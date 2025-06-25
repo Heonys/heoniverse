@@ -1,15 +1,12 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { PhaserGame, type PhaserRef } from "@/game/PhaserGame";
 
 function App() {
-  const navigate = useNavigate();
+  const phaserRef = useRef<PhaserRef | null>(null);
 
   return (
     <div>
-      <div className="flex gap-2">
-        <button onClick={() => navigate("/about")}>about</button>
-        <button onClick={() => navigate("/")}>home</button>
-      </div>
-      <Outlet />
+      <PhaserGame ref={phaserRef} />
     </div>
   );
 }
