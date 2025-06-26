@@ -1,14 +1,5 @@
-import { useRef } from "react";
-import { PhaserGame, type PhaserRef } from "@/game/PhaserGame";
-
 function App() {
-  const phaserRef = useRef<PhaserRef | null>(null);
-
-  return (
-    <div>
-      <PhaserGame ref={phaserRef} />
-    </div>
-  );
+  return <section className="size-full absolute"></section>;
 }
 
 export default App;

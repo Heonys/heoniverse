@@ -1,13 +1,15 @@
-import Phaser from "phaser";
+import { Preloader, Background, Game } from "@/game/scenes";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
+  parent: "game-container",
+  autoRound: true,
+  autoFocus: true,
   pixelArt: true,
   scale: {
-    // mode: Phaser.Scale.FIT,
-    // autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 1024,
-    height: 600,
+    mode: Phaser.Scale.ScaleModes.ENVELOP,
+    width: window.innerWidth,
+    height: window.innerHeight,
   },
   physics: {
     default: "arcade",
@@ -15,8 +17,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
+  scene: [Preloader, Background, Game],
 };
 
-export const startGame = (parent: string) => {
-  return new Phaser.Game({ ...config, parent });
-};
+export const phaserGame = new Phaser.Game(config);
