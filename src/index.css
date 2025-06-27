@@ -13,4 +13,26 @@
   #game-container canvas {
     display: block;
   }
+
+  @font-face {
+    font-family: "MiSansLatin";
+    font-weight: normal;
+    src: url("/fonts/MiSansLatin-Normal.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "MiSansLatin";
+    font-weight: 500;
+    src: url("/fonts/MiSansLatin-Medium.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "MiSansLatin";
+    font-weight: 600;
+    src: url("/fonts/MiSansLatin-Semibold.ttf") format("truetype");
+  }
+}
+
+@theme {
+  --font-misans: "MiSansLatin"; 
 }
