@@ -1,14 +1,19 @@
 export class Game extends Phaser.Scene {
+  private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private map!: Phaser.Tilemaps.Tilemap;
+
   constructor() {
-    super("Game");
+    super("game");
   }
 
   create() {
-    const sceneWidth = this.scale.height;
-    const sceneHeight = this.scale.width;
+    this.cursor = this.input.keyboard!.createCursorKeys();
+    this.map = this.make.tilemap({ key: "tilemap" });
 
-    const backdropImage = this.add.image(sceneWidth / 2, sceneHeight / 2, "backdrop2");
-    const scale = Math.max(sceneWidth / backdropImage.width, sceneHeight / backdropImage.height);
-    backdropImage.setScale(scale);
+    const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tiles_wall")!;
+    const colliderLayer = this.map.createLayer("Ground", floorAndGroundTileset)!;
+    colliderLayer.setCollisionByProperty({ collides: true });
+
+    // this.addGroupFromTiled("Wall", "tiles_wall", "FloorAndGround", false);
   }
 }

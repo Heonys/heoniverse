@@ -2,7 +2,7 @@ export class Background extends Phaser.Scene {
   cloud!: Phaser.Physics.Arcade.Group;
 
   constructor() {
-    super("Background");
+    super("background");
   }
 
   create() {
