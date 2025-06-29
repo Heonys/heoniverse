@@ -1,3 +1,5 @@
+import { store } from "@/stores";
+import { setRoomJoined } from "@/stores/roomSlice";
 import Phaser from "phaser";
 
 export class Preloader extends Phaser.Scene {
@@ -45,6 +47,11 @@ export class Preloader extends Phaser.Scene {
       frameHeight: 32,
     });
 
+    this.load.spritesheet("adam", "/images/character/adam.png", {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+
     this.load.atlas(
       "cloud_day",
       "/images/background/cloud_day.png",
@@ -66,5 +73,6 @@ export class Preloader extends Phaser.Scene {
   launchGame() {
     if (!this.preloadComplete) return;
     this.scene.launch("game");
+    store.dispatch(setRoomJoined(true));
   }
 }

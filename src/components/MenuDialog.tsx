@@ -15,7 +15,7 @@ export const MenuDialog = () => {
               preloader.launchGame();
             }}
           >
-            Move to Game
+            Public Room Join
           </AppButton>
         </div>
       </div>
