@@ -6,12 +6,12 @@ export class Background extends Phaser.Scene {
   }
 
   create() {
-    const sceneWidth = this.scale.height;
-    const sceneHeight = this.scale.width;
+    const sceneWidth = this.scale.width;
+    const sceneHeight = this.scale.height;
 
     const backdropImage = this.add.image(sceneWidth / 2, sceneHeight / 2, "backdrop");
     const scale = Math.max(sceneWidth / backdropImage.width, sceneHeight / backdropImage.height);
-    backdropImage.setScale(scale).setScrollFactor(0);
+    backdropImage.setScale(scale);
 
     this.cloud = this.physics.add.group();
     const frames = this.textures.get("cloud_day").getFrameNames();

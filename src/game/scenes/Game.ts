@@ -16,13 +16,13 @@ export class Game extends Phaser.Scene {
     createCharacterAnims(this.anims);
 
     const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tiles_wall")!;
-    const colliderLayer = this.map.createLayer("Ground", floorAndGroundTileset)!;
-    colliderLayer.setCollisionByProperty({ collides: true });
+    const groundLayer = this.map.createLayer("Ground", floorAndGroundTileset)!;
+    groundLayer.setCollisionByProperty({ collides: true });
 
     this.addGroupFromTiled("Wall", "tiles_wall", "FloorAndGround", false);
 
     this.localPlayer = new LocalPlayer(this, 705, 500, "adam");
-    this.physics.add.collider(this.localPlayer, colliderLayer);
+    this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
 
     this.setupCamera(this.localPlayer);
   }
@@ -46,6 +46,7 @@ export class Game extends Phaser.Scene {
   ) {
     const group = this.physics.add.staticGroup();
     const objectLayer = this.map.getObjectLayer(objectLayerName)!;
+
     objectLayer.objects.forEach((object) => {
       const actualX = object.x! + object.width! * 0.5;
       const actualY = object.y! - object.height! * 0.5;
@@ -54,7 +55,7 @@ export class Game extends Phaser.Scene {
         .setDepth(actualY);
     });
     if (this.localPlayer && collidable) {
-      this.physics.add.collider([this.localPlayer], group);
+      this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], group);
     }
   }
 }

@@ -4269,8 +4269,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":15,
- "nextobjectid":1269,
+ "nextlayerid":16,
+ "nextobjectid":1311,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -27396,7 +27396,7 @@
         {
          "columns":1,
          "firstgid":2561,
-         "image":"chair.png",
+         "image":"..\/objects\/chair.png",
          "imageheight":1472,
          "imagewidth":32,
          "margin":0,
@@ -27409,7 +27409,7 @@
         {
          "columns":16,
          "firstgid":2584,
-         "image":"Modern_Office_Black_Shadow.png",
+         "image":"..\/tileset\/Modern_Office_Black_Shadow.png",
          "imageheight":1696,
          "imagewidth":512,
          "margin":0,
@@ -27422,7 +27422,7 @@
         {
          "columns":16,
          "firstgid":3432,
-         "image":"Generic.png",
+         "image":"..\/tileset\/Generic.png",
          "imageheight":2496,
          "imagewidth":512,
          "margin":0,
@@ -27435,7 +27435,7 @@
         {
          "columns":5,
          "firstgid":4680,
-         "image":"computer.png",
+         "image":"..\/objects\/computer.png",
          "imageheight":64,
          "imagewidth":480,
          "margin":0,
@@ -27448,7 +27448,7 @@
         {
          "columns":1,
          "firstgid":4685,
-         "image":"whiteboard.png",
+         "image":"..\/objects\/whiteboard.png",
          "imageheight":192,
          "imagewidth":64,
          "margin":0,
@@ -27461,7 +27461,7 @@
         {
          "columns":16,
          "firstgid":4688,
-         "image":"Basement.png",
+         "image":"..\/tileset\/Basement.png",
          "imageheight":1600,
          "imagewidth":512,
          "margin":0,
@@ -27474,7 +27474,7 @@
         {
          "columns":1,
          "firstgid":5488,
-         "image":"vendingmachine.png",
+         "image":"..\/objects\/vendingmachine.png",
          "imageheight":72,
          "imagewidth":48,
          "margin":0,

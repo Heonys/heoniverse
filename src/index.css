@@ -3,15 +3,11 @@
 @layer base {
   html,
   body {
-    @apply m-0 p-0 box-border overflow-hidden;
+    @apply m-0 p-0 w-screen h-screen box-border overflow-hidden;
   }
 
   img {
     image-rendering: pixelated;
-  }
-
-  #game-container canvas {
-    display: block;
   }
 
   @font-face {
@@ -34,5 +30,5 @@
 }
 
 @theme {
-  --font-misans: "MiSansLatin"; 
+  --font-misans: "MiSansLatin";
 }
