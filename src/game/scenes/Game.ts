@@ -1,10 +1,11 @@
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
-import { LocalPlayer } from "@/game/characters";
+import { LocalPlayer, PlayerSelector } from "@/game/characters";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
   private map!: Phaser.Tilemaps.Tilemap;
   localPlayer!: LocalPlayer;
+  playerSelector!: PlayerSelector;
 
   constructor() {
     super("game");
@@ -22,6 +23,8 @@ export class Game extends Phaser.Scene {
     this.addGroupFromTiled("Wall", "tiles_wall", "FloorAndGround", false);
 
     this.localPlayer = new LocalPlayer(this, 705, 500, "adam");
+    this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
+
     this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
 
     this.setupCamera(this.localPlayer);
@@ -35,6 +38,7 @@ export class Game extends Phaser.Scene {
   update(_time: number, _delta: number) {
     if (this.localPlayer) {
       this.localPlayer.update(this.cursor);
+      this.playerSelector.update(this.localPlayer, this.cursor);
     }
   }
 
