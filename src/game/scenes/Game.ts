@@ -1,7 +1,8 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { Direction } from "@/constants";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, PlayerSelector } from "@/game/characters";
-import { Item, Chair } from "@/game/objects";
+import { Item, Chair, Computer } from "@/game/objects";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -38,8 +39,18 @@ export class Game extends Phaser.Scene {
       },
     );
 
+    const computers = this.addInteractiveGroupFromTiled(
+      Computer,
+      "Computer",
+      "tileset_computers",
+      "computer",
+      (computer) => {
+        computer.id = nanoid();
+      },
+    );
+
     this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
-    this.physics.add.overlap(this.playerSelector, [chairs], (object1, object2) => {
+    this.physics.add.overlap(this.playerSelector, [chairs, computers], (object1, object2) => {
       const playerSelector = object1 as PlayerSelector;
       const overlappedItem = object2 as Item;
 
@@ -117,5 +128,13 @@ export class Game extends Phaser.Scene {
       updater(item, chairObj);
     });
     return group;
+  }
+
+  disableKeys() {
+    this.input.keyboard!.enabled = false;
+  }
+
+  enableKeys() {
+    this.input.keyboard!.enabled = true;
   }
 }

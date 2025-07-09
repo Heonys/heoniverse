@@ -1,6 +1,6 @@
 import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants";
 import { Player, PlayerSelector } from "@/game/characters";
-import { Chair } from "@/game/objects";
+import { Chair, Computer } from "@/game/objects";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -15,7 +15,17 @@ export class LocalPlayer extends Player {
   update(playerSelector: PlayerSelector, cursor: Phaser.Types.Input.Keyboard.CursorKeys) {
     const selectedItem = playerSelector.selectedItem;
     const keyE = this.scene.input.keyboard!.addKey("E");
-    // const keyR = this.scene.input.keyboard!.addKey("R");
+    const keyR = this.scene.input.keyboard!.addKey("R");
+
+    if (Phaser.Input.Keyboard.JustDown(keyR)) {
+      switch (selectedItem?.itemType) {
+        case ItemType.COMPUTER: {
+          const computerObject = selectedItem as Computer;
+          computerObject.openDialog();
+          break;
+        }
+      }
+    }
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
