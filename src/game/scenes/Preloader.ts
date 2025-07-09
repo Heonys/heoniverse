@@ -14,35 +14,35 @@ export class Preloader extends Phaser.Scene {
 
     this.load.tilemapTiledJSON("tilemap", "/images/map/tilemap.tmj");
 
-    this.load.spritesheet("tiles_wall", "/images/map/FloorAndGround.png", {
+    this.load.spritesheet("tileset_wall", "/images/map/FloorAndGround.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("chairs", "/images/objects/chair.png", {
+    this.load.spritesheet("tileset_chairs", "/images/objects/chair.png", {
       frameWidth: 32,
       frameHeight: 64,
     });
-    this.load.spritesheet("computers", "/images/objects/computer.png", {
+    this.load.spritesheet("tileset_computers", "/images/objects/computer.png", {
       frameWidth: 96,
       frameHeight: 64,
     });
-    this.load.spritesheet("whiteboards", "/images/objects/whiteboard.png", {
+    this.load.spritesheet("tileset_whiteboards", "/images/objects/whiteboard.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
-    this.load.spritesheet("vendingmachines", "/images/objects/vendingmachine.png", {
+    this.load.spritesheet("tileset_vendingmachines", "/images/objects/vendingmachine.png", {
       frameWidth: 48,
       frameHeight: 72,
     });
-    this.load.spritesheet("office", "/images/tileset/Modern_Office_Black_Shadow.png", {
+    this.load.spritesheet("tileset_office", "/images/tileset/Modern_Office_Black_Shadow.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("basement", "/images/tileset/Basement.png", {
+    this.load.spritesheet("tileset_basement", "/images/tileset/Basement.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("generic", "/images/tileset/Generic.png", {
+    this.load.spritesheet("tileset_generic", "/images/tileset/Generic.png", {
       frameWidth: 32,
       frameHeight: 32,
     });

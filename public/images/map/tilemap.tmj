@@ -523,7 +523,6 @@
         {
          "draworder":"topdown",
          "id":4,
-         "locked":true,
          "name":"Chair",
          "objects":[
                 {

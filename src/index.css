@@ -27,6 +27,11 @@
     font-weight: 600;
     src: url("/fonts/MiSansLatin-Semibold.ttf") format("truetype");
   }
+
+  @font-face {
+    font-family: Retro;
+    src: url("/fonts/Retro Gaming.ttf") format("truetype");
+  }
 }
 
 @theme {

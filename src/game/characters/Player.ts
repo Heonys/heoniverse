@@ -1,8 +1,11 @@
+import { PlayerBehavior } from "@/constants";
+
 export class Player extends Phaser.Physics.Arcade.Sprite {
   // playerId: number;
   playerTexture: string;
   playerContainer: Phaser.GameObjects.Container;
   playerName: Phaser.GameObjects.Text;
+  playerBehavior = PlayerBehavior.IDLE;
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
@@ -17,7 +20,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.playerName = this.scene.add
       .text(0, 0, "adam")
-      .setFontFamily("Arial")
+      .setFontFamily("Retro")
       .setFontSize(12)
       .setColor("#000000")
       .setOrigin(0.5, 1);
