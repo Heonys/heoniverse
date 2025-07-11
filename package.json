@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
+    "preinstall": "pnpm dlx only-allow pnpm",
     "dev": "vite",
+    "dev:server": "pnpm -F @heoniverse/server dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
