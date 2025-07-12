@@ -1,4 +1,4 @@
-import { MenuDialog, ComputerDialog, WhiteboardDialog } from "@/components";
+import { MenuDialog, ComputerDialog, WhiteboardDialog, Chat, HelperGroups } from "@/components";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 
@@ -18,6 +18,8 @@ function App() {
       <Condition condition={whiteboardDialogOpen}>
         <WhiteboardDialog />
       </Condition>
+      <Chat />
+      <HelperGroups />
     </div>
   );
 }
