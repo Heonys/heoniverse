@@ -1,8 +1,8 @@
 import { useAppDispatch } from "@/hooks";
 import { AppButton, AppIcon } from "@/common";
-import { closeComputerDialog } from "@/stores/computerSlice";
+import { closeWhiteboardDialog } from "@/stores/whiteboardSlice";
 
-export const ComputerDialog = () => {
+export const WhiteboardDialog = () => {
   const dispatch = useAppDispatch();
 
   return (
@@ -11,7 +11,7 @@ export const ComputerDialog = () => {
         <AppButton
           className="absolute top-0 right-0 p-3 cursor-pointer opacity-90 transition-transform hover:scale-110 hover:opacity-100"
           onClick={() => {
-            dispatch(closeComputerDialog());
+            dispatch(closeWhiteboardDialog());
           }}
         >
           <AppIcon iconName="x-mark" color="white" />

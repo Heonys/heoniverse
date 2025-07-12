@@ -4,25 +4,25 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type ComputerState = {
   isOpenDialog: boolean;
-  computerId: null | string;
+  whiteboardId: null | string;
 };
 
 const initialState: ComputerState = {
   isOpenDialog: false,
-  computerId: null,
+  whiteboardId: null,
 };
 
-const computerSlice = createSlice({
-  name: "computer",
+const whiteboardSlice = createSlice({
+  name: "whiteboard",
   initialState,
   reducers: {
-    openComputerDialog: (state, action: PayloadAction<{ id: string }>) => {
+    openWhiteboardDialog: (state, action: PayloadAction<{ id: string }>) => {
       state.isOpenDialog = true;
-      state.computerId = action.payload.id;
+      state.whiteboardId = action.payload.id;
       const game = phaserGame.scene.keys.game as Game;
       game.disableKeys();
     },
-    closeComputerDialog: (state) => {
+    closeWhiteboardDialog: (state) => {
       state.isOpenDialog = false;
       const game = phaserGame.scene.keys.game as Game;
       game.enableKeys();
@@ -30,5 +30,5 @@ const computerSlice = createSlice({
   },
 });
 
-export const { openComputerDialog, closeComputerDialog } = computerSlice.actions;
-export default computerSlice.reducer;
+export const { openWhiteboardDialog, closeWhiteboardDialog } = whiteboardSlice.actions;
+export default whiteboardSlice.reducer;

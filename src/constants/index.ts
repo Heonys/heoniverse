@@ -13,6 +13,7 @@ export enum PlayerBehavior {
 export enum ItemType {
   CHAIR,
   COMPUTER,
+  WHITEBOARD,
 }
 
 // [offsetX, offsetY, offsetDepth]

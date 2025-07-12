@@ -2,7 +2,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import { Direction } from "@/constants";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, PlayerSelector } from "@/game/characters";
-import { Item, Chair, Computer } from "@/game/objects";
+import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -49,23 +49,37 @@ export class Game extends Phaser.Scene {
       },
     );
 
-    this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
-    this.physics.add.overlap(this.playerSelector, [chairs, computers], (object1, object2) => {
-      const playerSelector = object1 as PlayerSelector;
-      const overlappedItem = object2 as Item;
+    const whiteboard = this.addInteractiveGroupFromTiled(
+      Whiteboard,
+      "Whiteboard",
+      "tileset_whiteboards",
+      "whiteboard",
+      (whiteboard) => {
+        whiteboard.id = nanoid();
+      },
+    );
 
-      if (playerSelector.selectedItem) {
-        if (
-          playerSelector.selectedItem === overlappedItem ||
-          playerSelector.depth >= overlappedItem.depth
-        ) {
-          return;
+    this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
+    this.physics.add.overlap(
+      this.playerSelector,
+      [chairs, computers, whiteboard],
+      (object1, object2) => {
+        const playerSelector = object1 as PlayerSelector;
+        const overlappedItem = object2 as Item;
+
+        if (playerSelector.selectedItem) {
+          if (
+            playerSelector.selectedItem === overlappedItem ||
+            playerSelector.depth >= overlappedItem.depth
+          ) {
+            return;
+          }
+          playerSelector.selectedItem.clearDialogBox();
         }
-        playerSelector.selectedItem.clearDialogBox();
-      }
-      playerSelector.selectedItem = overlappedItem;
-      overlappedItem.onOverlapDialog();
-    });
+        playerSelector.selectedItem = overlappedItem;
+        overlappedItem.onOverlapDialog();
+      },
+    );
   }
 
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
@@ -132,9 +146,18 @@ export class Game extends Phaser.Scene {
 
   disableKeys() {
     this.input.keyboard!.enabled = false;
+    this.resetCursorKeys();
   }
 
   enableKeys() {
     this.input.keyboard!.enabled = true;
+  }
+
+  resetCursorKeys() {
+    const { down, left, right, up } = this.cursor;
+    left.reset();
+    right.reset();
+    up.reset();
+    down.reset();
   }
 }

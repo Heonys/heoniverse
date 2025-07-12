@@ -1,22 +1,22 @@
 import { ItemType } from "@/constants";
 import { Item } from "@/game/objects";
 import { store } from "@/stores";
-import { openComputerDialog } from "@/stores/computerSlice";
+import { openWhiteboardDialog } from "@/stores/whiteboardSlice";
 
-export class Computer extends Item {
+export class Whiteboard extends Item {
   id!: string;
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
-    this.itemType = ItemType.COMPUTER;
+    this.itemType = ItemType.WHITEBOARD;
   }
 
   onOverlapDialog() {
-    this.setDialogBox("R: 컴퓨터 사용하기");
+    this.setDialogBox("R: 화이트보드 사용하기");
   }
 
   openDialog() {
-    store.dispatch(openComputerDialog({ id: this.id }));
+    store.dispatch(openWhiteboardDialog({ id: this.id }));
   }
 }
