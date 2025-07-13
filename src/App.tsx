@@ -1,6 +1,7 @@
 import { MenuDialog, ComputerDialog, WhiteboardDialog, Chat, HelperGroups } from "@/components";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
+import { TestComponent } from "./TestComponent";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
@@ -20,6 +21,7 @@ function App() {
       </Condition>
       <Chat />
       <HelperGroups />
+      <TestComponent />
     </div>
   );
 }
