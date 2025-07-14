@@ -14,7 +14,7 @@ export const ComputerDialog = () => {
             dispatch(closeComputerDialog());
           }}
         >
-          <AppIcon iconName="x-mark" color="white" />
+          <AppIcon iconName="x-mark" color="white" size={25} />
         </AppButton>
       </div>
     </div>

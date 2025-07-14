@@ -1,3 +1,15 @@
+import Adam from "/images/login/Adam_login.png";
+import Ash from "/images/login/Ash_login.png";
+import Lucy from "/images/login/Lucy_login.png";
+import Nancy from "/images/login/Nancy_login.png";
+
+export const avatars = [
+  { name: "adam", img: Adam },
+  { name: "ash", img: Ash },
+  { name: "lucy", img: Lucy },
+  { name: "nancy", img: Nancy },
+];
+
 export enum Direction {
   LEFT = "left",
   RIGHT = "right",

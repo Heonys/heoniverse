@@ -1,9 +1,20 @@
+import { cn } from "@/utils";
 import { Button, ButtonProps } from "@headlessui/react";
 
-export const AppButton = (props: ButtonProps<"button">) => {
+type Props = {
+  className?: string;
+  disabled?: boolean;
+} & ButtonProps<"button">;
+
+export const AppButton = ({ className, disabled, ...props }: Props) => {
   return (
     <Button
-      className="rounded bg-sky-600 px-4 py-2 text-sm text-white data-active:bg-sky-700 data-hover:bg-sky-500"
+      className={cn(
+        "rounded cursor-pointer bg-sky-600 p-2 text-sm text-white",
+        "disabled:opacity-70 disabled:cursor-not-allowed",
+        className,
+      )}
+      disabled={disabled}
       {...props}
     ></Button>
   );

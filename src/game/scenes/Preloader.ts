@@ -1,12 +1,19 @@
+import { Network } from "@/service/Network";
 import { store } from "@/stores";
 import { setRoomJoined } from "@/stores/roomSlice";
 import Phaser from "phaser";
 
 export class Preloader extends Phaser.Scene {
   private preloadComplete = false;
+  network!: Network;
 
   constructor() {
     super("preloader");
+  }
+
+  init() {
+    this.network = new Network();
+    this.network.joinTestRoom();
   }
 
   preload() {
@@ -48,6 +55,21 @@ export class Preloader extends Phaser.Scene {
     });
 
     this.load.spritesheet("adam", "/images/character/adam.png", {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet("ash", "/images/character/ash.png", {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet("lucy", "/images/character/lucy.png", {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+
+    this.load.spritesheet("nancy", "/images/character/nancy.png", {
       frameWidth: 32,
       frameHeight: 48,
     });

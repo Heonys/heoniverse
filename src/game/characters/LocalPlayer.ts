@@ -7,17 +7,34 @@ export class LocalPlayer extends Player {
   facing: Direction = Direction.DOWN;
   activeChair?: Chair;
 
+  keyE!: Phaser.Input.Keyboard.Key;
+  keyR!: Phaser.Input.Keyboard.Key;
+
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
+    this.registerKeys();
+  }
+
+  setPlayerName(name: string) {
+    this.playerName.setText(name);
+  }
+
+  setPlayerAvatar(texture: string) {
+    this.playerTexture = texture;
+    this.anims.play(`${this.playerTexture}_idle_down`, true);
+  }
+
+  registerKeys() {
+    this.keyE = this.scene.input.keyboard!.addKey("E");
+    this.keyR = this.scene.input.keyboard!.addKey("R");
+    this.scene.input.keyboard!.disableGlobalCapture();
   }
 
   update(playerSelector: PlayerSelector, cursor: Phaser.Types.Input.Keyboard.CursorKeys) {
     const selectedItem = playerSelector.selectedItem;
-    const keyE = this.scene.input.keyboard!.addKey("E");
-    const keyR = this.scene.input.keyboard!.addKey("R");
 
-    if (Phaser.Input.Keyboard.JustDown(keyR)) {
+    if (Phaser.Input.Keyboard.JustDown(this.keyR)) {
       switch (selectedItem?.itemType) {
         case ItemType.COMPUTER: {
           const computerObject = selectedItem as Computer;
@@ -34,7 +51,10 @@ export class LocalPlayer extends Player {
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
-        if (Phaser.Input.Keyboard.JustDown(keyE) && selectedItem?.itemType === ItemType.CHAIR) {
+        if (
+          Phaser.Input.Keyboard.JustDown(this.keyE) &&
+          selectedItem?.itemType === ItemType.CHAIR
+        ) {
           const chairObject = selectedItem as Chair;
           this.activeChair = chairObject;
 
@@ -103,7 +123,7 @@ export class LocalPlayer extends Player {
         break;
       }
       case PlayerBehavior.SITTING: {
-        if (Phaser.Input.Keyboard.JustDown(keyE)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
           const split = this.anims.currentAnim!.key.split("_");
           split[1] = "idle";
           this.anims.play(split.join("_"), true);

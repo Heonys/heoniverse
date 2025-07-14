@@ -22,6 +22,7 @@ export class Game extends Phaser.Scene {
     this.localPlayer = new LocalPlayer(this, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
     this.setupCamera(this.localPlayer);
+    this.disableKeys();
 
     const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tileset_wall")!;
     const groundLayer = this.map.createLayer("Ground", floorAndGroundTileset)!;

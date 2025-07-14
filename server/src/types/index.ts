@@ -11,4 +11,5 @@ export enum MessageType {
 export interface RoomData {
   name: string;
   description: string;
+  password?: number;
 }

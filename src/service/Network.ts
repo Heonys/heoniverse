@@ -1,5 +1,7 @@
 import { Client, Room } from "colyseus.js";
-import { RoomType } from "@server/src/types";
+import { RoomType, MessageType } from "@server/src/types";
+import { store } from "@/stores";
+import { setJoinedRoomData } from "@/stores/roomSlice";
 
 export class Network {
   client: Client;
@@ -15,6 +17,7 @@ export class Network {
 
   async joinTestRoom() {
     this.room = await this.client.joinOrCreate(RoomType.TEST_ROOM);
+    this.setupRoom();
   }
 
   sendMessage(type: string, message: any) {
@@ -29,5 +32,13 @@ export class Network {
       throw new Error("방에 입장하지 않았습니다.");
     }
     this.room.onMessage(type, callback);
+  }
+
+  setupRoom() {
+    if (!this.room) return;
+
+    this.room.onMessage(MessageType.SEND_ROOM_DATA, (data) => {
+      store.dispatch(setJoinedRoomData(data));
+    });
   }
 }

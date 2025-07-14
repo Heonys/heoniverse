@@ -29,7 +29,6 @@ export const Chat = () => {
                   autoComplete="off"
                   placeholder="Press Enter to chat"
                   className="w-full outline-0 placeholder-gray-400 placeholder:font-bold text-white"
-                  name="full_name"
                 />
                 <AppIcon iconName="smile" color="white" size={24} />
               </div>

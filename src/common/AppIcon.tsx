@@ -6,6 +6,8 @@ import { MdRoom } from "react-icons/md";
 import { BiJoystickAlt } from "react-icons/bi";
 import { BiSolidHelpCircle } from "react-icons/bi";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { MdOutlinePublic } from "react-icons/md";
+import { FaArrowRight } from "react-icons/fa6";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -16,6 +18,8 @@ const IconMap = {
   ["help"]: BiSolidHelpCircle,
   ["github"]: FaGithub,
   ["room"]: MdRoom,
+  ["public"]: MdOutlinePublic,
+  ["arrow-right"]: FaArrowRight,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;
