@@ -76,7 +76,7 @@ export const LoginDialog = () => {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <AppButton className="font-bold">입장</AppButton>
+        <AppButton className="font-bold px-4">입장</AppButton>
       </div>
     </form>
   );

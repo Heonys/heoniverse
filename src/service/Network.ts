@@ -1,11 +1,12 @@
 import { Client, Room } from "colyseus.js";
-import { RoomType, MessageType } from "@server/src/types";
+import { RoomType, MessageType, IStudioState } from "@server/src/types";
 import { store } from "@/stores";
 import { setJoinedRoomData } from "@/stores/roomSlice";
 
 export class Network {
   client: Client;
-  room: Room | null = null;
+  room: Room<IStudioState> | null = null;
+  sessionId!: string;
 
   constructor() {
     this.client = new Client(import.meta.env.VITE_SERVER_URL);
@@ -15,8 +16,8 @@ export class Network {
     this.room = await this.client.joinOrCreate(RoomType.LOBBY);
   }
 
-  async joinTestRoom() {
-    this.room = await this.client.joinOrCreate(RoomType.TEST_ROOM);
+  async joinPublicRoom() {
+    this.room = await this.client.joinOrCreate(RoomType.STUDIO);
     this.setupRoom();
   }
 
@@ -36,6 +37,7 @@ export class Network {
 
   setupRoom() {
     if (!this.room) return;
+    this.sessionId = this.room.sessionId;
 
     this.room.onMessage(MessageType.SEND_ROOM_DATA, (data) => {
       store.dispatch(setJoinedRoomData(data));

@@ -12,7 +12,6 @@ const roomSlice = createSlice({
     setRoomJoined: (state, action: PayloadAction<boolean>) => {
       state.joined = action.payload;
     },
-
     setJoinedRoomData: (
       state,
       action: PayloadAction<{ id: string; name: string; description: string }>,

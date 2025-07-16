@@ -8,7 +8,7 @@ export const Chat = () => {
   const showChat = useAppSelector((state) => state.chat.showChat);
 
   return (
-    <div className="fixed left-0 bottom-14 w-full h-full max-w-1/3 max-h-1/2">
+    <div className="fixed left-0 bottom-12 w-[500px] h-full max-h-1/2">
       <div className="relative p-5 h-full flex flex-col">
         {showChat ? (
           <>

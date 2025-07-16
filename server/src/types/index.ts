@@ -1,6 +1,8 @@
+import { MapSchema } from "@colyseus/schema";
+
 export enum RoomType {
   LOBBY = "LOBBY",
-  TEST_ROOM = "TEST_ROOM",
+  STUDIO = "STUDIO",
 }
 
 export enum MessageType {
@@ -12,4 +14,15 @@ export interface RoomData {
   name: string;
   description: string;
   password?: number;
+}
+
+export interface IPlayer {
+  name: string;
+  x: number;
+  y: number;
+  animKey: string;
+}
+
+export interface IStudioState {
+  players: MapSchema<IPlayer>;
 }
