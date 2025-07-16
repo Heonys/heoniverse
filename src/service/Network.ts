@@ -1,19 +1,47 @@
 import { Client, Room } from "colyseus.js";
 import { RoomType, MessageType, IStudioState } from "@server/src/types";
 import { store } from "@/stores";
-import { setJoinedRoomData } from "@/stores/roomSlice";
+import {
+  setJoinedRoomData,
+  setLobbyJoined,
+  setAvailableRoom,
+  addAvailableRoom,
+  removeAvailableRoom,
+} from "@/stores/roomSlice";
 
 export class Network {
   client: Client;
   room: Room<IStudioState> | null = null;
+  lobby: Room | null = null;
   sessionId!: string;
 
   constructor() {
     this.client = new Client(import.meta.env.VITE_SERVER_URL);
+
+    this.joinLobbyRoom().then(() => {
+      store.dispatch(setLobbyJoined(true));
+    });
   }
 
   async joinLobbyRoom() {
-    this.room = await this.client.joinOrCreate(RoomType.LOBBY);
+    this.lobby = await this.client.joinOrCreate(RoomType.LOBBY);
+
+    this.lobby.onMessage("rooms", (rooms) => {
+      store.dispatch(setAvailableRoom(rooms));
+    });
+
+    this.lobby.onMessage("+", ([_roomId, room]) => {
+      store.dispatch(
+        addAvailableRoom({
+          ...room,
+          createdAt: room.createdAt.toISOString(),
+        }),
+      );
+    });
+
+    this.lobby.onMessage("-", ([roomId]) => {
+      store.dispatch(removeAvailableRoom(roomId));
+    });
   }
 
   async joinPublicRoom() {

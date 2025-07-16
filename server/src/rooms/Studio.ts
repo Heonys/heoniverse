@@ -1,9 +1,12 @@
 import { Room, Client } from "colyseus";
+import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioState";
 import { MessageType, RoomData } from "../types";
+import { PlayerUpdateCommand } from "./commands";
 
 export class Studio extends Room<StudioState> {
   state = new StudioState();
+  dispatcher = new Dispatcher(this);
   name!: string;
   description!: string;
 
@@ -11,9 +14,17 @@ export class Studio extends Room<StudioState> {
     this.name = options.name;
     this.description = options.description;
 
-    this.onMessage(MessageType.UPDATE_PLAYER, (client, message) => {
-      console.log("player update", message);
-    });
+    this.onMessage(
+      MessageType.UPDATE_PLAYER,
+      (client, payload: { x: number; y: number; animKey: string }) => {
+        this.dispatcher.dispatch(new PlayerUpdateCommand(), {
+          sessionId: client.sessionId,
+          x: payload.x,
+          y: payload.y,
+          animKey: payload.animKey,
+        });
+      },
+    );
   }
 
   onJoin(client: Client, options: any) {

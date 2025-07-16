@@ -13,7 +13,6 @@ export class Preloader extends Phaser.Scene {
 
   init() {
     this.network = new Network();
-    this.network.joinPublicRoom();
   }
 
   preload() {

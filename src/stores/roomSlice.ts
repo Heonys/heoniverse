@@ -1,16 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RoomAvailable } from "colyseus.js";
 
 const roomSlice = createSlice({
   name: "room",
   initialState: {
-    joined: false,
+    lobbyJoined: false,
+    roomJoined: false,
     id: "",
     name: "",
     description: "",
+    availableRooms: [] as RoomAvailable[],
   },
   reducers: {
+    setLobbyJoined: (state, action: PayloadAction<boolean>) => {
+      state.lobbyJoined = action.payload;
+    },
     setRoomJoined: (state, action: PayloadAction<boolean>) => {
-      state.joined = action.payload;
+      state.roomJoined = action.payload;
+    },
+    setAvailableRoom: (state, action: PayloadAction<RoomAvailable[]>) => {
+      state.availableRooms = action.payload;
+    },
+    addAvailableRoom: (state, action: PayloadAction<RoomAvailable>) => {
+      const exists = state.availableRooms.find(({ roomId }) => roomId === action.payload.roomId);
+      if (!exists) {
+        state.availableRooms.push(action.payload);
+      }
+    },
+    removeAvailableRoom: (state, action: PayloadAction<string>) => {
+      state.availableRooms = state.availableRooms.filter(
+        (rooms) => rooms.roomId !== action.payload,
+      );
     },
     setJoinedRoomData: (
       state,
@@ -23,5 +43,12 @@ const roomSlice = createSlice({
   },
 });
 
-export const { setRoomJoined, setJoinedRoomData } = roomSlice.actions;
+export const {
+  setLobbyJoined,
+  setRoomJoined,
+  setJoinedRoomData,
+  setAvailableRoom,
+  addAvailableRoom,
+  removeAvailableRoom,
+} = roomSlice.actions;
 export default roomSlice.reducer;

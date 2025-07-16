@@ -10,7 +10,7 @@ import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 
 function App() {
-  const roomJoined = useAppSelector((state) => state.room.joined);
+  const roomJoined = useAppSelector((state) => state.room.roomJoined);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);
   const whiteboardDialogOpen = useAppSelector((state) => state.whitebaord.isOpenDialog);

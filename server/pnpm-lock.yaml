@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@colyseus/command':
+    specifier: ^0.3.2
+    version: 0.3.2(colyseus@0.16.4)
   '@colyseus/schema':
     specifier: ^3.0.42
     version: 3.0.42
@@ -67,6 +70,17 @@ packages:
 
   /@colyseus/clock@1.0.0:
     resolution: {integrity: sha512-x1un5rFEgilVAA6ukSG8GFgtpX/hsmL5BtrPdxLx0dbPU7zwpTVXez2qoGza7YYS5QTvVD45gbHyX/KaaEWSZQ==}
+    dev: false
+
+  /@colyseus/command@0.3.2(colyseus@0.16.4):
+    resolution: {integrity: sha512-y275C8y7CMGNzD2oaPGNTUTqC9MNU6uWcaWhoNV3fU+v+i6wvvcvncx+gJnPc34vCVSEoEh/WJilLXKntiQP9A==}
+    peerDependencies:
+      colyseus: '*'
+    dependencies:
+      colyseus: 0.16.4(@colyseus/auth@0.16.6)(@colyseus/core@0.16.19)(@colyseus/redis-driver@0.16.1)(@colyseus/redis-presence@0.16.4)(@colyseus/schema@3.0.42)(@colyseus/uwebsockets-transport@0.16.9)(@colyseus/ws-transport@0.16.5)
+      debug: 4.4.1
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@colyseus/core@0.16.19(@colyseus/schema@3.0.42):
