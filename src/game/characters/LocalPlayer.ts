@@ -2,7 +2,7 @@ import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants"
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
-import { IPlayer } from "@server/src/types";
+import { eventEmitter } from "@/game/events";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -12,19 +12,25 @@ export class LocalPlayer extends Player {
   keyE!: Phaser.Input.Keyboard.Key;
   keyR!: Phaser.Input.Keyboard.Key;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
-    super(scene, x, y, texture);
+  constructor(scene: Phaser.Scene, id: string, x: number, y: number, texture: string) {
+    super(scene, id, x, y, texture);
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.registerKeys();
   }
 
   setPlayerName(name: string) {
     this.playerName.setText(name);
+    eventEmitter.emit("UPDATE_PLAYER_NAME", name);
   }
 
   setPlayerAvatar(texture: string) {
     this.playerTexture = texture;
     this.anims.play(`${this.playerTexture}_idle_down`, true);
+    eventEmitter.emit("UPDATE_PLAYER_TEXTURE", {
+      x: this.x,
+      y: this.y,
+      animKey: this.anims.currentAnim!.key,
+    });
   }
 
   registerKeys() {

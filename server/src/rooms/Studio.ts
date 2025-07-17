@@ -2,7 +2,7 @@ import { Room, Client } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioState";
 import { MessageType, RoomData } from "../types";
-import { PlayerUpdateCommand } from "./commands";
+import { PlayerUpdateCommand, PlayerNameUpdateCommand } from "./commands";
 
 export class Studio extends Room<StudioState> {
   state = new StudioState();
@@ -25,6 +25,13 @@ export class Studio extends Room<StudioState> {
         });
       },
     );
+
+    this.onMessage(MessageType.UPDATE_PLAYER_NAME, (client, payload: string) => {
+      this.dispatcher.dispatch(new PlayerNameUpdateCommand(), {
+        sessionId: client.sessionId,
+        name: payload,
+      });
+    });
   }
 
   onJoin(client: Client, options: any) {

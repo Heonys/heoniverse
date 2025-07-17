@@ -1,5 +1,5 @@
 import { Client, Room } from "colyseus.js";
-import { RoomType, MessageType, IStudioState, MessagePayloadMap, IPlayer } from "@server/src/types";
+import { RoomType, MessageType, IStudioState, MessagePayloadMap } from "@server/src/types";
 import { store } from "@/stores";
 import {
   setJoinedRoomData,
@@ -8,6 +8,7 @@ import {
   addAvailableRoom,
   removeAvailableRoom,
 } from "@/stores/roomSlice";
+import { eventEmitter } from "@/game/events";
 
 export class Network {
   client: Client;
@@ -20,6 +21,17 @@ export class Network {
 
     this.joinLobbyRoom().then(() => {
       store.dispatch(setLobbyJoined(true));
+    });
+    this.registerEventHandler();
+  }
+
+  registerEventHandler() {
+    eventEmitter.on("UPDATE_PLAYER_NAME", (payload) => {
+      this.sendMessage("UPDATE_PLAYER_NAME", payload);
+    });
+
+    eventEmitter.on("UPDATE_PLAYER_TEXTURE", (payload) => {
+      this.sendMessage("UPDATE_PLAYER", payload);
     });
   }
 

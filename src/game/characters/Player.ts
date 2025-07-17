@@ -1,15 +1,19 @@
 import { PlayerBehavior } from "@/constants";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  // playerId: number;
+  playerId: string;
   playerTexture: string;
   playerContainer: Phaser.GameObjects.Container;
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
+  readyToConnect = false;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
+  // 채팅 버블 컨테이너에 포함
+
+  constructor(scene: Phaser.Scene, id: string, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
 
+    this.playerId = id;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
 
@@ -19,7 +23,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.anims.play(`${texture}_idle_down`);
 
     this.playerName = this.scene.add
-      .text(0, 0, "adam")
+      .text(0, 0, "")
       .setFontFamily("Retro")
       .setFontSize(12)
       .setColor("#000000")

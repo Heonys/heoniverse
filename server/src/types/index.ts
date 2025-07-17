@@ -8,11 +8,13 @@ export enum RoomType {
 export enum MessageType {
   SEND_ROOM_DATA = "SEND_ROOM_DATA",
   UPDATE_PLAYER = "UPDATE_PLAYER",
+  UPDATE_PLAYER_NAME = "UPDATE_PLAYER_NAME",
 }
 
 export type MessagePayloadMap = {
   SEND_ROOM_DATA: RoomData;
   UPDATE_PLAYER: Omit<IPlayer, "name">;
+  UPDATE_PLAYER_NAME: string;
 };
 
 export interface RoomData {

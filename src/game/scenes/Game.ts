@@ -1,9 +1,10 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { Direction } from "@/constants";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
-import { LocalPlayer, PlayerSelector } from "@/game/characters";
+import { LocalPlayer, OtherPlayer, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
+import { IPlayer } from "@server/src/types";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -11,6 +12,8 @@ export class Game extends Phaser.Scene {
   localPlayer!: LocalPlayer;
   playerSelector!: PlayerSelector;
   network!: Network;
+  otherPlayers!: Phaser.Physics.Arcade.Group;
+  ohterPlayersMap = new Map<string, OtherPlayer>();
 
   constructor() {
     super("game");
@@ -22,8 +25,9 @@ export class Game extends Phaser.Scene {
     this.map = this.make.tilemap({ key: "tilemap" });
     createCharacterAnims(this.anims);
 
-    this.localPlayer = new LocalPlayer(this, 705, 500, "adam");
+    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
+    this.otherPlayers = this.physics.add.group();
     this.setupCamera(this.localPlayer);
     this.disableKeys();
 
@@ -163,5 +167,20 @@ export class Game extends Phaser.Scene {
     right.reset();
     up.reset();
     down.reset();
+  }
+
+  playerJoined(id: string, payload: IPlayer) {
+    const { name, x, y, animKey } = payload;
+    const otherPlayer = new OtherPlayer(this, id, name, x, y, animKey);
+    this.otherPlayers.add(otherPlayer);
+    this.ohterPlayersMap.set(id, otherPlayer);
+  }
+
+  playerLeft(id: string) {
+    if (this.ohterPlayersMap.has(id)) {
+      const otherPlayer = this.ohterPlayersMap.get(id)!;
+      this.otherPlayers.remove(otherPlayer, true, true);
+      this.ohterPlayersMap.delete(id);
+    }
   }
 }
