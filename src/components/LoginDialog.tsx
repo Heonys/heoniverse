@@ -32,6 +32,8 @@ export const LoginDialog = () => {
   const onSubmit = (data: FormType) => {
     game.localPlayer.setPlayerName(data.name);
     game.localPlayer.setPlayerAvatar(avatars[avatarIndex].name);
+    game.localPlayer.readyToConnect = true;
+    game.network.readyToConnect();
     game.enableKeys();
     dispatch(setLoggedIn(true));
   };

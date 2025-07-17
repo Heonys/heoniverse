@@ -1,6 +1,7 @@
 import { LobbyRoom } from "colyseus";
-import express from "express";
+import { monitor } from "@colyseus/monitor";
 import config from "@colyseus/tools";
+import express from "express";
 import { RoomData, RoomType } from "./types";
 import { Studio } from "./rooms/Studio";
 import cors from "cors";
@@ -19,6 +20,7 @@ export default config({
   initializeExpress: (app) => {
     app.use(express.json());
     app.use(cors());
+    app.use("/colyseus", monitor());
   },
 
   beforeListen: () => {},

@@ -6,6 +6,7 @@ export class Player extends Schema implements IPlayer {
   @type("number") x = 705;
   @type("number") y = 500;
   @type("string") animKey = "adam_idle_down";
+  @type("boolean") readyToConnect = false;
 }
 
 export class StudioState extends Schema implements IStudioState {

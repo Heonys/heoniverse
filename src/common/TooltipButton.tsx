@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { Button } from "@headlessui/react";
+import { Button, ButtonProps } from "@headlessui/react";
 
-export const TooltipButton = ({ text, children }: { text: string; children: React.ReactNode }) => {
+type Props = {
+  tooltip: string;
+  children: React.ReactNode;
+} & ButtonProps;
+
+export const TooltipButton = ({ tooltip, children, ...props }: Props) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -10,6 +15,7 @@ export const TooltipButton = ({ text, children }: { text: string; children: Reac
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         className="size-11 cursor-pointer flex justify-center items-center bg-white rounded-full shadow-xl"
+        {...props}
       >
         {children}
       </Button>
@@ -21,7 +27,7 @@ export const TooltipButton = ({ text, children }: { text: string; children: Reac
                      shadow-lg z-10 select-none"
           role="tooltip"
         >
-          {text}
+          {tooltip}
         </div>
       )}
     </div>

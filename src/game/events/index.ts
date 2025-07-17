@@ -1,8 +1,12 @@
-import { MessagePayloadMap } from "@server/src/types";
+import Phaser from "phaser";
+import { IPlayer, MessagePayloadMap } from "@server/src/types";
 
 type EventsPayloadMap = {
   UPDATE_PLAYER_NAME: string;
   UPDATE_PLAYER_TEXTURE: MessagePayloadMap["UPDATE_PLAYER"];
+  OTHER_PLAYER_JOINED: { sessionId: string; player: IPlayer };
+  OTHER_PLAYER_UPDATED: { sessionId: string; player: IPlayer };
+  OTHER_PLAYER_LEFT: string;
 };
 
 class PhaserEventEmitter<EventsMap> {

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@colyseus/command": "^0.3.2",
+    "@colyseus/monitor": "^0.16.7",
     "@colyseus/schema": "^3.0.42",
     "@colyseus/tools": "^0.16.0",
     "colyseus": "^0.16.0",

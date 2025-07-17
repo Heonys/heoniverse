@@ -5,6 +5,7 @@ import { LocalPlayer, OtherPlayer, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { IPlayer } from "@server/src/types";
+import { eventEmitter } from "@/game/events";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -24,6 +25,7 @@ export class Game extends Phaser.Scene {
     this.cursor = this.input.keyboard!.createCursorKeys();
     this.map = this.make.tilemap({ key: "tilemap" });
     createCharacterAnims(this.anims);
+    this.registerEventHandler();
 
     this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
@@ -102,6 +104,20 @@ export class Game extends Phaser.Scene {
     }
   }
 
+  registerEventHandler() {
+    eventEmitter.on("OTHER_PLAYER_JOINED", ({ sessionId, player }) => {
+      this.playerJoined(sessionId, player);
+    });
+
+    eventEmitter.on("OTHER_PLAYER_UPDATED", ({ sessionId, player }) => {
+      this.playerUpdated(sessionId, player);
+    });
+
+    eventEmitter.on("OTHER_PLAYER_LEFT", (playerId) => {
+      this.playerLeft(playerId);
+    });
+  }
+
   private addObjectFromTiled(
     group: Phaser.Physics.Arcade.StaticGroup,
     object: Phaser.Types.Tilemaps.TiledObject,
@@ -170,8 +186,8 @@ export class Game extends Phaser.Scene {
   }
 
   playerJoined(id: string, payload: IPlayer) {
-    const { name, x, y, animKey } = payload;
-    const otherPlayer = new OtherPlayer(this, id, name, x, y, animKey);
+    const { name, x, y } = payload;
+    const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
     this.otherPlayers.add(otherPlayer);
     this.ohterPlayersMap.set(id, otherPlayer);
   }
@@ -182,5 +198,13 @@ export class Game extends Phaser.Scene {
       this.otherPlayers.remove(otherPlayer, true, true);
       this.ohterPlayersMap.delete(id);
     }
+  }
+
+  playerUpdated(id: string, payload: IPlayer) {
+    const otherPlayer = this.ohterPlayersMap.get(id);
+
+    console.log(id, this.ohterPlayersMap);
+
+    // otherPlayer.update(payload);
   }
 }

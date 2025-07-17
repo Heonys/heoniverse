@@ -13,10 +13,10 @@ export const store = configureStore({
     whitebaord: whiteboardSlice,
     chat: chatSlice,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: false,
-  //   }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
