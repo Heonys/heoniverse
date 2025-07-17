@@ -93,7 +93,7 @@ export class Preloader extends Phaser.Scene {
 
   launchGame() {
     if (!this.preloadComplete) return;
-    this.scene.launch("game");
+    this.scene.launch("game", { network: this.network });
     store.dispatch(setRoomJoined(true));
   }
 }

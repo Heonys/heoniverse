@@ -10,6 +10,11 @@ export enum MessageType {
   UPDATE_PLAYER = "UPDATE_PLAYER",
 }
 
+export type MessagePayloadMap = {
+  SEND_ROOM_DATA: RoomData;
+  UPDATE_PLAYER: Omit<IPlayer, "name">;
+};
+
 export interface RoomData {
   name: string;
   description: string;

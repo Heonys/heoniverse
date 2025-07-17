@@ -1,5 +1,5 @@
 import { Client, Room } from "colyseus.js";
-import { RoomType, MessageType, IStudioState } from "@server/src/types";
+import { RoomType, MessageType, IStudioState, MessagePayloadMap, IPlayer } from "@server/src/types";
 import { store } from "@/stores";
 import {
   setJoinedRoomData,
@@ -49,14 +49,17 @@ export class Network {
     this.setupRoom();
   }
 
-  sendMessage(type: string, message: any) {
+  sendMessage<T extends keyof MessagePayloadMap>(type: T, message: MessagePayloadMap[T]) {
     if (!this.room) {
       throw new Error("방에 입장하지 않았습니다.");
     }
     this.room.send(type, message);
   }
 
-  onMessage(type: string, callback: (message: any) => void) {
+  onMessage<T extends keyof MessagePayloadMap>(
+    type: T,
+    callback: (message: MessagePayloadMap[T]) => void,
+  ) {
     if (!this.room) {
       throw new Error("방에 입장하지 않았습니다.");
     }

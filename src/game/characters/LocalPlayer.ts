@@ -1,6 +1,8 @@
 import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants";
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
+import { Network } from "@/service/Network";
+import { IPlayer } from "@server/src/types";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -31,7 +33,19 @@ export class LocalPlayer extends Player {
     this.scene.input.keyboard!.disableGlobalCapture();
   }
 
-  update(playerSelector: PlayerSelector, cursor: Phaser.Types.Input.Keyboard.CursorKeys) {
+  sendPlayerPosition(network: Network) {
+    network.sendMessage("UPDATE_PLAYER", {
+      x: this.x,
+      y: this.y,
+      animKey: this.anims.currentAnim!.key,
+    });
+  }
+
+  update(
+    playerSelector: PlayerSelector,
+    cursor: Phaser.Types.Input.Keyboard.CursorKeys,
+    network: Network,
+  ) {
     const selectedItem = playerSelector.selectedItem;
 
     if (Phaser.Input.Keyboard.JustDown(this.keyR)) {
@@ -67,11 +81,15 @@ export class LocalPlayer extends Player {
             this.setPosition(chairObject.x + offsetX, chairObject.y + offsetY).setDepth(
               chairObject.depth + offsetDepth,
             );
-            this.playerContainer.setPosition(chairObject.x, chairObject.y - this.height / 2);
+            this.playerContainer.setPosition(
+              chairObject.x + offsetX,
+              chairObject.y + offsetY - this.height / 2,
+            );
 
             this.anims.play(`${this.playerTexture}_sit_${chairObject.direction}`, true);
             playerSelector.selectedItem = undefined;
             playerSelector.setPosition(0, 0);
+            this.sendPlayerPosition(network);
           });
 
           chairObject.clearDialogBox();
@@ -118,8 +136,11 @@ export class LocalPlayer extends Player {
 
           if (this.anims.currentAnim?.key !== animKey) {
             this.play(animKey, true);
+            this.sendPlayerPosition(network);
           }
         }
+        if (vx !== 0 || vy !== 0) this.sendPlayerPosition(network);
+
         break;
       }
       case PlayerBehavior.SITTING: {
@@ -131,6 +152,7 @@ export class LocalPlayer extends Player {
           this.playerBehavior = PlayerBehavior.IDLE;
           this.activeChair?.clearDialogBox();
           playerSelector.setPosition(this.x, this.y);
+          this.sendPlayerPosition(network);
         }
         break;
       }

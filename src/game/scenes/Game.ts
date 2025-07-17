@@ -3,18 +3,21 @@ import { Direction } from "@/constants";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
+import { Network } from "@/service/Network";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
   private map!: Phaser.Tilemaps.Tilemap;
   localPlayer!: LocalPlayer;
   playerSelector!: PlayerSelector;
+  network!: Network;
 
   constructor() {
     super("game");
   }
 
-  create() {
+  create({ network }: { network: Network }) {
+    this.network = network;
     this.cursor = this.input.keyboard!.createCursorKeys();
     this.map = this.make.tilemap({ key: "tilemap" });
     createCharacterAnims(this.anims);
@@ -90,7 +93,7 @@ export class Game extends Phaser.Scene {
 
   update(_time: number, _delta: number) {
     if (this.localPlayer) {
-      this.localPlayer.update(this.playerSelector, this.cursor);
+      this.localPlayer.update(this.playerSelector, this.cursor, this.network);
       this.playerSelector.update(this.localPlayer, this.cursor);
     }
   }
