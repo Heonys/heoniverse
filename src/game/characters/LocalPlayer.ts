@@ -8,6 +8,7 @@ export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
   facing: Direction = Direction.DOWN;
   activeChair?: Chair;
+  speed = 200;
 
   keyE!: Phaser.Input.Keyboard.Key;
   keyR!: Phaser.Input.Keyboard.Key;
@@ -104,30 +105,30 @@ export class LocalPlayer extends Player {
           return;
         }
 
-        const speed = 200;
         let vx = 0;
         let vy = 0;
-
         if (cursor.up.isDown) {
-          vy -= speed;
+          vy -= this.speed;
           this.facing = Direction.UP;
         }
         if (cursor.down.isDown) {
-          vy += speed;
+          vy += this.speed;
           this.facing = Direction.DOWN;
         }
         if (cursor.left.isDown) {
-          vx -= speed;
+          vx -= this.speed;
           this.facing = Direction.LEFT;
         }
         if (cursor.right.isDown) {
-          vx += speed;
+          vx += this.speed;
           this.facing = Direction.RIGHT;
         }
 
         this.setDepth(this.y);
         this.setVelocity(vx, vy);
+        this.body!.velocity.setLength(this.speed);
         this.containerBody.setVelocity(vx, vy);
+        this.containerBody.velocity.setLength(this.speed);
 
         if (vx > 0) {
           this.play(`${this.playerTexture}_run_right`, true);

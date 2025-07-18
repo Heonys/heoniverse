@@ -96,7 +96,7 @@ export class Network {
       });
     });
 
-    $(this.room.state).players.onRemove((player, sessionId) => {
+    $(this.room.state).players.onRemove((_player, sessionId) => {
       eventEmitter.emit("OTHER_PLAYER_LEFT", sessionId);
     });
 

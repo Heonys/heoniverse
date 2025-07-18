@@ -186,6 +186,8 @@ export class Game extends Phaser.Scene {
   }
 
   playerJoined(id: string, payload: IPlayer) {
+    if (this.ohterPlayersMap.has(id)) return;
+
     const { name, x, y } = payload;
     const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
     this.otherPlayers.add(otherPlayer);
@@ -202,9 +204,8 @@ export class Game extends Phaser.Scene {
 
   playerUpdated(id: string, payload: IPlayer) {
     const otherPlayer = this.ohterPlayersMap.get(id);
+    if (!otherPlayer) return;
 
-    console.log(id, this.ohterPlayersMap);
-
-    // otherPlayer.update(payload);
+    otherPlayer.updatePlayer(payload);
   }
 }
