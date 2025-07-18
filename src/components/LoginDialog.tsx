@@ -42,9 +42,6 @@ export const LoginDialog = () => {
     <form
       className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999] bg-slate-900 p-6 px-16 rounded-2xl shadow-xl w-[600px] max-w-none"
       onSubmit={handleSubmit(onSubmit)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") handleSubmit(onSubmit)();
-      }}
     >
       <div className="flex flex-col gap-4 text-[#eee] ">
         <div className="flex justify-center items-center gap-2">

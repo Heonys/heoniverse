@@ -35,3 +35,10 @@ export const sittingOffset: Record<Direction, [number, number, number]> = {
   left: [0, -8, 10],
   right: [0, -8, 10],
 };
+
+export type ChatType = "JOINED" | "LEFT" | "CHAT";
+export type ChatMessage = {
+  author: string;
+  createdAt: number;
+  content: string;
+};

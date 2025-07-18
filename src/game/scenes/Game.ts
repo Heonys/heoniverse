@@ -6,6 +6,9 @@ import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { IPlayer } from "@server/src/types";
 import { eventEmitter } from "@/game/events";
+import { store } from "@/stores";
+import { addPlayerName, removePlayerName } from "@/stores/userSlice";
+import { setShowChat, setFocusChat } from "@/stores/chatSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -26,6 +29,7 @@ export class Game extends Phaser.Scene {
     this.map = this.make.tilemap({ key: "tilemap" });
     createCharacterAnims(this.anims);
     this.registerEventHandler();
+    this.registerKeyHandler();
 
     this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
@@ -108,13 +112,18 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("OTHER_PLAYER_JOINED", ({ sessionId, player }) => {
       this.playerJoined(sessionId, player);
     });
-
     eventEmitter.on("OTHER_PLAYER_UPDATED", ({ sessionId, player }) => {
       this.playerUpdated(sessionId, player);
     });
-
     eventEmitter.on("OTHER_PLAYER_LEFT", (playerId) => {
       this.playerLeft(playerId);
+    });
+  }
+
+  registerKeyHandler() {
+    this.input.keyboard?.on("keydown-ENTER", () => {
+      store.dispatch(setShowChat(true));
+      store.dispatch(setFocusChat(true));
     });
   }
 
@@ -192,6 +201,7 @@ export class Game extends Phaser.Scene {
     const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
     this.otherPlayers.add(otherPlayer);
     this.ohterPlayersMap.set(id, otherPlayer);
+    store.dispatch(addPlayerName({ id, name }));
   }
 
   playerLeft(id: string) {
@@ -199,6 +209,7 @@ export class Game extends Phaser.Scene {
       const otherPlayer = this.ohterPlayersMap.get(id)!;
       this.otherPlayers.remove(otherPlayer, true, true);
       this.ohterPlayersMap.delete(id);
+      store.dispatch(removePlayerName(id));
     }
   }
 
