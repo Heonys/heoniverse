@@ -4,16 +4,18 @@ import { Input } from "@headlessui/react";
 import { AppIcon, FloatingButton, IconButton } from "@/common";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setShowChat, setFocusChat } from "@/stores/chatSlice";
+import { phaserGame } from "@/game";
+import { Game } from "@/game/scenes";
+import { ChatMessage } from "@/components";
 
 type FormType = { message: string };
 
 export const Chat = () => {
-  const dispatch = useAppDispatch();
-  const showChat = useAppSelector((state) => state.chat.showChat);
-  const focused = useAppSelector((state) => state.chat.focused);
-  const chatMessage = useAppSelector((state) => state.chat.chatMessages);
+  const game = phaserGame.scene.keys.game as Game;
 
   const readyToSubmit = useRef(false);
+  const dispatch = useAppDispatch();
+  const { showChat, focused, chatMessages } = useAppSelector((state) => state.chat);
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
 
   const onSubmit = ({ message }: FormType) => {
@@ -21,16 +23,17 @@ export const Chat = () => {
       readyToSubmit.current = true;
       return;
     }
-    /*
-      Send the message to the server.
-      Show the chat bubble to the client.
-    */
+
+    game.network.sendMessage("PUSH_CHAT_MESSAGE", message);
+    // TODO:  Show the chat bubble to the client.
     reset();
   };
 
   useEffect(() => {
     if (focused) setFocus("message");
   }, [focused, setFocus]);
+
+  // 스크롤 문제, 스크롤바 문제
 
   return (
     <div className="fixed left-0 bottom-12 w-[500px] h-full max-h-1/2">
@@ -46,8 +49,12 @@ export const Chat = () => {
                 <AppIcon iconName="x-mark" size={25} />
               </IconButton>
             </div>
-            <div className="flex-auto">
-              <div className="h-full bg-neutral-800"></div>
+            <div className="h-full">
+              <div className="h-full bg-neutral-800 p-2 overflow-auto">
+                {chatMessages.map(({ type, message }, index) => {
+                  return <ChatMessage key={index} messageType={type} chatMessage={message} />;
+                })}
+              </div>
               <form
                 className="bg-black/65 rounded-b-xl flex p-2 border-2 border-red-400 shadow-2xl"
                 onSubmit={handleSubmit(onSubmit)}

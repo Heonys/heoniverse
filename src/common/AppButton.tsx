@@ -1,5 +1,5 @@
-import { cn } from "@/utils";
 import { Button, ButtonProps } from "@headlessui/react";
+import { cn } from "@/utils";
 
 type Props = {
   className?: string;

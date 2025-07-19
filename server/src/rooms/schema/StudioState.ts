@@ -1,5 +1,5 @@
-import { Schema, type, MapSchema } from "@colyseus/schema";
-import { IPlayer, IStudioState } from "../../types";
+import { Schema, type, MapSchema, ArraySchema } from "@colyseus/schema";
+import { IPlayer, IStudioState, IChatMessage } from "../../types";
 
 export class Player extends Schema implements IPlayer {
   @type("string") name = "";
@@ -9,6 +9,16 @@ export class Player extends Schema implements IPlayer {
   @type("boolean") readyToConnect = false;
 }
 
+export class ChatMessage extends Schema implements IChatMessage {
+  @type("string") author = "";
+  @type("number") createdAt = new Date().getTime();
+  @type("string") content = "";
+}
+
 export class StudioState extends Schema implements IStudioState {
-  @type({ map: Player }) players = new MapSchema<Player>();
+  @type({ map: Player })
+  players = new MapSchema<Player>();
+
+  @type([ChatMessage])
+  messages = new ArraySchema<ChatMessage>();
 }

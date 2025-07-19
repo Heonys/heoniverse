@@ -1,5 +1,4 @@
-import { AppIcon, Condition } from "@/common";
-import { TooltipButton } from "@/common/TooltipButton";
+import { AppIcon, Condition, TooltipButton } from "@/common";
 import { openURL } from "@/utils";
 
 export const HelperGroups = () => {

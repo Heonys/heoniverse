@@ -10,6 +10,8 @@ export enum Messages {
   UPDATE_PLAYER = "UPDATE_PLAYER",
   UPDATE_PLAYER_NAME = "UPDATE_PLAYER_NAME",
   READY_TO_CONNECT = "READY_TO_CONNECT",
+  PUSH_CHAT_MESSAGE = "PUSH_CHAT_MESSAGE",
+  UPDATED_CHAT_MESSAGE = "UPDATED_CHAT_MESSAGE",
 }
 
 export type MessagePayloadMap = {
@@ -17,12 +19,14 @@ export type MessagePayloadMap = {
   UPDATE_PLAYER: Omit<IPlayer, "name" | "readyToConnect">;
   UPDATE_PLAYER_NAME: string;
   READY_TO_CONNECT: void;
+  PUSH_CHAT_MESSAGE: string;
+  UPDATED_CHAT_MESSAGE: { clientId: string; message: string };
 };
 
 export interface RoomData {
+  id: string;
   name: string;
   description: string;
-  password?: number;
 }
 
 export interface IPlayer {
@@ -36,3 +40,10 @@ export interface IPlayer {
 export interface IStudioState {
   players: MapSchema<IPlayer>;
 }
+
+export type ChatType = "JOINED" | "LEFT" | "CHAT";
+export type IChatMessage = {
+  author: string;
+  createdAt: number;
+  content: string;
+};

@@ -10,6 +10,7 @@ import {
   removeAvailableRoom,
 } from "@/stores/roomSlice";
 import { eventEmitter } from "@/game/events";
+import { pushMessage } from "@/stores/chatSlice";
 
 export class Network {
   client: Client;
@@ -100,8 +101,16 @@ export class Network {
       eventEmitter.emit("OTHER_PLAYER_LEFT", sessionId);
     });
 
-    this.room.onMessage(Messages.SEND_ROOM_DATA, (data) => {
+    $(this.room.state).messages.onAdd((message) => {
+      store.dispatch(pushMessage(message));
+    });
+
+    this.onMessage(Messages.SEND_ROOM_DATA, (data) => {
       store.dispatch(setJoinedRoomData(data));
+    });
+
+    this.onMessage(Messages.UPDATED_CHAT_MESSAGE, () => {
+      // 다른 사람이 채팅침
     });
   }
 }

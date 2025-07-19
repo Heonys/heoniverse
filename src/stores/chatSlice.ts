@@ -1,11 +1,11 @@
-import { ChatMessage, ChatType } from "@/constants";
+import { IChatMessage, ChatType } from "@server/src/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
     showChat: false,
-    chatMessages: [] as { type: ChatType; message: ChatMessage }[],
+    chatMessages: [] as { type: ChatType; message: IChatMessage }[],
     focused: false,
   },
   reducers: {
@@ -15,13 +15,13 @@ const chatSlice = createSlice({
     setFocusChat(state, action: PayloadAction<boolean>) {
       state.focused = action.payload;
     },
-    pushMessage(state, action: PayloadAction<ChatMessage>) {
+    pushMessage(state, action: PayloadAction<IChatMessage>) {
       state.chatMessages.push({ type: "CHAT", message: action.payload });
     },
-    pushJoinedMessage(state, action: PayloadAction<ChatMessage>) {
+    pushJoinedMessage(state, action: PayloadAction<IChatMessage>) {
       state.chatMessages.push({ type: "JOINED", message: action.payload });
     },
-    pushLeftMessage(state, action: PayloadAction<ChatMessage>) {
+    pushLeftMessage(state, action: PayloadAction<IChatMessage>) {
       state.chatMessages.push({ type: "LEFT", message: action.payload });
     },
   },

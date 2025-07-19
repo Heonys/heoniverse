@@ -23,3 +23,8 @@ export function spliteAnimKey(key: string) {
     sittingOffset: sittingOffset[splited[2] as Direction],
   };
 }
+
+export const dateFormatter = new Intl.DateTimeFormat("ko-KR", {
+  timeStyle: "short",
+  dateStyle: "short",
+});

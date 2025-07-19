@@ -2,7 +2,7 @@ import { Room, Client } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioState";
 import { Messages, RoomData } from "../types";
-import { PlayerUpdateCommand, PlayerNameUpdateCommand } from "./commands";
+import { PlayerUpdateCommand, PlayerNameUpdateCommand, PushChatUpdateCommand } from "./commands";
 
 export class Studio extends Room<StudioState> {
   state = new StudioState();
@@ -37,6 +37,19 @@ export class Studio extends Room<StudioState> {
       const player = this.state.players.get(client.sessionId);
       if (!player) return;
       player.readyToConnect = true;
+    });
+
+    this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
+      this.dispatcher.dispatch(new PushChatUpdateCommand(), {
+        sessionId: client.sessionId,
+        message: payload,
+      });
+
+      this.broadcast(
+        Messages.UPDATED_CHAT_MESSAGE,
+        { clientId: client.sessionId, message: payload },
+        { except: client },
+      );
     });
   }
 
