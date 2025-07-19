@@ -7,6 +7,7 @@ type EventsPayloadMap = {
   OTHER_PLAYER_JOINED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_UPDATED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_LEFT: string;
+  UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
 };
 
 class PhaserEventEmitter<EventsMap> {

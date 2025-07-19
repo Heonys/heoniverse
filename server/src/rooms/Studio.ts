@@ -47,7 +47,7 @@ export class Studio extends Room<StudioState> {
 
       this.broadcast(
         Messages.UPDATED_CHAT_MESSAGE,
-        { clientId: client.sessionId, message: payload },
+        { sessionId: client.sessionId, message: payload },
         { except: client },
       );
     });

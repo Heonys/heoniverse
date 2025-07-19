@@ -23,6 +23,9 @@ importers:
       colyseus.js:
         specifier: ^0.16.19
         version: 0.16.19
+      immer:
+        specifier: ^10.1.1
+        version: 10.1.1
       phaser:
         specifier: ^3.88.2
         version: 3.88.2

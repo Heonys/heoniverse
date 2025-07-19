@@ -118,6 +118,12 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("OTHER_PLAYER_LEFT", (playerId) => {
       this.playerLeft(playerId);
     });
+    eventEmitter.on("UPDATED_CHAT_MESSAGE", ({ sessionId, message }) => {
+      const otherPlayer = this.ohterPlayersMap.get(sessionId);
+      if (otherPlayer) {
+        otherPlayer.openBubble(message);
+      }
+    });
   }
 
   registerKeyHandler() {
@@ -216,7 +222,6 @@ export class Game extends Phaser.Scene {
   playerUpdated(id: string, payload: IPlayer) {
     const otherPlayer = this.ohterPlayersMap.get(id);
     if (!otherPlayer) return;
-
     otherPlayer.updatePlayer(payload);
   }
 }

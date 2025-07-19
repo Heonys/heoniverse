@@ -70,7 +70,7 @@ export class OtherPlayer extends Player {
     }
   }
   destroy(fromScene?: boolean) {
-    this.containerBody.destroy();
+    this.playerContainer.destroy();
     super.destroy(fromScene);
   }
 }

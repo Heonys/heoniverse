@@ -20,7 +20,7 @@ export type MessagePayloadMap = {
   UPDATE_PLAYER_NAME: string;
   READY_TO_CONNECT: void;
   PUSH_CHAT_MESSAGE: string;
-  UPDATED_CHAT_MESSAGE: { clientId: string; message: string };
+  UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
 };
 
 export interface RoomData {

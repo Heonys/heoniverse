@@ -23,9 +23,8 @@ export const Chat = () => {
       readyToSubmit.current = true;
       return;
     }
-
     game.network.sendMessage("PUSH_CHAT_MESSAGE", message);
-    // TODO:  Show the chat bubble to the client.
+    game.localPlayer.openBubble(message);
     reset();
   };
 

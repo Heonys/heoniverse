@@ -1,9 +1,12 @@
+import { enableMapSet } from "immer";
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import roomReducer from "./roomSlice";
 import computerReducer from "./computerSlice";
 import whiteboardSlice from "./whiteboardSlice";
 import chatSlice from "./chatSlice";
+
+enableMapSet();
 
 export const store = configureStore({
   reducer: {

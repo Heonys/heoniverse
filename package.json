@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "clsx": "^2.1.1",
     "colyseus.js": "^0.16.19",
+    "immer": "^10.1.1",
     "phaser": "^3.88.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

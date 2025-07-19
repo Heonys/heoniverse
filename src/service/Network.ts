@@ -109,8 +109,8 @@ export class Network {
       store.dispatch(setJoinedRoomData(data));
     });
 
-    this.onMessage(Messages.UPDATED_CHAT_MESSAGE, () => {
-      // 다른 사람이 채팅침
+    this.onMessage(Messages.UPDATED_CHAT_MESSAGE, (payload) => {
+      eventEmitter.emit("UPDATED_CHAT_MESSAGE", payload);
     });
   }
 }
