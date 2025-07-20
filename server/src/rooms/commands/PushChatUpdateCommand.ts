@@ -14,7 +14,7 @@ export class PushChatUpdateCommand extends Command<Studio, Payload> {
     const messages = this.state.messages;
     if (!player) return;
 
-    // TODO: 메시지 최대 개수 제한
+    if (messages.length >= 100) messages.shift();
 
     const newMessage = new ChatMessage();
     newMessage.author = player.name;

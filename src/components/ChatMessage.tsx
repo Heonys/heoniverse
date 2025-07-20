@@ -1,23 +1,38 @@
 import { Tooltip } from "react-tooltip";
 import { ChatType, IChatMessage } from "@server/src/types";
-import { dateFormatter } from "@/utils";
+import { cn, dateFormatter, pickColor } from "@/utils";
+import { Condition } from "@/common";
 
 type Props = {
   messageType: ChatType;
   chatMessage: IChatMessage;
 };
 
-export const ChatMessage = ({ chatMessage }: Props) => {
+export const ChatMessage = ({ messageType, chatMessage }: Props) => {
   return (
     <div
       className="flex flex-wrap hover:bg-white/10 rounded"
       data-tooltip-id="chat-message-tooltip"
       data-tooltip-content={dateFormatter.format(chatMessage.createdAt)}
     >
-      <span className="py-1 break-words text-white text-sm ">
-        <span className="bg-rose-400 mx-1 rounded px-1">{chatMessage.author}</span>
-        <span>{chatMessage.content}</span>
-      </span>
+      <Condition
+        condition={messageType === "CHAT"}
+        fallback={
+          <div className="text-gray-600 text-sm flex gap-1 py-0.5 px-1">
+            <div className="underline">{chatMessage.author}</div>
+            <div>{chatMessage.content}</div>
+          </div>
+        }
+      >
+        <span className="py-1 break-all text-white text-sm">
+          <span
+            className={cn("mx-1 rounded px-1 text-black/70 mr-2", pickColor(chatMessage.author))}
+          >
+            {chatMessage.author}
+          </span>
+          <span>{chatMessage.content}</span>
+        </span>
+      </Condition>
 
       <Tooltip
         id="chat-message-tooltip"

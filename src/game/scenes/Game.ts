@@ -8,7 +8,7 @@ import { IPlayer } from "@server/src/types";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
-import { setShowChat, setFocusChat } from "@/stores/chatSlice";
+import { setShowChat, setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -115,8 +115,8 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("OTHER_PLAYER_UPDATED", ({ sessionId, player }) => {
       this.playerUpdated(sessionId, player);
     });
-    eventEmitter.on("OTHER_PLAYER_LEFT", (playerId) => {
-      this.playerLeft(playerId);
+    eventEmitter.on("OTHER_PLAYER_LEFT", ({ sessionId, player }) => {
+      this.playerLeft(sessionId, player);
     });
     eventEmitter.on("UPDATED_CHAT_MESSAGE", ({ sessionId, message }) => {
       const otherPlayer = this.ohterPlayersMap.get(sessionId);
@@ -200,22 +200,26 @@ export class Game extends Phaser.Scene {
     down.reset();
   }
 
-  playerJoined(id: string, payload: IPlayer) {
+  playerJoined(id: string, player: IPlayer) {
     if (this.ohterPlayersMap.has(id)) return;
 
-    const { name, x, y } = payload;
+    const { name, x, y } = player;
     const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
     this.otherPlayers.add(otherPlayer);
     this.ohterPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
+    store.dispatch(pushJoinedMessage(name));
   }
 
-  playerLeft(id: string) {
+  playerLeft(id: string, player: IPlayer) {
     if (this.ohterPlayersMap.has(id)) {
       const otherPlayer = this.ohterPlayersMap.get(id)!;
       this.otherPlayers.remove(otherPlayer, true, true);
       this.ohterPlayersMap.delete(id);
       store.dispatch(removePlayerName(id));
+
+      store.dispatch(removePlayerName(id));
+      store.dispatch(pushLeftMessage(player.name));
     }
   }
 

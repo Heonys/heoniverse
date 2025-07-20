@@ -62,7 +62,8 @@ export class OtherPlayer extends Player {
     this.containerBody.velocity.setLength(this.speed);
 
     this.setDepth(this.y);
-    const { state, sittingOffset } = spliteAnimKey(this.anims.currentAnim!.key);
+    const { character, state, sittingOffset } = spliteAnimKey(this.anims.currentAnim!.key);
+    this.playerTexture = character;
     if (state === "sit") {
       if (sittingOffset) {
         this.setDepth(this.y + sittingOffset[2]);

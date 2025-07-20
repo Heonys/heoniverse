@@ -92,13 +92,15 @@ export class Network {
         eventEmitter.emit("OTHER_PLAYER_UPDATED", { sessionId, player });
       });
 
-      $(player).listen("name", () => {
-        eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
+      $(player).listen("name", (name) => {
+        if (name) {
+          eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
+        }
       });
     });
 
-    $(this.room.state).players.onRemove((_player, sessionId) => {
-      eventEmitter.emit("OTHER_PLAYER_LEFT", sessionId);
+    $(this.room.state).players.onRemove((player, sessionId) => {
+      eventEmitter.emit("OTHER_PLAYER_LEFT", { sessionId, player });
     });
 
     $(this.room.state).messages.onAdd((message) => {

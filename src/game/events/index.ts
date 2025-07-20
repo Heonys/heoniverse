@@ -6,7 +6,7 @@ type EventsPayloadMap = {
   UPDATE_PLAYER_TEXTURE: MessagePayloadMap["UPDATE_PLAYER"];
   OTHER_PLAYER_JOINED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_UPDATED: { sessionId: string; player: IPlayer };
-  OTHER_PLAYER_LEFT: string;
+  OTHER_PLAYER_LEFT: { sessionId: string; player: IPlayer };
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
 };
 

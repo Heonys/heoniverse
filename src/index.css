@@ -11,46 +11,69 @@
   }
 
   .slick-slider {
-    @apply w-[120px]
+    @apply w-[120px];
   }
 
   .slick-list img {
-    @apply object-contain px-2
+    @apply object-contain px-2;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgba(51, 51, 51, 0.2);
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: rgba(51, 51, 51, 0.2);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    transition: background 0.1s;
+    background: rgba(238, 238, 238, 0.8);
+    border-radius: 3px;
+  }
+
+  *:hover::-webkit-scrollbar-thumb {
+    background: #eee;
   }
 
   @font-face {
-    font-family: "MiSansLatin";
+    font-family: MiSansLatin;
     font-weight: normal;
     src: url("/fonts/MiSansLatin-Normal.ttf") format("truetype");
   }
 
   @font-face {
-    font-family: "MiSansLatin";
+    font-family: MiSansLatin;
     font-weight: 500;
     src: url("/fonts/MiSansLatin-Medium.ttf") format("truetype");
   }
 
   @font-face {
-    font-family: "MiSansLatin";
+    font-family: MiSansLatin;
     font-weight: 600;
     src: url("/fonts/MiSansLatin-Semibold.ttf") format("truetype");
   }
 
   @font-face {
-    font-family: "NotoSansKR";
+    font-family: NotoSansKR;
     font-weight: 400;
     src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
   }
 
-    @font-face {
-    font-family: "NotoSansKR";
+  @font-face {
+    font-family: NotoSansKR;
     font-weight: 500;
     src: url("/fonts/NotoSansKR-Medium.ttf") format("truetype");
   }
 
-
   @font-face {
-    font-family: "NotoSansKR";
+    font-family: NotoSansKR;
     font-weight: 700;
     src: url("/fonts/NotoSansKR-Bold.ttf") format("truetype");
   }

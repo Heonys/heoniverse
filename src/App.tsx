@@ -18,11 +18,10 @@ function App() {
   return (
     <div className="w-full h-full absolute">
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
-        <Condition condition={!loggedIn}>
-          <LoginDialog />
+        <Condition condition={loggedIn} fallback={<LoginDialog />}>
+          <Chat />
+          <HelperGroups />
         </Condition>
-        <Chat />
-        <HelperGroups />
       </Condition>
 
       <Condition condition={computerDialogOpen}>

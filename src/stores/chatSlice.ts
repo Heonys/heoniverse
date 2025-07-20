@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
-    showChat: false,
+    showChat: true,
     chatMessages: [] as { type: ChatType; message: IChatMessage }[],
     focused: false,
   },
@@ -18,11 +18,25 @@ const chatSlice = createSlice({
     pushMessage(state, action: PayloadAction<IChatMessage>) {
       state.chatMessages.push({ type: "CHAT", message: action.payload });
     },
-    pushJoinedMessage(state, action: PayloadAction<IChatMessage>) {
-      state.chatMessages.push({ type: "JOINED", message: action.payload });
+    pushJoinedMessage(state, action: PayloadAction<string>) {
+      state.chatMessages.push({
+        type: "JOINED",
+        message: {
+          author: action.payload,
+          content: "님이 입장하셨습니다.",
+          createdAt: new Date().getTime(),
+        },
+      });
     },
-    pushLeftMessage(state, action: PayloadAction<IChatMessage>) {
-      state.chatMessages.push({ type: "LEFT", message: action.payload });
+    pushLeftMessage(state, action: PayloadAction<string>) {
+      state.chatMessages.push({
+        type: "LEFT",
+        message: {
+          author: action.payload,
+          content: "님이 퇴장하셨습니다.",
+          createdAt: new Date().getTime(),
+        },
+      });
     },
   },
 });
