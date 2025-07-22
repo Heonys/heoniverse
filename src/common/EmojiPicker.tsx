@@ -1,7 +1,7 @@
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { useEffect, useRef, useState } from "react";
-import { AppIcon, IconButton } from "@/common";
+import { AppIcon, IconButton } from "@/icons";
 
 type Props = {
   onSelect: (emoji: any) => void;

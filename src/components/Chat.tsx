@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
 import { Input } from "@headlessui/react";
-import { AppIcon, FloatingButton, IconButton } from "@/common";
+import { AppIcon, IconButton } from "@/icons";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setShowChat, setFocusChat } from "@/stores/chatSlice";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { ChatMessage } from "@/components";
+import { FloatingButton } from "@/common";
 
 type FormType = { message: string };
 

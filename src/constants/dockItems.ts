@@ -16,6 +16,12 @@ export const appsData: AppsData[] = [
     img: "/icons/facetime.png",
   },
   {
+    id: "message",
+    title: "Message",
+    img: "/icons/messages.webp",
+  },
+
+  {
     id: "music",
     title: "Music",
     img: "/icons/musics.png",

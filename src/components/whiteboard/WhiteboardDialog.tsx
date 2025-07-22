@@ -1,5 +1,6 @@
+import { AppButton } from "@/common";
 import { useAppDispatch } from "@/hooks";
-import { AppButton, AppIcon } from "@/common";
+import { AppIcon } from "@/icons";
 import { closeWhiteboardDialog } from "@/stores/whiteboardSlice";
 
 export const WhiteboardDialog = () => {

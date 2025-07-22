@@ -5,12 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@headlessui/react";
 
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { AppButton, AppIcon, AppSlider } from "@/common";
+import { AppButton, AppSlider } from "@/common";
 import { avatars } from "@/constants";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
+import { AppIcon } from "@/icons";
 
 type FormType = z.infer<typeof FormSchema>;
 

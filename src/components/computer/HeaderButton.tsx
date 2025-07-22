@@ -9,7 +9,7 @@ type Props = {
 
 export function HeaderButton({ children, onClick, onMouseEnter, className }: Props) {
   return (
-    <div
+    <button
       className={cn(
         "flex items-center gap-2 h-6 px-2 cursor-default rounded hover:bg-gray-100/30",
         className,
@@ -18,6 +18,6 @@ export function HeaderButton({ children, onClick, onMouseEnter, className }: Pro
       onMouseEnter={onMouseEnter}
     >
       {children}
-    </div>
+    </button>
   );
 }
