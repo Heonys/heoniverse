@@ -1,13 +1,8 @@
-import {
-  SelectMenuDialog,
-  ComputerDialog,
-  WhiteboardDialog,
-  Chat,
-  HelperGroups,
-  LoginDialog,
-} from "@/components";
+import { SelectMenuDialog, Chat, HelperGroups, LoginDialog } from "@/components";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
+import { ComputerDialog } from "@/components/computer";
+import { WhiteboardDialog } from "@/components/whiteboard";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);

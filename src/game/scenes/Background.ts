@@ -11,6 +11,7 @@ export class Background extends Phaser.Scene {
 
     const backdropImage = this.add.image(sceneWidth / 2, sceneHeight / 2, "backdrop");
     const scale = Math.max(sceneWidth / backdropImage.width, sceneHeight / backdropImage.height);
+
     backdropImage.setScale(scale);
 
     // this.cloud = this.physics.add.group();

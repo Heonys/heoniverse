@@ -11,24 +11,24 @@ export const HelperGroups = () => {
             openURL(`http://${import.meta.env.VITE_SERVER_URL}/colyseus`);
           }}
         >
-          <AppIcon iconName="monitor" color="black" size={27} />
+          <AppIcon iconName="monitor" color="black" size={25} />
         </TooltipButton>
       </Condition>
 
       <TooltipButton tooltip="Enable virtual joystick">
-        <AppIcon iconName="joystick" color="black" size={27} />
+        <AppIcon iconName="joystick" color="black" size={25} />
       </TooltipButton>
 
       <TooltipButton tooltip="Control Guide">
-        <AppIcon iconName="help" color="black" size={27} />
+        <AppIcon iconName="help" color="black" size={25} />
       </TooltipButton>
 
       <TooltipButton tooltip="Room Info">
-        <AppIcon iconName="room" color="black" size={27} />
+        <AppIcon iconName="room" color="black" size={25} />
       </TooltipButton>
 
       <TooltipButton tooltip="Visit GitHub">
-        <AppIcon iconName="github" color="black" size={27} />
+        <AppIcon iconName="github" color="black" size={25} />
       </TooltipButton>
     </div>
   );
