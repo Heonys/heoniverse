@@ -1,7 +1,11 @@
+import { VSCode } from "@/components/computer/apps/VSCode";
+
 type AppsData = {
   id: string;
   title: string;
   img: string;
+  link?: string;
+  component?: React.ReactNode;
 };
 
 export const appsData: AppsData[] = [
@@ -41,6 +45,7 @@ export const appsData: AppsData[] = [
     id: "vscode",
     title: "VSCode",
     img: "/icons/vscode.png",
+    component: <VSCode />,
   },
   {
     id: "github",

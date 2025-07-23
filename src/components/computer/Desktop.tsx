@@ -8,23 +8,20 @@ export const Desktop = () => {
 
   return (
     <div
-      className="relative w-full h-full rounded-2xl overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/background/wallpaper.webp')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      className="relative w-full h-full rounded-2xl overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/background/wallpaper.webp')" }}
     >
       <Bootstrap />
       <Header />
-      {appsData.map((app) => {
-        if (showApps[app.id]) {
-          return <AppWindow key={app.id} id={app.id} />;
-        } else {
-          return null;
-        }
-      })}
+      <div className="h-full">
+        {appsData.map((app) => {
+          if (showApps[app.id]) {
+            return <AppWindow key={app.id} id={app.id} component={app.component} />;
+          } else {
+            return null;
+          }
+        })}
+      </div>
       <Dock />
     </div>
   );

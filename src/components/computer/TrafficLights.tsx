@@ -21,24 +21,14 @@ export const TrafficLights = ({ id }: Props) => {
           size={10}
         />
       </button>
-      <button
-        className="size-[13px] rounded-full bg-[#ffbd2e] border-[#dea123] cursor-pointer flex justify-center items-center shadow-2xl group-hover:scale-110"
-        onClick={() => {
-          //
-        }}
-      >
+      <button className="size-[13px] rounded-full bg-[#ffbd2e] border-[#dea123] cursor-pointer flex justify-center items-center shadow-2xl group-hover:scale-110">
         <AppIcon
           className="opacity-0 group-hover:opacity-100 transition-opacity duration-150"
           iconName="minus"
           size={10}
         />
       </button>
-      <button
-        className="size-[13px] rounded-full bg-[#27c93f] border-[#1aab29] cursor-pointer flex justify-center items-center shadow-2xl group-hover:scale-110"
-        onClick={() => {
-          //
-        }}
-      >
+      <button className="size-[13px] rounded-full bg-[#27c93f] border-[#1aab29] cursor-pointer flex justify-center items-center shadow-2xl group-hover:scale-110">
         <AppIcon
           className="opacity-0 group-hover:opacity-100 transition-opacity duration-150"
           iconName="full"

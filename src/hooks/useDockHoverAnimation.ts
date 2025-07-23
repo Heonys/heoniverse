@@ -1,6 +1,7 @@
 import { MotionValue, useMotionValue, useSpring, useTransform } from "motion/react";
 import useRaf from "@rooks/use-raf";
 
+// https://github.com/Renovamen/playground-macos/blob/main/src/components/dock/DockItem.tsx
 export const useDockHoverAnimation = (
   mouseX: MotionValue,
   ref: React.RefObject<HTMLImageElement | null>,

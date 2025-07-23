@@ -10,10 +10,9 @@ export function Dock() {
   return (
     <div className="absolute inset-x-0 bottom-2 flex justify-center select-none">
       <ul
-        className="flex space-x-2 px-2 backdrop-blur-2xl bg-white/20 border border-neutral-400/40 rounded-xl shadow-2xl"
-        onMouseMove={(e) => mouseX.set(e.nativeEvent.x)}
+        className="flex space-x-2 px-2 backdrop-blur-2xl bg-white/20 border border-neutral-400/40 rounded-xl shadow-2xl h-16"
+        onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(null)}
-        style={{ height: `${(dockSize + 15) / 16}rem` }}
       >
         {appsData.map(({ id, img, title }) => (
           <DockItem
