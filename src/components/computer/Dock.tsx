@@ -18,6 +18,7 @@ export function Dock() {
         {appsData.map(({ id, img, title }) => (
           <DockItem
             key={id}
+            id={id}
             img={img}
             title={title}
             mouseX={mouseX}

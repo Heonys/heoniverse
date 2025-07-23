@@ -6,3 +6,4 @@ export * from "./FloatingButton";
 export * from "./AppSlider";
 export * from "./TooltipButton";
 export * from "./EmojiPicker";
+export * from "./AppWindow";

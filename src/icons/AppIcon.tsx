@@ -7,10 +7,13 @@ import { BiJoystickAlt, BiSolidHelpCircle } from "react-icons/bi";
 import { IoChatbubbleEllipsesOutline, IoBatteryCharging } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa6";
 import { RiShutDownLine } from "react-icons/ri";
+import { MdOutlineCloseFullscreen, MdOutlineOpenInFull } from "react-icons/md";
+import { FaXmark, FaMinus } from "react-icons/fa6";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
   ["x-mark"]: HiMiniXMark,
+  ["x-mark-bold"]: FaXmark,
   ["chat"]: IoChatbubbleEllipsesOutline,
   ["smile"]: CiFaceSmile,
   ["joystick"]: BiJoystickAlt,
@@ -24,6 +27,9 @@ const IconMap = {
   ["apple-logo"]: FaApple,
   ["shut-down"]: RiShutDownLine,
   ["wifi"]: FaWifi,
+  ["minus"]: FaMinus,
+  ["full"]: MdOutlineOpenInFull,
+  ["exit-full"]: MdOutlineCloseFullscreen,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

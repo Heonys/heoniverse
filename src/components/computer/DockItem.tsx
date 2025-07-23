@@ -1,9 +1,12 @@
 import { motion, MotionValue } from "motion/react";
 import { useRef } from "react";
-import { useDockHoverAnimation } from "@/hooks";
+import { useAppDispatch, useAppSelector, useDockHoverAnimation } from "@/hooks";
 import { Tooltip } from "react-tooltip";
+import { openApp } from "@/stores/desktopSlice";
+import { cn } from "@/utils";
 
 type Props = {
+  id: string;
   title: string;
   img: string;
   mouseX: MotionValue;
@@ -11,9 +14,11 @@ type Props = {
   dockMag: number;
 };
 
-export function DockItem({ img, mouseX, dockSize, dockMag, title }: Props) {
+export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
   const ref = useRef<HTMLImageElement>(null);
   const { width } = useDockHoverAnimation(mouseX, ref, dockSize, dockMag);
+  const dispatch = useAppDispatch();
+  const showApps = useAppSelector((state) => state.desktop.showApps);
 
   return (
     <li className="relative flex flex-col justify-end mb-1">
@@ -21,18 +26,20 @@ export function DockItem({ img, mouseX, dockSize, dockMag, title }: Props) {
         className="no-pixel"
         ref={ref}
         src={img}
-        alt={title}
-        title={title}
         draggable={false}
         style={{ width, willChange: "width" }}
         data-tooltip-id="dock-item-tooltip"
         data-tooltip-content={title}
+        onClick={() => dispatch(openApp(id))}
       />
       <Tooltip
         id="dock-item-tooltip"
         data-tooltip-variant="dark"
         place="top"
         className="!text-white !rounded !px-2 !py-1 !shadow-lg !select-none"
+      />
+      <div
+        className={cn("size-1 mx-auto rounded-full bg-[#F3F4F6]", showApps[id] ? "" : "invisible")}
       />
     </li>
   );

@@ -5,6 +5,7 @@ import roomReducer from "./roomSlice";
 import computerReducer from "./computerSlice";
 import whiteboardSlice from "./whiteboardSlice";
 import chatSlice from "./chatSlice";
+import desktopSlice from "./desktopSlice";
 
 enableMapSet();
 
@@ -15,6 +16,7 @@ export const store = configureStore({
     computer: computerReducer,
     whitebaord: whiteboardSlice,
     chat: chatSlice,
+    desktop: desktopSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
