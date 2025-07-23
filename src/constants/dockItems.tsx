@@ -1,4 +1,4 @@
-import { VSCode } from "@/components/computer/apps/VSCode";
+import { VSCode } from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -17,25 +17,23 @@ export const appsData: AppsData[] = [
   {
     id: "facetime",
     title: "FaceTime",
-    img: "/icons/facetime.png",
+    img: "/icons/facetime.webp",
   },
   {
     id: "message",
     title: "Message",
     img: "/icons/messages.webp",
   },
-
   {
-    id: "music",
-    title: "Music",
-    img: "/icons/musics.png",
+    id: "safari",
+    title: "Safari",
+    img: "/icons/safari.png",
   },
   {
-    id: "note",
-    title: "Note",
-    img: "/icons/notes.png",
+    id: "terminal",
+    title: "Terminal",
+    img: "/icons/terminal.png",
   },
-
   {
     id: "photo",
     title: "Photo",
@@ -46,10 +44,5 @@ export const appsData: AppsData[] = [
     title: "VSCode",
     img: "/icons/vscode.png",
     component: <VSCode />,
-  },
-  {
-    id: "github",
-    title: "Github",
-    img: "/icons/github.png",
   },
 ];

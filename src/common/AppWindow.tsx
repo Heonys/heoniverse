@@ -14,7 +14,7 @@ export const AppWindow = ({ id, component }: Props) => {
     <Rnd
       id={`desktop-app-${id}`}
       bounds="parent"
-      className="overflow-hidden rounded-xl bg-[#1B1B1D] border-gray-500 border shadow-xl"
+      className="overflow-hidden rounded-xl bg-[#1e1e1e] border-gray-500 border shadow-xl"
       size={{ width: position.width, height: position.height }}
       position={position}
       dragHandleClassName="draggable-area"

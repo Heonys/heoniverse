@@ -30,6 +30,9 @@ export const Header = () => {
           <AppIcon iconName="wifi" color="white" size={16} />
         </HeaderButton>
         <HeaderButton>
+          <AppIcon iconName="search" color="white" size={16} />
+        </HeaderButton>
+        <HeaderButton>
           <ControlCenterIcon size={16} />
         </HeaderButton>
         <HeaderButton>
