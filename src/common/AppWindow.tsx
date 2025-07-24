@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { Rnd } from "react-rnd";
-import { TrafficLights } from "@/components/computer";
 
 type Props = {
   id: string;
   component?: React.ReactNode;
 };
 
+// #f6f6f4
+// #1e1e1e
 export const AppWindow = ({ id, component }: Props) => {
-  const [position, setPosition] = useState({ x: 400, y: 15, width: 700, height: 500 });
+  const [position, setPosition] = useState({ x: 340, y: 15, width: 650, height: 430 });
 
   return (
     <Rnd
       id={`desktop-app-${id}`}
       bounds="parent"
-      className="overflow-hidden rounded-xl bg-[#1e1e1e] border-gray-500 border shadow-xl"
+      className="overflow-hidden rounded-2xl border-gray-500 border shadow-xl"
       size={{ width: position.width, height: position.height }}
       position={position}
       dragHandleClassName="draggable-area"
@@ -30,10 +31,7 @@ export const AppWindow = ({ id, component }: Props) => {
         });
       }}
     >
-      <div className="relative draggable-area text-center top-0 h-7 w-full cursor-move">
-        <TrafficLights id={id} />
-      </div>
-      <div className="w-full h-full">{component}</div>
+      {component}
     </Rnd>
   );
 };

@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type UserState = {
+  loggedIn: boolean;
+  otherPlayersName: Map<string, string>;
+};
+
+const initialState: UserState = {
+  loggedIn: false,
+  otherPlayersName: new Map<string, string>(),
+};
+
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    loggedIn: false,
-    otherPlayersName: new Map<string, string>(),
-  },
+  initialState,
   reducers: {
     setLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.loggedIn = action.payload;

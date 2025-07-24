@@ -12,7 +12,7 @@ export const Desktop = () => {
     >
       <Bootstrap />
       <Header />
-      <div className="h-full">
+      <div className="h-[calc(100%-2rem)]">
         {appsData.map((app) => {
           if (showApps[app.id]) {
             return <AppWindow key={app.id} id={app.id} component={app.component} />;

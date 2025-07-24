@@ -15,6 +15,12 @@ import { BsLayoutSidebar } from "react-icons/bs";
 import { FaShieldAlt } from "react-icons/fa";
 import { GoShare } from "react-icons/go";
 import { RxCopy } from "react-icons/rx";
+import { LiaEditSolid } from "react-icons/lia";
+import { BsCameraVideo } from "react-icons/bs";
+import { TfiInfoAlt } from "react-icons/tfi";
+import { FaPlus } from "react-icons/fa6";
+import { RiVoiceprintFill } from "react-icons/ri";
+import { BsEmojiSmile } from "react-icons/bs";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -43,6 +49,12 @@ const IconMap = {
   ["shield"]: FaShieldAlt,
   ["shared"]: GoShare,
   ["copy"]: RxCopy,
+  ["edit"]: LiaEditSolid,
+  ["video"]: BsCameraVideo,
+  ["info"]: TfiInfoAlt,
+  ["plus"]: FaPlus,
+  ["voice"]: RiVoiceprintFill,
+  ["emoji"]: BsEmojiSmile,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

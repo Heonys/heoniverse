@@ -1,4 +1,4 @@
-import { VSCode } from "@/components/computer/apps";
+import { VSCode, Messages } from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -20,9 +20,10 @@ export const appsData: AppsData[] = [
     img: "/icons/facetime.webp",
   },
   {
-    id: "message",
-    title: "Message",
+    id: "messages",
+    title: "Messages",
     img: "/icons/messages.webp",
+    component: <Messages />,
   },
   {
     id: "safari",

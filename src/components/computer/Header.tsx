@@ -9,7 +9,7 @@ export const Header = () => {
     <div
       className={twMerge(
         "overflow-hidden rounded-t-2xl w-full h-8 px-2 select-none",
-        "flex items-center justify-between text-sm text-white bg-black/10 backdrop-blur-3xl shadow transition",
+        "flex items-center justify-between text-sm text-white bg-black/15 backdrop-blur-3xl shadow transition",
       )}
     >
       <div className="flex">
