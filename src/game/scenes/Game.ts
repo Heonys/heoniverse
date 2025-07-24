@@ -208,7 +208,7 @@ export class Game extends Phaser.Scene {
     this.otherPlayers.add(otherPlayer);
     this.ohterPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
-    store.dispatch(pushJoinedMessage(name));
+    store.dispatch(pushJoinedMessage({ id, name }));
   }
 
   playerLeft(id: string, player: IPlayer) {
@@ -219,7 +219,7 @@ export class Game extends Phaser.Scene {
       store.dispatch(removePlayerName(id));
 
       store.dispatch(removePlayerName(id));
-      store.dispatch(pushLeftMessage(player.name));
+      store.dispatch(pushLeftMessage({ id, name: player.name }));
     }
   }
 

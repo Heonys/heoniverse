@@ -18,21 +18,23 @@ const chatSlice = createSlice({
     pushMessage(state, action: PayloadAction<IChatMessage>) {
       state.chatMessages.push({ type: "CHAT", message: action.payload });
     },
-    pushJoinedMessage(state, action: PayloadAction<string>) {
+    pushJoinedMessage(state, action: PayloadAction<{ id: string; name: string }>) {
       state.chatMessages.push({
         type: "JOINED",
         message: {
-          author: action.payload,
+          clientId: action.payload.id,
+          author: action.payload.name,
           content: "님이 입장하셨습니다.",
           createdAt: new Date().getTime(),
         },
       });
     },
-    pushLeftMessage(state, action: PayloadAction<string>) {
+    pushLeftMessage(state, action: PayloadAction<{ id: string; name: string }>) {
       state.chatMessages.push({
         type: "LEFT",
         message: {
-          author: action.payload,
+          clientId: action.payload.id,
+          author: action.payload.name,
           content: "님이 퇴장하셨습니다.",
           createdAt: new Date().getTime(),
         },

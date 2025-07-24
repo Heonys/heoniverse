@@ -17,6 +17,7 @@ export class PushChatUpdateCommand extends Command<Studio, Payload> {
     if (messages.length >= 100) messages.shift();
 
     const newMessage = new ChatMessage();
+    newMessage.clientId = sessionId;
     newMessage.author = player.name;
     newMessage.content = message;
     messages.push(newMessage);

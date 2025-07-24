@@ -10,6 +10,7 @@ export class Player extends Schema implements IPlayer {
 }
 
 export class ChatMessage extends Schema implements IChatMessage {
+  @type("string") clientId = "";
   @type("string") author = "";
   @type("number") createdAt = new Date().getTime();
   @type("string") content = "";

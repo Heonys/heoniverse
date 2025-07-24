@@ -1,3 +1,5 @@
+import { format, isToday } from "date-fns";
+import { ko } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 import { clsx, ClassValue } from "clsx";
 import { Direction, sittingOffset } from "@/constants";
@@ -57,4 +59,11 @@ export function pickColor(str: string) {
   }
   const index = Math.abs(hash % TAILWIND_COLORS.length);
   return TAILWIND_COLORS[index];
+}
+
+export function formattDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  return isToday(date)
+    ? format(date, "a h:mm", { locale: ko })
+    : format(date, "MMM d일 (eee)", { locale: ko });
 }

@@ -43,6 +43,7 @@ export interface IStudioState {
 
 export type ChatType = "JOINED" | "LEFT" | "CHAT";
 export type IChatMessage = {
+  clientId: string;
   author: string;
   createdAt: number;
   content: string;
