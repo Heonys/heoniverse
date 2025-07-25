@@ -14,7 +14,7 @@ export const Desktop = () => {
       <Header />
       <div className="h-[calc(100%-2rem)]">
         {appsData.map((app) => {
-          if (showApps[app.id]) {
+          if (app.component && showApps[app.id]) {
             return <AppWindow key={app.id} id={app.id} component={app.component} />;
           } else {
             return null;

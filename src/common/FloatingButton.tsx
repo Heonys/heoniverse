@@ -11,7 +11,7 @@ export const FloatingButton = ({ children, className, ...props }: Props) => {
     <Button
       className={cn(
         "z-50 w-13 h-13",
-        "rounded-full bg-neutral-700 shadow-xl cursor-pointer",
+        "relative rounded-full bg-neutral-700 shadow-xl cursor-pointer",
         "flex items-center justify-center",
         "hover:bg-neutral-800 transition-colors duration-300",
         className,
@@ -19,6 +19,9 @@ export const FloatingButton = ({ children, className, ...props }: Props) => {
       {...props}
     >
       {children}
+      <div className="absolute top-0 right-0 bg-red-500 size-5 p-1 rounded-full flex justify-center items-center text-white">
+        2
+      </div>
     </Button>
   );
 };

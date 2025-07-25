@@ -20,8 +20,12 @@ const desktopSlice = createSlice({
     closeApp(state, action: PayloadAction<string>) {
       state.showApps[action.payload] = false;
     },
+    shutdownDesktop(state) {
+      state.showApps = {};
+      state.focusedApp = null;
+    },
   },
 });
 
-export const { openApp, closeApp } = desktopSlice.actions;
+export const { openApp, closeApp, shutdownDesktop } = desktopSlice.actions;
 export default desktopSlice.reducer;

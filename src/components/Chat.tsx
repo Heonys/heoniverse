@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
-import { Input } from "@headlessui/react";
+import { twMerge } from "tailwind-merge";
+import { Button, Input } from "@headlessui/react";
 import { AppIcon, IconButton } from "@/icons";
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { setShowChat, setFocusChat } from "@/stores/chatSlice";
+import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { ChatMessage } from "@/components";
-import { FloatingButton } from "@/common";
 
 type FormType = { message: string };
 
@@ -18,8 +18,12 @@ export const Chat = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const { showChat, focused, chatMessages } = useAppSelector((state) => state.chat);
+  const { showChat, focused, chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
+
+  const unReadMessageCount = chatMessages.filter((it) => {
+    if (it.type === "CHAT" && it.message.createdAt > lastReadAt) return it;
+  }).length;
 
   const onSubmit = ({ message }: FormType) => {
     if (!readyToSubmit.current) {
@@ -46,7 +50,7 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed left-0 bottom-10 w-[500px] h-[360px]">
+    <div className="fixed left-0 bottom-10 w-[500px] h-[360px] select-none">
       <div className="relative h-full flex flex-col p-5">
         {showChat ? (
           <>
@@ -54,7 +58,10 @@ export const Chat = () => {
               <div>Chat</div>
               <IconButton
                 className="absolute top-0 right-0 p-2"
-                onClick={() => dispatch(setShowChat(false))}
+                onClick={() => {
+                  dispatch(setShowChat(false));
+                  dispatch(markAsRead());
+                }}
               >
                 <AppIcon iconName="x-mark" size={25} />
               </IconButton>
@@ -95,9 +102,22 @@ export const Chat = () => {
           </>
         ) : (
           <div className="mt-auto">
-            <FloatingButton onClick={() => dispatch(setShowChat(true))}>
+            <Button
+              className={twMerge(
+                "z-50 w-13 h-13",
+                "relative rounded-full bg-neutral-700 shadow-xl cursor-pointer select-none",
+                "flex items-center justify-center",
+                "hover:bg-neutral-800 transition-colors duration-300",
+              )}
+              onClick={() => dispatch(setShowChat(true))}
+            >
               <AppIcon iconName="chat" color="white" size={28} />
-            </FloatingButton>
+              {unReadMessageCount > 0 && (
+                <div className="absolute -top-1 -right-1 bg-red-500 size-5 p-1 rounded-full flex justify-center items-center text-white text-xs">
+                  {unReadMessageCount}
+                </div>
+              )}
+            </Button>
           </div>
         )}
       </div>

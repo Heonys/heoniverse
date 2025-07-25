@@ -1,4 +1,4 @@
-import { VSCode, Messages } from "@/components/computer/apps";
+import { VSCode, Messages, ScreenSharing, Safari } from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -15,9 +15,10 @@ export const appsData: AppsData[] = [
     img: "/icons/finder.png",
   },
   {
-    id: "facetime",
-    title: "FaceTime",
-    img: "/icons/facetime.webp",
+    id: "screen-sharing",
+    title: "Screen Sharing",
+    img: "/icons/screen-sharing.webp",
+    component: <ScreenSharing />,
   },
   {
     id: "messages",
@@ -29,6 +30,7 @@ export const appsData: AppsData[] = [
     id: "safari",
     title: "Safari",
     img: "/icons/safari.png",
+    component: <Safari />,
   },
   {
     id: "terminal",

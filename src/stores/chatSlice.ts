@@ -7,6 +7,7 @@ const chatSlice = createSlice({
     showChat: true,
     chatMessages: [] as { type: ChatType; message: IChatMessage }[],
     focused: false,
+    lastReadAt: Infinity,
   },
   reducers: {
     setShowChat: (state, action: PayloadAction<boolean>) => {
@@ -40,9 +41,18 @@ const chatSlice = createSlice({
         },
       });
     },
+    markAsRead(state) {
+      state.lastReadAt = new Date().getTime();
+    },
   },
 });
 
-export const { setShowChat, setFocusChat, pushMessage, pushJoinedMessage, pushLeftMessage } =
-  chatSlice.actions;
+export const {
+  setShowChat,
+  setFocusChat,
+  pushMessage,
+  pushJoinedMessage,
+  pushLeftMessage,
+  markAsRead,
+} = chatSlice.actions;
 export default chatSlice.reducer;

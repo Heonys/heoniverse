@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AppIcon } from "@/icons";
 import { TrafficLights } from "@/components/computer";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { phaserGame } from "@/game";
 import type { Game } from "@/game/scenes";
 import { formattDate } from "@/utils";
+import { markAsRead } from "@/stores/chatSlice";
 
 export const Messages = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,7 @@ export const Messages = () => {
   const [text, setText] = useState("");
 
   const chatMessages = useAppSelector((state) => state.chat.chatMessages);
+  const dispatch = useAppDispatch();
   const game = phaserGame.scene.keys.game as Game;
   const lastMessage = chatMessages[chatMessages.length - 1];
 
@@ -40,7 +42,7 @@ export const Messages = () => {
     <div className="w-full h-full bg-[#1e1e1e]/75 backdrop-blur-sm overflow-hidden rounded-2xl">
       <div className="relative grid grid-cols-3 draggable-area text-center top-0 h-7 w-full cursor-move">
         <div className="relative">
-          <TrafficLights id="messages" />
+          <TrafficLights id="messages" onClose={() => dispatch(markAsRead())} />
         </div>
         <div className="col-span-2 bg-[#1e1e1e]" />
       </div>

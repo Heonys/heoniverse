@@ -22,16 +22,18 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
 
   return (
     <li className="relative flex flex-col justify-end mb-1">
-      <motion.img
-        className="no-pixel"
-        ref={ref}
-        src={img}
-        draggable={false}
-        style={{ width, willChange: "width" }}
-        data-tooltip-id="dock-item-tooltip"
-        data-tooltip-content={title}
-        onClick={() => dispatch(openApp(id))}
-      />
+      <div className="relative">
+        <motion.img
+          className="no-pixel"
+          ref={ref}
+          src={img}
+          draggable={false}
+          style={{ width, willChange: "width" }}
+          data-tooltip-id="dock-item-tooltip"
+          data-tooltip-content={title}
+          onClick={() => dispatch(openApp(id))}
+        />
+      </div>
       <Tooltip
         id="dock-item-tooltip"
         data-tooltip-variant="dark"

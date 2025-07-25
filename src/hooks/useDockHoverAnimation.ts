@@ -48,5 +48,5 @@ export const useDockHoverAnimation = (
     distance.set(distanceLimit + 1);
   }, true);
 
-  return { width };
+  return { width, widthPX };
 };

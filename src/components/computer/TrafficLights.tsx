@@ -4,16 +4,20 @@ import { closeApp } from "@/stores/desktopSlice";
 
 type Props = {
   id: string;
+  onClose?: () => void;
 };
 
-export const TrafficLights = ({ id }: Props) => {
+export const TrafficLights = ({ id, onClose }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
     <div className="absolute left-0 flex gap-2 items-center ml-2 mt-2 group">
       <button
         className="size-[13px] rounded-full bg-[#ff5f56] border-[#e0443e] cursor-pointer flex justify-center items-center shadow-2xl group-hover:scale-110"
-        onClick={() => dispatch(closeApp(id))}
+        onClick={() => {
+          dispatch(closeApp(id));
+          onClose?.();
+        }}
       >
         <AppIcon
           className="opacity-0 group-hover:opacity-100 transition-opacity duration-150"

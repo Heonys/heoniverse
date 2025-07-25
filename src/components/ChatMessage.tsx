@@ -18,7 +18,7 @@ export const ChatMessage = ({ messageType, chatMessage }: Props) => {
       <Condition
         condition={messageType === "CHAT"}
         fallback={
-          <div className="text-gray-600 text-sm flex gap-1 py-0.5 px-1">
+          <div className="text-white/50 text-sm flex gap-1 py-0.5 px-1 w-full justify-center items-center">
             <div className="underline">{chatMessage.author}</div>
             <div>{chatMessage.content}</div>
           </div>
