@@ -3,8 +3,13 @@ import { ko } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 import { HeaderButton } from "./HeaderButton";
 import { AppIcon, ControlCenterIcon } from "@/icons";
+import { useAppSelector } from "@/hooks";
+import { visibleAppCount } from "@/stores/desktopSlice";
 
 export const Header = () => {
+  const currentApp = useAppSelector((state) => state.desktop.currentApp);
+  const count = useAppSelector(visibleAppCount);
+
   return (
     <div
       className={twMerge(
@@ -17,7 +22,7 @@ export const Header = () => {
           <AppIcon iconName="apple-logo" color="white" size={20} />
         </HeaderButton>
         <HeaderButton>
-          <span className="font-bold">Finder</span>
+          <span className="font-bold">{count ? currentApp : "Finder"}</span>
         </HeaderButton>
       </div>
 

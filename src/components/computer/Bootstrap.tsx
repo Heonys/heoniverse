@@ -20,7 +20,7 @@ export function Bootstrap() {
               className="h-full bg-white"
               initial={{ transform: "translateX(-100%)" }}
               animate={{ transform: "translateX(0%)" }}
-              transition={{ duration: 1.5 }}
+              transition={{ duration: 1.25 }}
               onAnimationComplete={() => setHidden(true)}
             />
           </div>

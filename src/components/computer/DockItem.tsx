@@ -20,6 +20,10 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
   const dispatch = useAppDispatch();
   const showApps = useAppSelector((state) => state.desktop.showApps);
 
+  const handleClick = () => {
+    dispatch(openApp({ id, title }));
+  };
+
   return (
     <li className="relative flex flex-col justify-end mb-1">
       <div className="relative">
@@ -31,7 +35,7 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
           style={{ width, willChange: "width" }}
           data-tooltip-id="dock-item-tooltip"
           data-tooltip-content={title}
-          onClick={() => dispatch(openApp(id))}
+          onClick={handleClick}
         />
       </div>
       <Tooltip

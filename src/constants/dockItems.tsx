@@ -1,4 +1,4 @@
-import { VSCode, Messages, ScreenSharing, Safari } from "@/components/computer/apps";
+import { VSCode, Messages, ScreenSharing, Safari, Music, Photo } from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -33,14 +33,16 @@ export const appsData: AppsData[] = [
     component: <Safari />,
   },
   {
-    id: "terminal",
-    title: "Terminal",
-    img: "/icons/terminal.png",
+    id: "music",
+    title: "Music",
+    img: "/icons/music.webp",
+    component: <Music />,
   },
   {
     id: "photo",
     title: "Photo",
     img: "/icons/photos.png",
+    component: <Photo />,
   },
   {
     id: "vscode",

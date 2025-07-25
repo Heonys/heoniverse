@@ -3,7 +3,7 @@ import { TrafficLights } from "../TrafficLights";
 
 export const Safari = () => {
   return (
-    <div className="w-full h-full bg-[#1e1e1e] overflow-hidden rounded-2xl">
+    <div className="w-full h-full overflow-hidden rounded-2xl bg-[#1e1e1e]">
       <div className="relative draggable-area text-center top-0 h-7 w-full cursor-move">
         <TrafficLights id="safari" />
       </div>
@@ -31,7 +31,7 @@ export const Safari = () => {
                 </span>
                 <input
                   type="text"
-                  className="h-6 w-64 pl-8 pr-2 py-1 rounded font-normal text-sm bg-[#1e1e1e] text-white outline-none"
+                  className="h-7 w-64 pl-8 p-2 rounded font-normal text-sm bg-[#1e1e1e] text-white outline-none"
                   placeholder="Search or enter website name"
                 />
               </div>
@@ -47,21 +47,38 @@ export const Safari = () => {
           </div>
         </div>
 
-        <div className="p-6">
-          <div className="pt-8 px-4">
-            <div className="text-white font-medium text-xl">즐겨 찾기</div>
-            <div className="mt-3 grid grid-flow-row grid-cols-8"></div>
-          </div>
-          <div className="pt-5 px-4">
-            <div className="text-white font-medium text-xl">개인 정보 보호 리포트</div>
-            <div className="h-16 w-full mt-4 grid grid-cols-8 shadow-2xl rounded-xl text-sm bg-gray-50/70">
-              <div className="col-start-1 col-span-1 flex items-center justify-center space-x-2">
-                <AppIcon iconName="shield" size={18} />
-                <span className="text-xl">20</span>
+        <div className="p-5">
+          <div className="mt-4 px-4">
+            <div className="text-white/90 font-medium text-lg">즐겨찾기</div>
+            <div className="mt-3 flex gap-3 px-2">
+              <div className="h-28 flex flex-col">
+                <div className="size-16 mx-auto rounded-md overflow-hidden bg-white/90">
+                  <img className="no-pixel scale-[80%]" src="/icons/apple.png" alt="2png" />
+                </div>
+                <span className="mt-2 mx-auto text-[10px] text-white">Apple</span>
               </div>
-              <div className="col-start-2 col-span-7 flex items-center px-2">
-                지난 7일 동안 Safari가 사용자를 프로파일링하려는 20개의 트래커를 차단했으며, 알려진
-                트래커에게서 사용자의 IP주소를 가렸습니다.
+              <div className="h-28 flex flex-col">
+                <div className="size-16 mx-auto rounded-md overflow-hidden bg-white/90">
+                  <img className="no-pixel" src="/icons/google.png" alt="2png" />
+                </div>
+                <span className="mt-2 mx-auto text-[10px] text-white">Google</span>
+              </div>
+              <div className="h-28 flex flex-col">
+                <div className="size-16 mx-auto rounded-md overflow-hidden bg-white/90">
+                  <img className="no-pixel scale-105" src="/icons/github.png" alt="2png" />
+                </div>
+                <span className="mt-2 mx-auto text-[10px] text-white">Github</span>
+              </div>
+            </div>
+          </div>
+          <div className="px-4">
+            <div className="text-white/90 font-medium text-lg">개인정보 보호 리포트</div>
+            <div className="h-16 w-full mt-4 flex items-center shadow-2xl rounded-xl text-sm bg-[#2d2d2d] text-white/90">
+              <div className="px-3 ml-2 my-auto flex items-center justify-center gap-1.5 opacity-80">
+                <AppIcon iconName="shield" size={20} />
+              </div>
+              <div className="flex items-center px-2 text-xs">
+                지난 7일 동안 Safari가 사용자를 프로파일링하려는 8개의 트래커를 차단했습니다.
               </div>
             </div>
           </div>
