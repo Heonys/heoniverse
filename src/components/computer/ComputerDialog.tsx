@@ -21,6 +21,10 @@ export const ComputerDialog = () => {
       </div>
 
       <div className="fixed bottom-2 right-5 flex gap-2 z-[9999]">
+        <TooltipButton tooltip="help">
+          <AppIcon iconName="help" color="black" size={25} />
+        </TooltipButton>
+
         <TooltipButton
           tooltip="Shut Down"
           onClick={() => {

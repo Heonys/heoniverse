@@ -38,7 +38,6 @@ export const ChatMessage = ({ messageType, chatMessage }: Props) => {
         id="chat-message-tooltip"
         className="!text-white !text-xs !rounded !px-2 !py-1 !shadow-lg !select-none"
         place="right"
-        data-tooltip-variant="dark"
       />
     </div>
   );

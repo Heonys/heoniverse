@@ -19,7 +19,6 @@ export const TooltipButton = ({ tooltip, children, ...props }: Props) => {
       </Button>
       <Tooltip
         id="app-tooltip-button"
-        data-tooltip-variant="dark"
         place="top"
         className="!text-white !text-xs !rounded !px-2 !py-1 !shadow-lg !select-none"
       />

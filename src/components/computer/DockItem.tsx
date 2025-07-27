@@ -40,7 +40,6 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
       </div>
       <Tooltip
         id="dock-item-tooltip"
-        data-tooltip-variant="dark"
         place="top"
         className="!text-white !rounded !px-2 !py-1 !shadow-lg !select-none"
       />

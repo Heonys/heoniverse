@@ -14,7 +14,6 @@ import { RiVoiceprintFill, RiCursorFill } from "react-icons/ri";
 import { LuEraser, LuUndo2, LuRedo2 } from "react-icons/lu";
 import { IoMdRefresh } from "react-icons/io";
 import { IoText } from "react-icons/io5";
-import { IoIosHelpCircleOutline } from "react-icons/io";
 import {
   MdRoom,
   MdOutlinePublic,
@@ -36,12 +35,6 @@ import {
 import { GoDiamond } from "react-icons/go";
 import { HiMiniArrowLongRight } from "react-icons/hi2";
 import { IoHandRightOutline } from "react-icons/io5";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { HiOutlineArrowLongRight } from "react-icons/hi2";
-import { IoImageOutline } from "react-icons/io5";
-import { RxDividerHorizontal } from "react-icons/rx";
-import { GoHorizontalRule } from "react-icons/go";
-import { MdOutlineHorizontalRule } from "react-icons/md";
 import { PiMinus, PiPlus } from "react-icons/pi";
 
 export type IconNames = keyof typeof IconMap;
@@ -91,16 +84,8 @@ const IconMap = {
   ["exit"]: MdExitToApp,
   ["diamond"]: GoDiamond,
   ["arrow-right-thin"]: HiMiniArrowLongRight,
-  ["arrow2"]: HiOutlineArrowNarrowRight,
-  ["arrow3"]: HiOutlineArrowLongRight,
   ["text"]: IoText,
-  ["help-outline"]: IoIosHelpCircleOutline,
-
   ["hand"]: IoHandRightOutline,
-  ["horizon-1"]: RxDividerHorizontal,
-  ["horizon-2"]: GoHorizontalRule,
-  ["horizon-3"]: MdOutlineHorizontalRule,
-  ["image"]: IoImageOutline,
   ["plus-thin"]: PiPlus,
   ["minus-thin"]: PiMinus,
 };
