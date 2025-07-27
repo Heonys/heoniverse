@@ -7,7 +7,7 @@ import { BiJoystickAlt, BiSolidHelpCircle } from "react-icons/bi";
 import { IoChatbubbleEllipsesOutline, IoBatteryCharging } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa6";
 import { RiShutDownLine } from "react-icons/ri";
-import { MdOutlineCloseFullscreen, MdOutlineOpenInFull } from "react-icons/md";
+import { MdOutlineCloseFullscreen, MdOutlineOpenInFull, MdErrorOutline } from "react-icons/md";
 import { FaXmark, FaMinus } from "react-icons/fa6";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
@@ -55,6 +55,7 @@ const IconMap = {
   ["plus"]: FaPlus,
   ["voice"]: RiVoiceprintFill,
   ["emoji"]: BsEmojiSmile,
+  ["error"]: MdErrorOutline,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;
