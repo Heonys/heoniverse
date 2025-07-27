@@ -8,7 +8,7 @@ type ComputerState = {
 };
 
 const initialState: ComputerState = {
-  isOpenDialog: false,
+  isOpenDialog: true,
   whiteboardId: null,
 };
 

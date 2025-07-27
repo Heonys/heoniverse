@@ -1,26 +1,48 @@
 import { IconBaseProps } from "react-icons";
-import { HiMiniXMark } from "react-icons/hi2";
-import { FaGithub, FaApple, FaWifi } from "react-icons/fa";
+import { FaGithub, FaApple, FaWifi, FaShieldAlt } from "react-icons/fa";
 import { CiFaceSmile } from "react-icons/ci";
-import { MdRoom, MdOutlinePublic, MdMonitorHeart } from "react-icons/md";
 import { BiJoystickAlt, BiSolidHelpCircle } from "react-icons/bi";
-import { IoChatbubbleEllipsesOutline, IoBatteryCharging } from "react-icons/io5";
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRight, FaXmark, FaMinus, FaPlus } from "react-icons/fa6";
 import { RiShutDownLine } from "react-icons/ri";
-import { MdOutlineCloseFullscreen, MdOutlineOpenInFull, MdErrorOutline } from "react-icons/md";
-import { FaXmark, FaMinus } from "react-icons/fa6";
-import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { BsLayoutSidebar } from "react-icons/bs";
-import { FaShieldAlt } from "react-icons/fa";
+import { HiMiniXMark, HiOutlineMagnifyingGlass, HiOutlinePencil } from "react-icons/hi2";
+import { BsLayoutSidebar, BsCameraVideo, BsEmojiSmile } from "react-icons/bs";
 import { GoShare } from "react-icons/go";
-import { RxCopy } from "react-icons/rx";
+import { RxCopy, RxBorderWidth } from "react-icons/rx";
 import { LiaEditSolid } from "react-icons/lia";
-import { BsCameraVideo } from "react-icons/bs";
-import { TfiInfoAlt } from "react-icons/tfi";
-import { FaPlus } from "react-icons/fa6";
-import { RiVoiceprintFill } from "react-icons/ri";
-import { BsEmojiSmile } from "react-icons/bs";
+import { TfiInfoAlt, TfiLayoutLineSolid } from "react-icons/tfi";
+import { RiVoiceprintFill, RiCursorFill } from "react-icons/ri";
+import { LuEraser, LuUndo2, LuRedo2 } from "react-icons/lu";
+import { IoMdRefresh } from "react-icons/io";
+import { IoText } from "react-icons/io5";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import {
+  MdRoom,
+  MdOutlinePublic,
+  MdMonitorHeart,
+  MdExitToApp,
+  MdOutlineCloseFullscreen,
+  MdOutlineOpenInFull,
+  MdErrorOutline,
+} from "react-icons/md";
+import {
+  IoChevronBack,
+  IoChevronForward,
+  IoEllipseOutline,
+  IoSquareOutline,
+  IoChatbubbleEllipsesOutline,
+  IoBatteryCharging,
+} from "react-icons/io5";
+
+import { GoDiamond } from "react-icons/go";
+import { HiMiniArrowLongRight } from "react-icons/hi2";
+import { IoHandRightOutline } from "react-icons/io5";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { HiOutlineArrowLongRight } from "react-icons/hi2";
+import { IoImageOutline } from "react-icons/io5";
+import { RxDividerHorizontal } from "react-icons/rx";
+import { GoHorizontalRule } from "react-icons/go";
+import { MdOutlineHorizontalRule } from "react-icons/md";
+import { PiMinus, PiPlus } from "react-icons/pi";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -56,6 +78,31 @@ const IconMap = {
   ["voice"]: RiVoiceprintFill,
   ["emoji"]: BsEmojiSmile,
   ["error"]: MdErrorOutline,
+  ["draw"]: HiOutlinePencil,
+  ["line"]: TfiLayoutLineSolid,
+  ["ellipse"]: IoEllipseOutline,
+  ["rect"]: IoSquareOutline,
+  ["cursor"]: RiCursorFill,
+  ["eraser"]: LuEraser,
+  ["undo"]: LuUndo2,
+  ["redo"]: LuRedo2,
+  ["stroke"]: RxBorderWidth,
+  ["refresh"]: IoMdRefresh,
+  ["exit"]: MdExitToApp,
+  ["diamond"]: GoDiamond,
+  ["arrow-right-thin"]: HiMiniArrowLongRight,
+  ["arrow2"]: HiOutlineArrowNarrowRight,
+  ["arrow3"]: HiOutlineArrowLongRight,
+  ["text"]: IoText,
+  ["help-outline"]: IoIosHelpCircleOutline,
+
+  ["hand"]: IoHandRightOutline,
+  ["horizon-1"]: RxDividerHorizontal,
+  ["horizon-2"]: GoHorizontalRule,
+  ["horizon-3"]: MdOutlineHorizontalRule,
+  ["image"]: IoImageOutline,
+  ["plus-thin"]: PiPlus,
+  ["minus-thin"]: PiMinus,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;
