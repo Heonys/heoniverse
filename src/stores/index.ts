@@ -6,6 +6,7 @@ import computerReducer from "./computerSlice";
 import whiteboardSlice from "./whiteboardSlice";
 import chatSlice from "./chatSlice";
 import desktopSlice from "./desktopSlice";
+import drawContextSlice from "./drawContextSlice";
 
 enableMapSet();
 
@@ -17,6 +18,7 @@ export const store = configureStore({
     whitebaord: whiteboardSlice,
     chat: chatSlice,
     desktop: desktopSlice,
+    drawContext: drawContextSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

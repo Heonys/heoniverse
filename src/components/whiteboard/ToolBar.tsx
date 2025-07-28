@@ -1,12 +1,14 @@
-import { useState } from "react";
 import { ToolButton } from "@/components/whiteboard";
 import { toolItems, Tools } from "@/constants/drawing";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { changeTool } from "@/stores/drawContextSlice";
 
 export const ToolBar = () => {
-  const [selected, setSelected] = useState<Tools>(Tools.Panning);
+  const dispatch = useAppDispatch();
+  const currentTool = useAppSelector((state) => state.drawContext.tool);
 
   const onActionButton = (name: Tools) => {
-    setSelected(name);
+    dispatch(changeTool(name));
   };
 
   return (
@@ -17,7 +19,7 @@ export const ToolBar = () => {
             <ToolButton
               key={name}
               name={name}
-              selected={selected}
+              selected={currentTool}
               onClick={onActionButton}
               iconName={iconName}
               label={label}

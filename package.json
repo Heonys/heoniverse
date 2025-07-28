@@ -21,7 +21,6 @@
     "clsx": "^2.1.1",
     "colyseus.js": "^0.16.19",
     "date-fns": "^4.1.0",
-    "emoji-mart": "^5.6.0",
     "immer": "^10.1.1",
     "motion": "^12.23.6",
     "perfect-freehand": "^1.2.2",
