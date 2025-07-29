@@ -1,4 +1,6 @@
-import { ToolBar, ControlBar, Canvas } from "@/components/whiteboard";
+import { Excalidraw } from "@excalidraw/excalidraw";
+import "@excalidraw/excalidraw/index.css";
+// import { ToolBar, ControlBar, Canvas } from "@/components/whiteboard";
 
 export const WhiteBoard = () => {
   return (
@@ -6,9 +8,10 @@ export const WhiteBoard = () => {
       id="white-board"
       className="relative w-full h-full rounded-2xl overflow-hidden bg-neutral-50"
     >
-      <ToolBar />
+      {/* <ToolBar />
       <ControlBar />
-      <Canvas />
+      <Canvas /> */}
+      <Excalidraw langCode="ko-KR" />
     </div>
   );
 };

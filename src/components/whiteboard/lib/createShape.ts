@@ -1,38 +1,44 @@
 import rough from "roughjs";
-import { Tools, ShapeMap } from "@/constants/drawing";
 
-export function createShape<T extends keyof ShapeMap>(toolType: T, shape: ShapeMap[T]) {
+import { Shape, Tools } from "@/constants/drawing";
+
+export function createShape(toolType: Tools, shape: Shape) {
   const generator = rough.generator();
 
   switch (toolType) {
     case Tools.Line: {
-      const line = shape as ShapeMap[Tools.Line];
-      const { x1, x2, y1, y2 } = line;
-      const drawable = generator.line(x1, x2, y1, y2);
-      return { ...line, drawable } as ShapeMap[T];
+      const { x1, y1, x2, y2 } = shape;
+      const drawable = generator.line(x1, y1, x2, y2);
+      return { ...shape, drawable };
     }
     case Tools.Rect: {
-      const rect = shape as ShapeMap[Tools.Rect];
-      const { x1, y1, x2, y2 } = rect;
+      const { x1, y1, x2, y2 } = shape;
       const drawable = generator.rectangle(x1, y1, x2 - x1, y2 - y1);
-      return { ...rect, drawable } as ShapeMap[T];
+      return { ...shape, drawable };
     }
     case Tools.Ellipse: {
-      const ellipse = shape as ShapeMap[Tools.Ellipse];
-      const { c1, c2, width, height } = ellipse;
-      const drawable = generator.ellipse(c1, c2, width, height);
-      return { ...ellipse, drawable } as ShapeMap[T];
+      const { x1, y1, x2, y2 } = shape;
+      const centerX = (x1 + x2) / 2;
+      const centerY = (y1 + y2) / 2;
+      const radiusX = Math.abs(x2 - x1);
+      const radiusY = Math.abs(y2 - y1);
+      const drawable = generator.ellipse(centerX, centerY, radiusX, radiusY);
+      return { ...shape, drawable };
     }
     case Tools.Diamond: {
-      const diamond = shape as ShapeMap[Tools.Diamond];
-      const { c1, c2, width, height } = diamond;
+      const { x1, y1, x2, y2 } = shape;
+      const centerX = (x1 + x2) / 2;
+      const centerY = (y1 + y2) / 2;
+      const width = Math.abs(x2 - x1);
+      const height = Math.abs(y2 - y1);
+
       const drawable = generator.polygon([
-        [c1, c2 - height / 2],
-        [c1 + width / 2, c2],
-        [c1, c2 + height / 2],
-        [c1 - width / 2, c2],
+        [centerX, centerY - height / 2],
+        [centerX + width / 2, centerY],
+        [centerX, centerY + height / 2],
+        [centerX - width / 2, centerY],
       ]);
-      return { ...diamond, drawable } as ShapeMap[T];
+      return { ...shape, drawable };
     }
     default: {
       throw new Error(`Type not recognised: ${toolType}`);

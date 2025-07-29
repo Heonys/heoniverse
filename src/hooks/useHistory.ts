@@ -1,12 +1,12 @@
-import { Shapes } from "@/constants/drawing";
+import { Shape } from "@/constants/drawing";
 import { useState } from "react";
 
 export const useHistory = () => {
   const [index, setIndex] = useState(0);
-  const [history, setHistory] = useState<Shapes[][]>([[]]);
+  const [history, setHistory] = useState<Shape[][]>([[]]);
 
   const setShapes = (
-    state: Shapes[] | ((state: Shapes[]) => Shapes[]), //
+    state: Shape[] | ((state: Shape[]) => Shape[]), //
     overwrite = false,
   ) => {
     const newState = typeof state === "function" ? state(history[index]) : state;

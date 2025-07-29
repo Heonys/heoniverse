@@ -2,7 +2,7 @@ import rough from "roughjs";
 import { useLayoutEffect, useRef, MouseEvent } from "react";
 import { useAppDispatch, useAppSelector, useCanvasScale, useHistory } from "@/hooks";
 import { createShape, drawShape, setupCanvasSize } from "@/components/whiteboard/lib";
-import { Actions, ShapeMap, Tools } from "@/constants/drawing";
+import { Actions, Tools } from "@/constants/drawing";
 import { changeAction } from "@/stores/drawContextSlice";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -32,10 +32,13 @@ export const Canvas = () => {
 
   const updateShape = (toolType: Tools, clientX: number, clientY: number) => {
     switch (toolType) {
-      case Tools.Rect: {
+      case Tools.Rect:
+      case Tools.Line:
+      case Tools.Ellipse:
+      case Tools.Diamond: {
         const lastIndex = shapes.length - 1;
         const updatedShape = createShape(toolType, {
-          ...(shapes[lastIndex] as ShapeMap[Tools.Rect]),
+          ...shapes[lastIndex],
           x2: clientX,
           y2: clientY,
         });
@@ -43,6 +46,7 @@ export const Canvas = () => {
         const copiedShapes = [...shapes];
         copiedShapes[lastIndex] = updatedShape;
         setShapes(copiedShapes, true);
+
         break;
       }
     }
@@ -52,7 +56,10 @@ export const Canvas = () => {
     const { clientX, clientY } = getMouseCoordinates(event);
 
     switch (tool) {
-      case Tools.Rect: {
+      case Tools.Rect:
+      case Tools.Line:
+      case Tools.Ellipse:
+      case Tools.Diamond: {
         const rectShape = createShape(tool, {
           id: nanoid(8),
           type: tool,
@@ -85,9 +92,9 @@ export const Canvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={hanldeMouseMove}
-      onMouseUp={hanldeMouseUp}
+      onPointerDown={handleMouseDown}
+      onPointerMove={hanldeMouseMove}
+      onPointerUp={hanldeMouseUp}
     />
   );
 };

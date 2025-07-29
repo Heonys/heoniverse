@@ -21,44 +21,15 @@ export enum Tools {
   Text = "Text",
 }
 
-export type Shapes =
-  | LineShape
-  | RectShape
-  | FreeDrawShape
-  | DiamondShape
-  | EllipseShape
-  | TextShape;
-
-export type ShapeMap = {
-  [Tools.Line]: LineShape;
-  [Tools.Rect]: RectShape;
-  [Tools.Draw]: FreeDrawShape;
-  [Tools.Diamond]: DiamondShape;
-  [Tools.Ellipse]: EllipseShape;
-  [Tools.Text]: TextShape;
-};
-
-export type BaseShape<T extends Tools> = {
+export type Shape = {
   id: string;
-  type: T;
+  type: Tools;
   drawable?: Drawable;
-};
-
-type FreeDrawShape = BaseShape<Tools.Draw> & { points: { x: number; y: number }[] };
-type TextShape = BaseShape<Tools.Draw> & { text: string };
-type LineShape = BaseShape<Tools.Line> & { x1: number; x2: number; y1: number; y2: number };
-type RectShape = BaseShape<Tools.Rect> & { x1: number; x2: number; y1: number; y2: number };
-type DiamondShape = BaseShape<Tools.Diamond> & {
-  c1: number;
-  c2: number;
-  width: number;
-  height: number;
-};
-type EllipseShape = BaseShape<Tools.Ellipse> & {
-  c1: number;
-  c2: number;
-  width: number;
-  height: number;
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+  points?: { x: number; y: number }[];
 };
 
 type ToolItems = {
