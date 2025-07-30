@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
-import { ChatMessage } from "@/components";
+import { ChatMessage } from "./ChatMessage";
 
 type FormType = { message: string };
 

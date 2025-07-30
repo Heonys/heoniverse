@@ -1,4 +1,4 @@
-import { IChatMessage, ChatType } from "@server/src/types";
+import { IChatMessage, ChatType } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({

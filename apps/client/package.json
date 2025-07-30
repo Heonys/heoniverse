@@ -12,8 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emoji-mart/data": "^1.2.1",
-    "@emoji-mart/react": "^1.1.1",
     "@excalidraw/excalidraw": "^0.18.0",
     "@headlessui/react": "^2.2.4",
     "@hookform/resolvers": "^5.1.1",
@@ -30,6 +28,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.60.0",
     "react-icons": "^5.5.0",
+    "react-joystick-component": "^6.2.1",
     "react-redux": "^9.2.0",
     "react-rnd": "^10.5.2",
     "react-slick": "^0.30.3",

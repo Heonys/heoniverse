@@ -1,8 +1,13 @@
 import { Condition, TooltipButton } from "@/common";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { AppIcon } from "@/icons";
+import { setJoystick } from "@/stores/userSlice";
 import { openURL } from "@/utils";
 
 export const HelperGroups = () => {
+  const dispatch = useAppDispatch();
+  const showJoystick = useAppSelector((state) => state.user.showJoystick);
+
   return (
     <div className="fixed bottom-2 right-5 flex gap-2">
       <Condition condition={import.meta.env.DEV}>
@@ -16,7 +21,10 @@ export const HelperGroups = () => {
         </TooltipButton>
       </Condition>
 
-      <TooltipButton tooltip="Enable virtual joystick">
+      <TooltipButton
+        tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
+        onClick={() => dispatch(setJoystick(!showJoystick))}
+      >
         <AppIcon iconName="joystick" color="black" size={25} />
       </TooltipButton>
 

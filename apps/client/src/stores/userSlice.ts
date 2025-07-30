@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type UserState = {
   loggedIn: boolean;
   otherPlayersName: Map<string, string>;
+  showJoystick: boolean;
 };
 
 const initialState: UserState = {
   loggedIn: false,
   otherPlayersName: new Map<string, string>(),
+  showJoystick: false,
 };
 
 const userSlice = createSlice({
@@ -23,8 +25,11 @@ const userSlice = createSlice({
     removePlayerName(state, action: PayloadAction<string>) {
       state.otherPlayersName.delete(action.payload);
     },
+    setJoystick(state, action: PayloadAction<boolean>) {
+      state.showJoystick = action.payload;
+    },
   },
 });
 
-export const { setLoggedIn, addPlayerName, removePlayerName } = userSlice.actions;
+export const { setLoggedIn, addPlayerName, removePlayerName, setJoystick } = userSlice.actions;
 export default userSlice.reducer;

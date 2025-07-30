@@ -1,7 +1,8 @@
-import { SelectMenuDialog, Chat, HelperGroups, LoginDialog } from "@/components";
+import { Chat, HelperGroups, VirtualJoystick } from "@/components";
+import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
+import { ComputerDialog } from "@/components/computer";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
-import { ComputerDialog } from "@/components/computer";
 import { WhiteboardDialog } from "@/components/whiteboard";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
 
   return (
     <div className="w-full h-full absolute">
+      <VirtualJoystick />
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <Chat />

@@ -3,6 +3,7 @@ import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { eventEmitter } from "@/game/events";
+import { JoystickMovement } from "@/components";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -12,6 +13,7 @@ export class LocalPlayer extends Player {
 
   keyE!: Phaser.Input.Keyboard.Key;
   keyR!: Phaser.Input.Keyboard.Key;
+  joystickMovement?: JoystickMovement;
 
   constructor(scene: Phaser.Scene, id: string, x: number, y: number, texture: string) {
     super(scene, id, x, y, texture);
@@ -32,6 +34,10 @@ export class LocalPlayer extends Player {
       y: this.y,
       animKey: this.anims.currentAnim!.key,
     });
+  }
+
+  setJoystickMovement(movement: JoystickMovement) {
+    this.joystickMovement = movement;
   }
 
   registerKeys() {
