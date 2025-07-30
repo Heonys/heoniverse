@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.app.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@server/*": ["../server/src/*"],
+      "@heoniverse/shared": ["../../packages/shared/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

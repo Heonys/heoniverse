@@ -21,13 +21,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-
-    /* Path */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@server/*": ["server/*"],
-    }
   },
-  "include": ["src"]
 }

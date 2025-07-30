@@ -1,0 +1,11 @@
+{
+    "name": "@heoniverse/shared",
+    "private": true,
+    "version": "1.0.0",
+    "main": "./index.ts",
+    "type": "module",
+    "dependencies": {
+      "@colyseus/schema": "^3.0.42"
+    }
+  }
+  
