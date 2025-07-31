@@ -1,5 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Direction } from "@/constants";
+import { Direction } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, OtherPlayer, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";

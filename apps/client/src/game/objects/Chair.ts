@@ -1,4 +1,4 @@
-import { Direction, ItemType } from "@/constants";
+import { Direction, ItemType } from "@/constants/game";
 import { Item } from "@/game/objects";
 
 export class Chair extends Item {

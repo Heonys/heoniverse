@@ -1,4 +1,4 @@
-import { ItemType } from "@/constants";
+import { ItemType } from "@/constants/game";
 
 export class Item extends Phaser.Physics.Arcade.Sprite {
   private dialogBox!: Phaser.GameObjects.Container;

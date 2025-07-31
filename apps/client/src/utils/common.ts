@@ -2,7 +2,8 @@ import { format, isToday } from "date-fns";
 import { ko } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 import { clsx, ClassValue } from "clsx";
-import { Direction, sittingOffset } from "@/constants";
+import { Direction, sittingOffset } from "@/constants/game";
+import { JoystickMovement, MovementInput } from "@/components";
 
 export function cn(...args: ClassValue[]) {
   return twMerge(clsx(...args));
@@ -66,4 +67,50 @@ export function formattDate(timestamp: number): string {
   return isToday(date)
     ? format(date, "a h:mm", { locale: ko })
     : format(date, "MMM d일 (eee)", { locale: ko });
+}
+
+export function getJoystickDirection(joystickMovement?: JoystickMovement) {
+  const joystic = { up: false, down: false, left: false, right: false };
+  if (joystickMovement?.isMoving) {
+    joystic.up = joystickMovement.movement.up;
+    joystic.down = joystickMovement.movement.down;
+    joystic.left = joystickMovement.movement.left;
+    joystic.right = joystickMovement.movement.right;
+  }
+  return joystic;
+}
+
+export function angle2Movement(angle: number): MovementInput {
+  angle = (angle + 360) % 360;
+
+  const movement = {
+    left: false,
+    right: false,
+    up: false,
+    down: false,
+  };
+
+  if (angle >= 22.5 && angle < 67.5) {
+    movement.right = true;
+    movement.up = true;
+  } else if (angle >= 67.5 && angle < 112.5) {
+    movement.up = true;
+  } else if (angle >= 112.5 && angle < 157.5) {
+    movement.up = true;
+    movement.left = true;
+  } else if (angle >= 157.5 && angle < 202.5) {
+    movement.left = true;
+  } else if (angle >= 202.5 && angle < 247.5) {
+    movement.left = true;
+    movement.down = true;
+  } else if (angle >= 247.5 && angle < 292.5) {
+    movement.down = true;
+  } else if (angle >= 292.5 && angle < 337.5) {
+    movement.down = true;
+    movement.right = true;
+  } else {
+    movement.right = true;
+  }
+
+  return movement;
 }

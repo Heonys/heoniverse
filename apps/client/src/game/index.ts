@@ -7,7 +7,7 @@ const config: Phaser.Types.Core.GameConfig = {
   autoFocus: true,
   pixelArt: true,
   scale: {
-    mode: Phaser.Scale.ScaleModes.ENVELOP,
+    mode: Phaser.Scale.ScaleModes.RESIZE,
     width: window.innerWidth,
     height: window.innerHeight,
   },

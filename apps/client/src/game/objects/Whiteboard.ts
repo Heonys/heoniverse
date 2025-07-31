@@ -1,4 +1,4 @@
-import { ItemType } from "@/constants";
+import { ItemType } from "@/constants/game";
 import { Item } from "@/game/objects";
 import { store } from "@/stores";
 import { openWhiteboardDialog } from "@/stores/whiteboardSlice";

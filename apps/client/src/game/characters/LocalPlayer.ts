@@ -1,9 +1,10 @@
-import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants";
+import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants/game";
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { eventEmitter } from "@/game/events";
 import { JoystickMovement } from "@/components";
+import { getJoystickDirection } from "@/utils";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -113,19 +114,21 @@ export class LocalPlayer extends Player {
 
         let vx = 0;
         let vy = 0;
-        if (cursor.up.isDown) {
+        const joystic = getJoystickDirection(this.joystickMovement);
+
+        if (cursor.up.isDown || joystic.up) {
           vy -= this.speed;
           this.facing = Direction.UP;
         }
-        if (cursor.down.isDown) {
+        if (cursor.down.isDown || joystic.down) {
           vy += this.speed;
           this.facing = Direction.DOWN;
         }
-        if (cursor.left.isDown) {
+        if (cursor.left.isDown || joystic.left) {
           vx -= this.speed;
           this.facing = Direction.LEFT;
         }
-        if (cursor.right.isDown) {
+        if (cursor.right.isDown || joystic.right) {
           vx += this.speed;
           this.facing = Direction.RIGHT;
         }

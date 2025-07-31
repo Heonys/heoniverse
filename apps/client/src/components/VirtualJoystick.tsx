@@ -3,42 +3,39 @@ import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
+import { angle2Movement } from "@/utils";
 
-export type JoystickMovement =
-  | {
-      isMoving: false;
-    }
-  | {
-      isMoving: true;
-      direction: {
-        left: boolean;
-        right: boolean;
-        top: boolean;
-        bottom: boolean;
-      };
-    };
+export type MovementInput = {
+  left: boolean;
+  right: boolean;
+  up: boolean;
+  down: boolean;
+};
+
+export type JoystickMovement = { isMoving: boolean; movement: MovementInput };
 
 export const VirtualJoystick = () => {
-  // const { innerWidth } = useWindowSize();
   const showJoystick = useAppSelector((state) => state.user.showJoystick);
   const game = phaserGame.scene.keys.game as Game;
 
   return (
-    <div className="fixed right-10 bottom-20">
+    <div className="fixed right-10 bottom-20 z-50">
       <Condition condition={showJoystick}>
         <Joystick
           size={75}
           baseColor="#5c5c5c60"
           stickColor="#5c5c5c80"
           move={(e) => {
-            console.log(e.x, e.y);
-
-            // const rad = Math.atan2(e.y || 0, e.x || 0);
-            // const deg = (rad * 180) / Math.PI;
-            // console.log(deg);
+            const rad = Math.atan2(e.y || 0, e.x || 0);
+            const deg = (rad * 180) / Math.PI;
+            const movement = angle2Movement(deg);
+            game.localPlayer.setJoystickMovement({ isMoving: true, movement });
           }}
           stop={() => {
-            game.localPlayer.setJoystickMovement({ isMoving: false });
+            game.localPlayer.setJoystickMovement({
+              isMoving: false,
+              movement: { left: false, right: false, up: false, down: false },
+            });
           }}
         />
       </Condition>

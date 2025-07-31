@@ -1,4 +1,4 @@
-import { PlayerBehavior } from "@/constants";
+import { PlayerBehavior } from "@/constants/game";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   playerId: string;

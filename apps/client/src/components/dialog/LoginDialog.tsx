@@ -6,7 +6,7 @@ import { Input } from "@headlessui/react";
 
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { AppButton, AppSlider } from "@/common";
-import { avatars } from "@/constants";
+import { avatars } from "@/constants/game";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { setLoggedIn } from "@/stores/userSlice";
