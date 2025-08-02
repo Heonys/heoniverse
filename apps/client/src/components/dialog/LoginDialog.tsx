@@ -41,7 +41,7 @@ export const LoginDialog = () => {
 
   return (
     <form
-      className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999] bg-slate-900 p-6 px-16 rounded-2xl shadow-xl w-[600px] max-w-none"
+      className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999] bg-slate-800 p-6 px-16 rounded-2xl shadow-xl w-[600px] max-w-none"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-4 text-[#eee] ">

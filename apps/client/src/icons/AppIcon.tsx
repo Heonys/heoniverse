@@ -1,7 +1,7 @@
 import { IconBaseProps } from "react-icons";
 import { FaGithub, FaApple, FaWifi, FaShieldAlt } from "react-icons/fa";
 import { CiFaceSmile } from "react-icons/ci";
-import { BiJoystickAlt, BiSolidHelpCircle } from "react-icons/bi";
+import { BiSolidHelpCircle } from "react-icons/bi";
 import { FaArrowRight, FaXmark, FaMinus, FaPlus } from "react-icons/fa6";
 import { RiShutDownLine } from "react-icons/ri";
 import { HiMiniXMark, HiOutlineMagnifyingGlass, HiOutlinePencil } from "react-icons/hi2";
@@ -36,6 +36,10 @@ import { GoDiamond } from "react-icons/go";
 import { HiMiniArrowLongRight } from "react-icons/hi2";
 import { IoHandRightOutline } from "react-icons/io5";
 import { PiMinus, PiPlus } from "react-icons/pi";
+import { FaGamepad } from "react-icons/fa";
+import { BsPersonLock } from "react-icons/bs";
+import { FaLock } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -43,7 +47,7 @@ const IconMap = {
   ["x-mark-bold"]: FaXmark,
   ["chat"]: IoChatbubbleEllipsesOutline,
   ["smile"]: CiFaceSmile,
-  ["joystick"]: BiJoystickAlt,
+  ["joystick"]: FaGamepad,
   ["help"]: BiSolidHelpCircle,
   ["github"]: FaGithub,
   ["room"]: MdRoom,
@@ -88,6 +92,9 @@ const IconMap = {
   ["hand"]: IoHandRightOutline,
   ["plus-thin"]: PiPlus,
   ["minus-thin"]: PiMinus,
+  ["person-lock"]: BsPersonLock,
+  ["people"]: FaUserFriends,
+  ["lock"]: FaLock,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

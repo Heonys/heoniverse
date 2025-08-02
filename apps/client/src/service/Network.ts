@@ -54,9 +54,11 @@ export class Network {
   }
 
   async joinPublicRoom() {
-    this.room = await this.client.joinOrCreate(RoomType.STUDIO);
+    this.room = await this.client.joinOrCreate(RoomType.PUBLIC);
     this.setupRoom();
   }
+
+  async joinPrivateRoom() {}
 
   sendMessage<T extends keyof MessagePayloadMap>(type: T, message?: MessagePayloadMap[T]) {
     if (!this.room) {

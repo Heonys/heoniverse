@@ -1,7 +1,7 @@
 import { Room, Client } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioState";
-import { Messages, RoomData } from "@heoniverse/shared";
+import { Messages, IRoom } from "@heoniverse/shared";
 import { PlayerUpdateCommand, PlayerNameUpdateCommand, PushChatUpdateCommand } from "./commands";
 
 export class Studio extends Room<StudioState> {
@@ -9,10 +9,22 @@ export class Studio extends Room<StudioState> {
   dispatcher = new Dispatcher(this);
   name!: string;
   description!: string;
+  hasPassword = false;
 
-  onCreate(options: RoomData) {
+  onCreate(options: IRoom) {
     this.name = options.name;
     this.description = options.description;
+    this.autoDispose = options.autoDispose;
+
+    if (options.password) {
+      this.hasPassword = true;
+    }
+
+    this.setMetadata({
+      name: this.name,
+      description: this.description,
+      hasPassword: this.hasPassword,
+    });
 
     this.onMessage(
       Messages.UPDATE_PLAYER,

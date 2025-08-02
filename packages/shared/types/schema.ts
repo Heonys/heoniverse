@@ -2,13 +2,27 @@ import { MapSchema } from "@colyseus/schema";
 
 export enum RoomType {
   LOBBY = "LOBBY",
-  STUDIO = "STUDIO",
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+}
+
+export interface RoomMetadata {
+  name: string;
+  description: string;
+  hasPassword: boolean;
 }
 
 export interface RoomData {
   id: string;
   name: string;
   description: string;
+}
+
+export interface IRoom {
+  name: string;
+  description: string;
+  autoDispose: boolean;
+  password?: string;
 }
 
 export interface IPlayer {

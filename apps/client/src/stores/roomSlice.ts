@@ -1,3 +1,4 @@
+import { RoomMetadata } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RoomAvailable } from "colyseus.js";
 
@@ -9,7 +10,7 @@ const roomSlice = createSlice({
     id: "",
     name: "",
     description: "",
-    availableRooms: [] as RoomAvailable[],
+    availableRooms: [] as RoomAvailable<RoomMetadata>[],
   },
   reducers: {
     setLobbyJoined: (state, action: PayloadAction<boolean>) => {

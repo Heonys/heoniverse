@@ -10,6 +10,21 @@ export const HelperGroups = () => {
 
   return (
     <div className="fixed bottom-2 right-5 flex gap-2">
+      <TooltipButton
+        tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
+        onClick={() => dispatch(setJoystick(!showJoystick))}
+      >
+        <AppIcon iconName="joystick" color="black" size={25} />
+      </TooltipButton>
+
+      {/* <TooltipButton tooltip="Control Guide">
+        <AppIcon iconName="help" color="black" size={25} />
+      </TooltipButton> */}
+
+      <TooltipButton tooltip="Room Info">
+        <AppIcon iconName="room" color="black" size={25} />
+      </TooltipButton>
+
       <Condition condition={import.meta.env.DEV}>
         <TooltipButton
           tooltip="Colyseus Monitoring"
@@ -22,21 +37,11 @@ export const HelperGroups = () => {
       </Condition>
 
       <TooltipButton
-        tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
-        onClick={() => dispatch(setJoystick(!showJoystick))}
+        tooltip="Visit GitHub"
+        onClick={() => {
+          openURL("https://github.com/Heonys/heoniverse");
+        }}
       >
-        <AppIcon iconName="joystick" color="black" size={25} />
-      </TooltipButton>
-
-      <TooltipButton tooltip="Control Guide">
-        <AppIcon iconName="help" color="black" size={25} />
-      </TooltipButton>
-
-      <TooltipButton tooltip="Room Info">
-        <AppIcon iconName="room" color="black" size={25} />
-      </TooltipButton>
-
-      <TooltipButton tooltip="Visit GitHub">
         <AppIcon iconName="github" color="black" size={25} />
       </TooltipButton>
     </div>
