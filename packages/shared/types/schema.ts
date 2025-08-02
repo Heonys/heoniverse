@@ -3,7 +3,7 @@ import { MapSchema } from "@colyseus/schema";
 export enum RoomType {
   LOBBY = "LOBBY",
   PUBLIC = "PUBLIC",
-  PRIVATE = "PRIVATE",
+  CUSTOM = "CUSTOM",
 }
 
 export interface RoomMetadata {

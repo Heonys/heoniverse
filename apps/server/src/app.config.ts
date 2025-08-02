@@ -16,7 +16,7 @@ export default config({
         autoDispose: false,
       })
       .enableRealtimeListing();
-    gameServer.define(RoomType.PRIVATE, Studio);
+    gameServer.define(RoomType.CUSTOM, Studio);
   },
 
   initializeExpress: (app) => {

@@ -3,7 +3,7 @@ import { phaserGame } from "@/game";
 import type { Preloader } from "@/game/scenes";
 import { AppButton, Condition } from "@/common";
 import { useAppSelector } from "@/hooks";
-import { PrivateRoomOverview } from "@/components/dialog";
+import { CustomRoomOverview } from "@/components/dialog";
 
 export const SelectMenuDialog = () => {
   const [showCustomRoom, setShowCustomRoom] = useState(false);
@@ -14,7 +14,7 @@ export const SelectMenuDialog = () => {
       <div className="bg-slate-800 relative text-[#eee] rounded-xl flex justify-center items-center gap-4 select-none">
         <Condition
           condition={!showCustomRoom}
-          fallback={<PrivateRoomOverview onPrevious={() => setShowCustomRoom(false)} />}
+          fallback={<CustomRoomOverview onPrevious={() => setShowCustomRoom(false)} />}
         >
           <div className="p-8 flex flex-col justify-center items-center gap-3">
             <AppButton
@@ -32,7 +32,7 @@ export const SelectMenuDialog = () => {
             </AppButton>
 
             <AppButton className="px-4 font-medium" onClick={() => setShowCustomRoom(true)}>
-              비공개 방 생성 / 참여
+              커스텀 방 생성 / 참여
             </AppButton>
           </div>
         </Condition>

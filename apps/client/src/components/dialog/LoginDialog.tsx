@@ -46,7 +46,7 @@ export const LoginDialog = () => {
     >
       <div className="flex flex-col gap-4 text-[#eee] ">
         <div className="flex justify-center items-center gap-2">
-          <AppIcon iconName="public" size={23} />
+          <AppIcon iconName="public" size={23} className="translate-y-0.5" />
           <div className="text-2xl font-bold ">{roomName}</div>
         </div>
         <div className="text-sm text-[#c2c2c2] flex justify-center items-center gap-2">

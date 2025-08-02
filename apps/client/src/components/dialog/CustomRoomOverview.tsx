@@ -20,12 +20,12 @@ const columns = [
   columnHelper.display({
     id: "avatar",
     cell: () => (
-      <div className="w-8 ml-3 flex justify-center items-center">
-        <AppIcon iconName="lock" />
+      <div className="w-8 ml-1 flex justify-center items-center">
+        <AppIcon iconName="lock" color="orange" size={17} />
       </div>
     ),
   }),
-  columnHelper.accessor("name", {
+  columnHelper.accessor("metadata.name", {
     header: "Name",
     cell: (info) => (
       <div className="w-[100px] h-full truncate font-semibold">{info.getValue()}</div>
@@ -51,9 +51,9 @@ const columns = [
     id: "enter",
     cell: () => (
       <div className="w-16 flex justify-center items-center">
-        <AppButton>
+        <AppButton className="bg-transparent ring-1 ring-white/50">
           <div className="flex items-center gap-1">
-            <AppIcon iconName="lock" />
+            <AppIcon iconName="exit" />
             <div>입장</div>
           </div>
         </AppButton>
@@ -62,12 +62,12 @@ const columns = [
   }),
 ];
 
-export const PrivateRoomOverview = ({ onPrevious }: Props) => {
+export const CustomRoomOverview = ({ onPrevious }: Props) => {
   const availableRooms = useAppSelector((state) => state.room.availableRooms);
 
   const table = useReactTable({
     debugAll: false,
-    data: [...availableRooms, ...availableRooms, ...availableRooms],
+    data: [...availableRooms, ...availableRooms, ...availableRooms, ...availableRooms],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -83,34 +83,36 @@ export const PrivateRoomOverview = ({ onPrevious }: Props) => {
       </div>
 
       <div className="flex justify-center items-center gap-2">
-        <AppIcon iconName="person-lock" size={23} />
-        <div className="text-2xl font-bold ">Private Room</div>
+        <AppIcon iconName="people" size={23} className="translate-y-0.5" />
+        <div className="text-2xl font-bold ">Custom Room</div>
       </div>
 
-      <table className="mt-4 min-w-[700px] max-h-[350px] table-fixed border-collapse select-none bg-black/80 text-sm rounded-md">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className="p-2 text-left">
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="p-2 truncate">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="mt-4 min-w-[700px] max-h-[350px] overflow-y-auto">
+        <table className=" table-fixed border-collapse select-none bg-[#09090b] text-sm rounded-md ">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} className="p-3 text-left">
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id} className="border-t border-white/20">
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="p-3 truncate">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="flex justify-center items-center">
         <AppButton>방 만들기</AppButton>
