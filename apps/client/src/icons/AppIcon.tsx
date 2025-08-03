@@ -40,6 +40,9 @@ import { FaGamepad } from "react-icons/fa";
 import { BsPersonLock } from "react-icons/bs";
 import { FaLock } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
+import { IoCreateOutline } from "react-icons/io5";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -95,6 +98,10 @@ const IconMap = {
   ["person-lock"]: BsPersonLock,
   ["people"]: FaUserFriends,
   ["lock"]: FaLock,
+  ["create"]: IoCreateOutline,
+  ["eye"]: IoEye,
+  ["eye-off"]: IoEyeOff,
+  ["warning"]: RiErrorWarningLine,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

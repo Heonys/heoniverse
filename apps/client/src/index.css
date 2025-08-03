@@ -3,7 +3,8 @@
 @layer base {
   html,
   body {
-    @apply m-0 p-0 w-screen h-screen box-border overflow-hidden font-misans;
+    @apply m-0 p-0 w-screen h-screen box-border overflow-hidden;
+    font-family: MiSansLatin, NotoSansKR;
   }
 
   img:not(.no-pixel) {
@@ -50,7 +51,7 @@
   #desktop {
     cursor: url("/cursor/normal-select.svg"), auto;
   }
-  
+
   @font-face {
     font-family: MiSansLatin;
     font-weight: normal;
@@ -86,13 +87,9 @@
     font-weight: 700;
     src: url("/fonts/NotoSansKR-Bold.ttf") format("truetype");
   }
-
+  
   @font-face {
     font-family: Retro;
     src: url("/fonts/Retro Gaming.ttf") format("truetype");
   }
-}
-
-@theme {
-  --font-misans: MiSansLatin NotoSansKR;
 }

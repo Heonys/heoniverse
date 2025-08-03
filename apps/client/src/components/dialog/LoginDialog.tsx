@@ -49,8 +49,7 @@ export const LoginDialog = () => {
           <AppIcon iconName="public" size={23} className="translate-y-0.5" />
           <div className="text-2xl font-bold ">{roomName}</div>
         </div>
-        <div className="text-sm text-[#c2c2c2] flex justify-center items-center gap-2">
-          <AppIcon iconName="arrow-right" />
+        <div className="text-sm text-[#c2c2c2] flex justify-center items-center">
           {roomDescription}
         </div>
       </div>
@@ -79,7 +78,7 @@ export const LoginDialog = () => {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <AppButton className="font-bold px-4">입장</AppButton>
+        <AppButton className="font-medium px-4">입장</AppButton>
       </div>
     </form>
   );
