@@ -16,7 +16,7 @@ export const SelectMenuDialog = () => {
   const lobbyJoined = useAppSelector((state) => state.room.lobbyJoined);
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999]">
+    <div className="fixed top-1/2 left-1/2 -translate-1/2 z-[1111]">
       <div className="bg-slate-800 relative text-[#eee] rounded-xl flex justify-center items-center gap-4 select-none">
         <Switch switch={dialogView}>
           <Case case={DialogView.Select}>

@@ -4,6 +4,7 @@ import { ComputerDialog } from "@/components/computer";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { WhiteboardDialog } from "@/components/whiteboard";
+import { ModalComponent } from "@/components/modal";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <div className="w-full h-full absolute">
+      <ModalComponent />
       <VirtualJoystick />
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>

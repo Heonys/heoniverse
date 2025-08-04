@@ -4,7 +4,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useAppSelector } from "@/hooks";
+import { useMemo } from "react";
+import { useAppSelector, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { RoomAvailable } from "colyseus.js";
 import { RoomMetadata } from "@heoniverse/shared";
@@ -17,60 +18,67 @@ type Props = {
 
 const columnHelper = createColumnHelper<RoomAvailable<RoomMetadata>>();
 
-const columns = [
-  columnHelper.display({
-    id: "avatar",
-    cell: () => (
-      <div className="w-8 ml-1 flex justify-center items-center">
-        <AppIcon iconName="lock" color="orange" size={17} />
-      </div>
-    ),
-  }),
-  columnHelper.accessor("metadata.name", {
-    header: "Name",
-    cell: (info) => (
-      <div className="w-[100px] h-full truncate font-semibold" title={info.getValue()}>
-        {info.getValue()}
-      </div>
-    ),
-  }),
-  columnHelper.accessor("metadata.description", {
-    header: "Description",
-    cell: (info) => (
-      <div className="w-[300px] truncate" title={info.getValue()}>
-        {info.getValue()}
-      </div>
-    ),
-  }),
-  columnHelper.accessor("roomId", {
-    header: "RoomId",
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
-  columnHelper.accessor("clients", {
-    header: () => (
-      <div className="flex justify-center items-center">
-        <AppIcon iconName="people" size={20} />
-      </div>
-    ),
-    cell: (info) => <div className="w-10 text-center font-semibold">{info.getValue()}</div>,
-  }),
-  columnHelper.display({
-    id: "enter",
-    cell: () => (
-      <div className="w-16 flex justify-center items-center">
-        <AppButton className="bg-transparent ring-1 ring-white/50">
-          <div className="flex items-center gap-1">
-            <AppIcon iconName="exit" />
-            <div>입장</div>
-          </div>
-        </AppButton>
-      </div>
-    ),
-  }),
-];
-
 export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
   const availableRooms = useAppSelector((state) => state.room.availableRooms);
+  const { showModal } = useModal();
+
+  const columns = useMemo(
+    () => [
+      columnHelper.display({
+        id: "avatar",
+        cell: () => (
+          <div className="w-8 ml-1 flex justify-center items-center">
+            <AppIcon iconName="lock" color="orange" size={17} />
+          </div>
+        ),
+      }),
+      columnHelper.accessor("metadata.name", {
+        header: "Name",
+        cell: (info) => (
+          <div className="w-[100px] h-full truncate font-semibold" title={info.getValue()}>
+            {info.getValue()}
+          </div>
+        ),
+      }),
+      columnHelper.accessor("metadata.description", {
+        header: "Description",
+        cell: (info) => (
+          <div className="w-[300px] truncate" title={info.getValue()}>
+            {info.getValue()}
+          </div>
+        ),
+      }),
+      columnHelper.accessor("roomId", {
+        header: "RoomId",
+        cell: (info) => <div>{info.getValue()}</div>,
+      }),
+      columnHelper.accessor("clients", {
+        header: () => (
+          <div className="flex justify-center items-center">
+            <AppIcon iconName="people" size={20} />
+          </div>
+        ),
+        cell: (info) => <div className="w-10 text-center font-semibold">{info.getValue()}</div>,
+      }),
+      columnHelper.display({
+        id: "enter",
+        cell: () => (
+          <div className="w-16 flex justify-center items-center">
+            <AppButton
+              className="bg-transparent ring-1 ring-white/50"
+              onClick={() => showModal("InputPassword")}
+            >
+              <div className="flex items-center gap-1">
+                <AppIcon iconName="exit" />
+                <div>입장</div>
+              </div>
+            </AppButton>
+          </div>
+        ),
+      }),
+    ],
+    [showModal],
+  );
 
   const table = useReactTable({
     debugAll: false,
@@ -91,7 +99,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
 
       <div className="flex justify-center items-center gap-2">
         <AppIcon iconName="people" size={23} className="translate-y-0.5" />
-        <div className="text-2xl font-bold ">Custom Room</div>
+        <div className="text-2xl font-bold leading-none tracking-tight">Custom Room</div>
       </div>
 
       <div className="text-sm text-[#c2c2c2] flex justify-center items-center">
@@ -136,7 +144,9 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       </Condition>
 
       <div className="flex justify-center items-center">
-        <AppButton onClick={onCreate}>방 만들기</AppButton>
+        <AppButton className="px-3" onClick={onCreate}>
+          방 만들기
+        </AppButton>
       </div>
     </div>
   );

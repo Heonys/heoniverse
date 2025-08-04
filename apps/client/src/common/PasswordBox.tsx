@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AppIcon } from "@/icons";
 import { Input } from "@headlessui/react";
 
-const PasswordBox = () => {
+export const PasswordBox = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ const PasswordBox = () => {
           type={isVisible ? "text" : "password"}
           id="pass"
           placeholder="Password"
-          className="bg-background w-full outline-none focus-within:border-white rounded-md p-2 border-2 border-white/20"
+          className="bg-background w-full outline-none focus-within:border-white placeholder:text-sm rounded-md p-2 border-2 border-white/20"
         />
         <div
           className="absolute top-3 right-4 text-2xl text-gray-500 cursor-pointer"
@@ -31,5 +31,3 @@ const PasswordBox = () => {
     </div>
   );
 };
-
-export default PasswordBox;

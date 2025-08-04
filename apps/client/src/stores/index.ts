@@ -7,6 +7,7 @@ import whiteboardSlice from "./whiteboardSlice";
 import chatSlice from "./chatSlice";
 import desktopSlice from "./desktopSlice";
 import drawContextSlice from "./drawContextSlice";
+import modalSlice from "./modalSlice";
 
 enableMapSet();
 
@@ -19,6 +20,7 @@ export const store = configureStore({
     chat: chatSlice,
     desktop: desktopSlice,
     drawContext: drawContextSlice,
+    modal: modalSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

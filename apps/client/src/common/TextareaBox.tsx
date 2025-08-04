@@ -1,4 +1,4 @@
-import { Field, Input, Label } from "@headlessui/react";
+import { Field, Label, Textarea } from "@headlessui/react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { z } from "zod";
 import { FormSchema } from "@/utils";
@@ -11,7 +11,7 @@ type Props = {
   regiser?: UseFormRegisterReturn<keyof z.infer<typeof FormSchema>>;
 };
 
-export const InputBox = ({
+export const TextareaBox = ({
   label,
   required = false,
   topLabel = true,
@@ -27,13 +27,12 @@ export const InputBox = ({
         </Label>
       )}
       <div className="relative mt-1">
-        <Input
-          type="text"
+        <Textarea
           autoComplete="off"
           autoFocus={autoFocus}
           placeholder={label}
           required={required}
-          className="bg-background w-full outline-none focus-within:border-white/70 placeholder:text-sm rounded-md p-2 border-2 border-white/25"
+          className="bg-background resize-none w-full outline-none focus-within:border-white/70 placeholder:text-sm rounded-md p-2 border-2 border-white/25"
           {...regiser}
         />
         <div className="absolute top-3 right-4 text-2xl text-gray-500 cursor-pointer"></div>

@@ -1,6 +1,4 @@
-import { AppButton } from "@/common";
-import { InputBox } from "@/common/InputBox";
-import PasswordBox from "@/common/PasswordBox";
+import { AppButton, InputBox, TextareaBox, PasswordBox } from "@/common";
 import { AppIcon } from "@/icons";
 
 type Props = {
@@ -20,20 +18,20 @@ export const CreateRoomForm = ({ onPrevious }: Props) => {
 
       <div className="flex justify-center items-center gap-2">
         <AppIcon iconName="create" size={23} className="translate-y-0.5" />
-        <div className="text-2xl font-bold ">Create Room</div>
+        <div className="text-2xl font-bold leading-none tracking-tight">Create Room</div>
       </div>
 
       <div className="text-sm text-[#c2c2c2] flex justify-center items-center">
         새로운 커스텀 방을 생성합니다 비밀번호를 설정할 수 있습니다.
       </div>
 
-      <div className="p-2 px-5 flex flex-col gap-4 w-[400px]">
+      <div className="p-2 px-6 flex flex-col gap-2 w-[400px]">
         <InputBox label="Name" required />
-        <InputBox label="Description" required />
+        <TextareaBox label="Description" required />
         <PasswordBox />
       </div>
       <div className="flex justify-center items-center">
-        <AppButton className="font-medium px-4">생성</AppButton>
+        <AppButton className="px-4">생성</AppButton>
       </div>
     </div>
   );

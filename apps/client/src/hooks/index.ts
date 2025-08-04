@@ -4,3 +4,4 @@ export * from "./useDockHoverAnimation";
 export * from "./useHistory";
 export * from "./useCanvasScale";
 export * from "./useWindowSize";
+export * from "./useModal";

@@ -18,7 +18,7 @@ type Props = {
 
 export const AppSlider = ({ afterChange, children }: Props) => {
   return (
-    <div className="flex justify-center items-center bg-slate-400 rounded-2xl p-3">
+    <div className="flex justify-center items-center bg-slate-400 rounded-2xl p-4 pb-6">
       <Slider {...settings} afterChange={afterChange}>
         {children}
       </Slider>
