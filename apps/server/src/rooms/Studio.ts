@@ -1,6 +1,6 @@
 import { Room, Client } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
-import { StudioState, Player } from "./schema/StudioState";
+import { StudioState, Player } from "./schema/StudioSchema";
 import { Messages, IRoom } from "@heoniverse/shared";
 import { PlayerUpdateCommand, PlayerNameUpdateCommand, PushChatUpdateCommand } from "./commands";
 

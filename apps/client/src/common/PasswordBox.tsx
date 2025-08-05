@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { AppIcon } from "@/icons";
 import { Input } from "@headlessui/react";
+import { UseFormRegisterReturn } from "react-hook-form";
+import { AppIcon } from "@/icons";
 
-export const PasswordBox = () => {
+type Props = {
+  regiser?: UseFormRegisterReturn<any>;
+};
+
+export const PasswordBox = ({ regiser }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -13,9 +18,11 @@ export const PasswordBox = () => {
       <div className="relative mt-1">
         <Input
           type={isVisible ? "text" : "password"}
+          autoComplete="off"
           id="pass"
           placeholder="Password"
           className="bg-background w-full outline-none focus-within:border-white placeholder:text-sm rounded-md p-2 border-2 border-white/20"
+          {...regiser}
         />
         <div
           className="absolute top-3 right-4 text-2xl text-gray-500 cursor-pointer"

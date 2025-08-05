@@ -1,14 +1,12 @@
 import { Field, Label, Textarea } from "@headlessui/react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { z } from "zod";
-import { FormSchema } from "@/utils";
 
 type Props = {
   label: string;
   required?: boolean;
   topLabel?: boolean;
   autoFocus?: boolean;
-  regiser?: UseFormRegisterReturn<keyof z.infer<typeof FormSchema>>;
+  regiser?: UseFormRegisterReturn<any>;
 };
 
 export const TextareaBox = ({

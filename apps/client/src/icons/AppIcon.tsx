@@ -38,7 +38,7 @@ import { IoHandRightOutline } from "react-icons/io5";
 import { PiMinus, PiPlus } from "react-icons/pi";
 import { FaGamepad } from "react-icons/fa";
 import { BsPersonLock } from "react-icons/bs";
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -98,6 +98,7 @@ const IconMap = {
   ["person-lock"]: BsPersonLock,
   ["people"]: FaUserFriends,
   ["lock"]: FaLock,
+  ["un-lock"]: FaLockOpen,
   ["create"]: IoCreateOutline,
   ["eye"]: IoEye,
   ["eye-off"]: IoEyeOff,

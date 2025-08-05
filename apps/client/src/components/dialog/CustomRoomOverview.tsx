@@ -10,6 +10,8 @@ import { AppIcon } from "@/icons";
 import { RoomAvailable } from "colyseus.js";
 import { RoomMetadata } from "@heoniverse/shared";
 import { AppButton, Condition } from "@/common";
+import { phaserGame } from "@/game";
+import { Preloader } from "@/game/scenes";
 
 type Props = {
   onPrevious: () => void;
@@ -21,16 +23,28 @@ const columnHelper = createColumnHelper<RoomAvailable<RoomMetadata>>();
 export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
   const availableRooms = useAppSelector((state) => state.room.availableRooms);
   const { showModal } = useModal();
+  const preloader = phaserGame.scene.keys.preloader as Preloader;
+
+  const handleJoinButton = (roomId: string) => {
+    preloader.network.joinCustomRoom(roomId).then(() => {
+      preloader.launchGame();
+    });
+  };
 
   const columns = useMemo(
     () => [
       columnHelper.display({
         id: "avatar",
-        cell: () => (
-          <div className="w-8 ml-1 flex justify-center items-center">
-            <AppIcon iconName="lock" color="orange" size={17} />
-          </div>
-        ),
+        cell: (info) => {
+          const hasPassword = info.row.original.metadata?.hasPassword;
+          return (
+            <div className="w-8 ml-1 flex justify-center items-center">
+              <Condition condition={hasPassword}>
+                <AppIcon iconName="lock" color="orange" size={17} />
+              </Condition>
+            </div>
+          );
+        },
       }),
       columnHelper.accessor("metadata.name", {
         header: "Name",
@@ -62,19 +76,33 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       }),
       columnHelper.display({
         id: "enter",
-        cell: () => (
-          <div className="w-16 flex justify-center items-center">
-            <AppButton
-              className="bg-transparent ring-1 ring-white/50"
-              onClick={() => showModal("InputPassword")}
-            >
-              <div className="flex items-center gap-1">
-                <AppIcon iconName="exit" />
-                <div>입장</div>
-              </div>
-            </AppButton>
-          </div>
-        ),
+        cell: (info) => {
+          const rowData = info.row.original;
+          const hasPassword = rowData.metadata?.hasPassword;
+
+          return (
+            <div className="w-16 flex justify-center items-center">
+              <AppButton
+                className="bg-transparent ring-1 ring-white/50"
+                onClick={() => {
+                  if (hasPassword) {
+                    showModal("InputPassword");
+                  } else {
+                    handleJoinButton(rowData.roomId);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-1">
+                  <AppIcon
+                    iconName={hasPassword ? "lock" : "exit"}
+                    color={hasPassword ? "orange" : "white"}
+                  />
+                  <div>입장</div>
+                </div>
+              </AppButton>
+            </div>
+          );
+        },
       }),
     ],
     [showModal],
@@ -109,7 +137,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       <Condition
         condition={availableRooms.length !== 0}
         fallback={
-          <div className="min-w-[700px] h-32 bg-[#09090b] rounded-md p-2 flex items-center justify-center gap-2 text-orange-200">
+          <div className="min-w-[700px] h-32 bg-[#09090b] rounded-md p-2 flex items-center justify-center gap-2 text-rose-200">
             <AppIcon iconName="warning" size={20} />
             <div>현재 생성된 커스텀 방이 없습니다.</div>
           </div>

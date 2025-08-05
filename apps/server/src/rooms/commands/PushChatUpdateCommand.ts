@@ -1,6 +1,6 @@
 import { Command } from "@colyseus/command";
 import { Studio } from "../Studio";
-import { ChatMessage } from "../schema/StudioState";
+import { ChatMessage } from "../schema/StudioSchema";
 
 type Payload = {
   sessionId: string;

@@ -15,7 +15,6 @@ export const AppButton = ({ className, disabled, ...props }: Props) => {
         className,
       )}
       disabled={disabled}
-      type="submit"
       {...props}
     ></Button>
   );

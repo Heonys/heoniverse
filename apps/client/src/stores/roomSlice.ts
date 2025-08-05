@@ -1,6 +1,7 @@
+import { RoomAvailable } from "colyseus.js";
 import { RoomMetadata } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RoomAvailable } from "colyseus.js";
+import { isCustomRoom } from "@/utils";
 
 const roomSlice = createSlice({
   name: "room",
@@ -20,9 +21,11 @@ const roomSlice = createSlice({
       state.roomJoined = action.payload;
     },
     setAvailableRoom: (state, action: PayloadAction<RoomAvailable[]>) => {
-      state.availableRooms = action.payload;
+      state.availableRooms = action.payload.filter((room) => isCustomRoom(room.name));
     },
     addAvailableRoom: (state, action: PayloadAction<RoomAvailable>) => {
+      if (!isCustomRoom(action.payload.name)) return;
+
       const exists = state.availableRooms.find(({ roomId }) => roomId === action.payload.roomId);
       if (!exists) {
         state.availableRooms.push(action.payload);

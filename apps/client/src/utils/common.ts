@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { clsx, ClassValue } from "clsx";
 import { Direction, sittingOffset } from "@/constants/game";
 import { JoystickMovement, MovementInput } from "@/components";
+import { RoomType } from "@heoniverse/shared";
 
 export function cn(...args: ClassValue[]) {
   return twMerge(clsx(...args));
@@ -113,4 +114,8 @@ export function angle2Movement(angle: number): MovementInput {
   }
 
   return movement;
+}
+
+export function isCustomRoom(roomName: string) {
+  return roomName === RoomType.CUSTOM;
 }

@@ -1,6 +1,6 @@
 import { Client, Room, getStateCallbacks } from "colyseus.js";
-import { RoomType, Messages, MessagePayloadMap } from "@heoniverse/shared";
-import { StudioState } from "@server/rooms/schema/StudioState";
+import { RoomType, Messages, MessagePayloadMap, IRoom } from "@heoniverse/shared";
+import { StudioState } from "@server/rooms/schema/StudioSchema";
 import { store } from "@/stores";
 import {
   setJoinedRoomData,
@@ -48,7 +48,7 @@ export class Network {
       store.dispatch(addAvailableRoom(room));
     });
 
-    this.lobby.onMessage("-", ([roomId]) => {
+    this.lobby.onMessage("-", (roomId) => {
       store.dispatch(removeAvailableRoom(roomId));
     });
   }
@@ -58,7 +58,15 @@ export class Network {
     this.setupRoom();
   }
 
-  async joinPrivateRoom() {}
+  async joinCustomRoom(roomId: string, password?: string) {
+    this.room = await this.client.joinById(roomId, { password });
+    this.setupRoom();
+  }
+
+  async createCustomRoom(room: IRoom) {
+    this.room = await this.client.create(RoomType.CUSTOM, room);
+    this.setupRoom();
+  }
 
   sendMessage<T extends keyof MessagePayloadMap>(type: T, message?: MessagePayloadMap[T]) {
     if (!this.room) {

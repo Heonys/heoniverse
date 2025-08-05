@@ -72,7 +72,9 @@ export const LoginDialog = () => {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <AppButton className="font-medium px-4">입장</AppButton>
+        <AppButton type="submit" className="font-medium px-4">
+          입장
+        </AppButton>
       </div>
     </form>
   );
