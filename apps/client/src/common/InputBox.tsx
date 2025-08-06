@@ -1,5 +1,5 @@
-import { Field, Input, Label } from "@headlessui/react";
 import { UseFormRegisterReturn } from "react-hook-form";
+import { Field, Input, Label } from "@headlessui/react";
 
 type Props = {
   label: string;
@@ -7,6 +7,8 @@ type Props = {
   topLabel?: boolean;
   autoFocus?: boolean;
   regiser?: UseFormRegisterReturn<any>;
+  value?: string;
+  onChange?: (password: string) => void;
 };
 
 export const InputBox = ({
@@ -15,6 +17,8 @@ export const InputBox = ({
   topLabel = true,
   autoFocus,
   regiser,
+  value,
+  onChange,
 }: Props) => {
   return (
     <Field className="w-full mx-auto">
@@ -32,6 +36,10 @@ export const InputBox = ({
           placeholder={label}
           required={required}
           className="bg-background w-full outline-none focus-within:border-white/70 placeholder:text-sm rounded-md p-2 border-2 border-white/25"
+          value={value}
+          onChange={(event) => {
+            onChange?.(event.target.value);
+          }}
           {...regiser}
         />
         <div className="absolute top-3 right-4 text-2xl text-gray-500 cursor-pointer"></div>

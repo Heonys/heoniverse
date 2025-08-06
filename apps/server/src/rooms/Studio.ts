@@ -1,4 +1,5 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, AuthContext, ServerError } from "colyseus";
+import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioSchema";
 import { Messages, IRoom } from "@heoniverse/shared";
@@ -9,21 +10,22 @@ export class Studio extends Room<StudioState> {
   dispatcher = new Dispatcher(this);
   name!: string;
   description!: string;
-  hasPassword = false;
+  password?: string;
 
-  onCreate(options: IRoom) {
+  async onCreate(options: IRoom) {
     this.name = options.name;
     this.description = options.description;
     this.autoDispose = options.autoDispose;
 
     if (options.password) {
-      this.hasPassword = true;
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(options.password, salt);
     }
 
     this.setMetadata({
       name: this.name,
       description: this.description,
-      hasPassword: this.hasPassword,
+      hasPassword: !!this.password,
     });
 
     this.onMessage(
@@ -80,7 +82,17 @@ export class Studio extends Room<StudioState> {
     }
   }
 
+  async onAuth(client: Client, options: IRoom) {
+    if (this.password) {
+      const isMatch = await bcrypt.compare(options.password!, this.password);
+      if (!isMatch) {
+        throw new ServerError(401, "비밀번호가 올바르지 않습니다.");
+      }
+    }
+    return true;
+  }
+
   onDispose() {
-    // console.log("🧹 Room disposed.");
+    this.dispatcher.stop();
   }
 }

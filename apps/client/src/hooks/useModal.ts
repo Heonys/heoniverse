@@ -1,9 +1,9 @@
-import { InputPassword } from "@/components/modal";
+import { CustomRoomPassword } from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { show, hide } from "@/stores/modalSlice";
 
 const modalTemplates = {
-  InputPassword,
+  CustomRoomPassword,
 };
 
 type ModalTemplates = typeof modalTemplates;
@@ -14,7 +14,7 @@ export const useModal = () => {
 
   const showModal = <T extends keyof ModalTemplates>(
     component: T,
-    props?: Parameters<ModalTemplates[T]>,
+    props?: Parameters<ModalTemplates[T]>[0],
   ) => {
     dispatch(
       show({

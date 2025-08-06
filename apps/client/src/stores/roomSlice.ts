@@ -26,9 +26,13 @@ const roomSlice = createSlice({
     addAvailableRoom: (state, action: PayloadAction<RoomAvailable>) => {
       if (!isCustomRoom(action.payload.name)) return;
 
-      const exists = state.availableRooms.find(({ roomId }) => roomId === action.payload.roomId);
-      if (!exists) {
+      const roomIndex = state.availableRooms.findIndex(
+        ({ roomId }) => roomId === action.payload.roomId,
+      );
+      if (roomIndex === -1) {
         state.availableRooms.push(action.payload);
+      } else {
+        state.availableRooms[roomIndex] = action.payload;
       }
     },
     removeAvailableRoom: (state, action: PayloadAction<string>) => {

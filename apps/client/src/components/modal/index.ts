@@ -1,2 +1,2 @@
 export * from "./ModalComponent";
-export * from "./InputPassword";
+export * from "./CustomRoomPassword";

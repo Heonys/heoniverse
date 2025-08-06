@@ -49,7 +49,7 @@ export const CreateRoomForm = ({ onPrevious }: Props) => {
       </div>
 
       <div className="p-2 px-6 flex flex-col gap-1 w-[400px]">
-        <InputBox label="Name" regiser={register("name")} required />
+        <InputBox label="Name" regiser={register("name")} required autoFocus />
         <div className="text-xs text-red-400 ml-1">{errors.name?.message}</div>
 
         <TextareaBox label="Description" regiser={register("description")} required />

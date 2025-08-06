@@ -86,7 +86,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
                 className="bg-transparent ring-1 ring-white/50"
                 onClick={() => {
                   if (hasPassword) {
-                    showModal("InputPassword");
+                    showModal("CustomRoomPassword", { roomId: rowData.roomId });
                   } else {
                     handleJoinButton(rowData.roomId);
                   }
@@ -105,6 +105,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
         },
       }),
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [showModal],
   );
 

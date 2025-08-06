@@ -4,10 +4,14 @@ import { UseFormRegisterReturn } from "react-hook-form";
 import { AppIcon } from "@/icons";
 
 type Props = {
+  required?: boolean;
   regiser?: UseFormRegisterReturn<any>;
+  autoFocus?: boolean;
+  value?: string;
+  onChange?: (password: string) => void;
 };
 
-export const PasswordBox = ({ regiser }: Props) => {
+export const PasswordBox = ({ required, autoFocus, regiser, value, onChange }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -20,8 +24,14 @@ export const PasswordBox = ({ regiser }: Props) => {
           type={isVisible ? "text" : "password"}
           autoComplete="off"
           id="pass"
+          autoFocus={autoFocus}
+          required={required}
           placeholder="Password"
           className="bg-background w-full outline-none focus-within:border-white placeholder:text-sm rounded-md p-2 border-2 border-white/20"
+          value={value}
+          onChange={(event) => {
+            onChange?.(event.target.value);
+          }}
           {...regiser}
         />
         <div
