@@ -12,7 +12,7 @@ export const TooltipButton = ({ tooltip, children, ...props }: Props) => {
       <Button
         data-tooltip-id="app-tooltip-button"
         data-tooltip-content={tooltip}
-        className="size-11 cursor-pointer flex justify-center items-center bg-white rounded-full shadow-xl border border-gray-500/20"
+        className="size-10 cursor-pointer flex justify-center items-center bg-white rounded-full shadow-xl border border-gray-500/20"
         {...props}
       >
         {children}

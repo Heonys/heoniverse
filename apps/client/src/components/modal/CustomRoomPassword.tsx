@@ -48,7 +48,7 @@ export const CustomRoomPassword = ({ roomId }: Props) => {
           <div className="text-xs text-red-400 ml-1 min-h-4">{message}</div>
         </div>
         <div className="flex justify-center items-center">
-          <AppButton type="submit" className="px-5 bg-white text-black">
+          <AppButton type="submit" className="px-5 bg-white text-black font-medium">
             확인
           </AppButton>
         </div>

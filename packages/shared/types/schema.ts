@@ -16,6 +16,7 @@ export interface RoomData {
   id: string;
   name: string;
   description: string;
+  roomType: RoomType;
 }
 
 export interface IRoom {

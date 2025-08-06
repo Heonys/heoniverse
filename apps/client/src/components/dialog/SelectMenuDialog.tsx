@@ -37,6 +37,7 @@ export const SelectMenuDialog = () => {
 
               <AppButton
                 className="px-4 font-medium"
+                disabled={!lobbyJoined}
                 onClick={() => setDialogView(DialogView.Overview)}
               >
                 커스텀 방 생성 / 참여

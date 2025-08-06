@@ -1,9 +1,11 @@
-import { CustomRoomPassword } from "@/components/modal";
+import { CustomRoomPassword, ControlGuide, LeaveRoom } from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { show, hide } from "@/stores/modalSlice";
 
 const modalTemplates = {
   CustomRoomPassword,
+  ControlGuide,
+  LeaveRoom,
 };
 
 type ModalTemplates = typeof modalTemplates;

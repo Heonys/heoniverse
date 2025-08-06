@@ -9,6 +9,7 @@ import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
 import { setShowChat, setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
+import { setLobbyJoined } from "@/stores/roomSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -30,6 +31,7 @@ export class Game extends Phaser.Scene {
     createCharacterAnims(this.anims);
     this.registerEventHandler();
     this.registerKeyHandler();
+    this.events.on("sleep", this.onSleep, this);
 
     this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
@@ -227,5 +229,11 @@ export class Game extends Phaser.Scene {
     const otherPlayer = this.ohterPlayersMap.get(id);
     if (!otherPlayer) return;
     otherPlayer.updatePlayer(payload);
+  }
+
+  onSleep() {
+    this.network.joinLobbyRoom().then(() => {
+      store.dispatch(setLobbyJoined(true));
+    });
   }
 }

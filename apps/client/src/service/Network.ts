@@ -68,6 +68,14 @@ export class Network {
     this.setupRoom();
   }
 
+  async leaveCurrentRoom() {
+    if (!this.room) return;
+
+    await this.room.leave();
+    this.room.removeAllListeners();
+    this.room = null;
+  }
+
   sendMessage<T extends keyof MessagePayloadMap>(type: T, message?: MessagePayloadMap[T]) {
     if (!this.room) {
       throw new Error("방에 입장하지 않았습니다.");
@@ -92,6 +100,8 @@ export class Network {
   setupRoom() {
     if (!this.room) return;
     this.lobby?.leave();
+    store.dispatch(setLobbyJoined(false));
+
     this.sessionId = this.room.sessionId;
     const $ = getStateCallbacks(this.room);
 

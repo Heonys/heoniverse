@@ -11,13 +11,13 @@ import { Game } from "@/game/scenes";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
+import { RoomType } from "@heoniverse/shared";
 
 type FormType = z.infer<typeof FormSchema>;
 
 export const LoginDialog = () => {
   const dispatch = useAppDispatch();
-  const roomName = useAppSelector((state) => state.room.name);
-  const roomDescription = useAppSelector((state) => state.room.description);
+  const { name, description, roomType } = useAppSelector((state) => state.room);
   const game = phaserGame.scene.keys.game as Game;
 
   const {
@@ -46,12 +46,10 @@ export const LoginDialog = () => {
     >
       <div className="flex flex-col gap-4 text-[#eee] ">
         <div className="flex justify-center items-center gap-2">
-          <AppIcon iconName="public" size={23} className="translate-y-0.5" />
-          <div className="text-2xl font-bold leading-none tracking-tight">{roomName}</div>
+          <AppIcon iconName={roomType === RoomType.PUBLIC ? "public" : "wand"} size={23} />
+          <div className="text-2xl font-bold leading-none tracking-tight">{name}</div>
         </div>
-        <div className="text-sm text-[#c2c2c2] flex justify-center items-center">
-          {roomDescription}
-        </div>
+        <div className="text-sm text-[#c2c2c2] flex justify-center items-center">{description}</div>
       </div>
       <div className="grid grid-cols-2 text-[#eee] my-6 gap-4">
         <div className="flex flex-col gap-2">

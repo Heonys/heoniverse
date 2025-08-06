@@ -1,5 +1,5 @@
 import { RoomAvailable } from "colyseus.js";
-import { RoomMetadata } from "@heoniverse/shared";
+import { RoomMetadata, RoomType } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isCustomRoom } from "@/utils";
 
@@ -11,6 +11,7 @@ const roomSlice = createSlice({
     id: "",
     name: "",
     description: "",
+    roomType: null as RoomType | null,
     availableRooms: [] as RoomAvailable<RoomMetadata>[],
   },
   reducers: {
@@ -42,11 +43,12 @@ const roomSlice = createSlice({
     },
     setJoinedRoomData: (
       state,
-      action: PayloadAction<{ id: string; name: string; description: string }>,
+      action: PayloadAction<{ id: string; name: string; description: string; roomType: RoomType }>,
     ) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.description = action.payload.description;
+      state.roomType = action.payload.roomType;
     },
   },
 });

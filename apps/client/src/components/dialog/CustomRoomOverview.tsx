@@ -138,7 +138,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       <Condition
         condition={availableRooms.length !== 0}
         fallback={
-          <div className="min-w-[700px] h-32 bg-[#09090b] rounded-md p-2 flex items-center justify-center gap-2 text-rose-200">
+          <div className="min-w-[700px] h-32 bg-[#09090b] rounded-md p-2 flex items-center justify-center gap-2 text-red-400">
             <AppIcon iconName="warning" size={20} />
             <div>현재 생성된 커스텀 방이 없습니다.</div>
           </div>

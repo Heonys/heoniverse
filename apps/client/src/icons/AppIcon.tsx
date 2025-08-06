@@ -43,6 +43,8 @@ import { FaUserFriends } from "react-icons/fa";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { RiErrorWarningLine } from "react-icons/ri";
+import { FaDoorOpen } from "react-icons/fa6";
+import { SlMagicWand } from "react-icons/sl";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -103,6 +105,8 @@ const IconMap = {
   ["eye"]: IoEye,
   ["eye-off"]: IoEyeOff,
   ["warning"]: RiErrorWarningLine,
+  ["door"]: FaDoorOpen,
+  ["wand"]: SlMagicWand,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

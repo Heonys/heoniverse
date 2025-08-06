@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Network } from "@/service/Network";
 import { store } from "@/stores";
 import { setRoomJoined } from "@/stores/roomSlice";
+import { setLoggedIn } from "@/stores/userSlice";
 
 export class Preloader extends Phaser.Scene {
   private preloadComplete = false;
@@ -93,7 +94,19 @@ export class Preloader extends Phaser.Scene {
 
   launchGame() {
     if (!this.preloadComplete) return;
-    this.scene.launch("game", { network: this.network });
+
+    if (this.scene.isSleeping("game")) {
+      this.scene.wake("game");
+    } else {
+      this.scene.launch("game", { network: this.network });
+    }
     store.dispatch(setRoomJoined(true));
+  }
+
+  leaveGame() {
+    if (!this.preloadComplete) return;
+    this.scene.sleep("game");
+    store.dispatch(setRoomJoined(false));
+    store.dispatch(setLoggedIn(false));
   }
 }

@@ -2,7 +2,7 @@ import { Room, Client, AuthContext, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioSchema";
-import { Messages, IRoom } from "@heoniverse/shared";
+import { Messages, IRoom, RoomType } from "@heoniverse/shared";
 import { PlayerUpdateCommand, PlayerNameUpdateCommand, PushChatUpdateCommand } from "./commands";
 
 export class Studio extends Room<StudioState> {
@@ -71,6 +71,7 @@ export class Studio extends Room<StudioState> {
     this.state.players.set(client.sessionId, new Player());
     client.send(Messages.SEND_ROOM_DATA, {
       id: this.roomId,
+      roomType: this.roomName,
       name: this.name,
       description: this.description,
     });
