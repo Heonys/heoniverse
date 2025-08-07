@@ -4,8 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AppButton, InputBox, TextareaBox, PasswordBox } from "@/common";
 import { AppIcon } from "@/icons";
 import { CreateFormSchema } from "@/utils";
-import { phaserGame } from "@/game";
-import { Preloader } from "@/game/scenes";
+import { useGame } from "@/hooks";
 
 type Props = {
   onPrevious: () => void;
@@ -14,7 +13,7 @@ type Props = {
 type FormType = z.infer<typeof CreateFormSchema>;
 
 export const CreateRoomForm = ({ onPrevious }: Props) => {
-  const preloader = phaserGame.scene.keys.preloader as Preloader;
+  const { preloaderScene } = useGame();
   const {
     register,
     handleSubmit,
@@ -24,8 +23,8 @@ export const CreateRoomForm = ({ onPrevious }: Props) => {
   });
 
   const onSubmit = (formdata: FormType) => {
-    preloader.network.createCustomRoom({ ...formdata, autoDispose: true }).then(() => {
-      preloader.launchGame();
+    preloaderScene.network.createCustomRoom({ ...formdata, autoDispose: true }).then(() => {
+      preloaderScene.launchGame();
     });
   };
 

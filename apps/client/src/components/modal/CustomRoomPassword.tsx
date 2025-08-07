@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { ServerError } from "colyseus.js";
 import { AppButton, PasswordBox } from "@/common";
-import { phaserGame } from "@/game";
-import { Preloader } from "@/game/scenes";
 import { Backdrop } from "./Backdrop";
 import { useAnimate } from "motion/react";
-import { useModal } from "@/hooks";
+import { useGame, useModal } from "@/hooks";
 
 type Props = {
   roomId: string;
@@ -16,14 +14,14 @@ export const CustomRoomPassword = ({ roomId }: Props) => {
   const [message, setMessage] = useState<string | null>(null);
   const [scope, animate] = useAnimate();
   const { hideModal } = useModal();
-  const preloader = phaserGame.scene.keys.preloader as Preloader;
+  const { preloaderScene } = useGame();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    preloader.network
+    preloaderScene.network
       .joinCustomRoom(roomId, password)
       .then(() => {
-        preloader.launchGame();
+        preloaderScene.launchGame();
         hideModal();
       })
       .catch((error) => {

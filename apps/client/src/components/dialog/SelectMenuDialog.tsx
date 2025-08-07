@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { phaserGame } from "@/game";
-import type { Preloader } from "@/game/scenes";
 import { AppButton, Switch, Case } from "@/common";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector, useGame } from "@/hooks";
 import { CustomRoomOverview, CreateRoomForm } from "@/components/dialog";
 
 const enum DialogView {
@@ -14,6 +12,7 @@ const enum DialogView {
 export const SelectMenuDialog = () => {
   const [dialogView, setDialogView] = useState<DialogView>(DialogView.Select);
   const lobbyJoined = useAppSelector((state) => state.room.lobbyJoined);
+  const { preloaderScene } = useGame();
 
   return (
     <div className="fixed top-1/2 left-1/2 -translate-1/2 z-[1111]">
@@ -25,10 +24,8 @@ export const SelectMenuDialog = () => {
                 className="px-4 font-medium"
                 disabled={!lobbyJoined}
                 onClick={() => {
-                  const preloader = phaserGame.scene.keys.preloader as Preloader;
-
-                  preloader.network.joinPublicRoom().then(() => {
-                    preloader.launchGame();
+                  preloaderScene.network.joinPublicRoom().then(() => {
+                    preloaderScene.launchGame();
                   });
                 }}
               >

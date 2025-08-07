@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AppIcon } from "@/icons";
 import { TrafficLights } from "@/components/computer";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { phaserGame } from "@/game";
-import type { Game } from "@/game/scenes";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { formattDate } from "@/utils";
 import { markAsRead } from "@/stores/chatSlice";
 
@@ -14,16 +12,16 @@ export const Messages = () => {
 
   const chatMessages = useAppSelector((state) => state.chat.chatMessages);
   const dispatch = useAppDispatch();
-  const game = phaserGame.scene.keys.game as Game;
+  const { localPlayer, network } = useGame();
   const lastMessage = chatMessages[chatMessages.length - 1];
 
   const isMe = (id: string) => {
-    return game.localPlayer.playerId === id;
+    return localPlayer.playerId === id;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    game.network.sendMessage("PUSH_CHAT_MESSAGE", text);
+    network.sendMessage("PUSH_CHAT_MESSAGE", text);
     setText("");
   };
 

@@ -3,16 +3,14 @@ import { useEffect, useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import { Button, Input } from "@headlessui/react";
 import { AppIcon, IconButton } from "@/icons";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
-import { phaserGame } from "@/game";
-import { Game } from "@/game/scenes";
 import { ChatMessage } from "./ChatMessage";
 
 type FormType = { message: string };
 
 export const Chat = () => {
-  const game = phaserGame.scene.keys.game as Game;
+  const { network, localPlayer } = useGame();
 
   const readyToSubmit = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,8 +31,8 @@ export const Chat = () => {
     reset();
     if (!message.trim()) return;
     inputRef.current?.blur();
-    game.network.sendMessage("PUSH_CHAT_MESSAGE", message);
-    game.localPlayer.openBubble(message);
+    network.sendMessage("PUSH_CHAT_MESSAGE", message);
+    localPlayer.openBubble(message);
   };
 
   const scrollToBottom = () => {

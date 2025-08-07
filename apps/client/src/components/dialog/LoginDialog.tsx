@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
 import { avatars } from "@/constants/game";
-import { phaserGame } from "@/game";
-import { Game } from "@/game/scenes";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
@@ -18,7 +16,7 @@ type FormType = z.infer<typeof FormSchema>;
 export const LoginDialog = () => {
   const dispatch = useAppDispatch();
   const { name, description, roomType } = useAppSelector((state) => state.room);
-  const game = phaserGame.scene.keys.game as Game;
+  const { gameScene, localPlayer, network } = useGame();
 
   const {
     register,
@@ -30,11 +28,11 @@ export const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState(0);
 
   const onSubmit = (data: FormType) => {
-    game.localPlayer.setPlayerName(data.name);
-    game.localPlayer.setPlayerAvatar(avatars[avatarIndex].name);
-    game.localPlayer.readyToConnect = true;
-    game.network.readyToConnect();
-    game.enableKeys();
+    localPlayer.setPlayerName(data.name);
+    localPlayer.setPlayerAvatar(avatars[avatarIndex].name);
+    localPlayer.readyToConnect = true;
+    network.readyToConnect();
+    gameScene.enableKeys();
     dispatch(setLoggedIn(true));
   };
 

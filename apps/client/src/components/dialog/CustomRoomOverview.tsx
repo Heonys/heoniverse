@@ -5,13 +5,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { useAppSelector, useModal } from "@/hooks";
+import { useAppSelector, useGame, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { RoomAvailable } from "colyseus.js";
 import { RoomMetadata } from "@heoniverse/shared";
 import { AppButton, Condition } from "@/common";
-import { phaserGame } from "@/game";
-import { Preloader } from "@/game/scenes";
 
 type Props = {
   onPrevious: () => void;
@@ -23,11 +21,11 @@ const columnHelper = createColumnHelper<RoomAvailable<RoomMetadata>>();
 export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
   const availableRooms = useAppSelector((state) => state.room.availableRooms);
   const { showModal } = useModal();
-  const preloader = phaserGame.scene.keys.preloader as Preloader;
+  const { preloaderScene } = useGame();
 
   const handleJoinButton = (roomId: string) => {
-    preloader.network.joinCustomRoom(roomId).then(() => {
-      preloader.launchGame();
+    preloaderScene.network.joinCustomRoom(roomId).then(() => {
+      preloaderScene.launchGame();
     });
   };
 

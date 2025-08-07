@@ -1,7 +1,5 @@
 import { Condition, TooltipButton } from "@/common";
-import { phaserGame } from "@/game";
-import { Preloader } from "@/game/scenes";
-import { useAppDispatch, useAppSelector, useModal } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setJoystick } from "@/stores/userSlice";
 import { openURL } from "@/utils";
@@ -10,7 +8,7 @@ export const HelperGroups = () => {
   const { showModal, hideModal } = useModal();
   const dispatch = useAppDispatch();
   const showJoystick = useAppSelector((state) => state.user.showJoystick);
-  const preloader = phaserGame.scene.keys.preloader as Preloader;
+  const { preloaderScene } = useGame();
 
   return (
     <div className="fixed bottom-2 right-5 flex gap-2">
@@ -19,8 +17,8 @@ export const HelperGroups = () => {
         onClick={() => {
           showModal("LeaveRoom", {
             onClose: () => {
-              preloader.network.leaveCurrentRoom().then(() => {
-                preloader.leaveGame();
+              preloaderScene.network.leaveCurrentRoom().then(() => {
+                preloaderScene.leaveGame();
                 hideModal();
               });
             },
