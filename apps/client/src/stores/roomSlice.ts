@@ -12,6 +12,7 @@ const roomSlice = createSlice({
     name: "",
     description: "",
     roomType: null as RoomType | null,
+    clients: 0,
     availableRooms: [] as RoomAvailable<RoomMetadata>[],
   },
   reducers: {
@@ -41,14 +42,27 @@ const roomSlice = createSlice({
         (rooms) => rooms.roomId !== action.payload,
       );
     },
+    increaseClient: (state) => {
+      state.clients++;
+    },
+    decreaseClient: (state) => {
+      if (state.clients > 0) state.clients--;
+    },
     setJoinedRoomData: (
       state,
-      action: PayloadAction<{ id: string; name: string; description: string; roomType: RoomType }>,
+      action: PayloadAction<{
+        id: string;
+        name: string;
+        description: string;
+        roomType: RoomType;
+        clients: number;
+      }>,
     ) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.description = action.payload.description;
       state.roomType = action.payload.roomType;
+      state.clients = action.payload.clients;
     },
   },
 });
@@ -60,5 +74,7 @@ export const {
   setAvailableRoom,
   addAvailableRoom,
   removeAvailableRoom,
+  increaseClient,
+  decreaseClient,
 } = roomSlice.actions;
 export default roomSlice.reducer;

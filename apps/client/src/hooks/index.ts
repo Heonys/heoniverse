@@ -5,3 +5,5 @@ export * from "./useHistory";
 export * from "./useCanvasScale";
 export * from "./useWindowSize";
 export * from "./useModal";
+export * from "./useGame";
+export * from "./useSceneEffect";

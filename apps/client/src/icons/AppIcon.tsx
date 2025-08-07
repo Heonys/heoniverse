@@ -45,6 +45,8 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { FaDoorOpen } from "react-icons/fa6";
 import { SlMagicWand } from "react-icons/sl";
+import { MdMonitor } from "react-icons/md";
+import { IoBatteryHalf } from "react-icons/io5";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -60,6 +62,7 @@ const IconMap = {
   ["arrow-right"]: FaArrowRight,
   ["monitor"]: MdMonitorHeart,
   ["batterty-charging"]: IoBatteryCharging,
+  ["batterty-half"]: IoBatteryHalf,
   ["apple-logo"]: FaApple,
   ["shut-down"]: RiShutDownLine,
   ["wifi"]: FaWifi,
@@ -107,6 +110,7 @@ const IconMap = {
   ["warning"]: RiErrorWarningLine,
   ["door"]: FaDoorOpen,
   ["wand"]: SlMagicWand,
+  ["display"]: MdMonitor,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

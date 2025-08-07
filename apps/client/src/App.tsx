@@ -16,12 +16,12 @@ function App() {
     <div className="w-full h-full absolute">
       <ModalComponent />
       <VirtualJoystick />
-      <GameHUD />
 
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <Chat />
           <HelperGroups />
+          <GameHUD />
         </Condition>
       </Condition>
 
