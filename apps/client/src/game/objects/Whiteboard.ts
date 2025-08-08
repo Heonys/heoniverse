@@ -13,7 +13,7 @@ export class Whiteboard extends Item {
   }
 
   onOverlapDialog() {
-    this.setDialogBox("R: 화이트보드 사용하기");
+    this.setDialogBox("E: 화이트보드 사용하기");
   }
 
   openDialog() {

@@ -1,5 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { Direction } from "@/constants/game";
+import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, OtherPlayer, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
@@ -12,7 +12,7 @@ import { setShowChat, setFocusChat, pushJoinedMessage, pushLeftMessage } from "@
 import { decreaseClient, increaseClient, setLobbyJoined } from "@/stores/roomSlice";
 
 export class Game extends Phaser.Scene {
-  private cursor!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private cursor!: ExtendedCursorKeys;
   private map!: Phaser.Tilemaps.Tilemap;
   localPlayer!: LocalPlayer;
   playerSelector!: PlayerSelector;
@@ -26,7 +26,10 @@ export class Game extends Phaser.Scene {
 
   create({ network }: { network: Network }) {
     this.network = network;
-    this.cursor = this.input.keyboard!.createCursorKeys();
+    this.cursor = {
+      ...this.input.keyboard!.createCursorKeys(),
+      ...(this.input.keyboard!.addKeys("W,S,A,D") as WASD),
+    };
     this.map = this.make.tilemap({ key: "tilemap" });
     createCharacterAnims(this.anims);
     this.registerEventHandler();
@@ -132,6 +135,11 @@ export class Game extends Phaser.Scene {
     this.input.keyboard?.on("keydown-ENTER", () => {
       store.dispatch(setShowChat(true));
       store.dispatch(setFocusChat(true));
+    });
+
+    this.input.keyboard?.on("keydown-ESC", () => {
+      store.dispatch(setShowChat(false));
+      store.dispatch(setFocusChat(false));
     });
   }
 

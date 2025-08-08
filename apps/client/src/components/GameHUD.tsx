@@ -15,10 +15,10 @@ export const GameHUD = () => {
   }, []);
 
   return (
-    <div>
+    <div className="fixed top-0.5 right-0.5 flex flex-col gap-1">
       <div
         className={twMerge(
-          "fixed top-0.5 right-0.5 py-1 rounded-2xl shadow-md select-none text-xs text-center w-44",
+          "py-1 rounded-2xl shadow-md select-none text-xs text-center w-44",
           "border-2 border-white bg-slate-900/90 backdrop-blur-sm text-white",
         )}
         style={{ fontFamily: "Retro" }}
@@ -40,7 +40,7 @@ export const GameHUD = () => {
               <NumberFlow value={clients} />
             </div>
             <div className="flex items-center gap-0.5">
-              <div>{frame.toFixed(0)}</div>
+              <div className="w-5">{frame.toFixed(0)}</div>
               <div className="">fps</div>
             </div>
           </div>

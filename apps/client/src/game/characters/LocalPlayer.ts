@@ -1,4 +1,10 @@
-import { Direction, ItemType, PlayerBehavior, sittingOffset } from "@/constants/game";
+import {
+  Direction,
+  ExtendedCursorKeys,
+  ItemType,
+  PlayerBehavior,
+  sittingOffset,
+} from "@/constants/game";
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
@@ -55,34 +61,14 @@ export class LocalPlayer extends Player {
     });
   }
 
-  update(
-    playerSelector: PlayerSelector,
-    cursor: Phaser.Types.Input.Keyboard.CursorKeys,
-    network: Network,
-  ) {
+  update(playerSelector: PlayerSelector, cursor: ExtendedCursorKeys, network: Network) {
     const selectedItem = playerSelector.selectedItem;
-
-    if (Phaser.Input.Keyboard.JustDown(this.keyR)) {
-      switch (selectedItem?.itemType) {
-        case ItemType.COMPUTER: {
-          const computerObject = selectedItem as Computer;
-          computerObject.openDialog();
-          break;
-        }
-        case ItemType.WHITEBOARD: {
-          const computerObject = selectedItem as Whiteboard;
-          computerObject.openDialog();
-          break;
-        }
-      }
-    }
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
-        if (
-          Phaser.Input.Keyboard.JustDown(this.keyE) &&
-          selectedItem?.itemType === ItemType.CHAIR
-        ) {
+        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE);
+
+        if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
           const chairObject = selectedItem as Chair;
           this.activeChair = chairObject;
 
@@ -112,23 +98,35 @@ export class LocalPlayer extends Player {
           return;
         }
 
+        if (isEJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
+          const computerObject = selectedItem as Computer;
+          computerObject.openDialog();
+          return;
+        }
+
+        if (isEJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
+          const computerObject = selectedItem as Whiteboard;
+          computerObject.openDialog();
+          return;
+        }
+
         let vx = 0;
         let vy = 0;
         const joystic = getJoystickDirection(this.joystickMovement);
 
-        if (cursor.up.isDown || joystic.up) {
+        if (cursor.up.isDown || cursor.W.isDown || joystic.up) {
           vy -= this.speed;
           this.facing = Direction.UP;
         }
-        if (cursor.down.isDown || joystic.down) {
+        if (cursor.down.isDown || cursor.S.isDown || joystic.down) {
           vy += this.speed;
           this.facing = Direction.DOWN;
         }
-        if (cursor.left.isDown || joystic.left) {
+        if (cursor.left.isDown || cursor.A.isDown || joystic.left) {
           vx -= this.speed;
           this.facing = Direction.LEFT;
         }
-        if (cursor.right.isDown || joystic.right) {
+        if (cursor.right.isDown || cursor.D.isDown || joystic.right) {
           vx += this.speed;
           this.facing = Direction.RIGHT;
         }

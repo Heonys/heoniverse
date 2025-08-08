@@ -1,4 +1,4 @@
-import { PlayerBehavior } from "@/constants/game";
+import { ExtendedCursorKeys, PlayerBehavior } from "@/constants/game";
 import { LocalPlayer } from "@/game/characters";
 import { Item } from "@/game/objects";
 import { getJoystickDirection } from "@/utils";
@@ -11,7 +11,7 @@ export class PlayerSelector extends Phaser.GameObjects.Zone {
     scene.physics.add.existing(this);
   }
 
-  update(player: LocalPlayer, cursor: Phaser.Types.Input.Keyboard.CursorKeys) {
+  update(player: LocalPlayer, cursor: ExtendedCursorKeys) {
     if (!cursor) return;
     if (player.playerBehavior === PlayerBehavior.SITTING) return;
 

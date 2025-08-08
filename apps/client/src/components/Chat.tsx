@@ -39,6 +39,11 @@ export const Chat = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleClose = () => {
+    dispatch(setShowChat(false));
+    dispatch(markAsRead());
+  };
+
   useEffect(() => {
     if (focused) setFocus("message");
   }, [focused, setFocus]);
@@ -54,13 +59,7 @@ export const Chat = () => {
           <>
             <div className="relative bg-black/70 rounded-t-xl h-10 flex justify-center items-center text-white text-lg font-bold">
               <div>Chat</div>
-              <IconButton
-                className="absolute top-0 right-0 p-2"
-                onClick={() => {
-                  dispatch(setShowChat(false));
-                  dispatch(markAsRead());
-                }}
-              >
+              <IconButton className="absolute top-0 right-0 p-2" onClick={handleClose}>
                 <AppIcon iconName="x-mark" size={25} />
               </IconButton>
             </div>

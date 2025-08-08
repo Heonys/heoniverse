@@ -11,8 +11,9 @@ export const HelperGroups = () => {
   const { preloaderScene } = useGame();
 
   return (
-    <div className="fixed bottom-2 right-5 flex gap-2">
+    <div className="fixed bottom-2 right-5.5 flex gap-2">
       <TooltipButton
+        id="leave-room"
         tooltip="Leave Room"
         onClick={() => {
           showModal("LeaveRoom", {
@@ -29,6 +30,7 @@ export const HelperGroups = () => {
       </TooltipButton>
 
       <TooltipButton
+        id="control-guide"
         tooltip="Control Guide"
         onClick={() => {
           showModal("ControlGuide");
@@ -38,6 +40,7 @@ export const HelperGroups = () => {
       </TooltipButton>
 
       <TooltipButton
+        id="joystick"
         tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
         onClick={() => dispatch(setJoystick(!showJoystick))}
       >
@@ -46,6 +49,7 @@ export const HelperGroups = () => {
 
       <Condition condition={import.meta.env.DEV}>
         <TooltipButton
+          id="monitoring"
           tooltip="Monitoring"
           onClick={() => {
             openURL(`http://${import.meta.env.VITE_SERVER_URL}/colyseus`);
@@ -56,6 +60,7 @@ export const HelperGroups = () => {
       </Condition>
 
       <TooltipButton
+        id="github"
         tooltip="Visit GitHub"
         onClick={() => {
           openURL("https://github.com/Heonys/heoniverse");
