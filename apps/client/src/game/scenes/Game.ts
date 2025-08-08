@@ -9,7 +9,7 @@ import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
 import { setShowChat, setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
-import { decreaseClient, increaseClient, setLobbyJoined } from "@/stores/roomSlice";
+import { setLobbyJoined } from "@/stores/roomSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: ExtendedCursorKeys;
@@ -219,7 +219,6 @@ export class Game extends Phaser.Scene {
     this.ohterPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
     store.dispatch(pushJoinedMessage({ id, name }));
-    store.dispatch(increaseClient());
   }
 
   playerLeft(id: string, player: IPlayer) {
@@ -227,10 +226,8 @@ export class Game extends Phaser.Scene {
       const otherPlayer = this.ohterPlayersMap.get(id)!;
       this.otherPlayers.remove(otherPlayer, true, true);
       this.ohterPlayersMap.delete(id);
-
       store.dispatch(removePlayerName(id));
       store.dispatch(pushLeftMessage({ id, name: player.name }));
-      store.dispatch(decreaseClient());
     }
   }
 

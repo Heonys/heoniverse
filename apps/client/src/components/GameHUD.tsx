@@ -7,11 +7,13 @@ import { AppIcon } from "@/icons";
 
 export const GameHUD = () => {
   const { gameScene } = useGame();
-  const { name, clients } = useAppSelector((state) => state.room);
+  const { name } = useAppSelector((state) => state.room);
   const [frame, setFrame] = useState(0);
+  const [users, setUsers] = useState(0);
 
   useSceneEffect(gameScene, () => {
     setFrame(gameScene.game.loop.actualFps);
+    setUsers(gameScene.ohterPlayersMap.size + 1);
   }, []);
 
   return (
@@ -37,7 +39,7 @@ export const GameHUD = () => {
           <div className="flex justify-center items-center gap-0.5">
             <div className="flex gap-1 items-center w-8">
               <AppIcon iconName="people" size={14} />
-              <NumberFlow value={clients} />
+              <NumberFlow value={users} />
             </div>
             <div className="flex items-center gap-0.5">
               <div className="w-5">{frame.toFixed(0)}</div>

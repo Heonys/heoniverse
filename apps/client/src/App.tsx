@@ -17,10 +17,13 @@ function App() {
       <ModalComponent />
       <VirtualJoystick />
 
+      <Condition condition={!computerDialogOpen && !whiteboardDialogOpen}>
+        <HelperGroups />
+      </Condition>
+
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <Chat />
-          <HelperGroups />
           <GameHUD />
         </Condition>
       </Condition>

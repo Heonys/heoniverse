@@ -74,7 +74,6 @@ export class Studio extends Room<StudioState> {
       roomType: this.roomName,
       name: this.name,
       description: this.description,
-      clients: this.clients.length,
     });
   }
 

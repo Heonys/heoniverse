@@ -7,27 +7,51 @@ import { openURL } from "@/utils";
 export const HelperGroups = () => {
   const { showModal, hideModal } = useModal();
   const dispatch = useAppDispatch();
-  const showJoystick = useAppSelector((state) => state.user.showJoystick);
+  const { showJoystick, loggedIn } = useAppSelector((state) => state.user);
   const { preloaderScene } = useGame();
 
   return (
     <div className="fixed bottom-2 right-5.5 flex gap-2">
-      <TooltipButton
-        id="leave-room"
-        tooltip="Leave Room"
-        onClick={() => {
-          showModal("LeaveRoom", {
-            onClose: () => {
-              preloaderScene.network.leaveCurrentRoom().then(() => {
-                preloaderScene.leaveGame();
-                hideModal();
-              });
-            },
-          });
-        }}
-      >
-        <AppIcon iconName="door" color="black" size={25} />
-      </TooltipButton>
+      <Condition condition={loggedIn}>
+        <TooltipButton
+          id="leave-room"
+          tooltip="Leave Room"
+          onClick={() => {
+            showModal("LeaveRoom", {
+              onClose: () => {
+                preloaderScene.network.leaveCurrentRoom().then(() => {
+                  preloaderScene.leaveGame();
+                  hideModal();
+                });
+              },
+            });
+          }}
+        >
+          <AppIcon iconName="door" color="black" size={25} />
+        </TooltipButton>
+      </Condition>
+
+      <Condition condition={loggedIn}>
+        <TooltipButton
+          id="users"
+          tooltip="View Joined Users"
+          onClick={() => {
+            showModal("JoinedUsers");
+          }}
+        >
+          <AppIcon iconName="people" color="black" size={25} />
+        </TooltipButton>
+      </Condition>
+
+      <Condition condition={loggedIn}>
+        <TooltipButton
+          id="joystick"
+          tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
+          onClick={() => dispatch(setJoystick(!showJoystick))}
+        >
+          <AppIcon iconName="joystick" color="black" size={25} />
+        </TooltipButton>
+      </Condition>
 
       <TooltipButton
         id="control-guide"
@@ -37,14 +61,6 @@ export const HelperGroups = () => {
         }}
       >
         <AppIcon iconName="help" color="black" size={25} />
-      </TooltipButton>
-
-      <TooltipButton
-        id="joystick"
-        tooltip={`${showJoystick ? "Disable" : "Enable"} virtual joystick`}
-        onClick={() => dispatch(setJoystick(!showJoystick))}
-      >
-        <AppIcon iconName="joystick" color="black" size={25} />
       </TooltipButton>
 
       <Condition condition={import.meta.env.DEV}>
