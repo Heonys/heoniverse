@@ -28,7 +28,7 @@ import {
   IoChevronForward,
   IoEllipseOutline,
   IoSquareOutline,
-  IoChatbubbleEllipsesOutline,
+  IoChatbubbleEllipsesSharp,
   IoBatteryCharging,
 } from "react-icons/io5";
 
@@ -47,12 +47,14 @@ import { FaDoorOpen } from "react-icons/fa6";
 import { SlMagicWand } from "react-icons/sl";
 import { MdMonitor } from "react-icons/md";
 import { IoBatteryHalf } from "react-icons/io5";
+import { BsChatFill } from "react-icons/bs";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
   ["x-mark"]: HiMiniXMark,
   ["x-mark-bold"]: FaXmark,
-  ["chat"]: IoChatbubbleEllipsesOutline,
+  ["chat"]: IoChatbubbleEllipsesSharp,
+  ["chat-fill"]: BsChatFill,
   ["smile"]: CiFaceSmile,
   ["joystick"]: FaGamepad,
   ["help"]: BiSolidHelpCircle,

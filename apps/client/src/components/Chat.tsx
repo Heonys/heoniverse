@@ -1,16 +1,16 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
-import { twMerge } from "tailwind-merge";
-import { Button, Input } from "@headlessui/react";
+import { Input } from "@headlessui/react";
 import { AppIcon, IconButton } from "@/icons";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
 import { ChatMessage } from "./ChatMessage";
+import { TooltipButton } from "@/common";
 
 type FormType = { message: string };
 
 export const Chat = () => {
-  const { network, localPlayer } = useGame();
+  const { network, getLocalPlayer } = useGame();
 
   const readyToSubmit = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +32,7 @@ export const Chat = () => {
     if (!message.trim()) return;
     inputRef.current?.blur();
     network.sendMessage("PUSH_CHAT_MESSAGE", message);
-    localPlayer.openBubble(message);
+    getLocalPlayer().openBubble(message);
   };
 
   const scrollToBottom = () => {
@@ -53,7 +53,7 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed left-0 bottom-10 w-[500px] h-[360px] select-none">
+    <div className="fixed left-0 bottom-0 w-[500px] h-[360px] select-none">
       <div className="relative h-full flex flex-col p-5">
         {showChat ? (
           <>
@@ -99,22 +99,19 @@ export const Chat = () => {
           </>
         ) : (
           <div className="mt-auto">
-            <Button
-              className={twMerge(
-                "z-50 w-13 h-13",
-                "relative rounded-full bg-neutral-700 shadow-xl cursor-pointer select-none",
-                "flex items-center justify-center",
-                "hover:bg-neutral-800 transition-colors duration-300",
-              )}
+            <TooltipButton
+              className="size-11"
+              id="chat"
+              tooltip="chat"
               onClick={() => dispatch(setShowChat(true))}
             >
-              <AppIcon iconName="chat" color="white" size={28} />
+              <AppIcon iconName="chat" color="black" size={26} />
               {unReadMessageCount > 0 && (
-                <div className="absolute -top-1 -right-1 bg-red-500 size-5 p-1 rounded-full flex justify-center items-center text-white text-xs">
+                <div className="absolute -top-1.5 -right-1.5 bg-red-500 size-5 p-1 rounded-full flex justify-center items-center text-white text-xs">
                   {unReadMessageCount}
                 </div>
               )}
-            </Button>
+            </TooltipButton>
           </div>
         )}
       </div>

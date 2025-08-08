@@ -15,7 +15,6 @@ export const ChatMessage = ({ messageType, chatMessage }: Props) => {
       data-tooltip-id="chat-message-tooltip"
       data-tooltip-content={dateFormatter.format(chatMessage.createdAt)}
     >
-      
       <Condition
         condition={messageType === "CHAT"}
         fallback={
@@ -37,7 +36,7 @@ export const ChatMessage = ({ messageType, chatMessage }: Props) => {
 
       <Tooltip
         id="chat-message-tooltip"
-        className="!text-white !text-xs !rounded !px-2 !py-1 !shadow-lg !select-none"
+        className="!text-white !text-xs !rounded !px-2 !py-1 !select-none"
         place="right"
       />
     </div>

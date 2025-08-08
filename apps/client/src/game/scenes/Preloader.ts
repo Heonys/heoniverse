@@ -94,19 +94,7 @@ export class Preloader extends Phaser.Scene {
 
   launchGame() {
     if (!this.preloadComplete) return;
-
-    if (this.scene.isSleeping("game")) {
-      this.scene.wake("game");
-    } else {
-      this.scene.launch("game", { network: this.network });
-    }
+    this.scene.launch("game", { network: this.network });
     store.dispatch(setRoomJoined(true));
-  }
-
-  leaveGame() {
-    if (!this.preloadComplete) return;
-    this.scene.sleep("game");
-    store.dispatch(setRoomJoined(false));
-    store.dispatch(setLoggedIn(false));
   }
 }

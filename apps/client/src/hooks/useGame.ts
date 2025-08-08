@@ -9,7 +9,7 @@ export const useGame = () => {
   return {
     gameScene: game,
     preloaderScene: preloader,
-    localPlayer: game.localPlayer,
+    getLocalPlayer: () => game.localPlayer,
     network: preloader.network,
   };
 };

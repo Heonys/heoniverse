@@ -14,7 +14,7 @@ export type JoystickMovement = { isMoving: boolean; movement: MovementInput };
 
 export const VirtualJoystick = () => {
   const showJoystick = useAppSelector((state) => state.user.showJoystick);
-  const { localPlayer } = useGame();
+  const { getLocalPlayer } = useGame();
 
   return (
     <div className="fixed right-10 bottom-20 z-50">
@@ -27,10 +27,10 @@ export const VirtualJoystick = () => {
             const rad = Math.atan2(e.y || 0, e.x || 0);
             const deg = (rad * 180) / Math.PI;
             const movement = angle2Movement(deg);
-            localPlayer.setJoystickMovement({ isMoving: true, movement });
+            getLocalPlayer().setJoystickMovement({ isMoving: true, movement });
           }}
           stop={() => {
-            localPlayer.setJoystickMovement({
+            getLocalPlayer().setJoystickMovement({
               isMoving: false,
               movement: { left: false, right: false, up: false, down: false },
             });

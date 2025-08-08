@@ -16,7 +16,7 @@ type FormType = z.infer<typeof FormSchema>;
 export const LoginDialog = () => {
   const dispatch = useAppDispatch();
   const { name, description, roomType } = useAppSelector((state) => state.room);
-  const { gameScene, localPlayer, network } = useGame();
+  const { gameScene, getLocalPlayer, network } = useGame();
 
   const {
     register,
@@ -28,9 +28,9 @@ export const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState(0);
 
   const onSubmit = (data: FormType) => {
-    localPlayer.setPlayerName(data.name);
-    localPlayer.setPlayerAvatar(avatars[avatarIndex].name);
-    localPlayer.readyToConnect = true;
+    getLocalPlayer().setPlayerName(data.name);
+    getLocalPlayer().setPlayerAvatar(avatars[avatarIndex].name);
+    getLocalPlayer().readyToConnect = true;
     network.readyToConnect();
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));

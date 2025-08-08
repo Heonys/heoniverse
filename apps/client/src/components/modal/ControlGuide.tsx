@@ -4,7 +4,7 @@ import { Kbd, KeyboardUI } from "./KeyboardUI";
 export const ControlGuide = () => {
   return (
     <Backdrop>
-      <div className="flex flex-col items-center gap-4 w-full">
+      <div className="flex flex-col items-center gap-5 w-full">
         <div className="flex flex-col space-y-1.5 text-left w-full">
           <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
             Control Guide

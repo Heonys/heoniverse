@@ -12,11 +12,11 @@ export const Messages = () => {
 
   const chatMessages = useAppSelector((state) => state.chat.chatMessages);
   const dispatch = useAppDispatch();
-  const { localPlayer, network } = useGame();
+  const { getLocalPlayer, network } = useGame();
   const lastMessage = chatMessages[chatMessages.length - 1];
 
   const isMe = (id: string) => {
-    return localPlayer.playerId === id;
+    return getLocalPlayer().playerId === id;
   };
 
   const handleSubmit = (e: React.FormEvent) => {

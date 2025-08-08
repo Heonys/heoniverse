@@ -1,36 +1,16 @@
 import { Condition, TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
+import { useAppDispatch, useAppSelector, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setJoystick } from "@/stores/userSlice";
 import { openURL } from "@/utils";
 
 export const HelperGroups = () => {
-  const { showModal, hideModal } = useModal();
+  const { showModal } = useModal();
   const dispatch = useAppDispatch();
   const { showJoystick, loggedIn } = useAppSelector((state) => state.user);
-  const { preloaderScene } = useGame();
 
   return (
     <div className="fixed bottom-2 right-5.5 flex gap-2">
-      <Condition condition={loggedIn}>
-        <TooltipButton
-          id="leave-room"
-          tooltip="Leave Room"
-          onClick={() => {
-            showModal("LeaveRoom", {
-              onClose: () => {
-                preloaderScene.network.leaveCurrentRoom().then(() => {
-                  preloaderScene.leaveGame();
-                  hideModal();
-                });
-              },
-            });
-          }}
-        >
-          <AppIcon iconName="door" color="black" size={25} />
-        </TooltipButton>
-      </Condition>
-
       <Condition condition={loggedIn}>
         <TooltipButton
           id="users"

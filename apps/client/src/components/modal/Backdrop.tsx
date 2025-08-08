@@ -27,7 +27,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] top-0 left-0 right-0 bottom-0 flex flex-col items-center w-full h-screen justify-center bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[99999] top-0 left-0 right-0 bottom-0 flex flex-col items-center w-full h-screen justify-center bg-black/60 backdrop-blur-sm"
             onClick={handleClick}
           >
             <motion.div
