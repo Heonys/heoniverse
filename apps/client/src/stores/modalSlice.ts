@@ -1,3 +1,4 @@
+import { modalTemplates } from "@/hooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ModalState =
@@ -22,8 +23,14 @@ const modalSlice = createSlice({
     hide: (state) => {
       state.modal = { state: "close" };
     },
+    showConnectBridge(state) {
+      state.modal = {
+        state: "open",
+        component: modalTemplates["UserProfile"],
+      };
+    },
   },
 });
 
-export const { show, hide } = modalSlice.actions;
+export const { show, hide, showConnectBridge } = modalSlice.actions;
 export default modalSlice.reducer;

@@ -1,16 +1,21 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
-import { LocalPlayer, OtherPlayer, PlayerSelector } from "@/game/characters";
+import { LocalPlayer, OtherPlayer, PlayerOverlap, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { IPlayer } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
-import { setShowChat, setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
-import { setLobbyJoined } from "@/stores/roomSlice";
 import { hide } from "@/stores/modalSlice";
+import {
+  setShowChat,
+  setFocusChat,
+  pushJoinedMessage,
+  pushLeftMessage,
+  markAsRead,
+} from "@/stores/chatSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: ExtendedCursorKeys;
@@ -19,6 +24,7 @@ export class Game extends Phaser.Scene {
   playerSelector!: PlayerSelector;
   network!: Network;
   otherPlayers!: Phaser.Physics.Arcade.Group;
+  ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
   ohterPlayersMap = new Map<string, OtherPlayer>();
 
   constructor() {
@@ -39,6 +45,8 @@ export class Game extends Phaser.Scene {
     this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
     this.otherPlayers = this.physics.add.group();
+    this.ohterPlayerOverlapZone = this.physics.add.group();
+
     this.setupCamera(this.localPlayer);
     this.disableKeys();
 
@@ -75,6 +83,22 @@ export class Game extends Phaser.Scene {
       "whiteboard",
       (whiteboard) => {
         whiteboard.id = nanoid();
+      },
+    );
+
+    this.physics.add.overlap(
+      this.playerSelector,
+      this.ohterPlayerOverlapZone,
+      (object1, object2) => {
+        const playerSelector = object1 as PlayerSelector;
+        const otherPlayer = object2 as PlayerOverlap;
+
+        if (playerSelector.playerOverlap) {
+          if (playerSelector.playerOverlap === otherPlayer) return;
+          otherPlayer.clearDialogBox();
+        }
+        playerSelector.playerOverlap = otherPlayer;
+        otherPlayer.onOverlapDialog();
       },
     );
 
@@ -140,6 +164,7 @@ export class Game extends Phaser.Scene {
     this.input.keyboard?.on("keydown-ESC", () => {
       store.dispatch(setShowChat(false));
       store.dispatch(setFocusChat(false));
+      store.dispatch(markAsRead());
       store.dispatch(hide());
     });
   }
@@ -217,6 +242,7 @@ export class Game extends Phaser.Scene {
     const { name, x, y } = player;
     const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
     this.otherPlayers.add(otherPlayer);
+    this.ohterPlayerOverlapZone.add(otherPlayer.playerOverlap);
     this.ohterPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
     store.dispatch(pushJoinedMessage({ id, name }));
@@ -226,6 +252,7 @@ export class Game extends Phaser.Scene {
     if (this.ohterPlayersMap.has(id)) {
       const otherPlayer = this.ohterPlayersMap.get(id)!;
       this.otherPlayers.remove(otherPlayer, true, true);
+      this.ohterPlayerOverlapZone.remove(otherPlayer.playerOverlap, true, true);
       this.ohterPlayersMap.delete(id);
       store.dispatch(removePlayerName(id));
       store.dispatch(pushLeftMessage({ id, name: player.name }));

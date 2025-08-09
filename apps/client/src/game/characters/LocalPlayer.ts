@@ -11,6 +11,8 @@ import { Network } from "@/service/Network";
 import { eventEmitter } from "@/game/events";
 import { JoystickMovement } from "@/components";
 import { getJoystickDirection } from "@/utils";
+import { store } from "@/stores";
+import { showConnectBridge } from "@/stores/modalSlice";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -108,6 +110,10 @@ export class LocalPlayer extends Player {
           const computerObject = selectedItem as Whiteboard;
           computerObject.openDialog();
           return;
+        }
+
+        if (isEJustDown && playerSelector.playerOverlap) {
+          store.dispatch(showConnectBridge());
         }
 
         let vx = 0;

@@ -20,12 +20,12 @@ export const GameHUD = () => {
     <div className="fixed top-0.5 right-0.5 flex flex-col gap-1">
       <div
         className={twMerge(
-          "py-1 rounded-2xl shadow-md select-none text-xs text-center w-44",
+          "py-2 rounded-2xl shadow-md select-none text-xs text-center w-44",
           "border-2 border-white bg-slate-900/90 backdrop-blur-sm text-white",
         )}
         style={{ fontFamily: "Retro" }}
       >
-        <div className="absolute top-1 right-2.5">
+        <div className="absolute top-1.5 right-2.5">
           <AppIcon iconName="batterty-half" size={18} />
         </div>
 

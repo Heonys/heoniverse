@@ -1,11 +1,9 @@
-import { ItemType } from "@/constants/game";
-
-export class Item extends Phaser.Physics.Arcade.Sprite {
+export class PlayerOverlap extends Phaser.GameObjects.Zone {
   private dialogBox: Phaser.GameObjects.Container;
-  itemType!: ItemType;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
-    super(scene, x, y, texture, frame);
+  constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
+    super(scene, x, y, width, height);
+    scene.physics.add.existing(this);
 
     this.dialogBox = this.scene.add.container().setDepth(9999);
   }
@@ -38,5 +36,7 @@ export class Item extends Phaser.Physics.Arcade.Sprite {
     this.dialogBox.removeAll(true);
   }
 
-  onOverlapDialog() {}
+  onOverlapDialog() {
+    this.setDialogBox("E: 프로필 보기");
+  }
 }

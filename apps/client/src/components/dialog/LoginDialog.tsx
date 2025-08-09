@@ -28,9 +28,10 @@ export const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState(0);
 
   const onSubmit = (data: FormType) => {
-    getLocalPlayer().setPlayerName(data.name);
-    getLocalPlayer().setPlayerAvatar(avatars[avatarIndex].name);
-    getLocalPlayer().readyToConnect = true;
+    const player = getLocalPlayer();
+    player.setPlayerName(data.name);
+    player.setPlayerAvatar(avatars[avatarIndex].name);
+    player.readyToConnect = true;
     network.readyToConnect();
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));

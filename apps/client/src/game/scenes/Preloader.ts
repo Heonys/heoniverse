@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import { Network } from "@/service/Network";
 import { store } from "@/stores";
 import { setRoomJoined } from "@/stores/roomSlice";
-import { setLoggedIn } from "@/stores/userSlice";
 
 export class Preloader extends Phaser.Scene {
   private preloadComplete = false;
@@ -18,6 +17,7 @@ export class Preloader extends Phaser.Scene {
 
   preload() {
     this.load.image("backdrop", "/images/background/backdrop_day.png");
+    this.load.image("lens", "/icons/lens.png");
 
     this.load.tilemapTiledJSON("tilemap", "/images/map/tilemap.tmj");
 

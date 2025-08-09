@@ -1,12 +1,19 @@
-import { CustomRoomPassword, ControlGuide, LeaveRoom, JoinedUsers } from "@/components/modal";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { show, hide } from "@/stores/modalSlice";
-
-const modalTemplates = {
+import {
   CustomRoomPassword,
   ControlGuide,
   LeaveRoom,
   JoinedUsers,
+  UserProfile,
+} from "@/components/modal";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { show, hide } from "@/stores/modalSlice";
+
+export const modalTemplates = {
+  CustomRoomPassword,
+  ControlGuide,
+  LeaveRoom,
+  JoinedUsers,
+  UserProfile,
 };
 
 type ModalTemplates = typeof modalTemplates;
