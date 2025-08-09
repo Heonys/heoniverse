@@ -95,7 +95,7 @@ export class LocalPlayer extends Player {
           });
 
           chairObject.clearDialogBox();
-          chairObject.setDialogBox("E: 일어나기");
+          chairObject.setDialogBox(["E: 일어나기"]);
           this.playerBehavior = PlayerBehavior.SITTING;
           return;
         }

@@ -10,28 +10,44 @@ export class Item extends Phaser.Physics.Arcade.Sprite {
     this.dialogBox = this.scene.add.container().setDepth(9999);
   }
 
-  setDialogBox(message: string) {
-    const innerText = this.scene.add
-      .text(0, 0, message)
-      .setFontFamily("Retro")
-      .setFontSize(12)
-      .setColor("#000000");
+  setDialogBox(messages: string[]) {
+    this.clearDialogBox();
 
-    const dialogBoxWidth = innerText.width + 3;
-    const dialogBoxHeight = innerText.height + 1;
-    const dialogBoxX = this.x - dialogBoxWidth / 2;
+    const paddingX = 4;
+    const paddingY = 4;
+    const lineSpacing = 1;
+
+    const textObjects = messages.map((msg, index) => {
+      const textObj = this.scene.add
+        .text(0, 0, msg)
+        .setFontFamily("Retro")
+        .setFontSize(12)
+        .setColor("#000000");
+
+      textObj.setY(index * (textObj.height + lineSpacing));
+      return textObj;
+    });
+
+    const maxWidth = Math.max(...textObjects.map((it) => it.width));
+    const totalHeight =
+      textObjects.reduce((acc, cur) => acc + cur.height, 0) + (messages.length - 1) * lineSpacing;
+
+    const dialogBoxX = this.x - maxWidth / 2 - paddingX / 2;
     const dialogBoxY = this.y + this.height / 2;
-
-    innerText.setPosition(dialogBoxX + 2, dialogBoxY);
 
     const box = this.scene.add
       .graphics()
       .fillStyle(0xffffff, 1)
-      .fillRoundedRect(dialogBoxX, dialogBoxY, dialogBoxWidth, dialogBoxHeight, 3)
+      .fillRoundedRect(dialogBoxX, dialogBoxY, maxWidth + paddingX, totalHeight + paddingY, 3)
       .lineStyle(1.5, 0x000000, 1)
-      .strokeRoundedRect(dialogBoxX, dialogBoxY, dialogBoxWidth, dialogBoxHeight, 3);
+      .strokeRoundedRect(dialogBoxX, dialogBoxY, maxWidth + paddingX, totalHeight + paddingY, 3);
 
-    this.dialogBox.add([box, innerText]);
+    textObjects.forEach((textObj) => {
+      textObj.setX(dialogBoxX + paddingX / 2);
+      textObj.setY(dialogBoxY + paddingY / 2 + textObj.y);
+    });
+
+    this.dialogBox.add([box, ...textObjects]);
   }
 
   clearDialogBox() {

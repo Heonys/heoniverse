@@ -13,7 +13,7 @@ export class Computer extends Item {
   }
 
   onOverlapDialog() {
-    this.setDialogBox("E: 컴퓨터 사용하기");
+    this.setDialogBox(["E: 컴퓨터 사용하기"]);
   }
 
   openDialog() {

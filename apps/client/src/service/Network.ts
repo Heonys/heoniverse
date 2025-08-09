@@ -113,8 +113,10 @@ export class Network {
       });
 
       $(player).listen("name", (name) => {
-        if (name) {
-          eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
+        if (name !== "") {
+          setTimeout(() => {
+            eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
+          }, 100);
         }
       });
     });

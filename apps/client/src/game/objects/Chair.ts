@@ -11,6 +11,6 @@ export class Chair extends Item {
   }
 
   onOverlapDialog() {
-    this.setDialogBox("E: 앉기");
+    this.setDialogBox(["E: 앉기"]);
   }
 }
