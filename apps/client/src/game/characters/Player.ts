@@ -8,6 +8,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
   readyToConnect = false;
+  lensIcon: Phaser.GameObjects.Image;
 
   constructor(
     public scene: Phaser.Scene,
@@ -34,8 +35,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setColor("#000000")
       .setOrigin(0.5, 1);
 
+    this.lensIcon = this.scene.add
+      .image(0, 0, "lens")
+      .setDisplaySize(16, 16)
+      .setOrigin(0.5, 1)
+      .setPosition(0, -this.playerName.height - 1);
+
     this.playerContainer = this.scene.add
-      .container(this.x, this.y - this.height / 2, [this.playerBubble, this.playerName])
+      .container(this.x, this.y - this.height / 2, [
+        this.playerName,
+        this.lensIcon,
+        this.playerBubble,
+      ])
       .setDepth(9999);
 
     this.scene.physics.world.enable(this.playerContainer);

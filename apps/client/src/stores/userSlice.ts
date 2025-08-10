@@ -4,12 +4,14 @@ type UserState = {
   loggedIn: boolean;
   otherPlayersName: Map<string, string>;
   showJoystick: boolean;
+  videoConnected: boolean;
 };
 
 const initialState: UserState = {
   loggedIn: false,
   otherPlayersName: new Map<string, string>(),
   showJoystick: false,
+  videoConnected: false,
 };
 
 const userSlice = createSlice({
@@ -28,8 +30,12 @@ const userSlice = createSlice({
     setJoystick(state, action: PayloadAction<boolean>) {
       state.showJoystick = action.payload;
     },
+    setViedeoConnected(state, action: PayloadAction<boolean>) {
+      state.videoConnected = action.payload;
+    },
   },
 });
 
-export const { setLoggedIn, addPlayerName, removePlayerName, setJoystick } = userSlice.actions;
+export const { setLoggedIn, addPlayerName, removePlayerName, setJoystick, setViedeoConnected } =
+  userSlice.actions;
 export default userSlice.reducer;
