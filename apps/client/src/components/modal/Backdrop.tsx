@@ -3,21 +3,20 @@ import { motion } from "motion/react";
 import { useModal } from "@/hooks";
 import { AnimatePresence } from "motion/react";
 import { AppIcon } from "@/icons";
+import { cn } from "@/utils";
 
 type BackdropProps = {
   onClose?: () => void;
-  disabled?: boolean;
+  className?: string;
 } & PropsWithChildren;
 
 export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
-  ({ onClose, disabled, children }, ref) => {
+  ({ onClose, className, children }, ref) => {
     const { modalState, hideModal } = useModal();
 
     const handleClick = () => {
-      if (!disabled) {
-        if (onClose) onClose();
-        else hideModal();
-      }
+      if (onClose) onClose();
+      else hideModal();
     };
 
     return (
@@ -36,7 +35,10 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
               onClick={(e) => e.stopPropagation()}
-              className=" w-full max-w-md rounded-xl bg-white/5 backdrop-blur-3xl p-6 border border-white/15"
+              className={cn(
+                "w-full max-w-md rounded-xl bg-white/5 backdrop-blur-3xl p-6 border border-white/15",
+                className,
+              )}
             >
               <button className="absolute top-2 right-2 cursor-pointer" onClick={hideModal}>
                 <AppIcon iconName="x-mark" color="white" size={20} />

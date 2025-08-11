@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import LensIcon from "/icons/lens.png";
 
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
-import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
+import { AppButton, AppSlider, InputBox } from "@/common";
 import { avatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
+import { twMerge } from "tailwind-merge";
 
 type FormType = z.infer<typeof FormSchema>;
 
@@ -64,7 +66,7 @@ export const LoginDialog = () => {
           <div className="flex flex-col gap-1.5">
             <InputBox label="Nickname" regiser={register("name")} required autoFocus />
             <div className="text-xs text-red-400 ml-1">{errors.name?.message}</div>
-            <TextareaBox label="Status Message" regiser={register("message")} />
+            {/* <TextareaBox label="Status Message" regiser={register("message")} /> */}
           </div>
         </div>
       </div>

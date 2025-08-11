@@ -1,7 +1,16 @@
+import { OtherPlayer } from "./OtherPlayer";
+
 export class PlayerOverlap extends Phaser.GameObjects.Zone {
   private dialogBox: Phaser.GameObjects.Container;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number) {
+  constructor(
+    scene: Phaser.Scene,
+    public player: OtherPlayer,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ) {
     super(scene, x, y, width, height);
     scene.physics.add.existing(this);
 

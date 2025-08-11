@@ -126,8 +126,9 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
-    this.cameras.main.setZoom(1.5);
+    this.cameras.main.setZoom(1.7);
     this.cameras.main.startFollow(object);
+    // this.cameras.main.setBackgroundColor("#2c4464");
   }
 
   update(_time: number, _delta: number) {
@@ -246,6 +247,7 @@ export class Game extends Phaser.Scene {
     this.ohterPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
     store.dispatch(pushJoinedMessage({ id, name }));
+    otherPlayer.updatePlayer(player);
   }
 
   playerLeft(id: string, player: IPlayer) {

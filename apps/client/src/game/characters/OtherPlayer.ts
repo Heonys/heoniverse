@@ -20,7 +20,7 @@ export class OtherPlayer extends Player {
     this.playerName.setText(name);
     this.destination = { x, y };
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
-    this.playerOverlap = new PlayerOverlap(scene, x, y, this.width, this.height);
+    this.playerOverlap = new PlayerOverlap(scene, this, x, y, this.width, this.height);
     scene.physics.add.existing(this.playerOverlap);
   }
 

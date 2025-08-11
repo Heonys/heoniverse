@@ -23,10 +23,11 @@ const modalSlice = createSlice({
     hide: (state) => {
       state.modal = { state: "close" };
     },
-    showConnectBridge(state) {
+    showConnectBridge(state, action: PayloadAction<{ id: string; name: string; texure: string }>) {
       state.modal = {
         state: "open",
         component: modalTemplates["UserProfile"],
+        props: { ...action.payload },
       };
     },
   },

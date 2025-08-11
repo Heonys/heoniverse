@@ -10,7 +10,7 @@ import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service/Network";
 import { eventEmitter } from "@/game/events";
 import { JoystickMovement } from "@/components";
-import { getJoystickDirection } from "@/utils";
+import { getJoystickDirection, spliteAnimKey } from "@/utils";
 import { store } from "@/stores";
 import { showConnectBridge } from "@/stores/modalSlice";
 
@@ -113,7 +113,16 @@ export class LocalPlayer extends Player {
         }
 
         if (isEJustDown && playerSelector.playerOverlap) {
-          store.dispatch(showConnectBridge());
+          const otherPlayer = playerSelector.playerOverlap.player;
+          const { character } = spliteAnimKey(otherPlayer.anims.currentAnim!.key);
+
+          store.dispatch(
+            showConnectBridge({
+              id: otherPlayer.playerId,
+              name: otherPlayer.playerName.text,
+              texure: character,
+            }),
+          );
         }
 
         let vx = 0;

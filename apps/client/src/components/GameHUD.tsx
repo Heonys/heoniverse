@@ -57,8 +57,8 @@ export const GameHUD = () => {
       <div className="text-sm font-semibold w-44">
         <button
           className={twMerge(
-            "bg-gradient-to-r from-purple-600 to-blue-500 text-white border-2 border-white/40",
-            "w-full cursor-pointer rounded-lg p-1 py-2 justify-center items-center shadow-lg flex gap-1.5 outline-none",
+            "bg-gradient-to-r from-purple-600 to-blue-500 text-white border-1 border-white/40",
+            "w-full text-[13px] cursor-pointer rounded-lg p-1 py-2 justify-center items-center shadow-lg flex gap-1.5 outline-none",
           )}
           onClick={connectCamera}
         >
@@ -69,7 +69,7 @@ export const GameHUD = () => {
       <AnimatePresence>
         {showMessage && (
           <motion.div
-            className="relative w-[340px] bg-black/60 backdrop-blur-lg rounded-sm text-white p-4 text-sm flex flex-col gap-1"
+            className="relative w-[340px] bg-black/60 backdrop-blur-lg rounded-sm text-smite p-4 text-sm flex flex-col gap-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
