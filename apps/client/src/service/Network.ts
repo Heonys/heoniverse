@@ -8,6 +8,7 @@ import {
   setAvailableRoom,
   addAvailableRoom,
   removeAvailableRoom,
+  setTotalClients,
 } from "@/stores/roomSlice";
 import { eventEmitter } from "@/game/events";
 import { pushMessage } from "@/stores/chatSlice";
@@ -39,6 +40,7 @@ export class Network {
 
   async joinLobbyRoom() {
     this.lobby = await this.client.joinOrCreate(RoomType.LOBBY);
+    this.room = this.lobby;
 
     this.lobby.onMessage("rooms", (rooms) => {
       store.dispatch(setAvailableRoom(rooms));
@@ -50,6 +52,10 @@ export class Network {
 
     this.lobby.onMessage("-", (roomId) => {
       store.dispatch(removeAvailableRoom(roomId));
+    });
+
+    this.onMessage(Messages.SEND_TOTAL_CLIENTS, ({ totalClients }) => {
+      store.dispatch(setTotalClients(totalClients));
     });
   }
 

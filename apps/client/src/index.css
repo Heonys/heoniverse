@@ -87,7 +87,7 @@
     font-weight: 700;
     src: url("/fonts/NotoSansKR-Bold.ttf") format("truetype");
   }
-  
+
   @font-face {
     font-family: Retro;
     src: url("/fonts/Retro Gaming.ttf") format("truetype");

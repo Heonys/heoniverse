@@ -10,7 +10,7 @@ export const AppButton = ({ className, disabled, ...props }: Props) => {
   return (
     <Button
       className={cn(
-        "rounded cursor-pointer bg-sky-600 p-2 text-sm text-white",
+        "rounded cursor-pointer bg-[#5865f2] p-2 text-sm text-white",
         "disabled:opacity-70 disabled:cursor-not-allowed",
         className,
       )}

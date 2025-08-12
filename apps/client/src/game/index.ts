@@ -3,6 +3,7 @@ import { Preloader, Background, Game } from "@/game/scenes";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: "game-container",
+  backgroundColor: "#9dd2f5",
   autoRound: true,
   autoFocus: true,
   pixelArt: true,

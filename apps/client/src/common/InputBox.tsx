@@ -25,7 +25,7 @@ export const InputBox = ({
       {topLabel && (
         <Label className="text-sm font-medium flex items-center gap-1">
           {required && <div className="text-orange-400 translate-y-0.5">*</div>}
-          <div>{label}</div>
+          <div className="text-white/70">{label}</div>
         </Label>
       )}
       <div className="relative mt-1">
@@ -35,7 +35,7 @@ export const InputBox = ({
           autoFocus={autoFocus}
           placeholder={label}
           required={required}
-          className="bg-background w-full outline-none focus-within:border-white/70 placeholder:text-sm rounded-md p-2 border-2 border-white/25"
+          className="bg-background w-full outline-none bg-[#1e1f23] focus-within:border-white/70 placeholder:text-sm rounded-sm p-2 border-1 border-transparent"
           value={value}
           onChange={(event) => {
             onChange?.(event.target.value);

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LensIcon from "/icons/lens.png";
 
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppButton, AppSlider, InputBox } from "@/common";
@@ -11,7 +10,6 @@ import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
-import { twMerge } from "tailwind-merge";
 
 type FormType = z.infer<typeof FormSchema>;
 
@@ -42,7 +40,7 @@ export const LoginDialog = () => {
   return (
     <form
       noValidate
-      className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999] bg-slate-800 p-6 px-16 rounded-2xl shadow-xl w-[600px] max-w-none select-none"
+      className="fixed top-1/2 left-1/2 -translate-1/2 z-[9999] bg-[#323338] p-6 px-16 rounded-2xl shadow-xl w-[600px] max-w-none select-none"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-4 text-[#eee] ">

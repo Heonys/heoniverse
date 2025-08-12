@@ -16,7 +16,7 @@ export const PasswordBox = ({ required, autoFocus, regiser, value, onChange }: P
 
   return (
     <div className="w-full mx-auto">
-      <label htmlFor="pass" className="text-sm font-medium">
+      <label htmlFor="pass" className="text-sm font-medium text-white/70">
         Password
       </label>
       <div className="relative mt-1">
@@ -27,7 +27,7 @@ export const PasswordBox = ({ required, autoFocus, regiser, value, onChange }: P
           autoFocus={autoFocus}
           required={required}
           placeholder="Password"
-          className="bg-background w-full outline-none focus-within:border-white placeholder:text-sm rounded-md p-2 border-2 border-white/20"
+          className="bg-background w-full outline-none bg-[#1e1f23] focus-within:border-white placeholder:text-sm rounded-sm p-2 border-1 border-transparent"
           value={value}
           onChange={(event) => {
             onChange?.(event.target.value);

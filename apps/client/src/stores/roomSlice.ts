@@ -13,6 +13,7 @@ const roomSlice = createSlice({
     description: "",
     roomType: null as RoomType | null,
     availableRooms: [] as RoomAvailable<RoomMetadata>[],
+    totalClients: 0,
   },
   reducers: {
     setLobbyJoined: (state, action: PayloadAction<boolean>) => {
@@ -23,6 +24,9 @@ const roomSlice = createSlice({
     },
     setAvailableRoom: (state, action: PayloadAction<RoomAvailable[]>) => {
       state.availableRooms = action.payload.filter((room) => isCustomRoom(room.name));
+    },
+    setTotalClients(state, action: PayloadAction<number>) {
+      state.totalClients = action.payload;
     },
     addAvailableRoom: (state, action: PayloadAction<RoomAvailable>) => {
       if (!isCustomRoom(action.payload.name)) return;
@@ -65,5 +69,6 @@ export const {
   setAvailableRoom,
   addAvailableRoom,
   removeAvailableRoom,
+  setTotalClients,
 } = roomSlice.actions;
 export default roomSlice.reducer;

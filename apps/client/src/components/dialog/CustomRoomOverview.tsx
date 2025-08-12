@@ -81,7 +81,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
           return (
             <div className="w-16 flex justify-center items-center">
               <AppButton
-                className="bg-transparent ring-1 ring-white/50"
+                className="bg-transparent ring-1 ring-white/35"
                 onClick={() => {
                   if (hasPassword) {
                     showModal("CustomRoomPassword", { roomId: rowData.roomId });
@@ -136,14 +136,14 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       <Condition
         condition={availableRooms.length !== 0}
         fallback={
-          <div className="min-w-[700px] h-32 bg-[#09090b] rounded-md p-2 flex items-center justify-center gap-2 text-red-400">
+          <div className="min-w-[700px] h-32 bg-[#1e1f23] rounded-md p-2 flex items-center justify-center gap-2 text-red-400">
             <AppIcon iconName="warning" size={20} />
             <div>현재 생성된 커스텀 방이 없습니다.</div>
           </div>
         }
       >
         <div className="mt-4 min-w-[700px] max-h-[350px] overflow-y-auto">
-          <table className="table-fixed border-collapse select-none bg-[#09090b] text-sm rounded-md ">
+          <table className="table-fixed border-collapse select-none bg-[#1e1f23] text-sm rounded-md ">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
