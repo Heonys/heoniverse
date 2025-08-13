@@ -11,22 +11,22 @@ type Props = {
 export const ChatMessage = ({ messageType, chatMessage }: Props) => {
   return (
     <div
-      className="flex flex-wrap hover:bg-white/10 rounded"
+      className="flex flex-wrap rounded hover:bg-white/10"
       data-tooltip-id="chat-message-tooltip"
       data-tooltip-content={dateFormatter.format(chatMessage.createdAt)}
     >
       <Condition
         condition={messageType === "CHAT"}
         fallback={
-          <div className="text-white/50 text-sm flex gap-1 py-0.5 px-1 w-full justify-center items-center">
+          <div className="flex w-full items-center justify-center gap-1 px-1 py-0.5 text-sm text-white/50">
             <div className="underline">{chatMessage.author}</div>
             <div>{chatMessage.content}</div>
           </div>
         }
       >
-        <span className="py-1 break-all text-white text-sm">
+        <span className="break-all py-1 text-sm text-white">
           <span
-            className={cn("mx-1 rounded px-1 text-black/70 mr-2", pickColor(chatMessage.author))}
+            className={cn("mx-1 mr-2 rounded px-1 text-black/70", pickColor(chatMessage.author))}
           >
             {chatMessage.author}
           </span>
@@ -36,7 +36,7 @@ export const ChatMessage = ({ messageType, chatMessage }: Props) => {
 
       <Tooltip
         id="chat-message-tooltip"
-        className="!text-white !text-xs !rounded !px-2 !py-1 !select-none"
+        className="!select-none !rounded !px-2 !py-1 !text-xs !text-white"
         place="right"
       />
     </div>

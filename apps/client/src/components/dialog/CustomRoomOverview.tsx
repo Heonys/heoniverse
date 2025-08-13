@@ -36,7 +36,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
         cell: (info) => {
           const hasPassword = info.row.original.metadata?.hasPassword;
           return (
-            <div className="w-8 ml-1 flex justify-center items-center">
+            <div className="ml-1 flex w-8 items-center justify-center">
               <Condition condition={hasPassword}>
                 <AppIcon iconName="lock" color="orange" size={17} />
               </Condition>
@@ -47,7 +47,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       columnHelper.accessor("metadata.name", {
         header: "Name",
         cell: (info) => (
-          <div className="w-[100px] h-full truncate font-semibold" title={info.getValue()}>
+          <div className="h-full w-[100px] truncate font-semibold" title={info.getValue()}>
             {info.getValue()}
           </div>
         ),
@@ -66,7 +66,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
       }),
       columnHelper.accessor("clients", {
         header: () => (
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <AppIcon iconName="people" size={20} />
           </div>
         ),
@@ -79,7 +79,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
           const hasPassword = rowData.metadata?.hasPassword;
 
           return (
-            <div className="w-16 flex justify-center items-center">
+            <div className="flex w-16 items-center justify-center">
               <AppButton
                 className="bg-transparent ring-1 ring-white/35"
                 onClick={() => {
@@ -115,35 +115,35 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
   });
 
   return (
-    <div className="p-8 pb-5 flex flex-col gap-3">
+    <div className="flex flex-col gap-3 p-8 pb-5">
       <div
-        className="absolute left-2 top-2 p-1 pr-3 flex items-center gap-2 rounded-md hover:bg-white/10 transition-colors duration-150 cursor-pointer"
+        className="absolute left-2 top-2 flex cursor-pointer items-center gap-2 rounded-md p-1 pr-3 transition-colors duration-150 hover:bg-white/10"
         onClick={onPrevious}
       >
         <AppIcon iconName="chevron-left" size={18} />
         <div className="text-xs font-medium">메인화면</div>
       </div>
 
-      <div className="flex justify-center items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         <AppIcon iconName="people" size={23} className="translate-y-0.5" />
         <div className="text-2xl font-bold leading-none tracking-tight">Custom Room</div>
       </div>
 
-      <div className="text-sm text-[#c2c2c2] flex justify-center items-center">
+      <div className="flex items-center justify-center text-sm text-[#c2c2c2]">
         현재 생성된 커스텀 방 목록입니다. 방에 입장하거나 생성할 수 있습니다.
       </div>
 
       <Condition
         condition={availableRooms.length !== 0}
         fallback={
-          <div className="min-w-[700px] h-32 bg-[#1e1f23] rounded-md p-2 flex items-center justify-center gap-2 text-red-400">
+          <div className="flex h-32 min-w-[700px] items-center justify-center gap-2 rounded-md bg-[#1e1f23] p-2 text-red-400">
             <AppIcon iconName="warning" size={20} />
             <div>현재 생성된 커스텀 방이 없습니다.</div>
           </div>
         }
       >
-        <div className="mt-4 min-w-[700px] max-h-[350px] overflow-y-auto">
-          <table className="table-fixed border-collapse select-none bg-[#1e1f23] text-sm rounded-md ">
+        <div className="mt-4 max-h-[350px] min-w-[700px] overflow-y-auto">
+          <table className="table-fixed border-collapse select-none rounded-md bg-[#1e1f23] text-sm">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -159,7 +159,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id} className="border-t border-white/20">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-3 truncate">
+                    <td key={cell.id} className="truncate p-3">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
@@ -170,7 +170,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
         </div>
       </Condition>
 
-      <div className="flex justify-center items-center">
+      <div className="flex items-center justify-center">
         <AppButton className="px-3" onClick={onCreate}>
           방 만들기
         </AppButton>

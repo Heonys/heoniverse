@@ -8,14 +8,14 @@ export const JoinedUsers = () => {
 
   return (
     <Backdrop>
-      <div className="flex flex-col w-full rounded-lg select-none">
-        <div className="flex flex-col space-y-1.5 text-left w-full">
+      <div className="flex w-full select-none flex-col rounded-lg">
+        <div className="flex w-full flex-col space-y-1.5 text-left">
           <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
             Joined Users
           </h2>
           <p className="text-sm text-[#c2c2c2]">{`현재 방에 접속한 인원 총 ${users.length + 1}명`}</p>
         </div>
-        <div className="flex flex-col gap-1 text-white mt-2">
+        <div className="mt-2 flex flex-col gap-1 text-white">
           <div className="border-b border-white/10 p-1">
             <UserListRow id={getLocalPlayer().playerId} name={getLocalPlayer().playerName.text} />
           </div>

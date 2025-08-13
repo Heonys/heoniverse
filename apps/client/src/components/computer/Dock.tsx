@@ -8,9 +8,9 @@ export function Dock() {
   const dockMag = 2;
 
   return (
-    <div className="absolute inset-x-0 bottom-2 flex justify-center select-none">
+    <div className="absolute inset-x-0 bottom-2 flex select-none justify-center">
       <ul
-        className="flex space-x-2 px-2 backdrop-blur-2xl bg-white/20 border border-neutral-400/40 rounded-xl shadow-2xl h-16"
+        className="flex h-16 space-x-2 rounded-xl border border-neutral-400/40 bg-white/20 px-2 shadow-2xl backdrop-blur-2xl"
         onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(null)}
       >

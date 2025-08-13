@@ -9,15 +9,15 @@ export const UserProfile = ({ id, name, texure }: Props) => {
 
   return (
     <Backdrop>
-      <div className="flex flex-col gap-3 select-none w-full">
+      <div className="flex w-full select-none flex-col gap-3">
         <div className="flex flex-col space-y-1.5 text-left">
           <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
             User Profile
           </h2>
           <p className="text-sm text-[#c2c2c2]">플레이어의 프로필을 확인합니다.</p>
         </div>
-        <div className="text-white grid grid-cols-2 h-36">
-          <div className="flex justify-center items-center px-2">
+        <div className="grid h-36 grid-cols-2 text-white">
+          <div className="flex items-center justify-center px-2">
             <SpriteAnimation
               animKey="avatar"
               src={sprite}
@@ -27,10 +27,10 @@ export const UserProfile = ({ id, name, texure }: Props) => {
               frameHeight={48}
             />
           </div>
-          <div className="text-sm flex flex-col gap-1 pt-2">
+          <div className="flex flex-col gap-1 pt-2 text-sm">
             <div>
-              <div className="text-blue-400 font-medium">Name</div>
-              <div className="text-sm p-1 truncate">
+              <div className="font-medium text-blue-400">Name</div>
+              <div className="truncate p-1 text-sm">
                 {name}
                 <span className="ml-1 text-xs text-[#888]">{`#${id}`}</span>
               </div>

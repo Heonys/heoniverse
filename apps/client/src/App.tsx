@@ -14,7 +14,7 @@ function App() {
   const whiteboardDialogOpen = useAppSelector((state) => state.whitebaord.isOpenDialog);
 
   return (
-    <div className="w-full h-full absolute">
+    <div className="absolute h-full w-full">
       <ModalComponent />
       <VirtualJoystick />
 

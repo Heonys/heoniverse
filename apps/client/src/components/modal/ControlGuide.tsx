@@ -4,8 +4,8 @@ import { Kbd, KeyboardUI } from "./KeyboardUI";
 export const ControlGuide = () => {
   return (
     <Backdrop>
-      <div className="flex flex-col items-center gap-5 w-full">
-        <div className="flex flex-col space-y-1.5 text-left w-full">
+      <div className="flex w-full flex-col items-center gap-5">
+        <div className="flex w-full flex-col space-y-1.5 text-left">
           <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
             Control Guide
           </h2>
@@ -14,7 +14,7 @@ export const ControlGuide = () => {
         <div className="mx-auto">
           <KeyboardUI />
         </div>
-        <div className="flex flex-col gap-1.5 select-none text-sm text-[#c2c2c2]">
+        <div className="flex select-none flex-col gap-1.5 text-sm text-[#c2c2c2]">
           <div className="flex gap-0.5">
             <Kbd>W</Kbd>
             <Kbd>A</Kbd>

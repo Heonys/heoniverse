@@ -37,20 +37,20 @@ export const Messages = () => {
   }, [chatMessages]);
 
   return (
-    <div className="w-full h-full bg-[#1e1e1e]/75 backdrop-blur-sm overflow-hidden rounded-2xl">
-      <div className="relative grid grid-cols-3 draggable-area text-center top-0 h-7 w-full cursor-move">
+    <div className="h-full w-full overflow-hidden rounded-2xl bg-[#1e1e1e]/75 backdrop-blur-sm">
+      <div className="draggable-area relative top-0 grid h-7 w-full cursor-move grid-cols-3 text-center">
         <div className="relative">
           <TrafficLights id="messages" onClose={() => dispatch(markAsRead())} />
         </div>
         <div className="col-span-2 bg-[#1e1e1e]" />
       </div>
-      <div className="h-[calc(100%-28px)] grid grid-cols-3 select-none">
-        <div className="h-full flex flex-col gap-1 p-2 text-white">
-          <div className="relative px-2 py-1 rounded-md bg-gray-100/10 h-15 flex items-center gap-2 cursor-pointer">
-            <div className="text-[10px] bg-gray-500 rounded-full size-9 flex justify-center items-center shrink-0">
+      <div className="grid h-[calc(100%-28px)] select-none grid-cols-3">
+        <div className="flex h-full flex-col gap-1 p-2 text-white">
+          <div className="h-15 relative flex cursor-pointer items-center gap-2 rounded-md bg-gray-100/10 px-2 py-1">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gray-500 text-[10px]">
               <div className="font-semibold">{roomName.split(" ")[0]}</div>
             </div>
-            <div className="text-xs truncate px-2 min-w-0">
+            <div className="min-w-0 truncate px-2 text-xs">
               {lastMessage ? lastMessage.message.content : "메시지가 없습니다"}
             </div>
             <div className="absolute right-1 top-1 text-[10px] text-white/60">
@@ -58,10 +58,10 @@ export const Messages = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-2 bg-[#1e1e1e] text-white h-full flex flex-col overflow-y-auto">
+        <div className="col-span-2 flex h-full flex-col overflow-y-auto bg-[#1e1e1e] text-white">
           {/* header */}
-          <div className="flex items-center h-9 border-b border-gray-100/20 shadow-2xl px-2">
-            <div className="flex gap-2 items-center text-sm text-white/90">
+          <div className="flex h-9 items-center border-b border-gray-100/20 px-2 shadow-2xl">
+            <div className="flex items-center gap-2 text-sm text-white/90">
               <AppIcon iconName="edit" size={18} />
               <div className="font-semibold">Messages</div>
             </div>
@@ -70,7 +70,7 @@ export const Messages = () => {
               <AppIcon iconName="info" size={18} />
             </div>
           </div>
-          <div className="text-sm p-3 flex-1 h-full overflow-y-auto" ref={containerRef}>
+          <div className="h-full flex-1 overflow-y-auto p-3 text-sm" ref={containerRef}>
             {chatMessages.map(({ type, message }, index) => {
               if (type === "CHAT") {
                 return isMe(message.clientId) ? (
@@ -84,8 +84,8 @@ export const Messages = () => {
                 );
               } else {
                 return (
-                  <div className="flex justify-center items-center">
-                    <div className="text-white/80 text-sm flex gap-1 py-0.5 px-1">
+                  <div className="flex items-center justify-center">
+                    <div className="flex gap-1 px-1 py-0.5 text-sm text-white/80">
                       <div className="underline">{message.author}</div>
                       <div>{message.content}</div>
                     </div>
@@ -96,10 +96,10 @@ export const Messages = () => {
           </div>
           {/* input */}
           <form
-            className="h-10 text-white flex items-center text-sm px-3 gap-3"
+            className="flex h-10 items-center gap-3 px-3 text-sm text-white"
             onSubmit={handleSubmit}
           >
-            <div className="bg-[#3e3e3e] text-white/60 rounded-full p-1 flex justify-center items-center">
+            <div className="flex items-center justify-center rounded-full bg-[#3e3e3e] p-1 text-white/60">
               <AppIcon iconName="plus" size={12} />
             </div>
             <div className="relative w-full">
@@ -107,7 +107,7 @@ export const Messages = () => {
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="bg-[#3e3e3e] rounded-xl py-1 px-3 outline-none w-full pr-9"
+                className="w-full rounded-xl bg-[#3e3e3e] px-3 py-1 pr-9 outline-none"
                 placeholder="Message"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -125,9 +125,9 @@ export const Messages = () => {
 const MessageBubbleOther = ({ author, message }: { author: string; message: string }) => {
   return (
     <div className="flex">
-      <span className="text-xs p-1 mb-auto border-b-2 border-white/90">{author}</span>
-      <div className="flex items-center flex-wrap p-1.5 gap-2 flex-1">
-        <span className="rounded-xl p-1 px-3 text-white/90 bg-[#3e3e3e]">{message}</span>
+      <span className="mb-auto border-b-2 border-white/90 p-1 text-xs">{author}</span>
+      <div className="flex flex-1 flex-wrap items-center gap-2 p-1.5">
+        <span className="rounded-xl bg-[#3e3e3e] p-1 px-3 text-white/90">{message}</span>
       </div>
     </div>
   );
@@ -135,8 +135,8 @@ const MessageBubbleOther = ({ author, message }: { author: string; message: stri
 
 const MessageBubbleSelf = ({ message }: { message: string }) => {
   return (
-    <div className="flex items-center flex-wrap p-1.5 gap-2 justify-end">
-      <span className="rounded-xl p-1 px-3 text-white/90 bg-[#0084ff]">{message}</span>
+    <div className="flex flex-wrap items-center justify-end gap-2 p-1.5">
+      <span className="rounded-xl bg-[#0084ff] p-1 px-3 text-white/90">{message}</span>
     </div>
   );
 };

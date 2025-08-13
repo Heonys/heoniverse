@@ -11,7 +11,7 @@ export function HeaderButton({ children, onClick, onMouseEnter, className }: Pro
   return (
     <button
       className={cn(
-        "flex items-center gap-2 h-6 px-2 cursor-default rounded hover:bg-gray-100/30",
+        "flex h-6 cursor-default items-center gap-2 rounded px-2 hover:bg-gray-100/30",
         className,
       )}
       onClick={onClick}

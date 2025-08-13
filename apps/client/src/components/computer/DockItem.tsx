@@ -25,7 +25,7 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
   };
 
   return (
-    <li className="relative flex flex-col justify-end mb-1">
+    <li className="relative mb-1 flex flex-col justify-end">
       <div className="relative">
         <motion.img
           className="no-pixel"
@@ -41,10 +41,10 @@ export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
       <Tooltip
         id="dock-item-tooltip"
         place="top"
-        className="!text-white !rounded !px-2 !py-1 !shadow-lg !select-none"
+        className="!select-none !rounded !px-2 !py-1 !text-white !shadow-lg"
       />
       <div
-        className={cn("size-1 mx-auto rounded-full bg-[#F3F4F6]", showApps[id] ? "" : "invisible")}
+        className={cn("mx-auto size-1 rounded-full bg-[#F3F4F6]", showApps[id] ? "" : "invisible")}
       />
     </li>
   );

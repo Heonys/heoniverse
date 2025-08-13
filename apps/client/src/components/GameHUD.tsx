@@ -23,27 +23,27 @@ export const GameHUD = () => {
   const connectCamera = () => {};
 
   return (
-    <div className="fixed top-0.5 right-1 flex flex-col items-end gap-2 select-none">
+    <div className="fixed right-1 top-0.5 flex select-none flex-col items-end gap-2">
       <div
         className={twMerge(
-          "py-2 rounded-2xl shadow-md text-xs text-center w-44",
-          "border-2 border-white bg-slate-900/90 backdrop-blur-sm text-white",
+          "w-44 rounded-2xl py-2 text-center text-xs shadow-md",
+          "border-2 border-white bg-slate-900/90 text-white backdrop-blur-sm",
         )}
         style={{ fontFamily: "Retro" }}
       >
-        <div className="absolute top-1.5 right-2.5">
+        <div className="absolute right-2.5 top-1.5">
           <AppIcon iconName="batterty-half" size={18} />
         </div>
 
         <div className="flex flex-col gap-0.5">
           <div className="text-cyan-400">{format(new Date(), "MMM do yyyy")}</div>
           <div className="text-lg text-cyan-400">{format(new Date(), "hh:mm a")}</div>
-          <div className="flex gap-1 justify-center">
+          <div className="flex justify-center gap-1">
             <AppIcon iconName="room" size={14} />
             <div>{name}</div>
           </div>
-          <div className="flex justify-center items-center gap-0.5">
-            <div className="flex gap-1 items-center w-8">
+          <div className="flex items-center justify-center gap-0.5">
+            <div className="flex w-8 items-center gap-1">
               <AppIcon iconName="people" size={14} />
               <NumberFlow value={users} />
             </div>
@@ -54,11 +54,11 @@ export const GameHUD = () => {
           </div>
         </div>
       </div>
-      <div className="text-sm font-semibold w-44">
+      <div className="w-44 text-sm font-semibold">
         <button
           className={twMerge(
-            "bg-gradient-to-r from-purple-600 to-blue-500 text-white border-1 border-white/40",
-            "w-full text-[13px] cursor-pointer rounded-lg p-1 py-2 justify-center items-center shadow-lg flex gap-1.5 outline-none",
+            "border-1 border-white/40 bg-gradient-to-r from-purple-600 to-blue-500 text-white",
+            "flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg p-1 py-2 text-[13px] shadow-lg outline-none",
           )}
           onClick={connectCamera}
         >
@@ -69,20 +69,20 @@ export const GameHUD = () => {
       <AnimatePresence>
         {showMessage && (
           <motion.div
-            className="relative w-[340px] bg-black/60 backdrop-blur-lg rounded-sm text-smite p-4 text-sm flex flex-col gap-1"
+            className="text-smite relative flex w-[340px] flex-col gap-1 rounded-sm bg-black/60 p-4 text-sm backdrop-blur-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <button
-              className="absolute top-1 right-1 cursor-pointer"
+              className="absolute right-1 top-1 cursor-pointer"
               onClick={() => setShowMessage(false)}
             >
               <AppIcon iconName="x-mark" color="white" size={18} />
             </button>
-            <div className="flex gap-2 text-blue-300 items-center">
+            <div className="flex items-center gap-2 text-blue-300">
               <AppIcon iconName="help" size={18} />
-              <div className="leading-none tracking-tight font-semibold">Access Camera</div>
+              <div className="font-semibold leading-none tracking-tight">Access Camera</div>
             </div>
             <div className="text-[#c2c2c2]">
               카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화되어 소통할 수

@@ -21,10 +21,10 @@ export const InputBox = ({
   onChange,
 }: Props) => {
   return (
-    <Field className="w-full mx-auto">
+    <Field className="mx-auto w-full">
       {topLabel && (
-        <Label className="text-sm font-medium flex items-center gap-1">
-          {required && <div className="text-orange-400 translate-y-0.5">*</div>}
+        <Label className="flex items-center gap-1 text-sm font-medium">
+          {required && <div className="translate-y-0.5 text-orange-400">*</div>}
           <div className="text-white/70">{label}</div>
         </Label>
       )}
@@ -35,14 +35,14 @@ export const InputBox = ({
           autoFocus={autoFocus}
           placeholder={label}
           required={required}
-          className="bg-background w-full outline-none bg-[#1e1f23] focus-within:border-white/70 placeholder:text-sm rounded-sm p-2 border-1 border-transparent"
+          className="bg-background border-1 w-full rounded-sm border-transparent bg-[#1e1f23] p-2 outline-none placeholder:text-sm focus-within:border-white/70"
           value={value}
           onChange={(event) => {
             onChange?.(event.target.value);
           }}
           {...regiser}
         />
-        <div className="absolute top-3 right-4 text-2xl text-gray-500 cursor-pointer"></div>
+        <div className="absolute right-4 top-3 cursor-pointer text-2xl text-gray-500"></div>
       </div>
     </Field>
   );

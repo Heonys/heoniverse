@@ -24,7 +24,7 @@ export const TooltipButton = ({
         data-tooltip-id={`app-tooltip-${id}`}
         data-tooltip-content={tooltip}
         className={twMerge(
-          "size-10 relative cursor-pointer flex justify-center items-center bg-white rounded-full shadow-xl border border-gray-500/20",
+          "relative flex size-10 cursor-pointer items-center justify-center rounded-full border border-gray-500/20 bg-white shadow-xl",
           className,
         )}
         {...props}
@@ -34,7 +34,7 @@ export const TooltipButton = ({
       <Tooltip
         id={`app-tooltip-${id}`}
         place={place}
-        className="!text-white !text-xs !rounded !px-2 !py-1 !shadow-lg !select-none"
+        className="!select-none !rounded !px-2 !py-1 !text-xs !text-white !shadow-lg"
       />
     </div>
   );

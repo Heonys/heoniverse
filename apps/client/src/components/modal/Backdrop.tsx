@@ -26,7 +26,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[99999] top-0 left-0 right-0 bottom-0 flex flex-col items-center w-full h-screen justify-center bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 bottom-0 left-0 right-0 top-0 z-[99999] flex h-screen w-full flex-col items-center justify-center bg-black/60 backdrop-blur-sm"
             onClick={handleClick}
           >
             <motion.div
@@ -36,11 +36,11 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
               exit={{ opacity: 0, y: 8 }}
               onClick={(e) => e.stopPropagation()}
               className={cn(
-                "w-full max-w-md rounded-xl bg-white/5 backdrop-blur-3xl p-6 border border-white/15",
+                "w-full max-w-md rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-3xl",
                 className,
               )}
             >
-              <button className="absolute top-2 right-2 cursor-pointer" onClick={hideModal}>
+              <button className="absolute right-2 top-2 cursor-pointer" onClick={hideModal}>
                 <AppIcon iconName="x-mark" color="white" size={20} />
               </button>
               {children}

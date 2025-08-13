@@ -8,24 +8,22 @@ import { shutdownDesktop } from "@/stores/desktopSlice";
 export const ComputerDialog = () => {
   const dispatch = useAppDispatch();
   return (
-    <div id="desktop" className="fixed top-0 left-0 w-full h-full p-5 backdrop-blur-xs z-[9999]">
-      <div
-        className="relative w-full h-full bg-[#030303] 
-        rounded-[24px] shadow-2xl border-[1.5px] border-neutral-400/60 overflow-hidden p-2.5"
-      >
-        <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-[210px] h-[25px] bg-[#030303] rounded-b-[10px] z-[10000]">
-          <div className="absolute top-0 -left-4 size-4 rounded-full shadow-[8px_-8px_0_0_#030303]" />
-          <div className="absolute top-0 -right-4 size-4 rounded-full shadow-[-8px_-8px_0_0_#030303]" />
+    <div id="desktop" className="backdrop-blur-xs fixed left-0 top-0 z-[9999] h-full w-full p-5">
+      <div className="relative h-full w-full overflow-hidden rounded-[24px] border-[1.5px] border-neutral-400/60 bg-[#030303] p-2.5 shadow-2xl">
+        <div className="absolute left-1/2 top-2.5 z-[10000] h-[25px] w-[210px] -translate-x-1/2 rounded-b-[10px] bg-[#030303]">
+          <div className="absolute -left-4 top-0 size-4 rounded-full shadow-[8px_-8px_0_0_#030303]" />
+          <div className="absolute -right-4 top-0 size-4 rounded-full shadow-[-8px_-8px_0_0_#030303]" />
         </div>
         <Desktop />
       </div>
 
-      <div className="fixed bottom-2 right-5 flex gap-2 z-[9999]">
-        <TooltipButton tooltip="help">
+      <div className="fixed bottom-2 right-5 z-[9999] flex gap-2">
+        <TooltipButton id="desktop-help" tooltip="help">
           <AppIcon iconName="help" color="black" size={25} />
         </TooltipButton>
 
         <TooltipButton
+          id="desktop-shutdown"
           tooltip="Shut Down"
           onClick={() => {
             dispatch(closeComputerDialog());

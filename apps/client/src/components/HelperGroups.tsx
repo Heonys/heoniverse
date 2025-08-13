@@ -10,7 +10,7 @@ export const HelperGroups = () => {
   const { showJoystick, loggedIn } = useAppSelector((state) => state.user);
 
   return (
-    <div className="fixed bottom-2 right-5.5 flex gap-2">
+    <div className="right-5.5 fixed bottom-2 flex gap-2">
       <Condition condition={loggedIn}>
         <TooltipButton
           id="users"

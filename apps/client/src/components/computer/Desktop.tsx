@@ -7,7 +7,7 @@ export const Desktop = () => {
   const showApps = useAppSelector((state) => state.desktop.showApps);
   return (
     <div
-      className="relative w-full h-full rounded-2xl overflow-hidden bg-cover bg-center bg-no-repeat"
+      className="relative h-full w-full overflow-hidden rounded-2xl bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/background/wallpaper.jpg')" }}
     >
       <Bootstrap />

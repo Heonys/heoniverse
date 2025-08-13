@@ -19,7 +19,7 @@ export const AppWindow = ({ id, title, component }: Props) => {
     <Rnd
       id={`desktop-app-${id}`}
       bounds="parent"
-      className="overflow-hidden rounded-2xl border-gray-600 border shadow-xl"
+      className="overflow-hidden rounded-2xl border border-gray-600 shadow-xl"
       size={{ width: position.width, height: position.height }}
       style={{ zIndex: zIndexMap[id] }}
       position={position}

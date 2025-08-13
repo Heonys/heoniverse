@@ -53,32 +53,32 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed left-0 bottom-0 w-[500px] h-[360px] select-none">
-      <div className="relative h-full flex flex-col p-5">
+    <div className="fixed bottom-0 left-0 h-[360px] w-[500px] select-none">
+      <div className="relative flex h-full flex-col p-5">
         {showChat ? (
           <>
-            <div className="relative bg-black/70 rounded-t-xl h-10 flex justify-center items-center text-white text-lg font-bold">
+            <div className="relative flex h-10 items-center justify-center rounded-t-xl bg-black/70 text-lg font-bold text-white">
               <div>Chat</div>
-              <IconButton className="absolute top-0 right-0 p-2" onClick={handleClose}>
+              <IconButton className="absolute right-0 top-0 p-2" onClick={handleClose}>
                 <AppIcon iconName="x-mark" size={25} />
               </IconButton>
             </div>
 
-            <div className="flex-1 h-full bg-neutral-800 p-2 overflow-y-auto border border-black/15">
+            <div className="h-full flex-1 overflow-y-auto border border-black/15 bg-neutral-800 p-2">
               {chatMessages.map(({ type, message }, index) => {
                 return <ChatMessage key={index} messageType={type} chatMessage={message} />;
               })}
               <div ref={messageEndRef} />
             </div>
             <form
-              className="bg-black/65 rounded-b-xl h-10 flex p-2 border-2 border-red-400 shadow-2xl items-center"
+              className="flex h-10 items-center rounded-b-xl border-2 border-red-400 bg-black/65 p-2 shadow-2xl"
               onSubmit={handleSubmit(onSubmit)}
             >
               <Input
                 type="text"
                 autoComplete="off"
                 placeholder="Press Enter to chat"
-                className="w-full outline-0 placeholder-gray-400 placeholder:font-bold text-white px-1"
+                className="w-full px-1 text-white placeholder-gray-400 outline-0 placeholder:font-bold"
                 {...register("message")}
                 ref={(e) => {
                   register("message").ref(e);
@@ -107,7 +107,7 @@ export const Chat = () => {
             >
               <AppIcon iconName="chat" color="black" size={26} />
               {unReadMessageCount > 0 && (
-                <div className="absolute -top-1.5 -right-1.5 bg-red-500 size-5 p-1 rounded-full flex justify-center items-center text-white text-xs">
+                <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
                   {unReadMessageCount}
                 </div>
               )}

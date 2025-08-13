@@ -17,7 +17,7 @@ export const VirtualJoystick = () => {
   const { getLocalPlayer } = useGame();
 
   return (
-    <div className="fixed right-10 bottom-20 z-50">
+    <div className="fixed bottom-20 right-10 z-50">
       <Condition condition={showJoystick}>
         <Joystick
           size={75}
