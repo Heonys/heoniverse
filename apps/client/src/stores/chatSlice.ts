@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
-    showChat: true,
+    showChat: false,
     chatMessages: [] as { type: ChatType; message: IChatMessage }[],
     focused: false,
     lastReadAt: Infinity,

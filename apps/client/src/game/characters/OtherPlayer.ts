@@ -1,6 +1,7 @@
 import { Player, PlayerOverlap } from "@/game/characters";
 import { spliteAnimKey } from "@/utils";
 import { IPlayer } from "@heoniverse/shared";
+import { Game } from "@/game/scenes";
 
 export class OtherPlayer extends Player {
   playerOverlap: PlayerOverlap;
@@ -8,20 +9,14 @@ export class OtherPlayer extends Player {
   destination = { x: 0, y: 0 };
   speed = 200;
 
-  constructor(
-    scene: Phaser.Scene,
-    id: string,
-    name: string,
-    x: number,
-    y: number,
-    texture: string,
-  ) {
+  constructor(scene: Game, id: string, name: string, x: number, y: number, texture: string) {
     super(scene, id, x, y, texture);
     this.playerName.setText(name);
     this.destination = { x, y };
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.playerOverlap = new PlayerOverlap(scene, this, x, y, this.width, this.height);
     scene.physics.add.existing(this.playerOverlap);
+    this.setupMinimap();
   }
 
   updatePlayer(player: IPlayer) {
@@ -36,6 +31,7 @@ export class OtherPlayer extends Player {
     super.preUpdate(time, delta);
 
     this.playerOverlap.setPosition(this.x, this.y);
+    this.playerMarker.setPosition(this.x, this.y);
 
     if (delta > 500) {
       this.setPosition(this.destination.x, this.destination.y);

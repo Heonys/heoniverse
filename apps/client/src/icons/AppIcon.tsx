@@ -50,6 +50,7 @@ import { IoBatteryHalf } from "react-icons/io5";
 import { BsChatFill } from "react-icons/bs";
 import { IoBatteryFullOutline } from "react-icons/io5";
 import { FaSignal } from "react-icons/fa";
+import { HiMapPin } from "react-icons/hi2";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -117,6 +118,7 @@ const IconMap = {
   ["wand"]: SlMagicWand,
   ["display"]: MdMonitor,
   ["signal"]: FaSignal,
+  ["map"]: HiMapPin,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

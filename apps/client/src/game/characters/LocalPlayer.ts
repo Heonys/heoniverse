@@ -13,6 +13,7 @@ import { JoystickMovement } from "@/components";
 import { getJoystickDirection, spliteAnimKey } from "@/utils";
 import { store } from "@/stores";
 import { showConnectBridge } from "@/stores/modalSlice";
+import { Game } from "@/game/scenes";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -24,10 +25,17 @@ export class LocalPlayer extends Player {
   keyR!: Phaser.Input.Keyboard.Key;
   joystickMovement?: JoystickMovement;
 
-  constructor(scene: Phaser.Scene, id: string, x: number, y: number, texture: string) {
+  constructor(
+    public scene: Game,
+    id: string,
+    x: number,
+    y: number,
+    texture: string,
+  ) {
     super(scene, id, x, y, texture);
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.registerKeys();
+    this.scene.time.delayedCall(300, this.setupMinimap, undefined, this);
   }
 
   setPlayerName(name: string) {
@@ -65,6 +73,7 @@ export class LocalPlayer extends Player {
 
   update(playerSelector: PlayerSelector, cursor: ExtendedCursorKeys, network: Network) {
     const selectedItem = playerSelector.selectedItem;
+    this.playerMarker.setPosition(this.x, this.y);
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {

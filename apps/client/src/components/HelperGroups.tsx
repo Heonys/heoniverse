@@ -22,6 +22,7 @@ export const HelperGroups = () => {
           <AppIcon iconName="people" color="black" size={25} />
         </TooltipButton>
       </Condition>
+
       <Condition condition={loggedIn}>
         <TooltipButton
           id="joystick"

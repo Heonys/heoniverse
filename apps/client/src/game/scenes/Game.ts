@@ -26,6 +26,7 @@ export class Game extends Phaser.Scene {
   otherPlayers!: Phaser.Physics.Arcade.Group;
   ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
   ohterPlayersMap = new Map<string, OtherPlayer>();
+  minimap!: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
     super("game");
@@ -126,8 +127,18 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
-    this.cameras.main.setZoom(1.7);
+    this.cameras.main.setZoom(2);
     this.cameras.main.startFollow(object);
+
+    this.minimap = this.cameras
+      .add(0, 0, 200, 200, false, "minimap")
+      .setZoom(0.18)
+      .setBackgroundColor("#323338")
+      .startFollow(object);
+
+    const maskGraphic = this.add.graphics().fillCircle(100, 100, 85);
+    const mask = maskGraphic.createGeometryMask();
+    this.minimap.setMask(mask);
   }
 
   update(_time: number, _delta: number) {

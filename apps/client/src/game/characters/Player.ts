@@ -1,4 +1,5 @@
 import { PlayerBehavior } from "@/constants/game";
+import { Game } from "@/game/scenes";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   playerId: string;
@@ -9,9 +10,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerBehavior = PlayerBehavior.IDLE;
   readyToConnect = false;
   lensIcon: Phaser.GameObjects.Image;
+  playerMarker: Phaser.GameObjects.Arc;
 
   constructor(
-    public scene: Phaser.Scene,
+    public scene: Game,
     id: string,
     x: number,
     y: number,
@@ -27,6 +29,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setDepth(this.y);
     this.anims.play(`${texture}_idle_down`);
 
+    this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0xff0000, 1).setDepth(999);
     this.playerBubble = this.scene.add.container(0, 0).setDepth(9999);
     this.playerName = this.scene.add
       .text(0, 0, "")
@@ -37,7 +40,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.lensIcon = this.scene.add
       .image(0, 0, "lens")
-      .setDisplaySize(16, 16)
+      .setDisplaySize(15, 15)
       .setOrigin(0.5, 1)
       .setPosition(0, -this.playerName.height - 1);
 
@@ -62,6 +65,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     spriteBody
       .setSize(this.width * collisionScale[0], this.height * collisionScale[1])
       .setOffset(this.width * (1 - collisionScale[0]) * 0.5, this.height * (1 - collisionScale[1]));
+  }
+
+  setupMinimap() {
+    this.scene.cameras.main.ignore([this.playerMarker]);
+    this.scene.minimap.ignore([this, this.playerContainer]);
   }
 
   openBubble(message: string) {

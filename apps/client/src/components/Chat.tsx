@@ -140,7 +140,7 @@ export const Chat = () => {
               </form>
             </motion.div>
           ) : (
-            <div className="absolute bottom-2 left-5">
+            <div className="absolute bottom-2 left-5 flex">
               <TooltipButton
                 className="size-11"
                 id="chat"
