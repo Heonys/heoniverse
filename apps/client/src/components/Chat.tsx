@@ -53,32 +53,41 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed bottom-0 left-0 h-[360px] w-[500px] select-none">
+    <div className="fixed bottom-0 left-0 h-[550px] w-[330px] select-none">
       <div className="relative flex h-full flex-col p-5">
         {showChat ? (
-          <>
-            <div className="relative flex h-10 items-center justify-center rounded-t-xl bg-black/70 text-lg font-bold text-white">
-              <div>Chat</div>
-              <IconButton className="absolute right-0 top-0 p-2" onClick={handleClose}>
+          <div className="rounded-4xl relative flex h-full flex-col border-[7px] border-black">
+            <div className="relative flex h-10 items-center justify-center rounded-t-3xl bg-[#f7f7f7] text-lg font-bold text-black">
+              {/* <IconButton className="absolute right-0 top-0 p-2" onClick={handleClose}>
                 <AppIcon iconName="x-mark" size={25} />
-              </IconButton>
+              </IconButton> */}
+              <div className="text-sm">Public Room</div>
             </div>
-
-            <div className="h-full flex-1 overflow-y-auto border border-black/15 bg-neutral-800 p-2">
+            <div className="flex h-full flex-1 flex-col gap-0.5 overflow-y-auto border-t border-black/15 bg-white p-2">
               {chatMessages.map(({ type, message }, index) => {
-                return <ChatMessage key={index} messageType={type} chatMessage={message} />;
+                return (
+                  <ChatMessage
+                    key={index}
+                    chatId={index}
+                    messageType={type}
+                    chatMessage={message}
+                  />
+                );
               })}
               <div ref={messageEndRef} />
             </div>
             <form
-              className="flex h-10 items-center rounded-b-xl border-2 border-red-400 bg-black/65 p-2 shadow-2xl"
+              className="flex h-12 items-center gap-1.5 rounded-b-3xl bg-white p-2"
               onSubmit={handleSubmit(onSubmit)}
             >
+              <div className="flex size-7 items-center justify-center rounded-full bg-[#e7e9eb] text-gray-500">
+                <AppIcon iconName="plus" size={12} />
+              </div>
               <Input
                 type="text"
                 autoComplete="off"
-                placeholder="Press Enter to chat"
-                className="w-full px-1 text-white placeholder-gray-400 outline-0 placeholder:font-bold"
+                placeholder="Message"
+                className="w-full flex-1 rounded-2xl border-2 border-black/15 px-3 py-1 text-xs text-black placeholder-gray-400 outline-0"
                 {...register("message")}
                 ref={(e) => {
                   register("message").ref(e);
@@ -96,7 +105,7 @@ export const Chat = () => {
                 }}
               />
             </form>
-          </>
+          </div>
         ) : (
           <div className="mt-auto">
             <TooltipButton

@@ -7,7 +7,7 @@ import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
 
 function App() {
-  usePreventWheel();
+  // usePreventWheel();
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);

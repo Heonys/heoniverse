@@ -62,6 +62,6 @@ export class PlayerOverlap extends Phaser.GameObjects.Zone {
   }
 
   onOverlapDialog() {
-    this.setDialogBox(["E: 프로필 보기", "R: 대화하기"]);
+    this.setDialogBox(["E: 프로필 보기", "R: 1:1 대화하기"]);
   }
 }

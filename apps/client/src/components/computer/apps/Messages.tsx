@@ -47,8 +47,10 @@ export const Messages = () => {
       <div className="grid h-[calc(100%-28px)] select-none grid-cols-3">
         <div className="flex h-full flex-col gap-1 p-2 text-white">
           <div className="h-15 relative flex cursor-pointer items-center gap-2 rounded-md bg-gray-100/10 px-2 py-1">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gray-500 text-[10px]">
-              <div className="font-semibold">{roomName.split(" ")[0]}</div>
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gray-500 text-[9px]">
+              <div className="overflow-hidden whitespace-nowrap font-semibold">
+                {roomName.split(" ")[0]}
+              </div>
             </div>
             <div className="min-w-0 truncate px-2 text-xs">
               {lastMessage ? lastMessage.message.content : "메시지가 없습니다"}
@@ -65,7 +67,7 @@ export const Messages = () => {
               <AppIcon iconName="edit" size={18} />
               <div className="font-semibold">Messages</div>
             </div>
-            <div className="flex flex-auto justify-end gap-3 px-1">
+            <div className="flex flex-1 justify-end gap-3 px-1">
               <AppIcon iconName="video" size={18} />
               <AppIcon iconName="info" size={18} />
             </div>

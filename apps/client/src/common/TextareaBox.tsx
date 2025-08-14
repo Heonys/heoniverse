@@ -30,10 +30,9 @@ export const TextareaBox = ({
           autoFocus={autoFocus}
           placeholder={label}
           required={required}
-          className="bg-background border-1 w-full resize-none rounded-sm border-transparent bg-[#1e1f23] p-2 outline-none placeholder:text-sm focus-within:border-white/70"
+          className="bg-background border-1 w-full resize-none rounded-sm border-transparent bg-[#1e1f23] p-2 text-sm outline-none placeholder:text-sm focus-within:border-white/70"
           {...regiser}
         />
-        <div className="absolute right-4 top-3 cursor-pointer text-2xl text-gray-500"></div>
       </div>
     </Field>
   );

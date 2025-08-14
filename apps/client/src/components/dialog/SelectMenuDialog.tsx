@@ -34,9 +34,9 @@ export const SelectMenuDialog = () => {
                 <div className="text-sm text-[#c2c2c2]">
                   함께 모여 소소하게 즐기고 이야기하는 곳
                 </div>
-                <div className="mt-1 flex items-center gap-1 text-xs">
+                <div className="mt-1 flex items-center gap-1.5 text-xs">
                   <div className="size-2 rounded-full bg-[#42a25a] ring ring-black/20"></div>
-                  <div>{totalClients ?? 0}명 온라인</div>
+                  <div>{Math.max(totalClients - 1, 0)}명 온라인</div>
                 </div>
               </div>
 

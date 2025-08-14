@@ -30,7 +30,7 @@ export const SpriteAnimation = ({
         to={{ backgroundPosition: `-${(endFrame + 1) * frameWidth}px` }}
       />
       <div
-        className="scale-200"
+        className="scale-200 mx-auto"
         style={{
           width: `${frameWidth}px`,
           height: `${frameHeight}px`,

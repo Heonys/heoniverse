@@ -85,8 +85,7 @@ export const GameHUD = () => {
               <div className="font-semibold leading-none tracking-tight">Access Camera</div>
             </div>
             <div className="text-[#c2c2c2]">
-              카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화되어 소통할 수
-              있습니다.
+              카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화됩니다.
             </div>
           </motion.div>
         )}

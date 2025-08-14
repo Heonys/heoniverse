@@ -5,11 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppButton, AppSlider, InputBox } from "@/common";
-import { avatars } from "@/constants/game";
+import { avatars, spriteAvatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
+import { SpriteAnimation } from "@/common/SpriteAnimation";
+import LensIcon from "/icons/lens.png";
 
 type FormType = z.infer<typeof FormSchema>;
 
@@ -51,20 +53,35 @@ export const LoginDialog = () => {
         <div className="flex items-center justify-center text-sm text-[#c2c2c2]">{description}</div>
       </div>
       <div className="my-6 grid grid-cols-2 gap-4 text-[#eee]">
-        <div className="flex flex-col gap-2">
-          <div className="text-center font-semibold">캐릭터 선택</div>
+        <div className="flex flex-col gap-2 p-1">
+          <div className="text-center text-sm font-semibold">캐릭터 선택</div>
           <AppSlider afterChange={(index) => setAvatarIndex(index)}>
-            {avatars.map(({ name, img }) => (
-              <img key={name} src={img} alt={name} />
+            {spriteAvatars.map(({ name, sprite }) => (
+              <div className="flex items-center justify-center p-10" key={name}>
+                <SpriteAnimation
+                  animKey="avatar"
+                  src={sprite}
+                  startFrame={18}
+                  endFrame={23}
+                  frameWidth={32}
+                  frameHeight={48}
+                />
+              </div>
             ))}
           </AppSlider>
         </div>
 
-        <div className="p-2">
+        <div className="my-auto p-2">
           <div className="flex flex-col gap-1.5">
             <InputBox label="Nickname" regiser={register("name")} required autoFocus />
             <div className="ml-1 text-xs text-red-400">{errors.name?.message}</div>
-            {/* <TextareaBox label="Status Message" regiser={register("message")} /> */}
+            <div className="mt-1 flex w-full items-center gap-2 rounded-sm bg-[#1e1f23] p-2.5">
+              <img className="size-5" src={LensIcon} alt="lens" />
+              <div className="cursor-pointer text-sm text-white/50">카메라 연결하기</div>
+            </div>
+            <div className="text-xs text-[#c2c2c2]">
+              카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화됩니다.
+            </div>
           </div>
         </div>
       </div>
