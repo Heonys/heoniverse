@@ -48,6 +48,8 @@ import { SlMagicWand } from "react-icons/sl";
 import { MdMonitor } from "react-icons/md";
 import { IoBatteryHalf } from "react-icons/io5";
 import { BsChatFill } from "react-icons/bs";
+import { IoBatteryFullOutline } from "react-icons/io5";
+import { FaSignal } from "react-icons/fa";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -65,6 +67,7 @@ const IconMap = {
   ["monitor"]: MdMonitorHeart,
   ["batterty-charging"]: IoBatteryCharging,
   ["batterty-half"]: IoBatteryHalf,
+  ["batterty-full"]: IoBatteryFullOutline,
   ["apple-logo"]: FaApple,
   ["shut-down"]: RiShutDownLine,
   ["wifi"]: FaWifi,
@@ -113,6 +116,7 @@ const IconMap = {
   ["door"]: FaDoorOpen,
   ["wand"]: SlMagicWand,
   ["display"]: MdMonitor,
+  ["signal"]: FaSignal,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

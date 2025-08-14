@@ -128,7 +128,6 @@ export class Game extends Phaser.Scene {
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
     this.cameras.main.setZoom(1.7);
     this.cameras.main.startFollow(object);
-    // this.cameras.main.setBackgroundColor("#2c4464");
   }
 
   update(_time: number, _delta: number) {
@@ -163,9 +162,13 @@ export class Game extends Phaser.Scene {
     });
 
     this.input.keyboard?.on("keydown-ESC", () => {
-      store.dispatch(setShowChat(false));
-      store.dispatch(setFocusChat(false));
-      store.dispatch(markAsRead());
+      const state = store.getState();
+
+      if (state.chat.showChat) {
+        store.dispatch(setShowChat(false));
+        store.dispatch(setFocusChat(false));
+        store.dispatch(markAsRead());
+      }
       store.dispatch(hide());
     });
   }

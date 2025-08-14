@@ -1,11 +1,14 @@
-import { useForm } from "react-hook-form";
 import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useForm } from "react-hook-form";
+import { format } from "date-fns";
 import { Input } from "@headlessui/react";
-import { AppIcon, IconButton } from "@/icons";
+import { AppIcon } from "@/icons";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
 import { ChatMessage } from "./ChatMessage";
 import { TooltipButton } from "@/common";
+import Cityscape from "/images/background/cityscape-icon.jpeg";
 
 type FormType = { message: string };
 
@@ -53,76 +56,107 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed bottom-0 left-0 h-[550px] w-[330px] select-none">
+    <div className="fixed bottom-0 left-0 h-[560px] w-[330px] select-none">
       <div className="relative flex h-full flex-col p-5">
-        {showChat ? (
-          <div className="rounded-4xl relative flex h-full flex-col border-[7px] border-black">
-            <div className="relative flex h-10 items-center justify-center rounded-t-3xl bg-[#f7f7f7] text-lg font-bold text-black">
-              {/* <IconButton className="absolute right-0 top-0 p-2" onClick={handleClose}>
-                <AppIcon iconName="x-mark" size={25} />
-              </IconButton> */}
-              <div className="text-sm">Public Room</div>
-            </div>
-            <div className="flex h-full flex-1 flex-col gap-0.5 overflow-y-auto border-t border-black/15 bg-white p-2">
-              {chatMessages.map(({ type, message }, index) => {
-                return (
-                  <ChatMessage
-                    key={index}
-                    chatId={index}
-                    messageType={type}
-                    chatMessage={message}
-                  />
-                );
-              })}
-              <div ref={messageEndRef} />
-            </div>
-            <form
-              className="flex h-12 items-center gap-1.5 rounded-b-3xl bg-white p-2"
-              onSubmit={handleSubmit(onSubmit)}
+        <AnimatePresence>
+          {showChat ? (
+            <motion.div
+              key="chat-phone"
+              initial={{ y: 600, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 600, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+              className="relative flex h-full flex-col rounded-[45px] border-8 border-[#040404] bg-white"
             >
-              <div className="flex size-7 items-center justify-center rounded-full bg-[#e7e9eb] text-gray-500">
-                <AppIcon iconName="plus" size={12} />
+              <div className="relative mt-1 flex h-24 flex-col overflow-hidden rounded-t-[36px] bg-[#f7f7f7] text-lg font-bold text-black">
+                <div className="w-22 absolute left-1/2 top-2 h-[22px] -translate-x-1/2 rounded-full bg-[#040404]"></div>
+                <div className="relative flex h-8 w-full items-center p-3 px-6 text-[13px] font-semibold">
+                  <div className="">{format(new Date(), "h:mm")}</div>
+                  <div className="flex flex-1 items-center justify-end gap-1.5">
+                    <AppIcon iconName="signal" size={14} />
+                    <AppIcon iconName="wifi" size={14} />
+                    <AppIcon iconName="batterty-half" size={18} />
+                  </div>
+                </div>
+                <div className="flex h-full flex-col items-center justify-center gap-1">
+                  <img
+                    className="size-8 rounded-2xl ring-2 ring-black/80"
+                    draggable={false}
+                    src={Cityscape}
+                    alt="Cityscape"
+                  />
+                  <div className="text-xs font-medium text-black/80">Public Room</div>
+                </div>
               </div>
-              <Input
-                type="text"
-                autoComplete="off"
-                placeholder="Message"
-                className="w-full flex-1 rounded-2xl border-2 border-black/15 px-3 py-1 text-xs text-black placeholder-gray-400 outline-0"
-                {...register("message")}
-                ref={(e) => {
-                  register("message").ref(e);
-                  inputRef.current = e as HTMLInputElement;
-                }}
-                onFocus={() => {
-                  if (!focused) {
-                    dispatch(setFocusChat(true));
-                    readyToSubmit.current = true;
+              <div
+                className="flex h-full flex-1 flex-col gap-0.5 overflow-y-auto border-t border-black/15 bg-white p-2 outline-none"
+                tabIndex={-1}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                    e.preventDefault();
                   }
                 }}
-                onBlur={() => {
-                  dispatch(setFocusChat(false));
-                  readyToSubmit.current = false;
-                }}
-              />
-            </form>
-          </div>
-        ) : (
-          <div className="mt-auto">
-            <TooltipButton
-              className="size-11"
-              id="chat"
-              tooltip="chat"
-              onClick={() => dispatch(setShowChat(true))}
-            >
-              <AppIcon iconName="chat" color="black" size={26} />
-              {unReadMessageCount > 0 && (
-                <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
-                  {unReadMessageCount}
+              >
+                {chatMessages.map(({ type, message }, index) => {
+                  return (
+                    <ChatMessage
+                      key={index}
+                      chatId={index}
+                      messageType={type}
+                      chatMessage={message}
+                    />
+                  );
+                })}
+                <div ref={messageEndRef} />
+              </div>
+              <form
+                className="mb-2 flex h-12 items-center gap-1.5 rounded-b-[38px] bg-white p-2"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="flex size-7 items-center justify-center rounded-full bg-[#e7e9eb] text-gray-500">
+                  <AppIcon iconName="plus" size={12} />
                 </div>
-              )}
-            </TooltipButton>
-          </div>
-        )}
+                <Input
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Message"
+                  className="w-full flex-1 rounded-2xl border-2 border-black/15 px-3 py-1 text-xs text-black placeholder-gray-400 outline-0"
+                  {...register("message")}
+                  ref={(e) => {
+                    register("message").ref(e);
+                    inputRef.current = e as HTMLInputElement;
+                  }}
+                  onFocus={() => {
+                    if (!focused) {
+                      dispatch(setFocusChat(true));
+                      readyToSubmit.current = true;
+                    }
+                  }}
+                  onBlur={() => {
+                    dispatch(setFocusChat(false));
+                    readyToSubmit.current = false;
+                  }}
+                />
+              </form>
+            </motion.div>
+          ) : (
+            <div className="absolute bottom-2 left-5">
+              <TooltipButton
+                className="size-11"
+                id="chat"
+                tooltip="chat"
+                onClick={() => dispatch(setShowChat(true))}
+              >
+                <AppIcon iconName="chat" color="black" size={26} />
+                {unReadMessageCount > 0 && (
+                  <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
+                    {unReadMessageCount}
+                  </div>
+                )}
+              </TooltipButton>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

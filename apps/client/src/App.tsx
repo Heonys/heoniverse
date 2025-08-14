@@ -1,13 +1,12 @@
 import { Chat, HelperGroups, VirtualJoystick, GameHUD } from "@/components";
 import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
 import { ComputerDialog } from "@/components/computer";
-import { useAppSelector, usePreventWheel } from "@/hooks";
+import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
 
 function App() {
-  // usePreventWheel();
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);

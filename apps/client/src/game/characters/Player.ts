@@ -67,8 +67,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   openBubble(message: string) {
     this.closeBubble();
 
+    const filtered = message.length <= 50 ? message : message.slice(0, 50).concat("...");
+
     const innerText = this.scene.add
-      .text(0, 0, message, { wordWrap: { width: 165, useAdvancedWrap: true } })
+      .text(0, 0, filtered, { wordWrap: { width: 165, useAdvancedWrap: true } })
       .setFontFamily("Retro")
       .setFontSize(12)
       .setColor("#000000")

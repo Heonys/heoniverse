@@ -32,7 +32,7 @@ export const GameHUD = () => {
         style={{ fontFamily: "Retro" }}
       >
         <div className="absolute right-2.5 top-1.5">
-          <AppIcon iconName="batterty-half" size={18} />
+          <AppIcon iconName="batterty-full" size={18} />
         </div>
 
         <div className="flex flex-col gap-0.5">

@@ -7,4 +7,3 @@ export * from "./useWindowSize";
 export * from "./useModal";
 export * from "./useGame";
 export * from "./useSceneEffect";
-export * from "./usePreventWheel";

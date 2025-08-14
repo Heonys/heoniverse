@@ -25,7 +25,7 @@ const chatSlice = createSlice({
         message: {
           clientId: action.payload.id,
           author: action.payload.name,
-          content: "님이 입장하셨습니다.",
+          content: "님이 입장하셨습니다",
           createdAt: new Date().getTime(),
         },
       });
@@ -36,7 +36,7 @@ const chatSlice = createSlice({
         message: {
           clientId: action.payload.id,
           author: action.payload.name,
-          content: "님이 퇴장하셨습니다.",
+          content: "님이 퇴장하셨습니다",
           createdAt: new Date().getTime(),
         },
       });
