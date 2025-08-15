@@ -5,6 +5,7 @@ import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
+import { WebcamView } from "./components/webcam";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <div className="absolute h-full w-full">
+      <WebcamView />
       <ModalComponent />
       <VirtualJoystick />
 
@@ -21,7 +23,11 @@ function App() {
         <HelperGroups />
       </Condition>
 
-      <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
+      <Condition
+        condition={roomJoined}
+        fallback={<SelectMenuDialog />}
+        // fallback={<div></div>}
+      >
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <Chat />
           <GameHUD />

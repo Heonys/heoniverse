@@ -6,6 +6,10 @@ import AdamSprite from "/images/character/adam.png";
 import AshSprite from "/images/character/ash.png";
 import LucySprite from "/images/character/lucy.png";
 import NancySprite from "/images/character/nancy.png";
+import AdamIcon from "/icons/character/adam-icon.png";
+import AshIcon from "/icons/character/ash-icon.png";
+import LucyIcon from "/icons/character/lucy-icon.png";
+import NancyIcon from "/icons/character/nancy-icon.png";
 
 export const avatars = [
   { name: "adam", img: Adam },
@@ -19,6 +23,13 @@ export const spriteAvatars = [
   { name: "ash", sprite: AshSprite },
   { name: "lucy", sprite: LucySprite },
   { name: "nancy", sprite: NancySprite },
+];
+
+export const avatarIcons = [
+  { name: "adam", icon: AdamIcon },
+  { name: "ash", icon: AshIcon },
+  { name: "lucy", icon: LucyIcon },
+  { name: "nancy", icon: NancyIcon },
 ];
 
 export enum Direction {

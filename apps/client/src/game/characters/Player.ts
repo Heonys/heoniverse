@@ -9,8 +9,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
   readyToConnect = false;
-  lensIcon: Phaser.GameObjects.Image;
   playerMarker: Phaser.GameObjects.Arc;
+  // lensIcon: Phaser.GameObjects.Image;
 
   constructor(
     public scene: Game,
@@ -29,7 +29,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setDepth(this.y);
     this.anims.play(`${texture}_idle_down`);
 
-    this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0xff0000, 1).setDepth(999);
+    this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0x00ff00, 1).setDepth(999);
     this.playerBubble = this.scene.add.container(0, 0).setDepth(9999);
     this.playerName = this.scene.add
       .text(0, 0, "")
@@ -38,17 +38,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setColor("#000000")
       .setOrigin(0.5, 1);
 
-    this.lensIcon = this.scene.add
-      .image(0, 0, "lens")
-      .setDisplaySize(15, 15)
-      .setOrigin(0.5, 1)
-      .setPosition(0, -this.playerName.height - 1);
+    // this.lensIcon = this.scene.add
+    //   .image(0, 0, "lens")
+    //   .setDisplaySize(15, 15)
+    //   .setOrigin(0.5, 1)
+    //   .setPosition(0, -this.playerName.height - 1);
 
     this.playerContainer = this.scene.add
       .container(this.x, this.y - this.height / 2, [
         this.playerName,
-        this.lensIcon,
         this.playerBubble,
+        // this.lensIcon,
       ])
       .setDepth(9999);
 

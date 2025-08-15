@@ -51,6 +51,9 @@ import { BsChatFill } from "react-icons/bs";
 import { IoBatteryFullOutline } from "react-icons/io5";
 import { FaSignal } from "react-icons/fa";
 import { HiMapPin } from "react-icons/hi2";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+import { IoNotificationsSharp } from "react-icons/io5";
+import { FaVideo, FaVideoSlash } from "react-icons/fa6";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -119,6 +122,11 @@ const IconMap = {
   ["display"]: MdMonitor,
   ["signal"]: FaSignal,
   ["map"]: HiMapPin,
+  ["mic-on"]: FaMicrophone,
+  ["mic-off"]: FaMicrophoneSlash,
+  ["video-on"]: FaVideo,
+  ["video-off"]: FaVideoSlash,
+  ["bell"]: IoNotificationsSharp,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

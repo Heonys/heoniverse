@@ -7,7 +7,7 @@ import {
 } from "@/constants/game";
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
-import { Network } from "@/service/Network";
+import { Network } from "@/service";
 import { eventEmitter } from "@/game/events";
 import { JoystickMovement } from "@/components";
 import { getJoystickDirection, spliteAnimKey } from "@/utils";

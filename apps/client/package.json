@@ -24,6 +24,7 @@
     "date-fns": "^4.1.0",
     "immer": "^10.1.1",
     "motion": "^12.23.6",
+    "peerjs": "^1.5.5",
     "perfect-freehand": "^1.2.2",
     "phaser": "^3.88.2",
     "react": "^19.0.0",

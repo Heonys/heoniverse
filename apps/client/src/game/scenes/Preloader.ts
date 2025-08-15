@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Network } from "@/service/Network";
+import { Network } from "@/service";
 import { store } from "@/stores";
 import { setRoomJoined } from "@/stores/roomSlice";
 

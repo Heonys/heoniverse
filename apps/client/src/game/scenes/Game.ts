@@ -3,7 +3,7 @@ import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, OtherPlayer, PlayerOverlap, PlayerSelector } from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
-import { Network } from "@/service/Network";
+import { Network } from "@/service";
 import { IPlayer } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
@@ -127,14 +127,16 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
-    this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(1.6);
     this.cameras.main.startFollow(object);
 
     this.minimap = this.cameras
       .add(0, 0, 200, 200, false, "minimap")
       .setZoom(0.18)
-      .setBackgroundColor("#323338")
+      .setBackgroundColor("#000")
       .startFollow(object);
+
+    this.minimap.postFX.addColorMatrix().grayscale(0.8);
 
     const maskGraphic = this.add.graphics().fillCircle(100, 100, 85);
     const mask = maskGraphic.createGeometryMask();
