@@ -33,6 +33,7 @@ export interface IPlayer {
   y: number;
   animKey: string;
   readyToConnect: boolean;
+  status: Status;
 }
 
 export interface IStudioState {
@@ -46,3 +47,5 @@ export type IChatMessage = {
   createdAt: number;
   content: string;
 };
+
+export type Status = "online" | "busy" | "dnd";

@@ -1,9 +1,14 @@
-import { Room, Client, AuthContext, ServerError } from "colyseus";
+import { Room, Client, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player } from "./schema/StudioSchema";
-import { Messages, IRoom, RoomType } from "@heoniverse/shared";
-import { PlayerUpdateCommand, PlayerNameUpdateCommand, PushChatUpdateCommand } from "./commands";
+import { Messages, IRoom, Status } from "@heoniverse/shared";
+import {
+  PlayerUpdateCommand,
+  PlayerNameUpdateCommand,
+  PushChatUpdateCommand,
+  PlayerUpdateStatus,
+} from "./commands";
 
 export class Studio extends Room<StudioState> {
   state = new StudioState();
@@ -44,6 +49,13 @@ export class Studio extends Room<StudioState> {
       this.dispatcher.dispatch(new PlayerNameUpdateCommand(), {
         sessionId: client.sessionId,
         name: payload,
+      });
+    });
+
+    this.onMessage(Messages.UPDATE_PLAYER_STATUS, (client, payload: Status) => {
+      this.dispatcher.dispatch(new PlayerUpdateStatus(), {
+        sessionId: client.sessionId,
+        status: payload,
       });
     });
 

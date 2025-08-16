@@ -20,11 +20,12 @@ export class OtherPlayer extends Player {
   }
 
   updatePlayer(player: IPlayer) {
-    const { name, x, y, readyToConnect, animKey } = player;
+    const { name, x, y, readyToConnect, animKey, status } = player;
     this.playerName.setText(name);
     this.destination = { x, y };
     this.readyToConnect = readyToConnect;
     this.anims.play(animKey, true);
+    this.setPlayerStatus(status);
   }
 
   protected preUpdate(time: number, delta: number) {

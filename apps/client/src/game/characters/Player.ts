@@ -1,5 +1,6 @@
 import { PlayerBehavior } from "@/constants/game";
 import { Game } from "@/game/scenes";
+import { Status } from "@heoniverse/shared";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   playerId: string;
@@ -10,7 +11,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerBehavior = PlayerBehavior.IDLE;
   readyToConnect = false;
   playerMarker: Phaser.GameObjects.Arc;
-  // lensIcon: Phaser.GameObjects.Image;
+  statusCircle: Phaser.GameObjects.Arc;
 
   constructor(
     public scene: Game,
@@ -38,17 +39,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setColor("#000000")
       .setOrigin(0.5, 1);
 
-    // this.lensIcon = this.scene.add
-    //   .image(0, 0, "lens")
-    //   .setDisplaySize(15, 15)
-    //   .setOrigin(0.5, 1)
-    //   .setPosition(0, -this.playerName.height - 1);
+    this.statusCircle = this.scene.add
+      .circle(0, 2, 5, 0x01dca2)
+      .setStrokeStyle(1.5, 0x000000, 1)
+      .setOrigin(0.5, 1)
+      .setPosition(0, -this.playerName.height - 1);
 
     this.playerContainer = this.scene.add
       .container(this.x, this.y - this.height / 2, [
         this.playerName,
+        this.statusCircle,
         this.playerBubble,
-        // this.lensIcon,
       ])
       .setDepth(9999);
 
@@ -107,5 +108,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   closeBubble() {
     this.playerBubble.removeAll(true);
+  }
+
+  setPlayerStatus(status: Status) {
+    switch (status) {
+      case "online": {
+        return this.statusCircle.setFillStyle(0x01dca2);
+      }
+      case "busy": {
+        return this.statusCircle.setFillStyle(0xfbd359);
+      }
+      case "dnd": {
+        return this.statusCircle.setFillStyle(0xe25156);
+      }
+    }
   }
 }

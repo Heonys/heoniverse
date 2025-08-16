@@ -36,6 +36,10 @@ export class Network {
     eventEmitter.on("UPDATE_PLAYER_TEXTURE", (payload) => {
       this.sendMessage("UPDATE_PLAYER", payload);
     });
+
+    eventEmitter.on("UPDATE_PLAYER_STATUS", (payload) => {
+      this.sendMessage("UPDATE_PLAYER_STATUS", payload);
+    });
   }
 
   async joinLobbyRoom() {

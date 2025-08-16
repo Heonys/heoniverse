@@ -1,4 +1,4 @@
-import { Chat, HelperGroups, VirtualJoystick, GameHUD } from "@/components";
+import { Chat, HelperGroups, VirtualJoystick, GameHUD, GameNoti } from "@/components";
 import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
 import { ComputerDialog } from "@/components/computer";
 import { useAppSelector } from "@/hooks";
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="absolute h-full w-full">
-      <WebcamView />
+      {/* <WebcamView /> */}
       <ModalComponent />
       <VirtualJoystick />
 
@@ -31,6 +31,7 @@ function App() {
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <Chat />
           <GameHUD />
+          <GameNoti />
         </Condition>
       </Condition>
 

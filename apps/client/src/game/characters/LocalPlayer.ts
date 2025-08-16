@@ -14,6 +14,7 @@ import { getJoystickDirection, spliteAnimKey } from "@/utils";
 import { store } from "@/stores";
 import { showConnectBridge } from "@/stores/modalSlice";
 import { Game } from "@/game/scenes";
+import { setUserName, setUserTexture, nextStatus, setUserStatus } from "@/stores/userSlice";
 
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
@@ -40,12 +41,21 @@ export class LocalPlayer extends Player {
 
   setPlayerName(name: string) {
     this.playerName.setText(name);
+    store.dispatch(setUserName(name));
     eventEmitter.emit("UPDATE_PLAYER_NAME", name);
+  }
+
+  togglePlayerStatus() {
+    const status = nextStatus(store.getState());
+    store.dispatch(setUserStatus(status));
+    eventEmitter.emit("UPDATE_PLAYER_STATUS", status);
+    this.setPlayerStatus(status);
   }
 
   setPlayerAvatar(texture: string) {
     this.playerTexture = texture;
-    this.anims.play(`${this.playerTexture}_idle_down`, true);
+    this.anims.play(`${texture}_idle_down`, true);
+    store.dispatch(setUserTexture(texture));
     eventEmitter.emit("UPDATE_PLAYER_TEXTURE", {
       x: this.x,
       y: this.y,

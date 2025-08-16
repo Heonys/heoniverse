@@ -127,18 +127,18 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera(object: Phaser.Physics.Arcade.Sprite) {
-    this.cameras.main.setZoom(1.6);
+    this.cameras.main.setZoom(1.4);
     this.cameras.main.startFollow(object);
 
     this.minimap = this.cameras
-      .add(0, 0, 200, 200, false, "minimap")
-      .setZoom(0.18)
+      .add(0, 0, 160, 160, false, "minimap")
+      .setZoom(0.14)
       .setBackgroundColor("#000")
       .startFollow(object);
 
     this.minimap.postFX.addColorMatrix().grayscale(0.8);
 
-    const maskGraphic = this.add.graphics().fillCircle(100, 100, 85);
+    const maskGraphic = this.add.graphics().fillCircle(80, 80, 70);
     const mask = maskGraphic.createGeometryMask();
     this.minimap.setMask(mask);
   }

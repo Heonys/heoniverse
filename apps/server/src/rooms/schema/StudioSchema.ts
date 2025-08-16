@@ -1,5 +1,5 @@
 import { Schema, type, MapSchema, ArraySchema } from "@colyseus/schema";
-import { IPlayer, IStudioState, IChatMessage } from "@heoniverse/shared";
+import { IPlayer, IStudioState, IChatMessage, Status } from "@heoniverse/shared";
 
 export class Player extends Schema implements IPlayer {
   @type("string") name = "";
@@ -7,6 +7,7 @@ export class Player extends Schema implements IPlayer {
   @type("number") y = 500;
   @type("string") animKey = "adam_idle_down";
   @type("boolean") readyToConnect = false;
+  @type("string") status: Status = "online";
 }
 
 export class ChatMessage extends Schema implements IChatMessage {
