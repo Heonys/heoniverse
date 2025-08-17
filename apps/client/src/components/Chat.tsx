@@ -1,21 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { Input } from "@headlessui/react";
 import { AppIcon } from "@/icons";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
-import { setShowChat, setFocusChat, markAsRead } from "@/stores/chatSlice";
+import { setShowChat, setFocusChat } from "@/stores/chatSlice";
 import { ChatMessage } from "./ChatMessage";
 import { TooltipButton } from "@/common";
-import Cityscape from "/images/background/cityscape-icon.jpeg";
 
 type FormType = { message: string };
 
 export const Chat = () => {
   const { network, getLocalPlayer } = useGame();
-
   const readyToSubmit = useRef(false);
+  const [time, seTtime] = useState(new Date());
   const inputRef = useRef<HTMLInputElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -42,10 +41,17 @@ export const Chat = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleClose = () => {
-    dispatch(setShowChat(false));
-    dispatch(markAsRead());
-  };
+  // const handleClose = () => {
+  //   dispatch(setShowChat(false));
+  //   dispatch(markAsRead());
+  // };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      seTtime(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (focused) setFocus("message");
@@ -71,21 +77,16 @@ export const Chat = () => {
               <div className="relative mt-1 flex h-24 flex-col overflow-hidden rounded-t-[36px] bg-[#f7f7f7] text-lg font-bold text-black">
                 <div className="w-22 absolute left-1/2 top-2 h-[22px] -translate-x-1/2 rounded-full bg-[#040404]"></div>
                 <div className="relative flex h-8 w-full items-center p-3 px-6 text-[13px] font-semibold">
-                  <div className="">{format(new Date(), "h:mm")}</div>
+                  <div className="">{format(time, "h:mm")}</div>
                   <div className="flex flex-1 items-center justify-end gap-1.5">
                     <AppIcon iconName="signal" size={14} />
                     <AppIcon iconName="wifi" size={14} />
                     <AppIcon iconName="batterty-half" size={18} />
                   </div>
                 </div>
-                <div className="flex h-full flex-col items-center justify-center gap-1">
-                  <img
-                    className="size-8 rounded-2xl ring-2 ring-black/80"
-                    draggable={false}
-                    src={Cityscape}
-                    alt="Cityscape"
-                  />
-                  <div className="text-xs font-medium text-black/80">Public Room</div>
+                <div className="flex h-full flex-col items-center justify-center gap-1 text-black/70">
+                  <AppIcon iconName="user-cirlce" size={32} />
+                  <div className="text-xs font-medium">Public Room</div>
                 </div>
               </div>
               <div
@@ -140,11 +141,11 @@ export const Chat = () => {
               </form>
             </motion.div>
           ) : (
-            <div className="absolute bottom-2 left-5 flex">
+            <div className="absolute bottom-2 left-6 flex">
               <TooltipButton
                 className="size-11"
                 id="chat"
-                tooltip="chat"
+                tooltip="채팅창 활성화"
                 onClick={() => dispatch(setShowChat(true))}
               >
                 <AppIcon iconName="chat" color="black" size={26} />

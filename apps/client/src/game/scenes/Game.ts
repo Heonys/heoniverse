@@ -26,7 +26,7 @@ export class Game extends Phaser.Scene {
   otherPlayers!: Phaser.Physics.Arcade.Group;
   ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
   ohterPlayersMap = new Map<string, OtherPlayer>();
-  minimap!: Phaser.Cameras.Scene2D.Camera;
+  minimap?: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
     super("game");
@@ -48,7 +48,7 @@ export class Game extends Phaser.Scene {
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
 
-    this.setupCamera(this.localPlayer);
+    this.setupCamera();
     this.disableKeys();
 
     const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tileset_wall")!;
@@ -126,21 +126,33 @@ export class Game extends Phaser.Scene {
     );
   }
 
-  setupCamera(object: Phaser.Physics.Arcade.Sprite) {
+  setupCamera() {
     this.cameras.main.setZoom(1.4);
-    this.cameras.main.startFollow(object);
+    this.cameras.main.startFollow(this.localPlayer);
+  }
 
+  setupMinimapCamera() {
     this.minimap = this.cameras
       .add(0, 0, 160, 160, false, "minimap")
       .setZoom(0.14)
       .setBackgroundColor("#000")
-      .startFollow(object);
-
+      .startFollow(this.localPlayer);
     this.minimap.postFX.addColorMatrix().grayscale(0.8);
 
     const maskGraphic = this.add.graphics().fillCircle(80, 80, 70);
     const mask = maskGraphic.createGeometryMask();
     this.minimap.setMask(mask);
+
+    this.localPlayer.setupMinimap();
+    this.ohterPlayersMap.forEach((player) => {
+      player.setupMinimap();
+    });
+  }
+
+  removeMinimapCamera() {
+    if (this.minimap) {
+      this.cameras.remove(this.minimap);
+    }
   }
 
   update(_time: number, _delta: number) {
@@ -272,6 +284,8 @@ export class Game extends Phaser.Scene {
       this.otherPlayers.remove(otherPlayer, true, true);
       this.ohterPlayerOverlapZone.remove(otherPlayer.playerOverlap, true, true);
       this.ohterPlayersMap.delete(id);
+      otherPlayer.playerMarker.destroy();
+
       store.dispatch(removePlayerName(id));
       store.dispatch(pushLeftMessage({ id, name: player.name }));
     }

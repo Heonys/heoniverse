@@ -5,7 +5,7 @@ import { cn } from "@/utils";
 
 type Props = {
   texture: string;
-  status: Status;
+  status?: Status;
   className?: string;
 };
 
@@ -28,15 +28,17 @@ export const AvatarIcon = ({ texture, status, className }: Props) => {
       <img
         src={avatarIcon}
         alt="avatar-icon"
-        className="size-full translate-x-[1px] scale-110 object-contain"
+        className="size-full -translate-y-[1px] scale-[1.2] object-contain"
         draggable={false}
       />
-      <div
-        className={cn(
-          "absolute bottom-0 right-0 size-2.5 rounded-full ring ring-black",
-          colorMap[status],
-        )}
-      ></div>
+      {status && (
+        <div
+          className={cn(
+            "absolute bottom-0 right-0 size-2.5 rounded-full ring ring-black",
+            colorMap[status],
+          )}
+        />
+      )}
     </div>
   );
 };

@@ -22,7 +22,7 @@ export const GameHUD = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-2 left-1/2 flex w-[400px] -translate-x-1/2 select-none items-center gap-2 rounded-full border-2 border-white/50 bg-slate-800 px-3 py-2">
+    <div className="fixed bottom-2 left-1/2 flex w-[400px] -translate-x-1/2 select-none items-center gap-1 rounded-full border-2 border-white/30 bg-slate-800 px-3 py-2">
       {/* left */}
       <div className="flex gap-3">
         <AvatarIcon texture={texture} status={status} />
@@ -61,7 +61,7 @@ export const GameHUD = () => {
         <div
           className={cn(
             "cursor-pointer rounded-full p-2 transition-all",
-            micConnected ? "bg-slate-600/70 text-white" : "bg-white/90 text-black",
+            micConnected ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
           )}
           onClick={() => dispatch(setMicConnected(!micConnected))}
         >
@@ -70,7 +70,7 @@ export const GameHUD = () => {
         <div
           className={cn(
             "cursor-pointer rounded-full p-2 transition-all",
-            videoConnected ? "bg-slate-600/70 text-white" : "bg-white/90 text-black",
+            videoConnected ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
           )}
           onClick={() => dispatch(setViedeoConnected(!videoConnected))}
         >

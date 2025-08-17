@@ -36,7 +36,6 @@ export class LocalPlayer extends Player {
     super(scene, id, x, y, texture);
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.registerKeys();
-    this.scene.time.delayedCall(300, this.setupMinimap, undefined, this);
   }
 
   setPlayerName(name: string) {

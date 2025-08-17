@@ -6,7 +6,7 @@ export const GameNoti = () => {
   const [showMessage, setShowMessage] = useState(true);
 
   return (
-    <div className="fixed right-1 top-0.5 flex select-none flex-col items-start gap-2">
+    <div className="fixed right-1 top-1 flex select-none flex-col items-start gap-2">
       <AnimatePresence>
         {showMessage && (
           <motion.div
@@ -23,10 +23,11 @@ export const GameNoti = () => {
             </button>
             <div className="flex items-center gap-2 text-blue-300">
               <AppIcon iconName="help" size={18} />
-              <div className="font-semibold leading-none tracking-tight">Access Camera</div>
+              <div className="font-semibold leading-none tracking-tight">영상·음성 접근 허용</div>
             </div>
             <div className="text-[#c2c2c2]">
-              카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화됩니다.
+              {/* 카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화됩니다.*/}
+              카메라와 마이크를 연결하면, 주변 플레이어와 더욱 원활하게 소통할 수 있습니다.
             </div>
           </motion.div>
         )}

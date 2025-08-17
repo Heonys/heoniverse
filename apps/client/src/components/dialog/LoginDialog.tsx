@@ -4,14 +4,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
-import { AppButton, AppSlider, InputBox } from "@/common";
+import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
 import { avatars, spriteAvatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
 import { SpriteAnimation } from "@/common/SpriteAnimation";
-import LensIcon from "/icons/lens.png";
 
 type FormType = z.infer<typeof FormSchema>;
 
@@ -75,13 +74,7 @@ export const LoginDialog = () => {
           <div className="flex flex-col gap-1.5">
             <InputBox label="Nickname" regiser={register("name")} required autoFocus />
             <div className="ml-1 text-xs text-red-400">{errors.name?.message}</div>
-            <div className="mt-1 flex w-full items-center gap-2 rounded-sm bg-[#1e1f23] p-2.5">
-              <img className="size-5" src={LensIcon} alt="lens" />
-              <div className="cursor-pointer text-sm text-white/50">카메라 연결하기</div>
-            </div>
-            <div className="text-xs text-[#c2c2c2]">
-              카메라를 연결하면 다른 플레이어가 근처에 있을 때 카메라가 활성화됩니다.
-            </div>
+            <TextareaBox label="Status Message" regiser={register("message")} />
           </div>
         </div>
       </div>

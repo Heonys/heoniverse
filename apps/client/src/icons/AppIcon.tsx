@@ -55,7 +55,7 @@ import { HiMapPin } from "react-icons/hi2";
 import { IoNotificationsSharp } from "react-icons/io5";
 import { FaVideo, FaVideoSlash } from "react-icons/fa6";
 import { IoMdMic, IoMdMicOff } from "react-icons/io";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { FaUserCircle } from "react-icons/fa";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -130,7 +130,7 @@ const IconMap = {
   ["video-on"]: FaVideo,
   ["video-off"]: FaVideoSlash,
   ["bell"]: IoNotificationsSharp,
-  ["switch"]: HiOutlineSwitchHorizontal,
+  ["user-cirlce"]: FaUserCircle,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

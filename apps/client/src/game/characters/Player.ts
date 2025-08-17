@@ -11,6 +11,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerBehavior = PlayerBehavior.IDLE;
   readyToConnect = false;
   playerMarker: Phaser.GameObjects.Arc;
+  playerStatus: Status = "online";
   statusCircle: Phaser.GameObjects.Arc;
 
   constructor(
@@ -31,6 +32,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.anims.play(`${texture}_idle_down`);
 
     this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0x00ff00, 1).setDepth(999);
+    this.scene.cameras.main.ignore([this.playerMarker]);
     this.playerBubble = this.scene.add.container(0, 0).setDepth(9999);
     this.playerName = this.scene.add
       .text(0, 0, "")
@@ -69,8 +71,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   setupMinimap() {
-    this.scene.cameras.main.ignore([this.playerMarker]);
-    this.scene.minimap.ignore([this, this.playerContainer]);
+    if (this.scene.minimap) {
+      this.scene.minimap.ignore([this, this.playerContainer]);
+    }
   }
 
   openBubble(message: string) {
@@ -111,6 +114,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   setPlayerStatus(status: Status) {
+    this.playerStatus = status;
     switch (status) {
       case "online": {
         return this.statusCircle.setFillStyle(0x01dca2);

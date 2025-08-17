@@ -16,7 +16,6 @@ export class OtherPlayer extends Player {
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.playerOverlap = new PlayerOverlap(scene, this, x, y, this.width, this.height);
     scene.physics.add.existing(this.playerOverlap);
-    this.setupMinimap();
   }
 
   updatePlayer(player: IPlayer) {

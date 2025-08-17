@@ -1,8 +1,11 @@
 import { Tooltip } from "react-tooltip";
 import { ChatType, IChatMessage } from "@heoniverse/shared";
-import { cn, dateFormatter, pickColor } from "@/utils";
+import { dateFormatter } from "@/utils";
 import { Condition } from "@/common";
 import { useGame } from "@/hooks";
+import { AppIcon } from "@/icons";
+import { AvatarIcon } from "@/components";
+import { OtherPlayer } from "@/game/characters";
 
 type Props = {
   chatId: number;
@@ -11,10 +14,11 @@ type Props = {
 };
 
 export const ChatMessage = ({ chatId, messageType, chatMessage }: Props) => {
-  const { getLocalPlayer } = useGame();
+  const { getLocalPlayer, isConnectedPlayer } = useGame();
   const isMe = (id: string) => {
     return getLocalPlayer().playerId === id;
   };
+  const player = isConnectedPlayer(chatMessage.clientId);
 
   return (
     <div
@@ -35,7 +39,11 @@ export const ChatMessage = ({ chatId, messageType, chatMessage }: Props) => {
           {isMe(chatMessage.clientId) ? (
             <MessageBubbleSelf message={chatMessage.content} />
           ) : (
-            <MessageBubbleOther author={chatMessage.author} message={chatMessage.content} />
+            <MessageBubbleOther
+              author={chatMessage.author}
+              message={chatMessage.content}
+              player={player}
+            />
           )}
         </div>
       </Condition>
@@ -49,15 +57,22 @@ export const ChatMessage = ({ chatId, messageType, chatMessage }: Props) => {
   );
 };
 
-const MessageBubbleOther = ({ author, message }: { author: string; message: string }) => {
+type OtherMessage = {
+  author: string;
+  message: string;
+  player?: OtherPlayer;
+};
+
+const MessageBubbleOther = ({ author, message, player }: OtherMessage) => {
   return (
     <>
-      <div
-        className={cn(
-          "mx-1 mb-1 flex size-6 items-center justify-center self-end rounded-full px-1.5 font-medium text-black/70",
-          pickColor(author),
+      <div className="mx-1 mb-1 flex size-7 items-center justify-center self-end rounded-full font-medium text-black/70">
+        {player ? (
+          <AvatarIcon texture={player.playerTexture} className="size-full" />
+        ) : (
+          <AppIcon iconName="user-cirlce" size={28} />
         )}
-      />
+      </div>
       <div className="flex flex-1 flex-col">
         <div className="px-1 text-[10px]">{author}</div>
         <div className="flex flex-1 items-center justify-start">
