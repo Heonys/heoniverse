@@ -12,16 +12,17 @@ import {
 } from "@/stores/roomSlice";
 import { eventEmitter } from "@/game/events";
 import { pushMessage } from "@/stores/chatSlice";
+import { WebRTC } from "@/service";
 
 export class Network {
   client: Client;
   room: Room<StudioState> | null = null;
   lobby: Room | null = null;
   sessionId!: string;
+  webRTC?: WebRTC;
 
   constructor() {
     this.client = new Client(import.meta.env.VITE_WEBSOCKET_URL);
-
     this.joinLobbyRoom().then(() => {
       store.dispatch(setLobbyJoined(true));
     });
@@ -111,6 +112,7 @@ export class Network {
     if (!this.room) return;
     this.lobby?.leave();
     store.dispatch(setLobbyJoined(false));
+    this.webRTC = new WebRTC(this.room.sessionId, this);
 
     this.sessionId = this.room.sessionId;
     const $ = getStateCallbacks(this.room);

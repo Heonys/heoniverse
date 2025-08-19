@@ -8,18 +8,16 @@ export const WhiteboardDialog = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full p-5 backdrop-blur-xs z-[9999]">
-      <div
-        className="relative w-full h-full bg-[#030303] 
-        rounded-[24px] shadow-2xl border-[1.5px] border-neutral-400/60 overflow-hidden p-2.5"
-      >
+    <div className="backdrop-blur-xs fixed left-0 top-0 z-[9999] h-full w-full p-5">
+      <div className="relative h-full w-full overflow-hidden rounded-[24px] border-[1.5px] border-neutral-400/60 bg-[#030303] p-2.5 shadow-2xl">
         <WhiteBoard />
       </div>
-      <div className="fixed bottom-2 right-5 flex gap-2 z-[9999]">
-        <TooltipButton tooltip="help">
+      <div className="fixed bottom-2 right-5 z-[9999] flex gap-2">
+        <TooltipButton id="whiteboard-help" tooltip="help">
           <AppIcon iconName="help" color="black" size={25} />
         </TooltipButton>
         <TooltipButton
+          id="whiteboard-exit"
           tooltip="Exit Board"
           onClick={() => {
             dispatch(closeWhiteboardDialog());

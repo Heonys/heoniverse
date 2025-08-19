@@ -128,6 +128,9 @@ importers:
       react-tooltip:
         specifier: ^5.29.1
         version: 5.29.1(react-dom@19.1.1)(react@19.1.1)
+      react-webcam:
+        specifier: ^7.2.0
+        version: 7.2.0(react-dom@19.1.1)(react@19.1.1)
       roughjs:
         specifier: ^4.6.6
         version: 4.6.6
@@ -6255,6 +6258,16 @@ packages:
     dependencies:
       '@floating-ui/dom': 1.7.2
       classnames: 2.5.1
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    dev: false
+
+  /react-webcam@7.2.0(react-dom@19.1.1)(react@19.1.1):
+    resolution: {integrity: sha512-xkrzYPqa1ag2DP+2Q/kLKBmCIfEx49bVdgCCCcZf88oF+0NPEbkwYk3/s/C7Zy0mhM8k+hpdNkBLzxg8H0aWcg==}
+    peerDependencies:
+      react: '>=16.2.0'
+      react-dom: '>=16.2.0'
+    dependencies:
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
     dev: false

@@ -6,7 +6,7 @@ export const GameNoti = () => {
   const [showMessage, setShowMessage] = useState(true);
 
   return (
-    <div className="fixed right-1 top-1 flex select-none flex-col items-start gap-2">
+    <div className="fixed right-1 top-1 flex select-none flex-col items-end gap-2">
       <AnimatePresence>
         {showMessage && (
           <motion.div

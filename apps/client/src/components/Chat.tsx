@@ -98,6 +98,17 @@ export const Chat = () => {
                   }
                 }}
               >
+                <ChatMessage
+                  key={-1}
+                  chatId={-1}
+                  messageType="JOINED"
+                  chatMessage={{
+                    clientId: getLocalPlayer().playerId,
+                    author: getLocalPlayer().playerName.text,
+                    content: "님이 입장하셨습니다",
+                    createdAt: new Date().getTime(),
+                  }}
+                />
                 {chatMessages.map(({ type, message }, index) => {
                   return (
                     <ChatMessage
@@ -145,7 +156,7 @@ export const Chat = () => {
               <TooltipButton
                 className="size-11"
                 id="chat"
-                tooltip="채팅창 활성화"
+                tooltip="채팅창 열기"
                 onClick={() => dispatch(setShowChat(true))}
               >
                 <AppIcon iconName="chat" color="black" size={26} />

@@ -8,8 +8,9 @@ type UserState = {
   otherPlayersName: Map<string, string>;
   showJoystick: boolean;
   showMinimap: boolean;
-  videoConnected: boolean;
-  micConnected: boolean;
+  mediaConnected: boolean;
+  videoEnabled: boolean;
+  micEnabled: boolean;
   status: Status;
 };
 
@@ -20,8 +21,9 @@ const initialState: UserState = {
   otherPlayersName: new Map<string, string>(),
   showJoystick: false,
   showMinimap: false,
-  videoConnected: false,
-  micConnected: false,
+  mediaConnected: false,
+  videoEnabled: true,
+  micEnabled: true,
   status: "online",
 };
 
@@ -50,14 +52,21 @@ const userSlice = createSlice({
     setMinimap(state, action: PayloadAction<boolean>) {
       state.showMinimap = action.payload;
     },
-    setViedeoConnected(state, action: PayloadAction<boolean>) {
-      state.videoConnected = action.payload;
+    setMediaConnected(state, action: PayloadAction<boolean>) {
+      state.mediaConnected = action.payload;
     },
-    setMicConnected(state, action: PayloadAction<boolean>) {
-      state.micConnected = action.payload;
+    setViedeoEnabled(state, action: PayloadAction<boolean>) {
+      state.videoEnabled = action.payload;
+    },
+    setMicEnabled(state, action: PayloadAction<boolean>) {
+      state.micEnabled = action.payload;
     },
     setUserStatus(state, action: PayloadAction<Status>) {
       state.status = action.payload;
+    },
+    initMediaState: (state) => {
+      state.videoEnabled = true;
+      state.micEnabled = true;
     },
   },
   selectors: {
@@ -75,12 +84,14 @@ export const {
   addPlayerName,
   removePlayerName,
   setJoystick,
-  setViedeoConnected,
-  setMicConnected,
+  setMediaConnected,
+  setViedeoEnabled,
+  setMicEnabled,
   setMinimap,
   setUserStatus,
   setUserName,
   setUserTexture,
+  initMediaState,
 } = userSlice.actions;
 export const { nextStatus } = userSlice.selectors;
 export default userSlice.reducer;

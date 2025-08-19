@@ -52,10 +52,12 @@ import { BsChatFill } from "react-icons/bs";
 import { IoBatteryFullOutline } from "react-icons/io5";
 import { FaSignal } from "react-icons/fa";
 import { HiMapPin } from "react-icons/hi2";
-import { IoNotificationsSharp } from "react-icons/io5";
+import { IoNotificationsSharp, IoNotificationsOffSharp } from "react-icons/io5";
 import { FaVideo, FaVideoSlash } from "react-icons/fa6";
 import { IoMdMic, IoMdMicOff } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
+import { FaLink, FaLinkSlash } from "react-icons/fa6";
+import { HiMiniSpeakerWave } from "react-icons/hi2";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -129,8 +131,12 @@ const IconMap = {
   ["mic-off"]: IoMdMicOff,
   ["video-on"]: FaVideo,
   ["video-off"]: FaVideoSlash,
-  ["bell"]: IoNotificationsSharp,
+  ["noti-on"]: IoNotificationsSharp,
+  ["noti-off"]: IoNotificationsOffSharp,
   ["user-cirlce"]: FaUserCircle,
+  ["link-on"]: FaLink,
+  ["link-off"]: FaLinkSlash,
+  ["speak"]: HiMiniSpeakerWave,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

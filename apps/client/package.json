@@ -36,6 +36,7 @@
     "react-rnd": "^10.5.2",
     "react-slick": "^0.30.3",
     "react-tooltip": "^5.29.1",
+    "react-webcam": "^7.2.0",
     "roughjs": "^4.6.6",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^3.0.2",

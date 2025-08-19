@@ -127,7 +127,7 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera() {
-    this.cameras.main.setZoom(1.4);
+    this.cameras.main.setZoom(1.45);
     this.cameras.main.startFollow(this.localPlayer);
   }
 
