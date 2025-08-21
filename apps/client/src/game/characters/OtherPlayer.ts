@@ -1,13 +1,18 @@
-import { Player, PlayerOverlap } from "@/game/characters";
+import { LocalPlayer, Player, PlayerOverlap } from "@/game/characters";
 import { spliteAnimKey } from "@/utils";
 import { IPlayer } from "@heoniverse/shared";
 import { Game } from "@/game/scenes";
+import { WebRTC } from "@/service";
+import { eventEmitter } from "@/game/events";
 
 export class OtherPlayer extends Player {
   playerOverlap: PlayerOverlap;
   containerBody: Phaser.Physics.Arcade.Body;
   destination = { x: 0, y: 0 };
   speed = 200;
+
+  hasBeenConnected = false;
+  connectionBufferTime = 0;
 
   constructor(scene: Game, id: string, name: string, x: number, y: number, texture: string) {
     super(scene, id, x, y, texture);
@@ -16,6 +21,27 @@ export class OtherPlayer extends Player {
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     this.playerOverlap = new PlayerOverlap(scene, this, x, y, this.width, this.height);
     scene.physics.add.existing(this.playerOverlap);
+
+    const spriteBody = this.body as Phaser.Physics.Arcade.Body;
+    spriteBody.setSize(this.width * 4, this.height * 2.5);
+  }
+
+  tryConnectWithPeer(localPlayer: LocalPlayer, webRTC: WebRTC) {
+    if (
+      !this.hasBeenConnected &&
+      this.connectionBufferTime >= 1000 &&
+      this.mediaConnect &&
+      localPlayer.mediaConnect &&
+      localPlayer.readyToStream &&
+      this.playerId > localPlayer.playerId
+    ) {
+      this.hasBeenConnected = true;
+      webRTC.peerCall(this.playerId);
+    } else if (this.hasBeenConnected && (!this.mediaConnect || !localPlayer.mediaConnect)) {
+      eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
+      this.hasBeenConnected = false;
+      this.connectionBufferTime = 0;
+    }
   }
 
   updatePlayer(player: IPlayer) {
@@ -33,6 +59,7 @@ export class OtherPlayer extends Player {
 
   protected preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
+    const spriteBody = this.body as Phaser.Physics.Arcade.Body;
 
     this.playerOverlap.setPosition(this.x, this.y);
     this.playerMarker.setPosition(this.x, this.y);
@@ -62,7 +89,7 @@ export class OtherPlayer extends Player {
     const vy = Math.sign(dy) * this.speed;
 
     this.setVelocity(vx, vy);
-    this.body!.velocity.setLength(this.speed);
+    spriteBody.velocity.setLength(this.speed);
     this.containerBody.setVelocity(vx, vy);
     this.containerBody.velocity.setLength(this.speed);
 
@@ -73,6 +100,13 @@ export class OtherPlayer extends Player {
       if (sittingOffset) {
         this.setDepth(this.y + sittingOffset[2]);
       }
+    }
+
+    this.connectionBufferTime += delta;
+    if (this.hasBeenConnected && !spriteBody.embedded && spriteBody.touching.none) {
+      eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
+      this.connectionBufferTime = 0;
+      this.hasBeenConnected = false;
     }
   }
   destroy(fromScene?: boolean) {

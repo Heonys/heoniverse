@@ -63,6 +63,7 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
         onUserMedia={(stream) => {
           network.webRTC?.setupMediaStream(stream);
           onUserMedia(stream);
+          player.readyToStream = true;
         }}
       />
     </div>

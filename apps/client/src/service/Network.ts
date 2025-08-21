@@ -41,6 +41,15 @@ export class Network {
     eventEmitter.on("UPDATE_PLAYER_STATUS", (payload) => {
       this.sendMessage("UPDATE_PLAYER_STATUS", payload);
     });
+
+    eventEmitter.on("CLOSE_PEER_CALL", (peerId) => {
+      this.webRTC?.closePeerCall(peerId);
+    });
+
+    eventEmitter.on("DISCONNECT_PEER_CALL", (peerId) => {
+      this.webRTC?.onDisconnectPeer(peerId);
+      this.webRTC?.closePeerCall(peerId);
+    });
   }
 
   async joinLobbyRoom() {
@@ -142,7 +151,10 @@ export class Network {
     });
 
     $(this.room.state).players.onRemove((player, sessionId) => {
-      eventEmitter.emit("OTHER_PLAYER_LEFT", { sessionId, player });
+      eventEmitter.emit("DISCONNECT_PEER_CALL", sessionId);
+      setTimeout(() => {
+        eventEmitter.emit("OTHER_PLAYER_LEFT", { sessionId, player });
+      });
     });
 
     $(this.room.state).messages.onAdd((message) => {

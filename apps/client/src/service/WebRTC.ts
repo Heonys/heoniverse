@@ -23,6 +23,7 @@ export class WebRTC {
   setupPeerEvents() {
     this.peer.on("call", (call) => {
       const peerId = call.peer;
+      console.log("callee", peerId);
       if (!this.connectedPeers.has(peerId)) {
         call.answer(this.stream);
         this.connectedPeers.set(call.peer, call);
@@ -34,23 +35,26 @@ export class WebRTC {
           }
         });
 
-        call.on("close", () => {
-          if (this.connectedPeers.has(peerId)) {
-            const connectedPeer = this.connectedPeers.get(peerId);
-            connectedPeer?.close();
-            this.connectedPeers.delete(peerId);
-
-            const otherPlayer = this.getOtherPlayerById(peerId);
-            if (otherPlayer) {
-              this.mediaStreamsMap.delete(otherPlayer);
-            }
-          }
-        });
+        call.on("close", () => this.onDisconnectPeer(peerId));
       }
     });
   }
 
+  onDisconnectPeer(peerId: string) {
+    if (this.connectedPeers.has(peerId)) {
+      const connectedPeer = this.connectedPeers.get(peerId);
+      connectedPeer?.close();
+      this.connectedPeers.delete(peerId);
+
+      const otherPlayer = this.getOtherPlayerById(peerId);
+      if (otherPlayer) {
+        this.mediaStreamsMap.delete(otherPlayer);
+      }
+    }
+  }
+
   peerCall(peerId: string) {
+    console.log("caller", peerId);
     if (!this.peersMap.has(peerId)) {
       const call = this.peer.call(peerId, this.stream!);
       this.peersMap.set(peerId, call);

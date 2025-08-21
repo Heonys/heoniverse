@@ -101,6 +101,7 @@ export const GameHUD = () => {
               if (mediaConnected) {
                 network.webRTC?.disConnectUserMedia();
                 localPlayer.mediaConnect = false;
+                localPlayer.readyToStream = false;
               } else {
                 network.webRTC?.getUserMedia();
                 localPlayer.mediaConnect = true;

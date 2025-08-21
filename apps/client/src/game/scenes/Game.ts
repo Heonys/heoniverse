@@ -87,14 +87,18 @@ export class Game extends Phaser.Scene {
       },
     );
 
+    this.physics.add.overlap(this.localPlayer, this.otherPlayers, (object1, object2) => {
+      const localPlayer = object1 as LocalPlayer;
+      const otherPlayer = object2 as OtherPlayer;
+      otherPlayer.tryConnectWithPeer(localPlayer, this.network.webRTC!);
+    });
+
     this.physics.add.overlap(
       this.playerSelector,
       this.ohterPlayerOverlapZone,
       (object1, object2) => {
         const playerSelector = object1 as PlayerSelector;
         const otherPlayer = object2 as PlayerOverlap;
-
-        otherPlayer.mediaConnect(this.localPlayer, this.network.webRTC!);
 
         if (playerSelector.playerOverlap) {
           if (playerSelector.playerOverlap === otherPlayer) return;

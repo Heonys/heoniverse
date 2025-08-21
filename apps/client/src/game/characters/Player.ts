@@ -17,6 +17,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   mediaConnect = false;
   videoEnabled = true;
   micEnabled = true;
+  readyToStream = false;
 
   constructor(
     public scene: Game,
