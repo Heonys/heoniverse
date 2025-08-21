@@ -108,6 +108,14 @@ export class Network {
     this.sendMessage("READY_TO_CONNECT");
   }
 
+  updateMideaConnect(payload: boolean) {
+    this.sendMessage("UPDATE_MEDIA_CONNECT", payload);
+  }
+
+  updateMediaEnabled({ video, microphone }: { video?: boolean; microphone?: boolean }) {
+    this.sendMessage("UPDATE_MEDIA_ENABELD", { video, microphone });
+  }
+
   setupRoom() {
     if (!this.room) return;
     this.lobby?.leave();

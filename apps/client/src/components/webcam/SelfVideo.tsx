@@ -1,14 +1,16 @@
 import { forwardRef, useState } from "react";
 import Webcam from "react-webcam";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { Condition } from "@/common";
-import { AvatarIcon } from "../AvatarIcon";
+import { AvatarIcon } from "@/components";
 import { cn } from "@/utils";
 
 export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const { network, getLocalPlayer } = useGame();
   const { videoEnabled, micEnabled } = useAppSelector((state) => state.user);
+  const player = getLocalPlayer();
 
   const onUserMedia = (stream: MediaStream) => {
     const audioCtx = new AudioContext();
@@ -40,16 +42,16 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
             size={15}
           />
         )}
-        <div>지헌</div>
+        <div>{player.playerName.text}</div>
       </div>
       <Condition condition={!videoEnabled}>
         <div className="-translate-1/2 absolute left-1/2 top-1/2 flex flex-col items-center gap-2">
-          <AvatarIcon texture="adam" status="online" className="ring-2 ring-white/30" />
+          <AvatarIcon
+            texture={player.playerTexture}
+            status="online"
+            className="ring-2 ring-white/30"
+          />
         </div>
-        {/* <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5 rounded-lg border border-white/50 px-2 py-1 text-white/90">
-          <AppIcon iconName="noti-on" size={15} />
-          <button className="cursor-pointer text-xs outline-none">알림 보내기</button>
-        </div> */}
       </Condition>
 
       <Webcam
@@ -58,7 +60,10 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
         ref={ref}
         playsInline
         muted
-        onUserMedia={onUserMedia}
+        onUserMedia={(stream) => {
+          network.webRTC?.setupMediaStream(stream);
+          onUserMedia(stream);
+        }}
       />
     </div>
   );

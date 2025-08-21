@@ -9,10 +9,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerBubble: Phaser.GameObjects.Container;
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
-  readyToConnect = false;
   playerMarker: Phaser.GameObjects.Arc;
   playerStatus: Status = "online";
   statusCircle: Phaser.GameObjects.Arc;
+
+  readyToConnect = false;
+  mediaConnect = false;
+  videoEnabled = true;
+  micEnabled = true;
 
   constructor(
     public scene: Game,

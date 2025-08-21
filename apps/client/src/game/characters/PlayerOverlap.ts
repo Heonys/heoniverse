@@ -1,7 +1,10 @@
-import { OtherPlayer } from "./OtherPlayer";
+import { OtherPlayer, LocalPlayer } from "@/game/characters";
+import { WebRTC } from "@/service";
 
 export class PlayerOverlap extends Phaser.GameObjects.Zone {
   private dialogBox: Phaser.GameObjects.Container;
+  private hasBeenCalled = false;
+  private connectionTime = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -63,5 +66,17 @@ export class PlayerOverlap extends Phaser.GameObjects.Zone {
 
   onOverlapDialog() {
     this.setDialogBox(["E: 프로필 보기", "R: 1:1 대화하기"]);
+  }
+
+  mediaConnect(localPlayer: LocalPlayer, webRTC: WebRTC) {
+    if (
+      !this.hasBeenCalled &&
+      this.player.mediaConnect &&
+      localPlayer.mediaConnect
+      // this.player.playerId > localPlayer.playerId
+    ) {
+      this.hasBeenCalled = true;
+      webRTC.peerCall(this.player.playerId);
+    }
   }
 }

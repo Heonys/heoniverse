@@ -94,6 +94,8 @@ export class Game extends Phaser.Scene {
         const playerSelector = object1 as PlayerSelector;
         const otherPlayer = object2 as PlayerOverlap;
 
+        otherPlayer.mediaConnect(this.localPlayer, this.network.webRTC!);
+
         if (playerSelector.playerOverlap) {
           if (playerSelector.playerOverlap === otherPlayer) return;
           otherPlayer.clearDialogBox();

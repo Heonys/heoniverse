@@ -19,10 +19,14 @@ export class OtherPlayer extends Player {
   }
 
   updatePlayer(player: IPlayer) {
-    const { name, x, y, readyToConnect, animKey, status } = player;
+    const { name, x, y, readyToConnect, animKey, status, mediaConnect, videoEnabled, micEnabled } =
+      player;
     this.playerName.setText(name);
     this.destination = { x, y };
     this.readyToConnect = readyToConnect;
+    this.mediaConnect = mediaConnect;
+    this.videoEnabled = videoEnabled;
+    this.micEnabled = micEnabled;
     this.anims.play(animKey, true);
     this.setPlayerStatus(status);
   }

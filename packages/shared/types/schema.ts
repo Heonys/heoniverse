@@ -33,6 +33,9 @@ export interface IPlayer {
   y: number;
   animKey: string;
   readyToConnect: boolean;
+  mediaConnect: boolean;
+  videoEnabled: boolean;
+  micEnabled: boolean;
   status: Status;
 }
 

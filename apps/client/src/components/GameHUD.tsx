@@ -1,18 +1,17 @@
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
+import { createPortal } from "react-dom";
 import NumberFlow from "@number-flow/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "./AvatarIcon";
 import { useAppDispatch, useAppSelector, useGame, useSceneEffect } from "@/hooks";
 import { cn } from "@/utils";
 import { TooltipButton } from "@/common";
+import { SelfVideo, RemoteVideo } from "@/components/webcam";
 import { setMicEnabled, setViedeoEnabled } from "@/stores/userSlice";
-import { createPortal } from "react-dom";
-import { SelfVideo } from "./webcam/SelfVideo";
 
-// TODO: 생성 및 제거시 애니메이션 추가
 export const GameHUD = () => {
-  const { gameScene, network } = useGame();
+  const { gameScene, network, getLocalPlayer } = useGame();
   const dispatch = useAppDispatch();
   const { name } = useAppSelector((state) => state.room);
   const { mediaConnected, micEnabled, videoEnabled, status, userName, texture } = useAppSelector(
@@ -97,10 +96,14 @@ export const GameHUD = () => {
             id="joystick"
             tooltip={`${mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근"}`}
             onClick={() => {
+              const localPlayer = getLocalPlayer();
+
               if (mediaConnected) {
                 network.webRTC?.disConnectUserMedia();
+                localPlayer.mediaConnect = false;
               } else {
                 network.webRTC?.getUserMedia();
+                localPlayer.mediaConnect = true;
               }
             }}
             className={cn(
@@ -119,9 +122,11 @@ export const GameHUD = () => {
               if (micEnabled) {
                 dispatch(setMicEnabled(false));
                 handleMicToggle(true);
+                network.updateMediaEnabled({ microphone: false });
               } else {
                 dispatch(setMicEnabled(true));
                 handleMicToggle(false);
+                network.updateMediaEnabled({ microphone: true });
               }
             }}
             className={cn(
@@ -140,9 +145,11 @@ export const GameHUD = () => {
               if (videoEnabled) {
                 dispatch(setViedeoEnabled(false));
                 handleVideoToggle(false);
+                network.updateMediaEnabled({ video: false });
               } else {
                 dispatch(setViedeoEnabled(true));
                 handleVideoToggle(true);
+                network.updateMediaEnabled({ video: true });
               }
             }}
             className={cn(
@@ -156,7 +163,16 @@ export const GameHUD = () => {
       </div>
       {createPortal(
         <div className="absolute left-1/2 top-3 flex -translate-x-1/2 gap-2">
-          {mediaConnected && <SelfVideo ref={videoRef} />}
+          {mediaConnected && (
+            <>
+              <SelfVideo ref={videoRef} />
+              {Array.from(network.webRTC!.mediaStreamsMap.entries()).map(
+                ([player, mediaStream]) => {
+                  return <RemoteVideo key={player.playerId} player={player} stream={mediaStream} />;
+                },
+              )}
+            </>
+          )}
         </div>,
         document.getElementById("webcam-container")!,
       )}

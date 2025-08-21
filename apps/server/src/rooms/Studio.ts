@@ -65,6 +65,19 @@ export class Studio extends Room<StudioState> {
       player.readyToConnect = true;
     });
 
+    this.onMessage(Messages.UPDATE_MEDIA_CONNECT, (client, payload) => {
+      const player = this.state.players.get(client.sessionId);
+      if (!player) return;
+      player.mediaConnect = payload;
+    });
+
+    this.onMessage(Messages.UPDATE_MEDIA_ENABELD, (client, payload) => {
+      const player = this.state.players.get(client.sessionId);
+      if (!player) return;
+      player.videoEnabled = payload.video ?? player.videoEnabled;
+      player.micEnabled = payload.microphone ?? player.micEnabled;
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,
