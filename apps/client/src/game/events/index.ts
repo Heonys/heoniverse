@@ -4,6 +4,7 @@ import { IPlayer, MessagePayloadMap, Status } from "@heoniverse/shared";
 type EventsPayloadMap = {
   UPDATE_PLAYER_NAME: string;
   UPDATE_PLAYER_STATUS: Status;
+  RENDER_TO_STATUS: { id: string; status: Status };
   UPDATE_PLAYER_TEXTURE: MessagePayloadMap["UPDATE_PLAYER"];
   OTHER_PLAYER_JOINED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_UPDATED: { sessionId: string; player: IPlayer };

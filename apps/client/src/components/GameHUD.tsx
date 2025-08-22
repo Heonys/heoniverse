@@ -9,6 +9,7 @@ import { cn } from "@/utils";
 import { TooltipButton } from "@/common";
 import { SelfVideo, RemoteVideo } from "@/components/webcam";
 import { setMicEnabled, setViedeoEnabled } from "@/stores/userSlice";
+import { TestVideo } from "./webcam/TestVideo";
 
 export const GameHUD = () => {
   const { gameScene, network, getLocalPlayer } = useGame();
@@ -167,6 +168,9 @@ export const GameHUD = () => {
           {mediaConnected && (
             <>
               <SelfVideo ref={videoRef} />
+              {/* <TestVideo micEnabled={false} videoEnabled={false} />
+              <TestVideo micEnabled={false} videoEnabled={false} />
+              <TestVideo micEnabled={false} videoEnabled={false} /> */}
               {Array.from(network.webRTC!.mediaStreamsMap.entries()).map(
                 ([player, mediaStream]) => {
                   return <RemoteVideo key={player.playerId} player={player} stream={mediaStream} />;

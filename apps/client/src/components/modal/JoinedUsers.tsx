@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
 import { useAppSelector, useGame } from "@/hooks";
 import { Backdrop } from "./Backdrop";
-import { AvatarIcon } from "../AvatarIcon";
+import { AvatarIcon } from "@/components";
+import { Player } from "@/game/characters";
+import { Status } from "@heoniverse/shared";
+import { eventEmitter } from "@/game/events";
 
 export const JoinedUsers = () => {
   const { getLocalPlayer, getOtherPlayerById } = useGame();
@@ -20,23 +24,24 @@ export const JoinedUsers = () => {
         </div>
         <div className="mt-3 flex flex-col gap-1 text-white">
           <div className="border-b border-white/10 p-1">
-            <UserListRow
-              id={player.playerId}
-              name={player.playerName.text}
-              texture={player.playerTexture}
-            />
+            <div className="flex items-center gap-2">
+              <AvatarIcon
+                texture={player.playerTexture}
+                status={player.playerStatus}
+                className="size-9"
+              />
+              <div>
+                <span className="text-base font-medium text-blue-400">
+                  {player.playerName.text}
+                </span>
+                <span className="ml-1 text-xs text-[#888]">{`#${player.playerId}`}</span>
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-2 p-1">
-            {users.map(({ id, name }) => {
+            {users.map(({ id }) => {
               const player = getOtherPlayerById(id);
-              return (
-                <UserListRow
-                  key={id}
-                  id={id}
-                  name={name}
-                  texture={player?.playerTexture ?? "adam"}
-                />
-              );
+              return player && <UserListRow key={id} player={player} />;
             })}
           </div>
         </div>
@@ -45,13 +50,24 @@ export const JoinedUsers = () => {
   );
 };
 
-function UserListRow({ id, name, texture }: { id: string; name: string; texture: string }) {
+function UserListRow({ player }: { player: Player }) {
+  const { playerTexture, playerName, playerId, playerStatus } = player;
+  const [status, setStatus] = useState<Status>(playerStatus);
+
+  useEffect(() => {
+    const handler = ({ id, status }: { id: string; status: Status }) => {
+      if (playerId === id) setStatus(status);
+    };
+    eventEmitter.on("RENDER_TO_STATUS", handler);
+    return () => eventEmitter.off("RENDER_TO_STATUS", handler);
+  }, [playerId]);
+
   return (
     <div className="flex items-center gap-2">
-      <AvatarIcon texture={texture} className="size-9" />
+      <AvatarIcon texture={playerTexture} status={status} className="size-9" />
       <div>
-        <span className="text-base font-medium text-blue-400">{name}</span>
-        <span className="ml-1 text-xs text-[#888]">{`#${id}`}</span>
+        <span className="text-base font-medium text-blue-400">{playerName.text}</span>
+        <span className="ml-1 text-xs text-[#888]">{`#${playerId}`}</span>
       </div>
     </div>
   );

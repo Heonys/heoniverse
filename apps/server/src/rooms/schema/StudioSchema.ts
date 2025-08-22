@@ -10,7 +10,7 @@ export class Player extends Schema implements IPlayer {
   @type("boolean") mediaConnect = false;
   @type("boolean") videoEnabled = true;
   @type("boolean") micEnabled = true;
-  @type("string") status: Status = "online";
+  @type("string") status: Status = "available";
 }
 
 export class ChatMessage extends Schema implements IChatMessage {

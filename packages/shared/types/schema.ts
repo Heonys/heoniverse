@@ -51,4 +51,4 @@ export type IChatMessage = {
   content: string;
 };
 
-export type Status = "online" | "busy" | "dnd";
+export type Status = "available" | "busy" | "focused";

@@ -30,8 +30,8 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
   };
 
   return (
-    <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-slate-800 shadow-lg">
-      <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
+    <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black shadow-lg">
+      <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg border border-white/40 bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
         {!micEnabled ? (
           <AppIcon iconName="mic-off" color="red" size={15} />
         ) : (
@@ -48,7 +48,7 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
         <div className="-translate-1/2 absolute left-1/2 top-1/2 flex flex-col items-center gap-2">
           <AvatarIcon
             texture={player.playerTexture}
-            status="online"
+            status={player.playerStatus}
             className="ring-2 ring-white/30"
           />
         </div>

@@ -24,7 +24,7 @@ const initialState: UserState = {
   mediaConnected: false,
   videoEnabled: true,
   micEnabled: true,
-  status: "online",
+  status: "available",
 };
 
 const userSlice = createSlice({
@@ -71,7 +71,7 @@ const userSlice = createSlice({
   },
   selectors: {
     nextStatus: (state) => {
-      const statuses: Status[] = ["online", "busy", "dnd"];
+      const statuses: Status[] = ["available", "busy", "focused"];
       const currentIndex = statuses.indexOf(state.status);
       const nextIndex = (currentIndex + 1) % statuses.length;
       return statuses[nextIndex];

@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "../AvatarIcon";
 import { Condition } from "@/common";
 import { Player } from "@/game/characters";
+import { Status } from "@heoniverse/shared";
+import { eventEmitter } from "@/game/events";
 
 type Props = {
   stream: MediaStream;
@@ -11,7 +13,8 @@ type Props = {
 
 export const RemoteVideo = ({ stream, player }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { micEnabled, videoEnabled, playerName } = player;
+  const { micEnabled, videoEnabled, playerName, playerTexture, playerStatus, playerId } = player;
+  const [status, setStatus] = useState<Status>(playerStatus);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -21,6 +24,14 @@ export const RemoteVideo = ({ stream, player }: Props) => {
       });
     }
   }, [stream]);
+
+  useEffect(() => {
+    const handler = ({ id, status }: { id: string; status: Status }) => {
+      if (playerId === id) setStatus(status);
+    };
+    eventEmitter.on("RENDER_TO_STATUS", handler);
+    return () => eventEmitter.off("RENDER_TO_STATUS", handler);
+  }, [playerId]);
 
   return (
     <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-slate-800 shadow-lg">
@@ -34,16 +45,14 @@ export const RemoteVideo = ({ stream, player }: Props) => {
       </div>
       <Condition condition={!videoEnabled}>
         <div className="-translate-1/2 absolute left-1/2 top-1/2 flex flex-col items-center gap-2">
-          <AvatarIcon
-            texture={player.playerTexture}
-            status="online"
-            className="ring-2 ring-white/30"
-          />
+          <AvatarIcon texture={playerTexture} status={status} className="ring-2 ring-white/30" />
         </div>
-        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5 rounded-lg border border-white/50 px-2 py-1 text-white/90">
-          <AppIcon iconName="noti-on" size={15} />
-          <button className="cursor-pointer text-xs outline-none">알림 보내기</button>
-        </div>
+        <Condition condition={status !== "focused"}>
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5 rounded-lg border border-white/50 px-2 py-1 text-white/90">
+            <AppIcon iconName="noti-on" size={15} />
+            <button className="cursor-pointer text-xs outline-none">알림 보내기</button>
+          </div>
+        </Condition>
       </Condition>
 
       <video ref={videoRef} className="size-full rounded-2xl" playsInline />

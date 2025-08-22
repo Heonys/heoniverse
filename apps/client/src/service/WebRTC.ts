@@ -24,6 +24,7 @@ export class WebRTC {
     this.peer.on("call", (call) => {
       const peerId = call.peer;
       console.log("callee", peerId);
+
       if (!this.connectedPeers.has(peerId)) {
         call.answer(this.stream);
         this.connectedPeers.set(call.peer, call);
@@ -55,6 +56,7 @@ export class WebRTC {
 
   peerCall(peerId: string) {
     console.log("caller", peerId);
+
     if (!this.peersMap.has(peerId)) {
       const call = this.peer.call(peerId, this.stream!);
       this.peersMap.set(peerId, call);

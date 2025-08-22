@@ -10,7 +10,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
   playerMarker: Phaser.GameObjects.Arc;
-  playerStatus: Status = "online";
+  playerStatus: Status = "available";
   statusCircle: Phaser.GameObjects.Arc;
 
   readyToConnect = false;
@@ -121,13 +121,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   setPlayerStatus(status: Status) {
     this.playerStatus = status;
     switch (status) {
-      case "online": {
+      case "available": {
         return this.statusCircle.setFillStyle(0x01dca2);
       }
       case "busy": {
         return this.statusCircle.setFillStyle(0xfbd359);
       }
-      case "dnd": {
+      case "focused": {
         return this.statusCircle.setFillStyle(0xe25156);
       }
     }

@@ -10,9 +10,9 @@ type Props = {
 };
 
 const colorMap: Record<Status, string> = {
-  online: "bg-[#01dca2]",
+  available: "bg-[#01dca2]",
   busy: "bg-[#fbd359]",
-  dnd: "bg-[#e25156]",
+  focused: "bg-[#e25156]",
 };
 
 export const AvatarIcon = ({ texture, status, className }: Props) => {

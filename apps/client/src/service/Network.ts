@@ -148,6 +148,10 @@ export class Network {
           }, 100);
         }
       });
+
+      $(player).listen("status", (status) => {
+        eventEmitter.emit("RENDER_TO_STATUS", { id: sessionId, status });
+      });
     });
 
     $(this.room.state).players.onRemove((player, sessionId) => {
