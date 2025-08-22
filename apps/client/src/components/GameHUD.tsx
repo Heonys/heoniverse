@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { createPortal } from "react-dom";
+import { AnimatePresence } from "motion/react";
 import NumberFlow from "@number-flow/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "./AvatarIcon";
@@ -9,7 +10,6 @@ import { cn } from "@/utils";
 import { TooltipButton } from "@/common";
 import { SelfVideo, RemoteVideo } from "@/components/webcam";
 import { setMicEnabled, setViedeoEnabled } from "@/stores/userSlice";
-import { TestVideo } from "./webcam/TestVideo";
 
 export const GameHUD = () => {
   const { gameScene, network, getLocalPlayer } = useGame();
@@ -165,19 +165,18 @@ export const GameHUD = () => {
       </div>
       {createPortal(
         <div className="absolute left-1/2 top-3 flex -translate-x-1/2 gap-2">
-          {mediaConnected && (
-            <>
-              <SelfVideo ref={videoRef} />
-              {/* <TestVideo micEnabled={false} videoEnabled={false} />
-              <TestVideo micEnabled={false} videoEnabled={false} />
-              <TestVideo micEnabled={false} videoEnabled={false} /> */}
-              {Array.from(network.webRTC!.mediaStreamsMap.entries()).map(
-                ([player, mediaStream]) => {
-                  return <RemoteVideo key={player.playerId} player={player} stream={mediaStream} />;
-                },
-              )}
-            </>
-          )}
+          <AnimatePresence>
+            {mediaConnected && (
+              <>
+                <SelfVideo ref={videoRef} />
+                {Array.from(network.webRTC!.mediaStreamsMap.entries()).map(
+                  ([player, mediaStream]) => (
+                    <RemoteVideo key={player.playerId} player={player} stream={mediaStream} />
+                  ),
+                )}
+              </>
+            )}
+          </AnimatePresence>
         </div>,
         document.getElementById("webcam-container")!,
       )}

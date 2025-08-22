@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "../AvatarIcon";
 import { Condition } from "@/common";
@@ -34,7 +35,12 @@ export const RemoteVideo = ({ stream, player }: Props) => {
   }, [playerId]);
 
   return (
-    <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-slate-800 shadow-lg">
+    <motion.div
+      className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black shadow-lg"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
         {!micEnabled ? (
           <AppIcon iconName="mic-off" color="red" size={15} />
@@ -56,6 +62,6 @@ export const RemoteVideo = ({ stream, player }: Props) => {
       </Condition>
 
       <video ref={videoRef} className="size-full rounded-2xl" playsInline />
-    </div>
+    </motion.div>
   );
 };

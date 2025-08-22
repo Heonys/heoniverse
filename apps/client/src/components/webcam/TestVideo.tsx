@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { Condition } from "@/common";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "../AvatarIcon";
@@ -9,7 +10,12 @@ type Props = {
 
 export const TestVideo = ({ videoEnabled, micEnabled }: Props) => {
   return (
-    <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black">
+    <motion.div
+      className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg border border-white/40 bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
         {!micEnabled ? (
           <AppIcon iconName="mic-off" color="red" size={15} />
@@ -27,6 +33,6 @@ export const TestVideo = ({ videoEnabled, micEnabled }: Props) => {
           <button className="cursor-pointer text-xs outline-none">알림 보내기</button>
         </div>
       </Condition>
-    </div>
+    </motion.div>
   );
 };

@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import { motion } from "motion/react";
 import Webcam from "react-webcam";
 import { useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
@@ -30,8 +31,13 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
   };
 
   return (
-    <div className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black shadow-lg">
-      <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg border border-white/40 bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
+    <motion.div
+      className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black shadow-lg"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="absolute left-2 top-2 flex items-center gap-1.5 rounded-lg bg-black/60 p-1 px-2.5 text-xs font-medium text-white backdrop-blur-2xl">
         {!micEnabled ? (
           <AppIcon iconName="mic-off" color="red" size={15} />
         ) : (
@@ -66,6 +72,6 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
           player.readyToStream = true;
         }}
       />
-    </div>
+    </motion.div>
   );
 });

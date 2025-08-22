@@ -6,6 +6,8 @@ import { Player } from "@/game/characters";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 
+const MAX_PEERS = 4;
+
 export class WebRTC {
   private peer: Peer;
   private peersMap = new Map<string, MediaConnection>(); // host
@@ -15,7 +17,12 @@ export class WebRTC {
   mediaStreamsMap = new Map<Player, MediaStream>();
 
   constructor(peerId: string, network: Network) {
-    this.peer = new Peer(peerId);
+    this.peer = new Peer(peerId, {
+      host: import.meta.env.PROD ? import.meta.env.VITE_PEER_URL : "localhost",
+      port: Number(import.meta.env.VITE_PEER_PORT),
+      path: "/peerjs",
+      secure: false,
+    });
     this.network = network;
     this.setupPeerEvents();
   }
@@ -23,7 +30,6 @@ export class WebRTC {
   setupPeerEvents() {
     this.peer.on("call", (call) => {
       const peerId = call.peer;
-      console.log("callee", peerId);
 
       if (!this.connectedPeers.has(peerId)) {
         call.answer(this.stream);
@@ -55,7 +61,8 @@ export class WebRTC {
   }
 
   peerCall(peerId: string) {
-    console.log("caller", peerId);
+    const currentConnections = this.peersMap.size + this.connectedPeers.size + 1;
+    if (currentConnections >= MAX_PEERS) return;
 
     if (!this.peersMap.has(peerId)) {
       const call = this.peer.call(peerId, this.stream!);
