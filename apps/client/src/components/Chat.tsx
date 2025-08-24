@@ -19,6 +19,7 @@ export const Chat = () => {
   const messageEndRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { showChat, focused, chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
+  const RoomName = useAppSelector((state) => state.room.name);
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
 
   const unReadMessageCount = chatMessages.filter((it) => {
@@ -41,11 +42,6 @@ export const Chat = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // const handleClose = () => {
-  //   dispatch(setShowChat(false));
-  //   dispatch(markAsRead());
-  // };
-
   useEffect(() => {
     const interval = setInterval(() => {
       seTtime(new Date());
@@ -62,31 +58,34 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="fixed bottom-0 left-0 h-[560px] w-[330px] select-none">
-      <div className="relative flex h-full flex-col p-5">
-        <AnimatePresence>
-          {showChat ? (
-            <motion.div
-              key="chat-phone"
-              initial={{ y: 600, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 600, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 120, damping: 20 }}
-              className="relative flex h-full flex-col rounded-[45px] border-8 border-[#040404] bg-white"
-            >
-              <div className="relative mt-1 flex h-24 flex-col overflow-hidden rounded-t-[36px] bg-[#f7f7f7] text-lg font-bold text-black">
-                <div className="w-22 absolute left-1/2 top-2 h-[22px] -translate-x-1/2 rounded-full bg-[#040404]"></div>
-                <div className="relative flex h-8 w-full items-center p-3 px-6 text-[13px] font-semibold">
+    <div className="fixed bottom-2 left-0 select-none">
+      <AnimatePresence>
+        {showChat ? (
+          <motion.div
+            className="h-[580px] w-[300px] bg-contain bg-center bg-no-repeat"
+            initial={{ y: 600, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 600, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            style={{ backgroundImage: showChat ? "url('/svg/iphone15.svg')" : undefined }}
+          >
+            <div className="-translate-1/2 absolute left-1/2 top-1/2 flex h-[552px] w-[250px] flex-col">
+              <div className="rounded-t-4xl relative flex h-24 flex-col bg-[#f7f7f7] text-lg font-bold text-black">
+                <div className="absolute left-1/2 top-2 h-[22px] w-20 -translate-x-1/2 rounded-full bg-[#040404]" />
+                <div className="px-4.5 relative flex h-9 w-full items-center py-2 text-[13px]">
                   <div className="">{format(time, "h:mm")}</div>
                   <div className="flex flex-1 items-center justify-end gap-1.5">
                     <AppIcon iconName="signal" size={14} />
                     <AppIcon iconName="wifi" size={14} />
-                    <AppIcon iconName="batterty-half" size={18} />
+                    <AppIcon iconName="batterty-half" size={16} />
                   </div>
                 </div>
-                <div className="flex h-full flex-col items-center justify-center gap-1 text-black/70">
+                <div className="relative flex h-full flex-col items-center justify-center gap-1 text-black/70">
                   <AppIcon iconName="user-cirlce" size={32} />
-                  <div className="text-xs font-medium">Public Room</div>
+                  <div className="text-[10px] font-medium">{RoomName}</div>
+                  <button className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer outline-none">
+                    <AppIcon iconName="chevron-left" color="#0579fb" size={23} />
+                  </button>
                 </div>
               </div>
               <div
@@ -122,7 +121,7 @@ export const Chat = () => {
                 <div ref={messageEndRef} />
               </div>
               <form
-                className="mb-2 flex h-12 items-center gap-1.5 rounded-b-[38px] bg-white p-2"
+                className="rounded-b-4xl flex h-12 items-center gap-1.5 bg-white p-2"
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="flex size-7 items-center justify-center rounded-full bg-[#e7e9eb] text-gray-500">
@@ -150,26 +149,26 @@ export const Chat = () => {
                   }}
                 />
               </form>
-            </motion.div>
-          ) : (
-            <div className="absolute bottom-2 left-6 flex">
-              <TooltipButton
-                className="size-11"
-                id="chat"
-                tooltip="채팅창 열기"
-                onClick={() => dispatch(setShowChat(true))}
-              >
-                <AppIcon iconName="chat" color="black" size={26} />
-                {unReadMessageCount > 0 && (
-                  <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
-                    {unReadMessageCount}
-                  </div>
-                )}
-              </TooltipButton>
             </div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        ) : (
+          <div className="absolute bottom-2 left-6 flex">
+            <TooltipButton
+              className="size-11"
+              id="chat"
+              tooltip="채팅창 열기"
+              onClick={() => dispatch(setShowChat(true))}
+            >
+              <AppIcon iconName="chat" color="black" size={26} />
+              {unReadMessageCount > 0 && (
+                <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
+                  {unReadMessageCount}
+                </div>
+              )}
+            </TooltipButton>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
