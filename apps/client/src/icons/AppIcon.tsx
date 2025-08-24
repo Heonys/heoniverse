@@ -58,6 +58,9 @@ import { IoMdMic, IoMdMicOff } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { FaLink, FaLinkSlash } from "react-icons/fa6";
 import { HiMiniSpeakerWave } from "react-icons/hi2";
+import { MdOutlineSmartphone } from "react-icons/md";
+import { FaCloud } from "react-icons/fa";
+import { BsCalendarDate } from "react-icons/bs";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -137,6 +140,9 @@ const IconMap = {
   ["link-on"]: FaLink,
   ["link-off"]: FaLinkSlash,
   ["speak"]: HiMiniSpeakerWave,
+  ["phone"]: MdOutlineSmartphone,
+  ["cloud"]: FaCloud,
+  ["calendar"]: BsCalendarDate,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

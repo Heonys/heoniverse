@@ -152,7 +152,11 @@ export const Chat = () => {
             </div>
           </motion.div>
         ) : (
-          <div className="absolute bottom-2 left-6 flex">
+          <div className="absolute bottom-2 left-6 flex gap-2">
+            <TooltipButton className="size-11" id="phone" tooltip="휴대폰 열기">
+              <AppIcon iconName="phone" color="black" size={28} />
+            </TooltipButton>
+
             <TooltipButton
               className="size-11"
               id="chat"

@@ -23,7 +23,7 @@ export const appsData: AppsData[] = [
   {
     id: "messages",
     title: "Messages",
-    img: "/icons/messages.webp",
+    img: "/icons/messages.png",
     component: <Messages />,
   },
   {

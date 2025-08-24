@@ -1,10 +1,11 @@
-import { Chat, HelperGroups, VirtualJoystick, GameHUD, GameNoti } from "@/components";
+import { HelperGroups, VirtualJoystick, GameHUD, GameNoti } from "@/components";
 import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
 import { ComputerDialog } from "@/components/computer";
 import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
+import { Iphone } from "@/components/iphone";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
@@ -23,7 +24,7 @@ function App() {
 
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
-          <Chat />
+          <Iphone />
           <GameHUD />
           <GameNoti />
         </Condition>

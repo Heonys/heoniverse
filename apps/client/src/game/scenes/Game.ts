@@ -9,13 +9,8 @@ import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
 import { hide } from "@/stores/modalSlice";
-import {
-  setShowChat,
-  setFocusChat,
-  pushJoinedMessage,
-  pushLeftMessage,
-  markAsRead,
-} from "@/stores/chatSlice";
+import { setFocusChat, pushJoinedMessage, pushLeftMessage, markAsRead } from "@/stores/chatSlice";
+import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
 
 export class Game extends Phaser.Scene {
   private cursor!: ExtendedCursorKeys;
@@ -188,7 +183,8 @@ export class Game extends Phaser.Scene {
 
   registerKeyHandler() {
     this.input.keyboard?.on("keydown-ENTER", () => {
-      store.dispatch(setShowChat(true));
+      store.dispatch(setShowIphone(true));
+      store.dispatch(setCurrentPage("messages"));
       store.dispatch(setFocusChat(true));
     });
 
@@ -196,9 +192,12 @@ export class Game extends Phaser.Scene {
       const state = store.getState();
 
       if (state.chat.showChat) {
-        store.dispatch(setShowChat(false));
+        store.dispatch(setShowIphone(false));
         store.dispatch(setFocusChat(false));
         store.dispatch(markAsRead());
+      }
+      if (state.phone.showIphone) {
+        store.dispatch(setShowIphone(false));
       }
       store.dispatch(hide());
     });
