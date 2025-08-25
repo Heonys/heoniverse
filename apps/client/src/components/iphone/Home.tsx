@@ -1,16 +1,24 @@
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 import { useAppDispatch } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
-import { format } from "date-fns";
-import { useState } from "react";
 
 export const Home = () => {
   const [time, seTtime] = useState(new Date());
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      seTtime(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div
-      className="-translate-1/2 rounded-4xl absolute left-1/2 top-1/2 flex h-[552px] w-[253px] flex-col bg-cover bg-center bg-no-repeat"
+      className="rounded-4xl flex size-full flex-col bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/background/iphone-wallpaper.jpg')" }}
     >
       {/* header */}
@@ -39,8 +47,8 @@ export const Home = () => {
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="size-[106px] rounded-3xl bg-white p-3.5 text-[10px]">
-              <div>일요일</div>
-              <div className="pb-3 text-2xl">24</div>
+              <div>{format(time, "EEEE", { locale: ko })}</div>
+              <div className="pb-3 text-2xl">{format(time, "d", { locale: ko })}</div>
               <div className="text-black/70">오늘 이벤트 없음</div>
             </div>
             <div className="text-[9px] text-white">캘린더</div>
@@ -77,9 +85,10 @@ export const Home = () => {
       {/* bottom */}
       <div className="h-17 m-2 flex items-center justify-center gap-1 overflow-hidden rounded-[32px] bg-white/25 text-white backdrop-blur-3xl">
         <img
-          src="/icons/facetime.png"
+          src="/icons/phone.png"
           className="no-pixel size-13 hover:brightness-80 cursor-pointer transition-all"
-          alt="safari"
+          alt="phone"
+          onClick={() => dispatch(setCurrentPage("contacts"))}
         />
         <img
           src="/icons/messages.png"

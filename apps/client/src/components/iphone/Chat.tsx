@@ -53,7 +53,7 @@ export const Chat = () => {
   }, [chatMessages, showChat]);
 
   return (
-    <div className="-translate-1/2 rounded-4xl absolute left-1/2 top-1/2 flex h-[552px] w-[253px] flex-col bg-white">
+    <div className="rounded-4xl flex size-full flex-col bg-white">
       {/* header */}
       <div className="rounded-t-4xl relative flex flex-col text-lg font-bold text-black">
         <div className="absolute left-1/2 top-2 h-[22px] w-20 -translate-x-1/2 rounded-full bg-[#040404]" />
@@ -108,7 +108,7 @@ export const Chat = () => {
 
       {/* bottom */}
       <form
-        className="rounded-b-4xl flex h-12 items-center gap-1.5 bg-white p-2"
+        className="rounded-b-4xl flex h-16 items-center gap-1.5 bg-white px-2"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex size-7 items-center justify-center rounded-full bg-[#e7e9eb] text-gray-500">

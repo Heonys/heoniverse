@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector, useGame, useModal, useSceneEffect } fro
 import { AppIcon } from "@/icons";
 import { setJoystick, setMinimap } from "@/stores/userSlice";
 import { openURL } from "@/utils";
+import { setIsRinging, setShowIphone } from "@/stores/phoneSlice";
 
 export const HelperGroups = () => {
   const { gameScene } = useGame();
@@ -19,6 +20,25 @@ export const HelperGroups = () => {
 
   return (
     <div className="fixed bottom-2 right-6 flex gap-2">
+      <TooltipButton
+        id="pickup"
+        tooltip="전화 걸기 테스트"
+        onClick={() => {
+          dispatch(setShowIphone(true));
+          dispatch(setIsRinging(true));
+        }}
+      >
+        <AppIcon iconName="pick-up" color="black" size={25} />
+      </TooltipButton>
+
+      <TooltipButton
+        id="hangup"
+        tooltip="전화 끊기 테스트"
+        onClick={() => dispatch(setIsRinging(false))}
+      >
+        <AppIcon iconName="hang-up" color="black" size={25} />
+      </TooltipButton>
+
       <Condition condition={loggedIn}>
         <TooltipButton
           id="users"

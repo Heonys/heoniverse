@@ -28,7 +28,7 @@ export const AvatarIcon = ({ texture, status, className }: Props) => {
       <img
         src={avatarIcon}
         alt="avatar-icon"
-        className="size-full -translate-y-[1px] scale-[1.2] object-contain"
+        className="size-full -translate-y-[1px] translate-x-[1px] scale-[1.2] object-contain"
         draggable={false}
       />
       {status && (

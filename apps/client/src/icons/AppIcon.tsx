@@ -61,6 +61,9 @@ import { HiMiniSpeakerWave } from "react-icons/hi2";
 import { MdOutlineSmartphone } from "react-icons/md";
 import { FaCloud } from "react-icons/fa";
 import { BsCalendarDate } from "react-icons/bs";
+import { ImPhone, ImPhoneHangUp } from "react-icons/im";
+import { BsStarFill } from "react-icons/bs";
+import { BsClockFill } from "react-icons/bs";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -143,6 +146,10 @@ const IconMap = {
   ["phone"]: MdOutlineSmartphone,
   ["cloud"]: FaCloud,
   ["calendar"]: BsCalendarDate,
+  ["pick-up"]: ImPhone,
+  ["hang-up"]: ImPhoneHangUp,
+  ["star"]: BsStarFill,
+  ["clock"]: BsClockFill,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

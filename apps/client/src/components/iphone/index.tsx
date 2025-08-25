@@ -1,26 +1,45 @@
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect } from "react";
+import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { TooltipButton } from "@/common";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setShowIphone } from "@/stores/phoneSlice";
 import { Home } from "./Home";
 import { Chat } from "./Chat";
+import { IncomingCalls } from "./IncomingCalls";
+import { Contacts } from "./Contacts";
 
 export const Iphone = () => {
   const dispatch = useAppDispatch();
-  const { showIphone, currentPage } = useAppSelector((state) => state.phone);
+  const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
+  const [scope, animate] = useAnimate();
 
   const unReadMessageCount = chatMessages.filter((it) => {
     if (it.type === "CHAT" && it.message.createdAt > lastReadAt) return it;
   }).length;
+
+  useEffect(() => {
+    if (!scope.current) return;
+    if (isRinging) {
+      const controls = animate(
+        scope.current,
+        { x: [0, -2.5, 2.5, -1.5, 1.5, -0.5, 0.5, 0] },
+        { duration: 0.4, repeat: Infinity, repeatType: "loop", repeatDelay: 1 },
+      );
+      return () => controls.stop();
+    } else {
+      animate(scope.current).stop();
+    }
+  }, [isRinging, scope, animate]);
 
   return (
     <div className="fixed bottom-2 left-0 select-none">
       <AnimatePresence>
         {showIphone ? (
           <motion.div
-            className="h-[580px] w-[300px] bg-contain bg-center bg-no-repeat"
+            ref={scope}
+            className="relative h-[580px] w-[300px] overflow-hidden bg-contain bg-center bg-no-repeat"
             initial={{ y: 600, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 600, opacity: 0 }}
@@ -34,12 +53,14 @@ export const Iphone = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="absolute inset-0"
+                className="-translate-1/2 absolute left-1/2 top-1/2 h-[552px] w-[253px]"
               >
                 {currentPage === "home" && <Home />}
                 {currentPage === "messages" && <Chat />}
+                {currentPage === "contacts" && <Contacts />}
               </motion.div>
             </AnimatePresence>
+            <AnimatePresence>{isRinging && <IncomingCalls />}</AnimatePresence>
           </motion.div>
         ) : (
           <div className="absolute bottom-2 left-6 flex gap-2">
