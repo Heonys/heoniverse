@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type Pages = "home" | "messages" | "contacts";
+export type Pages = "home" | "messages" | "contacts" | "dialing";
 
 const phoneSlice = createSlice({
   name: "phone",
@@ -8,6 +8,7 @@ const phoneSlice = createSlice({
     showIphone: false,
     currentPage: "home" as Pages,
     isRinging: false,
+    contactName: "Unknown",
   },
   reducers: {
     setShowIphone: (state, action: PayloadAction<boolean>) => {
@@ -19,8 +20,11 @@ const phoneSlice = createSlice({
     setIsRinging(state, action: PayloadAction<boolean>) {
       state.isRinging = action.payload;
     },
+    setContactName(state, action: PayloadAction<string>) {
+      state.contactName = action.payload;
+    },
   },
 });
 
-export const { setShowIphone, setCurrentPage, setIsRinging } = phoneSlice.actions;
+export const { setShowIphone, setCurrentPage, setIsRinging, setContactName } = phoneSlice.actions;
 export default phoneSlice.reducer;

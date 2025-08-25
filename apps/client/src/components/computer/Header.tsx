@@ -3,10 +3,11 @@ import { ko } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 import { HeaderButton } from "./HeaderButton";
 import { AppIcon, ControlCenterIcon } from "@/icons";
-import { useAppSelector } from "@/hooks";
+import { useAppSelector, useCurrentTime } from "@/hooks";
 import { visibleAppCount } from "@/stores/desktopSlice";
 
 export const Header = () => {
+  const time = useCurrentTime();
   const currentApp = useAppSelector((state) => state.desktop.currentApp);
   const count = useAppSelector(visibleAppCount);
 
@@ -41,7 +42,7 @@ export const Header = () => {
           <ControlCenterIcon size={16} />
         </HeaderButton>
         <HeaderButton>
-          <span>{format(new Date(), "MMM d일 (eee) a h:mm", { locale: ko })}</span>
+          <span>{format(time, "MMM d일 (eee) a h:mm", { locale: ko })}</span>
         </HeaderButton>
       </div>
     </div>

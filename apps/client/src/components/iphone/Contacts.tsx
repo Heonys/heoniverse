@@ -1,29 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
-import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
-import { AvatarIcon } from "../AvatarIcon";
+import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
+import { AvatarIcon } from "@/components";
 import { Condition } from "@/common";
 import { cn } from "@/utils";
 
 type Tabs = "contacts" | "recent";
 
 export const Contacts = () => {
+  const time = useCurrentTime();
   const [tab, setTab] = useState<Tabs>("contacts");
-  const [time, seTtime] = useState(new Date());
   const dispatch = useAppDispatch();
   const { getOtherPlayerById } = useGame();
   const { otherPlayersName } = useAppSelector((state) => state.user);
 
   const users = [...otherPlayersName.entries()].map(([id, name]) => ({ id, name }));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      seTtime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="rounded-4xl flex size-full flex-col bg-white">
@@ -64,11 +57,17 @@ export const Contacts = () => {
             const player = getOtherPlayerById(id);
             return (
               player && (
-                <div className="flex cursor-pointer items-center gap-2 border-b border-black/15 p-2 hover:bg-[#f5f5f5]">
+                <div
+                  className="flex cursor-pointer items-center gap-2 border-b border-black/15 p-2 hover:bg-[#f5f5f5]"
+                  onClick={() => dispatch(setCurrentPage("dialing"))}
+                >
                   <AvatarIcon texture={player.playerTexture} className="size-8" />
                   <div className="flex flex-1 flex-col">
-                    <div className="text-xs">{player.playerName.text}</div>
-                    <div className="flex items-center gap-1 text-[10px] text-black/50">
+                    <div className="flex items-center gap-1 text-xs">
+                      <div className="font-medium">{player.playerName.text}</div>
+                      <div className="text-[10px] text-black/80">{`#${player.playerId}`}</div>
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-black/60">
                       <AppIcon iconName="pick-up" />
                       <div>통화</div>
                     </div>

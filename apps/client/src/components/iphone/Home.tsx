@@ -1,20 +1,12 @@
-import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useCurrentTime } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
 
 export const Home = () => {
-  const [time, seTtime] = useState(new Date());
+  const time = useCurrentTime();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      seTtime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div
@@ -78,6 +70,14 @@ export const Home = () => {
               alt="facetime"
             />
             <div className="text-[10px] text-white">지도</div>
+          </div>
+          <div className="group flex cursor-pointer flex-col items-center gap-1">
+            <img
+              src="/icons/music.png"
+              className="no-pixel size-13 group-hover:brightness-80 transition-all"
+              alt="facetime"
+            />
+            <div className="text-[10px] text-white">음악</div>
           </div>
         </div>
       </div>

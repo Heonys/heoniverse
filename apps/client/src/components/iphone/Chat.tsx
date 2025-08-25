@@ -1,21 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { Input } from "@headlessui/react";
 import { AppIcon } from "@/icons";
-import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
+import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
 import { setFocusChat } from "@/stores/chatSlice";
-import { ChatMessage } from "./ChatMessage";
+import { ChatMessage } from "@/components/iphone";
 import { setCurrentPage } from "@/stores/phoneSlice";
 
 type FormType = { message: string };
 
 export const Chat = () => {
-  const { network, getLocalPlayer } = useGame();
   const readyToSubmit = useRef(false);
-  const [time, seTtime] = useState(new Date());
   const inputRef = useRef<HTMLInputElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const { network, getLocalPlayer } = useGame();
+  const time = useCurrentTime();
   const dispatch = useAppDispatch();
   const { showChat, focused, chatMessages } = useAppSelector((state) => state.chat);
   const RoomName = useAppSelector((state) => state.room.name);
@@ -36,13 +36,6 @@ export const Chat = () => {
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      seTtime(new Date());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     if (focused) setFocus("message");

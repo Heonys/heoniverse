@@ -5,7 +5,7 @@ import { useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
 import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
-import { Iphone } from "@/components/iphone";
+import { IphoneApp } from "@/components/iphone";
 
 function App() {
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
@@ -24,7 +24,7 @@ function App() {
 
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
-          <Iphone />
+          <IphoneApp />
           <GameHUD />
           <GameNoti />
         </Condition>

@@ -35,7 +35,7 @@ export const appsData: AppsData[] = [
   {
     id: "music",
     title: "Music",
-    img: "/icons/music.webp",
+    img: "/icons/music.png",
     component: <Music />,
   },
   {

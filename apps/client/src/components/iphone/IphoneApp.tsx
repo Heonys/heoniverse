@@ -4,12 +4,9 @@ import { TooltipButton } from "@/common";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setShowIphone } from "@/stores/phoneSlice";
-import { Home } from "./Home";
-import { Chat } from "./Chat";
-import { IncomingCalls } from "./IncomingCalls";
-import { Contacts } from "./Contacts";
+import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
 
-export const Iphone = () => {
+export const IphoneApp = () => {
   const dispatch = useAppDispatch();
   const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
@@ -52,12 +49,13 @@ export const Iphone = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.15 }}
                 className="-translate-1/2 absolute left-1/2 top-1/2 h-[552px] w-[253px]"
               >
                 {currentPage === "home" && <Home />}
                 {currentPage === "messages" && <Chat />}
                 {currentPage === "contacts" && <Contacts />}
+                {currentPage === "dialing" && <Dialing />}
               </motion.div>
             </AnimatePresence>
             <AnimatePresence>{isRinging && <IncomingCalls />}</AnimatePresence>
