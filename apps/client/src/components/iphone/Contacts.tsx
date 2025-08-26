@@ -13,7 +13,7 @@ export const Contacts = () => {
   const time = useCurrentTime();
   const [tab, setTab] = useState<Tabs>("contacts");
   const dispatch = useAppDispatch();
-  const { getOtherPlayerById } = useGame();
+  const { getOtherPlayerById, network } = useGame();
   const { otherPlayersName } = useAppSelector((state) => state.user);
 
   const users = [...otherPlayersName.entries()].map(([id, name]) => ({ id, name }));
@@ -37,7 +37,7 @@ export const Contacts = () => {
           </div>
           <button
             className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer outline-none"
-            onClick={() => dispatch(setCurrentPage("home"))}
+            onClick={() => dispatch(setCurrentPage({ page: "home" }))}
           >
             <AppIcon iconName="chevron-left" color="#0579fb" size={23} />
           </button>
@@ -58,8 +58,20 @@ export const Contacts = () => {
             return (
               player && (
                 <div
+                  key={id}
                   className="flex cursor-pointer items-center gap-2 border-b border-black/15 p-2 hover:bg-[#f5f5f5]"
-                  onClick={() => dispatch(setCurrentPage("dialing"))}
+                  onClick={() => {
+                    network.webRTC?.getUserMedia().then((allowed) => {
+                      if (allowed) {
+                        dispatch(
+                          setCurrentPage({
+                            page: "dialing",
+                            props: { remoteName: player.playerName.text },
+                          }),
+                        );
+                      }
+                    });
+                  }}
                 >
                   <AvatarIcon texture={player.playerTexture} className="size-8" />
                   <div className="flex flex-1 flex-col">

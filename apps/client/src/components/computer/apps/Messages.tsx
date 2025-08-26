@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AppIcon } from "@/icons";
 import { TrafficLights } from "@/components/computer";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
-import { formattDate } from "@/utils";
+import { formatDate } from "@/utils";
 import { markAsRead } from "@/stores/chatSlice";
 
 export const Messages = () => {
@@ -56,7 +56,7 @@ export const Messages = () => {
               {lastMessage ? lastMessage.message.content : "메시지가 없습니다"}
             </div>
             <div className="absolute right-1 top-1 text-[10px] text-white/60">
-              {lastMessage && formattDate(lastMessage.message.createdAt)}
+              {lastMessage && formatDate(lastMessage.message.createdAt)}
             </div>
           </div>
         </div>

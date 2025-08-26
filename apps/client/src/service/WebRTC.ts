@@ -5,6 +5,7 @@ import { store } from "@/stores";
 import { Player } from "@/game/characters";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
+import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
 
 const MAX_PEERS = 4;
 
@@ -94,14 +95,17 @@ export class WebRTC {
     this.stream = stream;
   }
 
-  getUserMedia() {
-    navigator.mediaDevices //
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        this.stream = stream;
-        store.dispatch(setMediaConnected(true));
-        this.network.updateMideaConnect(true);
-      });
+  async getUserMedia() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      this.stream = stream;
+      store.dispatch(setMediaConnected(true));
+      this.network.updateMideaConnect(true);
+      this.getLocalPlayer().mediaConnect = true;
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   disConnectUserMedia() {
@@ -112,12 +116,21 @@ export class WebRTC {
       });
       store.dispatch(setMediaConnected(false));
       store.dispatch(initMediaState());
+      store.dispatch(setCurrentPage({ page: "home" }));
+      store.dispatch(setIsConnected({ state: false }));
       this.network.updateMideaConnect(false);
+      this.getLocalPlayer().mediaConnect = false;
+      this.getLocalPlayer().readyToStream = false;
     }
   }
 
   getOtherPlayerById(playerId: string) {
     const gameScene = phaserGame.scene.keys.game as Game;
     return gameScene.ohterPlayersMap.get(playerId);
+  }
+
+  getLocalPlayer() {
+    const gameScene = phaserGame.scene.keys.game as Game;
+    return gameScene.localPlayer;
   }
 }

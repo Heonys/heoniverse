@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { createPortal } from "react-dom";
 import { AnimatePresence } from "motion/react";
@@ -10,9 +10,10 @@ import { cn } from "@/utils";
 import { TooltipButton } from "@/common";
 import { SelfVideo, RemoteVideo } from "@/components/webcam";
 import { setMicEnabled, setViedeoEnabled } from "@/stores/userSlice";
+import { eventEmitter } from "@/game/events";
 
 export const GameHUD = () => {
-  const { gameScene, network, getLocalPlayer } = useGame();
+  const { gameScene, network } = useGame();
   const dispatch = useAppDispatch();
   const { name } = useAppSelector((state) => state.room);
   const { mediaConnected, micEnabled, videoEnabled, status, userName, texture } = useAppSelector(
@@ -22,17 +23,17 @@ export const GameHUD = () => {
   const [users, setUsers] = useState(0);
   const videoRef = useRef<Webcam>(null);
 
-  const handleMicToggle = async (isMute: boolean) => {
+  const handleMicEnabled = async (isEnabled: boolean) => {
     if (videoRef.current) {
       const stream = videoRef.current.stream;
       if (stream) {
         const audioTrack = stream.getAudioTracks()[0];
-        audioTrack.enabled = !isMute;
+        audioTrack.enabled = isEnabled;
       }
     }
   };
 
-  const handleVideoToggle = (isEnabled: boolean) => {
+  const handleVideoEnabled = (isEnabled: boolean) => {
     if (videoRef.current) {
       const stream = videoRef.current.stream;
       if (stream) {
@@ -41,6 +42,54 @@ export const GameHUD = () => {
       }
     }
   };
+
+  const toggleMedia = (isEnabled: boolean) => {
+    if (isEnabled) {
+      network.webRTC?.disConnectUserMedia();
+    } else {
+      network.webRTC?.getUserMedia();
+    }
+  };
+
+  const toggleMic = (isEnabled: boolean) => {
+    if (isEnabled) {
+      dispatch(setMicEnabled(false));
+      handleMicEnabled(false);
+      network.updateMediaEnabled({ microphone: false });
+    } else {
+      dispatch(setMicEnabled(true));
+      handleMicEnabled(true);
+      network.updateMediaEnabled({ microphone: true });
+    }
+  };
+
+  const toggleVideo = (isEnabled: boolean) => {
+    if (isEnabled) {
+      dispatch(setViedeoEnabled(false));
+      handleVideoEnabled(false);
+      network.updateMediaEnabled({ video: false });
+    } else {
+      dispatch(setViedeoEnabled(true));
+      handleVideoEnabled(true);
+      network.updateMediaEnabled({ video: true });
+    }
+  };
+
+  useEffect(() => {
+    const handlerMedia = (isEnabled: boolean) => toggleMedia(isEnabled);
+    const handlerMic = (isEnabled: boolean) => toggleMic(isEnabled);
+    const handlerVideo = (isEnabled: boolean) => toggleVideo(isEnabled);
+
+    eventEmitter.on("MEDIA_ENABLED_CHANGE", handlerMedia);
+    eventEmitter.on("MIC_ENABLED_CHANGE", handlerMic);
+    eventEmitter.on("VIDEO_ENABLED_CHANGE", handlerVideo);
+    return () => {
+      eventEmitter.on("MEDIA_ENABLED_CHANGE", handlerMedia);
+      eventEmitter.off("MIC_ENABLED_CHANGE", handlerMic);
+      eventEmitter.off("VIDEO_ENABLED_CHANGE", handlerVideo);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useSceneEffect(gameScene, () => {
     setFrame(gameScene.game.loop.actualFps);
@@ -94,20 +143,9 @@ export const GameHUD = () => {
         {/* right */}
         <div className="flex items-center justify-end gap-1.5 px-1 text-white">
           <TooltipButton
-            id="joystick"
+            id="media-enabled"
             tooltip={`${mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근"}`}
-            onClick={() => {
-              const localPlayer = getLocalPlayer();
-
-              if (mediaConnected) {
-                network.webRTC?.disConnectUserMedia();
-                localPlayer.mediaConnect = false;
-                localPlayer.readyToStream = false;
-              } else {
-                network.webRTC?.getUserMedia();
-                localPlayer.mediaConnect = true;
-              }
-            }}
+            onClick={() => toggleMedia(mediaConnected)}
             className={cn(
               "size-9 transition-all",
               mediaConnected ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
@@ -117,49 +155,29 @@ export const GameHUD = () => {
           </TooltipButton>
 
           <TooltipButton
-            id="joystick"
-            disabled={!mediaConnected}
-            tooltip={`마이크 ${micEnabled ? "비활성화" : "활성화"}`}
-            onClick={() => {
-              if (micEnabled) {
-                dispatch(setMicEnabled(false));
-                handleMicToggle(true);
-                network.updateMediaEnabled({ microphone: false });
-              } else {
-                dispatch(setMicEnabled(true));
-                handleMicToggle(false);
-                network.updateMediaEnabled({ microphone: true });
-              }
-            }}
-            className={cn(
-              "size-9 transition-all",
-              micEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
-            )}
-          >
-            <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={20} />
-          </TooltipButton>
-
-          <TooltipButton
-            id="joystick"
+            id="camera-enabled"
             disabled={!mediaConnected}
             tooltip={`카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
-            onClick={() => {
-              if (videoEnabled) {
-                dispatch(setViedeoEnabled(false));
-                handleVideoToggle(false);
-                network.updateMediaEnabled({ video: false });
-              } else {
-                dispatch(setViedeoEnabled(true));
-                handleVideoToggle(true);
-                network.updateMediaEnabled({ video: true });
-              }
-            }}
+            onClick={() => toggleVideo(videoEnabled)}
             className={cn(
               "size-9 transition-all",
               videoEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
             )}
           >
             <AppIcon iconName={videoEnabled ? "video-on" : "video-off"} size={20} />
+          </TooltipButton>
+
+          <TooltipButton
+            id="mic-enabled"
+            disabled={!mediaConnected}
+            tooltip={`마이크 ${micEnabled ? "비활성화" : "활성화"}`}
+            onClick={() => toggleMic(micEnabled)}
+            className={cn(
+              "size-9 transition-all",
+              micEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
+            )}
+          >
+            <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={20} />
           </TooltipButton>
         </div>
       </div>

@@ -25,18 +25,10 @@ export const HelperGroups = () => {
         tooltip="전화 걸기 테스트"
         onClick={() => {
           dispatch(setShowIphone(true));
-          dispatch(setIsRinging(true));
+          dispatch(setIsRinging({ state: true, caller: "지헌" }));
         }}
       >
         <AppIcon iconName="pick-up" color="black" size={25} />
-      </TooltipButton>
-
-      <TooltipButton
-        id="hangup"
-        tooltip="전화 끊기 테스트"
-        onClick={() => dispatch(setIsRinging(false))}
-      >
-        <AppIcon iconName="hang-up" color="black" size={25} />
       </TooltipButton>
 
       <Condition condition={loggedIn}>

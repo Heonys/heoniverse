@@ -63,7 +63,7 @@ export const Chat = () => {
           <div className="text-[10px] font-medium">{RoomName}</div>
           <button
             className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer outline-none"
-            onClick={() => dispatch(setCurrentPage("home"))}
+            onClick={() => dispatch(setCurrentPage({ page: "home" }))}
           >
             <AppIcon iconName="chevron-left" color="#0579fb" size={23} />
           </button>

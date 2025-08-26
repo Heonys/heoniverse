@@ -1,11 +1,15 @@
 import { motion } from "motion/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "@/components";
-import { setIsRinging } from "@/stores/phoneSlice";
-import { useAppDispatch } from "@/hooks";
+import { setCurrentPage, setIsConnected, setIsRinging } from "@/stores/phoneSlice";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 
-export const IncomingCalls = () => {
+type Props = { caller: string };
+
+export const IncomingCalls = ({ caller }: Props) => {
+  const { network } = useGame();
   const dispatch = useAppDispatch();
+  const roomName = useAppSelector((state) => state.room.name);
 
   return (
     <motion.div
@@ -16,18 +20,31 @@ export const IncomingCalls = () => {
     >
       <AvatarIcon texture="adam" className="size-[30px] bg-white ring-2 ring-white/30" />
       <div className="flex flex-1 flex-col">
-        <div className="text-[10px] text-white/50">Public Room</div>
-        <div className="text-[13px]">김지헌</div>
+        <div className="text-[10px] text-white/50">{roomName}</div>
+        <div className="text-[13px]">{caller}</div>
       </div>
       <div
         className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-[#fa4837] p-2"
         onClick={() => {
-          dispatch(setIsRinging(false));
+          dispatch(setIsRinging({ state: false }));
         }}
       >
         <AppIcon iconName="hang-up" />
       </div>
-      <div className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-[#2ed058] p-2">
+      <div
+        className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-[#2ed058] p-2"
+        onClick={() => {
+          network.webRTC?.getUserMedia().then((allowed) => {
+            if (allowed) {
+              dispatch(setIsRinging({ state: false }));
+              dispatch(setIsConnected({ state: true, startedAt: new Date() }));
+              dispatch(setCurrentPage({ page: "dialing", props: { remoteName: caller } }));
+            } else {
+              dispatch(setIsRinging({ state: false }));
+            }
+          });
+        }}
+      >
         <AppIcon iconName="pick-up" />
       </div>
     </motion.div>

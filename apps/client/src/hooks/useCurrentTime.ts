@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
-export const useCurrentTime = () => {
+export const useCurrentTime = (tick: number = 5000) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
-    }, 5000);
+    }, tick);
     return () => clearInterval(interval);
-  }, []);
+  }, [tick]);
 
   return time;
 };

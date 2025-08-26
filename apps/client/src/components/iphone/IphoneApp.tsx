@@ -3,14 +3,22 @@ import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { TooltipButton } from "@/common";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { AppIcon } from "@/icons";
-import { setShowIphone } from "@/stores/phoneSlice";
+import { Pages, setShowIphone } from "@/stores/phoneSlice";
 import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
+
+const pagesMap: Record<Pages, React.ComponentType<any>> = {
+  home: Home,
+  messages: Chat,
+  contacts: Contacts,
+  dialing: Dialing,
+};
 
 export const IphoneApp = () => {
   const dispatch = useAppDispatch();
   const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
   const [scope, animate] = useAnimate();
+  const CurrentComponent = pagesMap[currentPage.page];
 
   const unReadMessageCount = chatMessages.filter((it) => {
     if (it.type === "CHAT" && it.message.createdAt > lastReadAt) return it;
@@ -18,11 +26,11 @@ export const IphoneApp = () => {
 
   useEffect(() => {
     if (!scope.current) return;
-    if (isRinging) {
+    if (isRinging.state) {
       const controls = animate(
         scope.current,
         { x: [0, -2.5, 2.5, -1.5, 1.5, -0.5, 0.5, 0] },
-        { duration: 0.4, repeat: Infinity, repeatType: "loop", repeatDelay: 1 },
+        { duration: 0.4, repeat: Infinity, repeatType: "loop", repeatDelay: 0.75 },
       );
       return () => controls.stop();
     } else {
@@ -45,20 +53,19 @@ export const IphoneApp = () => {
           >
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentPage}
+                key={currentPage.page}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
                 className="-translate-1/2 absolute left-1/2 top-1/2 h-[552px] w-[253px]"
               >
-                {currentPage === "home" && <Home />}
-                {currentPage === "messages" && <Chat />}
-                {currentPage === "contacts" && <Contacts />}
-                {currentPage === "dialing" && <Dialing />}
+                <CurrentComponent {...(currentPage.props || {})} />
               </motion.div>
             </AnimatePresence>
-            <AnimatePresence>{isRinging && <IncomingCalls />}</AnimatePresence>
+            <AnimatePresence>
+              {isRinging.state && <IncomingCalls caller={isRinging.caller} />}
+            </AnimatePresence>
           </motion.div>
         ) : (
           <div className="absolute bottom-2 left-6 flex gap-2">

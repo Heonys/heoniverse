@@ -1,18 +1,24 @@
-import { format } from "date-fns";
-import { useAppDispatch, useCurrentTime } from "@/hooks";
+import { format, differenceInSeconds } from "date-fns";
+import { useAppDispatch, useAppSelector, useCurrentTime } from "@/hooks";
 import { AppIcon } from "@/icons";
-import { setCurrentPage } from "@/stores/phoneSlice";
+import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
+import { cn, formatElapsedTime } from "@/utils";
+import { eventEmitter } from "@/game/events";
 
-export const Dialing = () => {
+type Props = { remoteName: string };
+
+export const Dialing = ({ remoteName }: Props) => {
   const dispatch = useAppDispatch();
-  const time = useCurrentTime();
+  const time = useCurrentTime(1000);
+  const isConnected = useAppSelector((state) => state.phone.isConnected);
+  const { mediaConnected, micEnabled, videoEnabled } = useAppSelector((state) => state.user);
 
   return (
     <div
       className="rounded-4xl size-full bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/background/iphone-wallpaper.jpg')" }}
     >
-      <div className="rounded-4xl flex size-full flex-col bg-black/60 backdrop-blur-lg">
+      <div className="rounded-4xl flex size-full flex-col bg-black/40 backdrop-blur-xl">
         {/* header */}
         <div className="rounded-t-4xl relative flex flex-col text-lg font-bold text-white">
           <div className="absolute left-1/2 top-2 h-[22px] w-20 -translate-x-1/2 rounded-full bg-[#040404]" />
@@ -30,21 +36,44 @@ export const Dialing = () => {
         {/* center */}
         <div className="flex flex-1 flex-col items-center pb-20 text-white">
           <div className="flex flex-col items-center gap-0.5">
-            <div className="text-2xl">김지헌</div>
-            {/* <div className="text-sm text-white/50">00:10</div> */}
-            <div className="text-sm text-white/50">연결중...</div>
+            <div className="text-sm tracking-wide text-white/50">
+              {isConnected.state
+                ? formatElapsedTime(differenceInSeconds(time, isConnected.startedAt))
+                : "연결중..."}
+            </div>
+            <div className="text-2xl">{remoteName}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-end gap-5">
             <div className="flex gap-5">
-              <div className="flex flex-col items-center gap-1 text-[10px]">
-                <div className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-white/30 p-2">
-                  <AppIcon iconName="video-on" size={23} />
+              <div
+                className="flex cursor-pointer flex-col items-center gap-1 text-[10px]"
+                onClick={() => {
+                  if (mediaConnected) eventEmitter.emit("VIDEO_ENABLED_CHANGE", videoEnabled);
+                }}
+              >
+                <div
+                  className={cn(
+                    "size-13 flex cursor-pointer items-center justify-center rounded-full p-2",
+                    videoEnabled ? "bg-gray-200/30 text-white/90" : "bg-white/70 text-black",
+                  )}
+                >
+                  <AppIcon iconName={videoEnabled ? "video-on" : "video-off"} size={22} />
                 </div>
                 <div>카메라</div>
               </div>
-              <div className="flex flex-col items-center gap-1 text-[10px]">
-                <div className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-white/70 p-2 text-black">
-                  <AppIcon iconName="mic-off" size={23} />
+              <div
+                className="flex cursor-pointer flex-col items-center gap-1 text-[10px]"
+                onClick={() => {
+                  if (mediaConnected) eventEmitter.emit("MIC_ENABLED_CHANGE", micEnabled);
+                }}
+              >
+                <div
+                  className={cn(
+                    "size-13 flex cursor-pointer items-center justify-center rounded-full p-2",
+                    micEnabled ? "bg-gray-200/30 text-white/90" : "bg-white/70 text-black",
+                  )}
+                >
+                  <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={22} />
                 </div>
                 <div>마이크</div>
               </div>
@@ -52,10 +81,13 @@ export const Dialing = () => {
 
             <div
               className="flex cursor-pointer flex-col items-center gap-1 text-[10px]"
-              onClick={() => dispatch(setCurrentPage("contacts"))}
+              onClick={() => {
+                dispatch(setCurrentPage({ page: "home" }));
+                dispatch(setIsConnected({ state: false }));
+              }}
             >
-              <div className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-[#fa4837] p-2">
-                <AppIcon iconName="hang-up" size={23} />
+              <div className="size-13 flex cursor-pointer items-center justify-center rounded-full bg-[#fa4837] p-2">
+                <AppIcon iconName="hang-up" size={20} />
               </div>
               <div>종료</div>
             </div>

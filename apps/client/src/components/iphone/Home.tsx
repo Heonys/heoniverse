@@ -88,13 +88,13 @@ export const Home = () => {
           src="/icons/phone.png"
           className="no-pixel size-13 hover:brightness-80 cursor-pointer transition-all"
           alt="phone"
-          onClick={() => dispatch(setCurrentPage("contacts"))}
+          onClick={() => dispatch(setCurrentPage({ page: "contacts" }))}
         />
         <img
           src="/icons/messages.png"
           className="no-pixel size-13 hover:brightness-80 cursor-pointer transition-all"
           alt="messages"
-          onClick={() => dispatch(setCurrentPage("messages"))}
+          onClick={() => dispatch(setCurrentPage({ page: "messages" }))}
         />
       </div>
     </div>

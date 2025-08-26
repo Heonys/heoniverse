@@ -63,11 +63,17 @@ export function pickColor(str: string) {
   return TAILWIND_COLORS[index];
 }
 
-export function formattDate(timestamp: number): string {
+export function formatDate(timestamp: number): string {
   const date = new Date(timestamp);
   return isToday(date)
     ? format(date, "a h:mm", { locale: ko })
     : format(date, "MMM d일 (eee)", { locale: ko });
+}
+
+export function formatElapsedTime(time: number) {
+  const minutes = `${Math.floor(time / 60)}`.padStart(2, "0");
+  const seconds = `${time % 60}`.padStart(2, "0");
+  return `${minutes}:${seconds}`;
 }
 
 export function getJoystickDirection(joystickMovement?: JoystickMovement) {

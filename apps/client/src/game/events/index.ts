@@ -12,6 +12,9 @@ type EventsPayloadMap = {
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
   CLOSE_PEER_CALL: string;
   DISCONNECT_PEER_CALL: string;
+  MEDIA_ENABLED_CHANGE: boolean;
+  MIC_ENABLED_CHANGE: boolean;
+  VIDEO_ENABLED_CHANGE: boolean;
 };
 
 class PhaserEventEmitter<EventsMap> {
