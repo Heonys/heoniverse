@@ -11,6 +11,7 @@ export enum Messages {
   UPDATE_MEDIA_ENABELD = "UPDATE_MEDIA_ENABELD",
   PUSH_CHAT_MESSAGE = "PUSH_CHAT_MESSAGE",
   UPDATED_CHAT_MESSAGE = "UPDATED_CHAT_MESSAGE",
+  UPDATED_CALLING = "UPDATED_CALLING",
 }
 
 export type MessagePayloadMap = {
@@ -19,7 +20,13 @@ export type MessagePayloadMap = {
   UPDATE_PLAYER_STATUS: Status;
   UPDATE_PLAYER: Omit<
     IPlayer,
-    "name" | "readyToConnect" | "mediaConnect" | "videoEnabled" | "micEnabled" | "status"
+    | "name"
+    | "readyToConnect"
+    | "mediaConnect"
+    | "videoEnabled"
+    | "micEnabled"
+    | "status"
+    | "isCalling"
   >;
   UPDATE_PLAYER_NAME: string;
   READY_TO_CONNECT: void;
@@ -27,4 +34,5 @@ export type MessagePayloadMap = {
   UPDATE_MEDIA_ENABELD: { video?: boolean; microphone?: boolean };
   PUSH_CHAT_MESSAGE: string;
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
+  UPDATED_CALLING: boolean;
 };

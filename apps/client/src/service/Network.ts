@@ -13,6 +13,8 @@ import {
 import { eventEmitter } from "@/game/events";
 import { pushMessage } from "@/stores/chatSlice";
 import { WebRTC } from "@/service";
+import { phaserGame } from "@/game";
+import { Game } from "@/game/scenes";
 
 export class Network {
   client: Client;
@@ -123,6 +125,14 @@ export class Network {
 
   updateMediaEnabled({ video, microphone }: { video?: boolean; microphone?: boolean }) {
     this.sendMessage("UPDATE_MEDIA_ENABELD", { video, microphone });
+  }
+
+  updateIsCalling(payload: boolean) {
+    const game = phaserGame.scene.keys.game as Game;
+    const localPlayer = game.localPlayer;
+    localPlayer.isCalling = payload;
+    localPlayer.callingIcon.setVisible(payload);
+    this.sendMessage("UPDATED_CALLING", payload);
   }
 
   setupRoom() {

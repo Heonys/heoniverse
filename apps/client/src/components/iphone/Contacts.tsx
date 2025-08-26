@@ -63,10 +63,11 @@ export const Contacts = () => {
                   onClick={() => {
                     network.webRTC?.getUserMedia().then((allowed) => {
                       if (allowed) {
+                        network.updateIsCalling(true);
                         dispatch(
                           setCurrentPage({
                             page: "dialing",
-                            props: { remoteName: player.playerName.text },
+                            props: { remoteId: player.playerId },
                           }),
                         );
                       }

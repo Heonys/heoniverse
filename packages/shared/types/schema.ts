@@ -37,6 +37,7 @@ export interface IPlayer {
   videoEnabled: boolean;
   micEnabled: boolean;
   status: Status;
+  isCalling: boolean;
 }
 
 export interface IStudioState {

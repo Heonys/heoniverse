@@ -78,6 +78,12 @@ export class Studio extends Room<StudioState> {
       player.micEnabled = payload.microphone ?? player.micEnabled;
     });
 
+    this.onMessage(Messages.UPDATED_CALLING, (client, payload) => {
+      const player = this.state.players.get(client.sessionId);
+      if (!player) return;
+      player.isCalling = payload;
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,

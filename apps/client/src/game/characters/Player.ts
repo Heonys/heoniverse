@@ -12,12 +12,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerMarker: Phaser.GameObjects.Arc;
   playerStatus: Status = "available";
   statusCircle: Phaser.GameObjects.Arc;
+  callingIcon: Phaser.GameObjects.Image;
 
   readyToConnect = false;
   mediaConnect = false;
   videoEnabled = true;
   micEnabled = true;
   readyToStream = false;
+  isCalling = false;
 
   constructor(
     public scene: Game,
@@ -52,10 +54,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setOrigin(0.5, 1)
       .setPosition(0, -this.playerName.height - 1);
 
+    this.callingIcon = this.scene.add
+      .image(0, 0, "call")
+      .setDisplaySize(15, 15)
+      .setOrigin(0.5, 1)
+      .setPosition(0, this.height / 2)
+      .setVisible(false);
+
     this.playerContainer = this.scene.add
       .container(this.x, this.y - this.height / 2, [
         this.playerName,
         this.statusCircle,
+        this.callingIcon,
         this.playerBubble,
       ])
       .setDepth(9999);

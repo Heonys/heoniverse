@@ -61,6 +61,8 @@ export class WebRTC {
     }
   }
 
+  callPeerDirectly(peerId: string) {}
+
   peerCall(peerId: string) {
     const currentConnections = this.peersMap.size + this.connectedPeers.size + 1;
     if (currentConnections >= MAX_PEERS) return;

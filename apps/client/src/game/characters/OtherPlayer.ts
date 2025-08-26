@@ -31,13 +31,18 @@ export class OtherPlayer extends Player {
       !this.hasBeenConnected &&
       this.connectionBufferTime >= 1000 &&
       this.mediaConnect &&
+      !this.isCalling &&
+      !localPlayer.isCalling &&
       localPlayer.mediaConnect &&
       localPlayer.readyToStream &&
       this.playerId > localPlayer.playerId
     ) {
       this.hasBeenConnected = true;
       webRTC.peerCall(this.playerId);
-    } else if (this.hasBeenConnected && (!this.mediaConnect || !localPlayer.mediaConnect)) {
+    } else if (
+      this.hasBeenConnected &&
+      (!this.mediaConnect || !localPlayer.mediaConnect || this.isCalling || localPlayer.isCalling)
+    ) {
       eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
       this.hasBeenConnected = false;
       this.connectionBufferTime = 0;
@@ -45,14 +50,26 @@ export class OtherPlayer extends Player {
   }
 
   updatePlayer(player: IPlayer) {
-    const { name, x, y, readyToConnect, animKey, status, mediaConnect, videoEnabled, micEnabled } =
-      player;
+    const {
+      name,
+      x,
+      y,
+      readyToConnect,
+      animKey,
+      status,
+      mediaConnect,
+      videoEnabled,
+      micEnabled,
+      isCalling,
+    } = player;
     this.playerName.setText(name);
     this.destination = { x, y };
     this.readyToConnect = readyToConnect;
     this.mediaConnect = mediaConnect;
     this.videoEnabled = videoEnabled;
     this.micEnabled = micEnabled;
+    this.isCalling = isCalling;
+    this.callingIcon.setVisible(isCalling);
     this.anims.play(animKey, true);
     this.setPlayerStatus(status);
   }

@@ -18,7 +18,7 @@ export class Preloader extends Phaser.Scene {
   preload() {
     this.load.image("backdrop", "/images/background/backdrop_day.png");
     this.load.image("backdrop_night", "/images/background/backdrop_night.png");
-    this.load.image("lens", "/icons/lens.png");
+    this.load.image("call", "/icons/call.png");
 
     this.load.tilemapTiledJSON("tilemap", "/images/map/tilemap.tmj");
 

@@ -1,17 +1,19 @@
 import { format, differenceInSeconds } from "date-fns";
-import { useAppDispatch, useAppSelector, useCurrentTime } from "@/hooks";
+import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
 import { cn, formatElapsedTime } from "@/utils";
 import { eventEmitter } from "@/game/events";
 
-type Props = { remoteName: string };
+type Props = { remoteId: string };
 
-export const Dialing = ({ remoteName }: Props) => {
-  const dispatch = useAppDispatch();
+export const Dialing = ({ remoteId }: Props) => {
   const time = useCurrentTime(1000);
+  const { network, getOtherPlayerById } = useGame();
+  const dispatch = useAppDispatch();
   const isConnected = useAppSelector((state) => state.phone.isConnected);
   const { mediaConnected, micEnabled, videoEnabled } = useAppSelector((state) => state.user);
+  const player = getOtherPlayerById(remoteId)!;
 
   return (
     <div
@@ -41,7 +43,7 @@ export const Dialing = ({ remoteName }: Props) => {
                 ? formatElapsedTime(differenceInSeconds(time, isConnected.startedAt))
                 : "연결중..."}
             </div>
-            <div className="text-2xl">{remoteName}</div>
+            <div className="text-2xl">{player.playerName.text}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-end gap-5">
             <div className="flex gap-5">
@@ -82,6 +84,7 @@ export const Dialing = ({ remoteName }: Props) => {
             <div
               className="flex cursor-pointer flex-col items-center gap-1 text-[10px]"
               onClick={() => {
+                network.updateIsCalling(false);
                 dispatch(setCurrentPage({ page: "home" }));
                 dispatch(setIsConnected({ state: false }));
               }}

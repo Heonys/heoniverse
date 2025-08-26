@@ -184,7 +184,7 @@ export class Game extends Phaser.Scene {
   registerKeyHandler() {
     this.input.keyboard?.on("keydown-ENTER", () => {
       store.dispatch(setShowIphone(true));
-      store.dispatch(setCurrentPage("messages"));
+      store.dispatch(setCurrentPage({ page: "messages" }));
       store.dispatch(setFocusChat(true));
     });
 
