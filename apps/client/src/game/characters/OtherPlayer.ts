@@ -68,8 +68,7 @@ export class OtherPlayer extends Player {
     this.mediaConnect = mediaConnect;
     this.videoEnabled = videoEnabled;
     this.micEnabled = micEnabled;
-    this.isCalling = isCalling;
-    this.callingIcon.setVisible(isCalling);
+    this.setCallingState(isCalling);
     this.anims.play(animKey, true);
     this.setPlayerStatus(status);
   }

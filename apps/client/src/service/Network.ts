@@ -130,8 +130,7 @@ export class Network {
   updateIsCalling(payload: boolean) {
     const game = phaserGame.scene.keys.game as Game;
     const localPlayer = game.localPlayer;
-    localPlayer.isCalling = payload;
-    localPlayer.callingIcon.setVisible(payload);
+    localPlayer.setCallingState(payload);
     this.sendMessage("UPDATED_CALLING", payload);
   }
 

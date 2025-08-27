@@ -7,12 +7,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerTexture: string;
   playerContainer: Phaser.GameObjects.Container;
   playerBubble: Phaser.GameObjects.Container;
+  playerStatusBox: Phaser.GameObjects.Container;
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
   playerMarker: Phaser.GameObjects.Arc;
   playerStatus: Status = "available";
   statusCircle: Phaser.GameObjects.Arc;
-  callingIcon: Phaser.GameObjects.Image;
 
   readyToConnect = false;
   mediaConnect = false;
@@ -41,6 +41,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0x00ff00, 1).setDepth(999);
     this.scene.cameras.main.ignore([this.playerMarker]);
     this.playerBubble = this.scene.add.container(0, 0).setDepth(9999);
+    this.playerStatusBox = this.scene.add.container(0, 0).setDepth(9999);
+
     this.playerName = this.scene.add
       .text(0, 0, "")
       .setFontFamily("Retro")
@@ -54,18 +56,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setOrigin(0.5, 1)
       .setPosition(0, -this.playerName.height - 1);
 
-    this.callingIcon = this.scene.add
-      .image(0, 0, "call")
-      .setDisplaySize(15, 15)
-      .setOrigin(0.5, 1)
-      .setPosition(0, this.height / 2)
-      .setVisible(false);
+    // this.callingIcon = this.scene.add
+    //   .image(0, 0, "call")
+    //   .setDisplaySize(15, 15)
+    //   .setOrigin(0.5, 1)
+    //   .setPosition(0, this.height / 2)
+    //   .setVisible(false);
 
     this.playerContainer = this.scene.add
       .container(this.x, this.y - this.height / 2, [
         this.playerName,
         this.statusCircle,
-        this.callingIcon,
+        this.playerStatusBox,
         this.playerBubble,
       ])
       .setDepth(9999);
@@ -126,6 +128,45 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   closeBubble() {
     this.playerBubble.removeAll(true);
+  }
+
+  openStatusBox(text: string) {
+    const innerText = this.scene.add
+      .text(0, 0, text)
+      .setFontFamily("Retro")
+      .setFontSize(12)
+      .setColor("#000000")
+      .setOrigin(0.5)
+      .setY(this.height / 2);
+
+    const statusBoxWidth = innerText.width + 4;
+    const statusBoxHeight = innerText.height + 2;
+    const statusBoxX = innerText.x - statusBoxWidth / 2;
+    const statusBoxY = innerText.y - statusBoxHeight / 2;
+
+    const box = this.scene.add
+      .graphics()
+      .fillStyle(0xffffff, 1)
+      .fillRoundedRect(statusBoxX, statusBoxY, statusBoxWidth, statusBoxHeight, 3)
+      .lineStyle(1.5, 0x000000, 1)
+      .strokeRoundedRect(statusBoxX, statusBoxY, statusBoxWidth, statusBoxHeight, 3);
+
+    this.playerStatusBox.add([box, innerText]);
+  }
+
+  closeStatusBox() {
+    this.playerStatusBox.removeAll(true);
+  }
+
+  setCallingState(payload: boolean) {
+    console.log("setCallingState ::", payload);
+
+    this.isCalling = payload;
+    if (payload) {
+      this.openStatusBox("통화중...");
+    } else {
+      this.closeStatusBox();
+    }
   }
 
   setPlayerStatus(status: Status) {

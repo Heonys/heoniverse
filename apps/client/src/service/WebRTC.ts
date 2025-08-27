@@ -121,8 +121,11 @@ export class WebRTC {
       store.dispatch(setCurrentPage({ page: "home" }));
       store.dispatch(setIsConnected({ state: false }));
       this.network.updateMideaConnect(false);
-      this.getLocalPlayer().mediaConnect = false;
-      this.getLocalPlayer().readyToStream = false;
+
+      const localPlayer = this.getLocalPlayer();
+      localPlayer.mediaConnect = false;
+      localPlayer.readyToStream = false;
+      localPlayer.setCallingState(false);
     }
   }
 
