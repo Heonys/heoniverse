@@ -13,7 +13,7 @@ export const Dialing = ({ remoteId }: Props) => {
   const dispatch = useAppDispatch();
   const isConnected = useAppSelector((state) => state.phone.isConnected);
   const { mediaConnected, micEnabled, videoEnabled } = useAppSelector((state) => state.user);
-  const player = getOtherPlayerById(remoteId)!;
+  const player = getOtherPlayerById(remoteId);
 
   return (
     <div
@@ -43,7 +43,7 @@ export const Dialing = ({ remoteId }: Props) => {
                 ? formatElapsedTime(differenceInSeconds(time, isConnected.startedAt))
                 : "연결중..."}
             </div>
-            <div className="text-2xl">{player.playerName.text}</div>
+            <div className="text-2xl">{player ? player.playerName.text : "Unknown"}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-end gap-5">
             <div className="flex gap-5">
@@ -87,6 +87,7 @@ export const Dialing = ({ remoteId }: Props) => {
                 network.updateIsCalling(false);
                 dispatch(setCurrentPage({ page: "home" }));
                 dispatch(setIsConnected({ state: false }));
+                eventEmitter.emit("CLOSE_PEER_CALL", remoteId);
               }}
             >
               <div className="size-13 flex cursor-pointer items-center justify-center rounded-full bg-[#fa4837] p-2">

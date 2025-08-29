@@ -5,8 +5,10 @@ import { store } from "@/stores";
 import { Player } from "@/game/characters";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
-import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
+import { setCurrentPage, setIsConnected, setIsRinging, setShowIphone } from "@/stores/phoneSlice";
+import { eventEmitter } from "@/game/events";
 
+type CallType = "direct" | "proximity";
 const MAX_PEERS = 4;
 
 export class WebRTC {
@@ -30,45 +32,63 @@ export class WebRTC {
 
   setupPeerEvents() {
     this.peer.on("call", (call) => {
+      const callType = call.metadata.type;
       const peerId = call.peer;
 
-      if (!this.connectedPeers.has(peerId)) {
-        call.answer(this.stream);
-        this.connectedPeers.set(call.peer, call);
-
-        call.on("stream", (stream: MediaStream) => {
-          const otherPlayer = this.getOtherPlayerById(peerId);
-          if (otherPlayer) {
-            this.mediaStreamsMap.set(otherPlayer, stream);
-          }
-        });
-
-        call.on("close", () => this.onDisconnectPeer(peerId));
+      if (callType === "proximity") {
+        this.handleProximityCall(call, peerId);
+      } else if (callType === "direct") {
+        this.handleDirectCall(call, peerId);
       }
     });
   }
 
-  onDisconnectPeer(peerId: string) {
-    if (this.connectedPeers.has(peerId)) {
-      const connectedPeer = this.connectedPeers.get(peerId);
-      connectedPeer?.close();
-      this.connectedPeers.delete(peerId);
+  handleProximityCall(call: MediaConnection, peerId: string) {
+    if (!this.connectedPeers.has(peerId)) {
+      call.answer(this.stream);
+      this.connectedPeers.set(call.peer, call);
 
-      const otherPlayer = this.getOtherPlayerById(peerId);
-      if (otherPlayer) {
-        this.mediaStreamsMap.delete(otherPlayer);
-      }
+      call.on("stream", (stream: MediaStream) => {
+        const otherPlayer = this.getOtherPlayerById(peerId);
+        if (otherPlayer) {
+          this.mediaStreamsMap.set(otherPlayer, stream);
+        }
+      });
+      call.on("close", () => this.closePeerCall(peerId));
     }
   }
 
-  callPeerDirectly(peerId: string) {}
+  handleDirectCall(call: MediaConnection, peerId: string) {
+    if (!this.connectedPeers.has(peerId)) {
+      store.dispatch(setShowIphone(true));
+      store.dispatch(setIsRinging({ state: true, caller: peerId }));
 
-  peerCall(peerId: string) {
+      eventEmitter.once("CALL_RESPONSE", (result) => {
+        if (result === "answer") {
+          call.answer(this.stream);
+          this.network.sendAnswerCall(peerId);
+          this.connectedPeers.set(call.peer, call);
+
+          call.on("stream", (stream: MediaStream) => {
+            const otherPlayer = this.getOtherPlayerById(peerId);
+            if (otherPlayer) {
+              this.mediaStreamsMap.set(otherPlayer, stream);
+            }
+          });
+          call.on("close", () => this.onCloseCall(peerId));
+        } else {
+          this.network.sendRejectCall(peerId);
+        }
+      });
+    }
+  }
+
+  peerCall(peerId: string, callType: CallType) {
     const currentConnections = this.peersMap.size + this.connectedPeers.size + 1;
     if (currentConnections >= MAX_PEERS) return;
 
     if (!this.peersMap.has(peerId)) {
-      const call = this.peer.call(peerId, this.stream!);
+      const call = this.peer.call(peerId, this.stream!, { metadata: { type: callType } });
       this.peersMap.set(peerId, call);
 
       call.on("stream", (mediaStream) => {
@@ -77,6 +97,8 @@ export class WebRTC {
           this.mediaStreamsMap.set(otherPlayer, mediaStream);
         }
       });
+
+      call.on("close", () => this.onCloseCall(peerId));
     }
   }
 
@@ -85,12 +107,29 @@ export class WebRTC {
       const calledPeer = this.peersMap.get(peerId);
       calledPeer?.close();
       this.peersMap.delete(peerId);
-
-      const otherPlayer = this.getOtherPlayerById(peerId);
-      if (otherPlayer) {
-        this.mediaStreamsMap.delete(otherPlayer);
-      }
+      this.cleanUpStream(peerId);
     }
+
+    if (this.connectedPeers.has(peerId)) {
+      const calledPeer = this.connectedPeers.get(peerId);
+      calledPeer?.close();
+      this.connectedPeers.delete(peerId);
+      this.cleanUpStream(peerId);
+    }
+  }
+
+  cleanUpStream(peerId: string) {
+    const otherPlayer = this.getOtherPlayerById(peerId);
+    if (otherPlayer) {
+      this.mediaStreamsMap.delete(otherPlayer);
+    }
+  }
+
+  onCloseCall(peerId: string) {
+    this.closePeerCall(peerId);
+    this.network.updateIsCalling(false);
+    store.dispatch(setCurrentPage({ page: "home" }));
+    store.dispatch(setIsConnected({ state: false }));
   }
 
   setupMediaStream(stream: MediaStream) {
@@ -121,6 +160,7 @@ export class WebRTC {
       store.dispatch(setCurrentPage({ page: "home" }));
       store.dispatch(setIsConnected({ state: false }));
       this.network.updateMideaConnect(false);
+      this.network.updateIsCalling(false);
 
       const localPlayer = this.getLocalPlayer();
       localPlayer.mediaConnect = false;

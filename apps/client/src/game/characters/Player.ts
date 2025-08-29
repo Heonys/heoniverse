@@ -159,8 +159,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   setCallingState(payload: boolean) {
-    console.log("setCallingState ::", payload);
-
     this.isCalling = payload;
     if (payload) {
       this.openStatusBox("통화중...");

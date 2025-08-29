@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { Pages, setShowIphone } from "@/stores/phoneSlice";
 import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
@@ -64,7 +64,7 @@ export const IphoneApp = () => {
               </motion.div>
             </AnimatePresence>
             <AnimatePresence>
-              {isRinging.state && <IncomingCalls caller={isRinging.caller} />}
+              {isRinging.state && <IncomingCalls callerId={isRinging.caller} />}
             </AnimatePresence>
           </motion.div>
         ) : (

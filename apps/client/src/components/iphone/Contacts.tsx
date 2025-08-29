@@ -57,13 +57,15 @@ export const Contacts = () => {
             const player = getOtherPlayerById(id);
             return (
               player && (
-                <div
+                <button
                   key={id}
-                  className="flex cursor-pointer items-center gap-2 border-b border-black/15 p-2 hover:bg-[#f5f5f5]"
+                  className="flex cursor-pointer items-center gap-2 border-b border-black/15 p-2 hover:bg-[#f5f5f5] disabled:cursor-not-allowed"
+                  disabled={player.isCalling}
                   onClick={() => {
                     network.webRTC?.getUserMedia().then((allowed) => {
                       if (allowed) {
                         network.updateIsCalling(true);
+                        network.webRTC?.peerCall(id, "direct");
                         dispatch(
                           setCurrentPage({
                             page: "dialing",
@@ -82,11 +84,11 @@ export const Contacts = () => {
                     </div>
                     <div className="flex items-center gap-1 text-[10px] text-black/60">
                       <AppIcon iconName="pick-up" />
-                      <div>통화</div>
+                      <div>{player.isCalling ? "통화중" : "통화가능"}</div>
                     </div>
                   </div>
                   <AppIcon iconName="info" color="#0579fb" />
-                </div>
+                </button>
               )
             );
           })}

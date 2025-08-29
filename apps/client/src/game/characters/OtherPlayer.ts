@@ -38,7 +38,7 @@ export class OtherPlayer extends Player {
       this.playerId > localPlayer.playerId
     ) {
       this.hasBeenConnected = true;
-      webRTC.peerCall(this.playerId);
+      webRTC.peerCall(this.playerId, "proximity");
     } else if (
       this.hasBeenConnected &&
       (!this.mediaConnect || !localPlayer.mediaConnect || this.isCalling || localPlayer.isCalling)

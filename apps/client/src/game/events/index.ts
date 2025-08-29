@@ -15,6 +15,7 @@ type EventsPayloadMap = {
   MEDIA_ENABLED_CHANGE: boolean;
   MIC_ENABLED_CHANGE: boolean;
   VIDEO_ENABLED_CHANGE: boolean;
+  CALL_RESPONSE: "answer" | "reject";
 };
 
 class PhaserEventEmitter<EventsMap> {
@@ -26,6 +27,10 @@ class PhaserEventEmitter<EventsMap> {
 
   on<K extends keyof EventsMap & string>(name: K, fn: (payload: EventsMap[K]) => void) {
     this.ee.on(name, fn);
+  }
+
+  once<K extends keyof EventsMap & string>(name: K, fn: (payload: EventsMap[K]) => void) {
+    this.ee.once(name, fn);
   }
 
   off<K extends keyof EventsMap & string>(name: K, fn: (payload: EventsMap[K]) => void) {

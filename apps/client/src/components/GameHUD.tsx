@@ -76,15 +76,12 @@ export const GameHUD = () => {
   };
 
   useEffect(() => {
-    const handlerMedia = (isEnabled: boolean) => toggleMedia(isEnabled);
     const handlerMic = (isEnabled: boolean) => toggleMic(isEnabled);
     const handlerVideo = (isEnabled: boolean) => toggleVideo(isEnabled);
 
-    eventEmitter.on("MEDIA_ENABLED_CHANGE", handlerMedia);
     eventEmitter.on("MIC_ENABLED_CHANGE", handlerMic);
     eventEmitter.on("VIDEO_ENABLED_CHANGE", handlerVideo);
     return () => {
-      eventEmitter.on("MEDIA_ENABLED_CHANGE", handlerMedia);
       eventEmitter.off("MIC_ENABLED_CHANGE", handlerMic);
       eventEmitter.off("VIDEO_ENABLED_CHANGE", handlerVideo);
     };

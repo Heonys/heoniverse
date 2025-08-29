@@ -15,6 +15,7 @@ import { pushMessage } from "@/stores/chatSlice";
 import { WebRTC } from "@/service";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
+import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
 
 export class Network {
   client: Client;
@@ -49,7 +50,6 @@ export class Network {
     });
 
     eventEmitter.on("DISCONNECT_PEER_CALL", (peerId) => {
-      this.webRTC?.onDisconnectPeer(peerId);
       this.webRTC?.closePeerCall(peerId);
     });
   }
@@ -134,6 +134,14 @@ export class Network {
     this.sendMessage("UPDATED_CALLING", payload);
   }
 
+  sendRejectCall(peerId: string) {
+    this.sendMessage("SEND_REJECTED_CALL", peerId);
+  }
+
+  sendAnswerCall(peerId: string) {
+    this.sendMessage("SEND_ANSWER_CALL", peerId);
+  }
+
   setupRoom() {
     if (!this.room) return;
     this.lobby?.leave();
@@ -180,6 +188,17 @@ export class Network {
 
     this.onMessage(Messages.UPDATED_CHAT_MESSAGE, (payload) => {
       eventEmitter.emit("UPDATED_CHAT_MESSAGE", payload);
+    });
+
+    this.onMessage(Messages.SEND_REJECTED_CALL, (peerId) => {
+      this.updateIsCalling(false);
+      store.dispatch(setCurrentPage({ page: "home" }));
+      store.dispatch(setIsConnected({ state: false }));
+      eventEmitter.emit("CLOSE_PEER_CALL", peerId);
+    });
+
+    this.onMessage(Messages.SEND_ANSWER_CALL, () => {
+      store.dispatch(setIsConnected({ state: true, startedAt: new Date() }));
     });
   }
 }

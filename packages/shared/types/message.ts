@@ -12,6 +12,8 @@ export enum Messages {
   PUSH_CHAT_MESSAGE = "PUSH_CHAT_MESSAGE",
   UPDATED_CHAT_MESSAGE = "UPDATED_CHAT_MESSAGE",
   UPDATED_CALLING = "UPDATED_CALLING",
+  SEND_REJECTED_CALL = "SEND_REJECTED_CALL",
+  SEND_ANSWER_CALL = "SEND_ANSWER_CALL",
 }
 
 export type MessagePayloadMap = {
@@ -35,4 +37,6 @@ export type MessagePayloadMap = {
   PUSH_CHAT_MESSAGE: string;
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
   UPDATED_CALLING: boolean;
+  SEND_REJECTED_CALL: string;
+  SEND_ANSWER_CALL: string;
 };

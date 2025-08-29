@@ -84,6 +84,20 @@ export class Studio extends Room<StudioState> {
       player.isCalling = payload;
     });
 
+    this.onMessage(Messages.SEND_REJECTED_CALL, (client, peerId) => {
+      const caller = this.clients.find((c) => c.sessionId === peerId);
+      if (caller) {
+        caller.send(Messages.SEND_REJECTED_CALL, client.sessionId);
+      }
+    });
+
+    this.onMessage(Messages.SEND_ANSWER_CALL, (client, peerId) => {
+      const caller = this.clients.find((c) => c.sessionId === peerId);
+      if (caller) {
+        caller.send(Messages.SEND_ANSWER_CALL, client.sessionId);
+      }
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,

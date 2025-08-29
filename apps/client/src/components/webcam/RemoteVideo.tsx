@@ -27,6 +27,16 @@ export const RemoteVideo = ({ stream, player }: Props) => {
   }, [stream]);
 
   useEffect(() => {
+    if (videoRef.current) {
+      const videoTrack = stream.getVideoTracks()[0];
+      const audioTrack = stream.getAudioTracks()[0];
+
+      if (videoTrack) videoTrack.enabled = videoEnabled;
+      if (audioTrack) audioTrack.enabled = micEnabled;
+    }
+  }, [stream, videoEnabled, micEnabled]);
+
+  useEffect(() => {
     const handler = ({ id, status }: { id: string; status: Status }) => {
       if (playerId === id) setStatus(status);
     };
