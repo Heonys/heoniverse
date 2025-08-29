@@ -11,6 +11,8 @@ export class Player extends Schema implements IPlayer {
   @type("boolean") videoEnabled = true;
   @type("boolean") micEnabled = true;
   @type("boolean") isCalling = false;
+  @type("boolean") isUsingComputer = false;
+  @type("boolean") isUsingWhiteboard = false;
   @type("string") status: Status = "available";
 }
 

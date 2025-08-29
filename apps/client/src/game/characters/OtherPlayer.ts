@@ -61,6 +61,8 @@ export class OtherPlayer extends Player {
       videoEnabled,
       micEnabled,
       isCalling,
+      isUsingComputer,
+      isUsingWhiteboard,
     } = player;
     this.playerName.setText(name);
     this.destination = { x, y };
@@ -71,6 +73,14 @@ export class OtherPlayer extends Player {
     this.setCallingState(isCalling);
     this.anims.play(animKey, true);
     this.setPlayerStatus(status);
+
+    if (isUsingComputer) {
+      this.openStatusBox("컴퓨터 사용중...");
+    } else if (isUsingWhiteboard) {
+      this.openStatusBox("화이트보드 사용중...");
+    } else {
+      this.closeStatusBox();
+    }
   }
 
   protected preUpdate(time: number, delta: number) {

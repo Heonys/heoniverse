@@ -134,6 +134,10 @@ export class Network {
     this.sendMessage("UPDATED_CALLING", payload);
   }
 
+  updateInteractable({ computer, whiteboard }: { computer?: boolean; whiteboard?: boolean }) {
+    this.sendMessage("UPDATE_INTERACTABLE", { computer, whiteboard });
+  }
+
   sendRejectCall(peerId: string) {
     this.sendMessage("SEND_REJECTED_CALL", peerId);
   }

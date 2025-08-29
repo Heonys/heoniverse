@@ -78,6 +78,13 @@ export class Studio extends Room<StudioState> {
       player.micEnabled = payload.microphone ?? player.micEnabled;
     });
 
+    this.onMessage(Messages.UPDATE_INTERACTABLE, (client, paylaod) => {
+      const player = this.state.players.get(client.sessionId);
+      if (!player) return;
+      player.isUsingComputer = paylaod.computer;
+      player.isUsingWhiteboard = paylaod.whiteboard;
+    });
+
     this.onMessage(Messages.UPDATED_CALLING, (client, payload) => {
       const player = this.state.players.get(client.sessionId);
       if (!player) return;
