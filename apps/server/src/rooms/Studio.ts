@@ -1,7 +1,7 @@
 import { Room, Client, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
-import { StudioState, Player, Computer } from "./schema/StudioSchema";
+import { StudioState, Player, Computer, Whiteboard } from "./schema/StudioSchema";
 import { Messages, IRoom, Status } from "@heoniverse/shared";
 import {
   PlayerUpdateCommand,
@@ -9,6 +9,7 @@ import {
   PushChatUpdateCommand,
   PlayerUpdateStatus,
   ComputerUpdateCommand,
+  WhiteboardUpdateCommand,
 } from "./commands";
 
 export class Studio extends Room<StudioState> {
@@ -80,15 +81,25 @@ export class Studio extends Room<StudioState> {
     });
 
     this.onMessage(Messages.CREATE_COMPUTER, (client, payload) => {
-      if (!this.state.computers.has(payload)) {
-        this.state.computers.set(payload, new Computer());
-      }
+      this.state.computers.set(payload, new Computer());
+    });
+
+    this.onMessage(Messages.CREATE_WHITEBOARD, (client, payload) => {
+      this.state.whiteboards.set(payload, new Whiteboard());
     });
 
     this.onMessage(Messages.CONNECT_COMPUTER, (client, payload) => {
       this.dispatcher.dispatch(new ComputerUpdateCommand(), {
         sessionId: client.sessionId,
         computerId: payload.id,
+        connect: payload.connect,
+      });
+    });
+
+    this.onMessage(Messages.CONNECT_WHITEBOARD, (client, payload) => {
+      this.dispatcher.dispatch(new WhiteboardUpdateCommand(), {
+        sessionId: client.sessionId,
+        whiteboardId: payload.id,
         connect: payload.connect,
       });
     });
@@ -138,9 +149,20 @@ export class Studio extends Room<StudioState> {
   }
 
   onLeave(client: Client, consented: boolean) {
-    if (this.state.players.has(client.sessionId)) {
-      this.state.players.delete(client.sessionId);
+    const clientId = client.sessionId;
+    if (this.state.players.has(clientId)) {
+      this.state.players.delete(clientId);
     }
+    this.state.computers.forEach((computer) => {
+      if (computer.connectedUser.has(clientId)) {
+        computer.connectedUser.delete(clientId);
+      }
+    });
+    this.state.whiteboards.forEach((whiteboard) => {
+      if (whiteboard.connectedUser.has(clientId)) {
+        whiteboard.connectedUser.delete(clientId);
+      }
+    });
   }
 
   async onAuth(client: Client, options: IRoom) {

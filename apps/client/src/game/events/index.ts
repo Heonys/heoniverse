@@ -18,6 +18,8 @@ type EventsPayloadMap = {
   CALL_RESPONSE: "answer" | "reject";
   COMPUTER_USER_ADDED: { userId: string; computerId: string };
   COMPUTER_USER_REMOVED: { userId: string; computerId: string };
+  WHITEBOARD_USER_ADDED: { userId: string; whiteboardId: string };
+  WHITEBOARD_USER_REMOVED: { userId: string; whiteboardId: string };
 };
 
 class PhaserEventEmitter<EventsMap> {

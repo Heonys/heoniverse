@@ -11,12 +11,12 @@ export class ComputerUpdateCommand extends Command<Studio, Payload> {
   execute(payload: Payload) {
     const { sessionId, computerId, connect } = payload;
     const computer = this.state.computers.get(computerId);
-
+    if (!computer) return;
     if (connect) {
-      if (!computer || computer.connectedUser.has(sessionId)) return;
+      if (computer.connectedUser.has(sessionId)) return;
       computer.connectedUser.add(sessionId);
     } else {
-      computer?.connectedUser.delete(sessionId);
+      computer.connectedUser.delete(sessionId);
     }
   }
 }

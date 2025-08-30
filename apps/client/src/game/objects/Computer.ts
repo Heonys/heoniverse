@@ -16,7 +16,7 @@ export class Computer extends Item {
     this.closeStatusBox();
     const size = this.connectedUsers.size;
     if (size > 0) {
-      this.openStatusBox(`${size}명 접속중`);
+      this.openStatusBox(`${size}명 사용중`);
     }
   }
 

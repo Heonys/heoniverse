@@ -21,6 +21,7 @@ export class Game extends Phaser.Scene {
   ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
   ohterPlayersMap = new Map<string, OtherPlayer>();
   computersMap = new Map<string, Computer>();
+  whiteboardsMap = new Map<string, Whiteboard>();
   minimap?: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
@@ -83,6 +84,8 @@ export class Game extends Phaser.Scene {
       (whiteboard, index) => {
         const id = `${index}`;
         whiteboard.id = id;
+        this.whiteboardsMap.set(id, whiteboard);
+        this.network.createWhiteboard(id);
       },
     );
 
@@ -194,6 +197,19 @@ export class Game extends Phaser.Scene {
       const computer = this.computersMap.get(computerId);
       if (computer) {
         computer.disConnected(userId);
+      }
+    });
+
+    eventEmitter.on("WHITEBOARD_USER_ADDED", ({ userId, whiteboardId }) => {
+      const whiteboard = this.whiteboardsMap.get(whiteboardId);
+      if (whiteboard) {
+        whiteboard.connected(userId);
+      }
+    });
+    eventEmitter.on("WHITEBOARD_USER_REMOVED", ({ userId, whiteboardId }) => {
+      const whiteboard = this.whiteboardsMap.get(whiteboardId);
+      if (whiteboard) {
+        whiteboard.disConnected(userId);
       }
     });
   }

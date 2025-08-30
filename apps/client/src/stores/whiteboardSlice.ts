@@ -20,11 +20,13 @@ const whiteboardSlice = createSlice({
       state.isOpenDialog = true;
       state.whiteboardId = action.payload.id;
       const game = phaserGame.scene.keys.game as Game;
+      game.network.connectToWhiteboard(action.payload.id, true);
       game.disableKeys();
     },
     closeWhiteboardDialog: (state) => {
       state.isOpenDialog = false;
       const game = phaserGame.scene.keys.game as Game;
+      game.network.connectToWhiteboard(state.whiteboardId!, false);
       game.enableKeys();
     },
   },

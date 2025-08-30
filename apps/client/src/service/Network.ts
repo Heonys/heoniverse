@@ -208,6 +208,16 @@ export class Network {
       });
     });
 
+    $(this.room.state).whiteboards.onAdd((whiteboard, whiteboardId) => {
+      $(whiteboard).connectedUser.onAdd((userId) => {
+        eventEmitter.emit("WHITEBOARD_USER_ADDED", { userId, whiteboardId });
+      });
+
+      $(whiteboard).connectedUser.onRemove((userId) => {
+        eventEmitter.emit("WHITEBOARD_USER_REMOVED", { userId, whiteboardId });
+      });
+    });
+
     this.onMessage(Messages.SEND_ROOM_DATA, (data) => {
       store.dispatch(setJoinedRoomData(data));
     });

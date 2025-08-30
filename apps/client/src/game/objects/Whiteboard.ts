@@ -5,11 +5,32 @@ import { openWhiteboardDialog } from "@/stores/whiteboardSlice";
 
 export class Whiteboard extends Item {
   id!: string;
+  connectedUsers = new Set<string>();
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
     this.itemType = ItemType.WHITEBOARD;
+  }
+
+  updateStatusBox() {
+    this.closeStatusBox();
+    const size = this.connectedUsers.size;
+    if (size > 0) {
+      this.openStatusBox(`${size}명 사용중`);
+    }
+  }
+
+  connected(userId: string) {
+    if (this.connectedUsers.has(userId)) return;
+    this.connectedUsers.add(userId);
+    this.updateStatusBox();
+  }
+
+  disConnected(userId: string) {
+    if (!this.connectedUsers.has(userId)) return;
+    this.connectedUsers.delete(userId);
+    this.updateStatusBox();
   }
 
   onOverlapDialog() {
