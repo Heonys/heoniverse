@@ -38,8 +38,6 @@ export interface IPlayer {
   micEnabled: boolean;
   status: Status;
   isCalling: boolean;
-  isUsingComputer: boolean;
-  isUsingWhiteboard: boolean;
 }
 
 export interface IStudioState {

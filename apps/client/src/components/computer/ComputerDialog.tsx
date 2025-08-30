@@ -1,4 +1,4 @@
-import { useAppDispatch, useGame } from "@/hooks";
+import { useAppDispatch } from "@/hooks";
 import { TooltipButton } from "@/common";
 import { closeComputerDialog } from "@/stores/computerSlice";
 import { Desktop } from "@/components/computer";
@@ -6,7 +6,6 @@ import { AppIcon } from "@/icons";
 import { shutdownDesktop } from "@/stores/desktopSlice";
 
 export const ComputerDialog = () => {
-  const { network } = useGame();
   const dispatch = useAppDispatch();
   return (
     <div id="desktop" className="backdrop-blur-xs fixed left-0 top-0 z-[9999] h-full w-full p-5">
@@ -29,7 +28,6 @@ export const ComputerDialog = () => {
           onClick={() => {
             dispatch(closeComputerDialog());
             dispatch(shutdownDesktop());
-            network.updateInteractable({ computer: false });
           }}
         >
           <AppIcon iconName="shut-down" color="black" size={25} />

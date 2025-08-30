@@ -1,4 +1,3 @@
-import { nanoid } from "@reduxjs/toolkit";
 import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import { LocalPlayer, OtherPlayer, PlayerOverlap, PlayerSelector } from "@/game/characters";
@@ -21,6 +20,7 @@ export class Game extends Phaser.Scene {
   otherPlayers!: Phaser.Physics.Arcade.Group;
   ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
   ohterPlayersMap = new Map<string, OtherPlayer>();
+  computersMap = new Map<string, Computer>();
   minimap?: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
@@ -57,7 +57,7 @@ export class Game extends Phaser.Scene {
       "Chair",
       "tileset_chairs",
       "chair",
-      (chair, tileObject) => {
+      (chair, _index, tileObject) => {
         chair.direction = tileObject.properties[0].value as Direction;
       },
     );
@@ -67,8 +67,11 @@ export class Game extends Phaser.Scene {
       "Computer",
       "tileset_computers",
       "computer",
-      (computer) => {
-        computer.id = nanoid();
+      (computer, index) => {
+        const id = `${index}`;
+        computer.id = id;
+        this.computersMap.set(id, computer);
+        this.network.createComputer(id);
       },
     );
 
@@ -77,8 +80,9 @@ export class Game extends Phaser.Scene {
       "Whiteboard",
       "tileset_whiteboards",
       "whiteboard",
-      (whiteboard) => {
-        whiteboard.id = nanoid();
+      (whiteboard, index) => {
+        const id = `${index}`;
+        whiteboard.id = id;
       },
     );
 
@@ -179,6 +183,19 @@ export class Game extends Phaser.Scene {
         otherPlayer.openBubble(message);
       }
     });
+
+    eventEmitter.on("COMPUTER_USER_ADDED", ({ userId, computerId }) => {
+      const computer = this.computersMap.get(computerId);
+      if (computer) {
+        computer.connected(userId);
+      }
+    });
+    eventEmitter.on("COMPUTER_USER_REMOVED", ({ userId, computerId }) => {
+      const computer = this.computersMap.get(computerId);
+      if (computer) {
+        computer.disConnected(userId);
+      }
+    });
   }
 
   registerKeyHandler() {
@@ -241,14 +258,14 @@ export class Game extends Phaser.Scene {
     objectLayerName: string,
     texture: string,
     tilesetName: string,
-    updater: (object: S, tileObject: Phaser.Types.Tilemaps.TiledObject) => void,
+    updater: (object: S, index: number, tileObject: Phaser.Types.Tilemaps.TiledObject) => void,
   ) {
     const group = this.physics.add.staticGroup({ classType });
     const objectLayer = this.map.getObjectLayer(objectLayerName)!;
 
-    objectLayer.objects.forEach((chairObj) => {
+    objectLayer.objects.forEach((chairObj, index) => {
       const item = this.addObjectFromTiled(group, chairObj, texture, tilesetName) as S;
-      updater(item, chairObj);
+      updater(item, index, chairObj);
     });
     return group;
   }

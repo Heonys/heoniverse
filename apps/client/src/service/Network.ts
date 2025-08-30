@@ -134,16 +134,28 @@ export class Network {
     this.sendMessage("UPDATED_CALLING", payload);
   }
 
-  updateInteractable({ computer, whiteboard }: { computer?: boolean; whiteboard?: boolean }) {
-    this.sendMessage("UPDATE_INTERACTABLE", { computer, whiteboard });
-  }
-
   sendRejectCall(peerId: string) {
     this.sendMessage("SEND_REJECTED_CALL", peerId);
   }
 
   sendAnswerCall(peerId: string) {
     this.sendMessage("SEND_ANSWER_CALL", peerId);
+  }
+
+  createComputer(id: string) {
+    this.sendMessage("CREATE_COMPUTER", id);
+  }
+
+  createWhiteboard(id: string) {
+    this.sendMessage("CREATE_WHITEBOARD", id);
+  }
+
+  connectToComputer(id: string, connect: boolean) {
+    this.sendMessage("CONNECT_COMPUTER", { id, connect });
+  }
+
+  connectToWhiteboard(id: string, connect: boolean) {
+    this.sendMessage("CONNECT_WHITEBOARD", { id, connect });
   }
 
   setupRoom() {
@@ -184,6 +196,16 @@ export class Network {
 
     $(this.room.state).messages.onAdd((message) => {
       store.dispatch(pushMessage(message));
+    });
+
+    $(this.room.state).computers.onAdd((computer, computerId) => {
+      $(computer).connectedUser.onAdd((userId) => {
+        eventEmitter.emit("COMPUTER_USER_ADDED", { userId, computerId });
+      });
+
+      $(computer).connectedUser.onRemove((userId) => {
+        eventEmitter.emit("COMPUTER_USER_REMOVED", { userId, computerId });
+      });
     });
 
     this.onMessage(Messages.SEND_ROOM_DATA, (data) => {

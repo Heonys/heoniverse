@@ -1,13 +1,14 @@
 import { Room, Client, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
-import { StudioState, Player } from "./schema/StudioSchema";
+import { StudioState, Player, Computer } from "./schema/StudioSchema";
 import { Messages, IRoom, Status } from "@heoniverse/shared";
 import {
   PlayerUpdateCommand,
   PlayerNameUpdateCommand,
   PushChatUpdateCommand,
   PlayerUpdateStatus,
+  ComputerUpdateCommand,
 } from "./commands";
 
 export class Studio extends Room<StudioState> {
@@ -78,11 +79,18 @@ export class Studio extends Room<StudioState> {
       player.micEnabled = payload.microphone ?? player.micEnabled;
     });
 
-    this.onMessage(Messages.UPDATE_INTERACTABLE, (client, paylaod) => {
-      const player = this.state.players.get(client.sessionId);
-      if (!player) return;
-      player.isUsingComputer = paylaod.computer;
-      player.isUsingWhiteboard = paylaod.whiteboard;
+    this.onMessage(Messages.CREATE_COMPUTER, (client, payload) => {
+      if (!this.state.computers.has(payload)) {
+        this.state.computers.set(payload, new Computer());
+      }
+    });
+
+    this.onMessage(Messages.CONNECT_COMPUTER, (client, payload) => {
+      this.dispatcher.dispatch(new ComputerUpdateCommand(), {
+        sessionId: client.sessionId,
+        computerId: payload.id,
+        connect: payload.connect,
+      });
     });
 
     this.onMessage(Messages.UPDATED_CALLING, (client, payload) => {

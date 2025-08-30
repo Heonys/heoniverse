@@ -121,14 +121,12 @@ export class LocalPlayer extends Player {
         if (isEJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
           const computerObject = selectedItem as Computer;
           computerObject.openDialog();
-          network.updateInteractable({ computer: true });
           return;
         }
 
         if (isEJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
-          const computerObject = selectedItem as Whiteboard;
-          computerObject.openDialog();
-          network.updateInteractable({ whiteboard: true });
+          const whiteboardObject = selectedItem as Whiteboard;
+          whiteboardObject.openDialog();
           return;
         }
 

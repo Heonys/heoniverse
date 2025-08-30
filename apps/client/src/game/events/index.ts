@@ -16,6 +16,8 @@ type EventsPayloadMap = {
   MIC_ENABLED_CHANGE: boolean;
   VIDEO_ENABLED_CHANGE: boolean;
   CALL_RESPONSE: "answer" | "reject";
+  COMPUTER_USER_ADDED: { userId: string; computerId: string };
+  COMPUTER_USER_REMOVED: { userId: string; computerId: string };
 };
 
 class PhaserEventEmitter<EventsMap> {

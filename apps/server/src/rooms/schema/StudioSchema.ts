@@ -1,4 +1,4 @@
-import { Schema, type, MapSchema, ArraySchema } from "@colyseus/schema";
+import { Schema, type, MapSchema, SetSchema, ArraySchema } from "@colyseus/schema";
 import { IPlayer, IStudioState, IChatMessage, Status } from "@heoniverse/shared";
 
 export class Player extends Schema implements IPlayer {
@@ -11,8 +11,6 @@ export class Player extends Schema implements IPlayer {
   @type("boolean") videoEnabled = true;
   @type("boolean") micEnabled = true;
   @type("boolean") isCalling = false;
-  @type("boolean") isUsingComputer = false;
-  @type("boolean") isUsingWhiteboard = false;
   @type("string") status: Status = "available";
 }
 
@@ -23,10 +21,17 @@ export class ChatMessage extends Schema implements IChatMessage {
   @type("string") content = "";
 }
 
-export class StudioState extends Schema implements IStudioState {
-  @type({ map: Player })
-  players = new MapSchema<Player>();
+export class Computer extends Schema {
+  @type({ set: "string" }) connectedUser = new SetSchema<string>();
+}
 
-  @type([ChatMessage])
-  messages = new ArraySchema<ChatMessage>();
+export class Whiteboard extends Schema {
+  @type({ set: "string" }) connectedUser = new SetSchema<string>();
+}
+
+export class StudioState extends Schema implements IStudioState {
+  @type({ map: Player }) players = new MapSchema<Player>();
+  @type({ map: Computer }) computers = new MapSchema<Computer>();
+  @type({ map: Whiteboard }) whiteboards = new MapSchema<Whiteboard>();
+  @type([ChatMessage]) messages = new ArraySchema<ChatMessage>();
 }

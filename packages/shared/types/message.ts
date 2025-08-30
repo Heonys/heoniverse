@@ -14,7 +14,10 @@ export enum Messages {
   UPDATED_CALLING = "UPDATED_CALLING",
   SEND_REJECTED_CALL = "SEND_REJECTED_CALL",
   SEND_ANSWER_CALL = "SEND_ANSWER_CALL",
-  UPDATE_INTERACTABLE = "UPDATE_INTERACTABLE",
+  CONNECT_COMPUTER = "CONNECT_COMPUTER",
+  CONNECT_WHITEBOARD = "CONNECT_WHITEBOARD",
+  CREATE_COMPUTER = "CREATE_COMPUTER",
+  CREATE_WHITEBOARD = "CREATE_WHITEBOARD",
 }
 
 export type MessagePayloadMap = {
@@ -30,8 +33,6 @@ export type MessagePayloadMap = {
     | "micEnabled"
     | "status"
     | "isCalling"
-    | "isUsingComputer"
-    | "isUsingWhiteboard"
   >;
   UPDATE_PLAYER_NAME: string;
   READY_TO_CONNECT: void;
@@ -42,5 +43,8 @@ export type MessagePayloadMap = {
   UPDATED_CALLING: boolean;
   SEND_REJECTED_CALL: string;
   SEND_ANSWER_CALL: string;
-  UPDATE_INTERACTABLE: { computer?: boolean; whiteboard?: boolean };
+  CONNECT_COMPUTER: { id: string; connect: boolean };
+  CONNECT_WHITEBOARD: { id: string; connect: boolean };
+  CREATE_COMPUTER: string;
+  CREATE_WHITEBOARD: string;
 };

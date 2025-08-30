@@ -1,11 +1,10 @@
 import { TooltipButton } from "@/common";
-import { useAppDispatch, useGame } from "@/hooks";
+import { useAppDispatch } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { closeWhiteboardDialog } from "@/stores/whiteboardSlice";
 import { WhiteBoard } from "@/components/whiteboard";
 
 export const WhiteboardDialog = () => {
-  const { network } = useGame();
   const dispatch = useAppDispatch();
 
   return (
@@ -22,7 +21,6 @@ export const WhiteboardDialog = () => {
           tooltip="Exit Board"
           onClick={() => {
             dispatch(closeWhiteboardDialog());
-            network.updateInteractable({ whiteboard: false });
           }}
         >
           <AppIcon iconName="exit" color="black" size={25} />

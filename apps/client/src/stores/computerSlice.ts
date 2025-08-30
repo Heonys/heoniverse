@@ -20,12 +20,15 @@ const computerSlice = createSlice({
       state.isOpenDialog = true;
       state.computerId = action.payload.id;
       const game = phaserGame.scene.keys.game as Game;
+      game.network.connectToComputer(action.payload.id, true);
       game.disableKeys();
     },
     closeComputerDialog: (state) => {
       state.isOpenDialog = false;
       const game = phaserGame.scene.keys.game as Game;
+      game.network.connectToComputer(state.computerId!, false);
       game.enableKeys();
+      state.computerId = null;
     },
   },
 });

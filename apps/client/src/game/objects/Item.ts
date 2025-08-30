@@ -2,12 +2,14 @@ import { ItemType } from "@/constants/game";
 
 export class Item extends Phaser.Physics.Arcade.Sprite {
   private dialogBox: Phaser.GameObjects.Container;
+  private playerStatusBox: Phaser.GameObjects.Container;
   itemType!: ItemType;
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
 
     this.dialogBox = this.scene.add.container().setDepth(9999);
+    this.playerStatusBox = this.scene.add.container().setDepth(9999);
   }
 
   setDialogBox(messages: string[]) {
@@ -50,9 +52,37 @@ export class Item extends Phaser.Physics.Arcade.Sprite {
     this.dialogBox.add([box, ...textObjects]);
   }
 
+  onOverlapDialog() {
+    throw new Error("must be implemented");
+  }
+
   clearDialogBox() {
     this.dialogBox.removeAll(true);
   }
 
-  onOverlapDialog() {}
+  openStatusBox(text: string) {
+    const innerText = this.scene.add
+      .text(0, 0, text)
+      .setFontFamily("Retro")
+      .setFontSize(12)
+      .setColor("#000000");
+
+    const statusBoxWidth = innerText.width + 4;
+    const statusBoxHeight = innerText.height + 2;
+    const statusBoxX = this.x - statusBoxWidth * 0.5;
+    const statusBoxY = this.y - this.height * 0.25;
+
+    const box = this.scene.add
+      .graphics()
+      .fillStyle(0xffffff, 1)
+      .fillRoundedRect(statusBoxX, statusBoxY, statusBoxWidth, statusBoxHeight, 3)
+      .lineStyle(1.5, 0x000000, 1)
+      .strokeRoundedRect(statusBoxX, statusBoxY, statusBoxWidth, statusBoxHeight, 3);
+
+    this.playerStatusBox.add([box, innerText.setPosition(statusBoxX + 2, statusBoxY)]);
+  }
+
+  closeStatusBox() {
+    this.playerStatusBox.removeAll(true);
+  }
 }
