@@ -8,7 +8,7 @@ import { Game } from "@/game/scenes";
 import { setCurrentPage, setIsConnected, setIsRinging, setShowIphone } from "@/stores/phoneSlice";
 import { eventEmitter } from "@/game/events";
 
-type CallType = "direct" | "proximity";
+type CallType = "direct" | "proximity" | "screen";
 const MAX_PEERS = 4;
 
 export class WebRTC {
@@ -16,7 +16,8 @@ export class WebRTC {
   private peersMap = new Map<string, MediaConnection>(); // host
   private connectedPeers = new Map<string, MediaConnection>(); // guest
   private network: Network;
-  private stream?: MediaStream;
+  private videoStream?: MediaStream;
+  private screenStream?: MediaStream;
   mediaStreamsMap = new Map<Player, MediaStream>();
 
   constructor(peerId: string, network: Network) {
@@ -32,20 +33,26 @@ export class WebRTC {
 
   setupPeerEvents() {
     this.peer.on("call", (call) => {
-      const callType = call.metadata.type;
+      const callType = call.metadata.type as CallType;
       const peerId = call.peer;
 
-      if (callType === "proximity") {
-        this.handleProximityCall(call, peerId);
-      } else if (callType === "direct") {
-        this.handleDirectCall(call, peerId);
+      switch (callType) {
+        case "proximity": {
+          return this.handleProximityCall(call, peerId);
+        }
+        case "direct": {
+          return this.handleDirectCall(call, peerId);
+        }
+        case "screen": {
+          return this.handleScreenShareCall(call, peerId);
+        }
       }
     });
   }
 
   handleProximityCall(call: MediaConnection, peerId: string) {
     if (!this.connectedPeers.has(peerId)) {
-      call.answer(this.stream);
+      call.answer(this.videoStream);
       this.connectedPeers.set(call.peer, call);
 
       call.on("stream", (stream: MediaStream) => {
@@ -65,7 +72,7 @@ export class WebRTC {
 
       eventEmitter.once("CALL_RESPONSE", (result) => {
         if (result === "answer") {
-          call.answer(this.stream);
+          call.answer(this.videoStream);
           this.network.sendAnswerCall(peerId);
           this.connectedPeers.set(call.peer, call);
 
@@ -83,12 +90,20 @@ export class WebRTC {
     }
   }
 
+  handleScreenShareCall(call: MediaConnection, peerId: string) {
+    call.answer();
+
+    call.on("stream", (call) => {
+      //
+    });
+  }
+
   peerCall(peerId: string, callType: CallType) {
     const currentConnections = this.peersMap.size + this.connectedPeers.size + 1;
     if (currentConnections >= MAX_PEERS) return;
 
     if (!this.peersMap.has(peerId)) {
-      const call = this.peer.call(peerId, this.stream!, { metadata: { type: callType } });
+      const call = this.peer.call(peerId, this.videoStream!, { metadata: { type: callType } });
       this.peersMap.set(peerId, call);
 
       call.on("stream", (mediaStream) => {
@@ -133,13 +148,13 @@ export class WebRTC {
   }
 
   setupMediaStream(stream: MediaStream) {
-    this.stream = stream;
+    this.videoStream = stream;
   }
 
   async getUserMedia() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      this.stream = stream;
+      this.videoStream = stream;
       store.dispatch(setMediaConnected(true));
       this.network.updateMideaConnect(true);
       this.getLocalPlayer().mediaConnect = true;
@@ -150,10 +165,10 @@ export class WebRTC {
   }
 
   disConnectUserMedia() {
-    if (this.stream) {
-      this.stream.getTracks().forEach((track) => {
+    if (this.videoStream) {
+      this.videoStream.getTracks().forEach((track) => {
         track.stop();
-        this.stream = undefined;
+        this.videoStream = undefined;
       });
       store.dispatch(setMediaConnected(false));
       store.dispatch(initMediaState());
@@ -178,4 +193,14 @@ export class WebRTC {
     const gameScene = phaserGame.scene.keys.game as Game;
     return gameScene.localPlayer;
   }
+
+  startScreenShare() {
+    window.navigator.mediaDevices //
+      .getDisplayMedia({ video: true, audio: true })
+      .then((stream) => {
+        this.screenStream = stream;
+      });
+  }
+
+  stopScreenShare() {}
 }

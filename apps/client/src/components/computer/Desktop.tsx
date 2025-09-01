@@ -16,7 +16,13 @@ export const Desktop = () => {
         {appsData.map((app) => {
           if (app.component && showApps[app.id]) {
             return (
-              <AppWindow key={app.id} id={app.id} title={app.title} component={app.component} />
+              <AppWindow
+                key={app.id}
+                id={app.id}
+                title={app.title}
+                component={app.component}
+                initPosition={app.initPosition}
+              />
             );
           } else {
             return null;

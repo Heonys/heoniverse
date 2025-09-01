@@ -7,11 +7,14 @@ type Props = {
   id: string;
   title: string;
   component?: React.ReactNode;
+  initPosition?: { x: number; y: number; width: number; height: number };
 };
 
 // #f6f6f4 #1e1e1e
-export const AppWindow = ({ id, title, component }: Props) => {
-  const [position, setPosition] = useState({ x: 337, y: 20, width: 800, height: 480 });
+export const AppWindow = ({ id, title, component, initPosition }: Props) => {
+  const [position, setPosition] = useState(
+    initPosition ?? { x: 337, y: 20, width: 800, height: 480 },
+  );
   const dispatch = useAppDispatch();
   const zIndexMap = useAppSelector((state) => state.desktop.zIndexMap);
 

@@ -6,6 +6,12 @@ type AppsData = {
   img: string;
   link?: string;
   component?: React.ReactNode;
+  initPosition?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 };
 
 export const appsData: AppsData[] = [
@@ -19,6 +25,7 @@ export const appsData: AppsData[] = [
     title: "Screen Sharing",
     img: "/icons/screen-sharing.webp",
     component: <ScreenSharing />,
+    initPosition: { x: 115, y: 20, width: 1244, height: 536 },
   },
   {
     id: "messages",
