@@ -20,18 +20,6 @@ export const HelperGroups = () => {
 
   return (
     <div className="fixed bottom-2 right-6 flex gap-2">
-      {/* TODO: 삭제 */}
-      <TooltipButton
-        id="pickup"
-        tooltip="전화 걸기 테스트"
-        onClick={() => {
-          dispatch(setShowIphone(true));
-          dispatch(setIsRinging({ state: true, caller: "지헌" }));
-        }}
-      >
-        <AppIcon iconName="pick-up" color="black" size={25} />
-      </TooltipButton>
-
       <Condition condition={loggedIn}>
         <TooltipButton
           id="users"

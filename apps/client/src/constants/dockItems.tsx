@@ -25,7 +25,7 @@ export const appsData: AppsData[] = [
     title: "Screen Sharing",
     img: "/icons/screen-sharing.webp",
     component: <ScreenSharing />,
-    initPosition: { x: 115, y: 20, width: 1244, height: 536 },
+    initPosition: { x: 232, y: 10, width: 1009, height: 562 },
   },
   {
     id: "messages",

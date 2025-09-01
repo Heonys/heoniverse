@@ -2,14 +2,17 @@ import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type Sharing = Record<string, { sharingUserId: string; isSharing: boolean }>;
 type ComputerState = {
   isOpenDialog: boolean;
   computerId: null | string;
+  sharing: Sharing;
 };
 
 const initialState: ComputerState = {
   isOpenDialog: false,
   computerId: null,
+  sharing: {},
 };
 
 const computerSlice = createSlice({
@@ -30,8 +33,27 @@ const computerSlice = createSlice({
       game.enableKeys();
       state.computerId = null;
     },
+    setSharing(state, action: PayloadAction<{ sharingUserId: string; isSharing: boolean }>) {
+      if (state.computerId) {
+        state.sharing[state.computerId] = action.payload;
+      }
+    },
+  },
+  selectors: {
+    currentSharing: (state) => {
+      if (
+        state.computerId &&
+        state.sharing[state.computerId] &&
+        state.sharing[state.computerId].isSharing
+      ) {
+        return state.sharing[state.computerId];
+      } else {
+        return false;
+      }
+    },
   },
 });
 
-export const { openComputerDialog, closeComputerDialog } = computerSlice.actions;
+export const { openComputerDialog, closeComputerDialog, setSharing } = computerSlice.actions;
+export const { currentSharing } = computerSlice.selectors;
 export default computerSlice.reducer;

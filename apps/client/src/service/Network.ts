@@ -16,6 +16,7 @@ import { WebRTC } from "@/service";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
+import { setSharing } from "@/stores/computerSlice";
 
 export class Network {
   client: Client;
@@ -158,6 +159,19 @@ export class Network {
     this.sendMessage("CONNECT_WHITEBOARD", { id, connect });
   }
 
+  getLocalPlayer() {
+    const gameScene = phaserGame.scene.keys.game as Game;
+    return gameScene.localPlayer;
+  }
+
+  screenSharing(shared: boolean) {
+    const { computerId } = store.getState().computer;
+    const userId = this.getLocalPlayer().playerId;
+    if (computerId) {
+      this.sendMessage("SCREEN_SHARING", { computerId, userId, shared });
+    }
+  }
+
   setupRoom() {
     if (!this.room) return;
     this.lobby?.leave();
@@ -205,6 +219,11 @@ export class Network {
 
       $(computer).connectedUser.onRemove((userId) => {
         eventEmitter.emit("COMPUTER_USER_REMOVED", { userId, computerId });
+      });
+
+      $(computer).onChange(() => {
+        const { sharingUserId, isSharing } = computer;
+        store.dispatch(setSharing({ sharingUserId, isSharing }));
       });
     });
 

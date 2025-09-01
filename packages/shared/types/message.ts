@@ -18,6 +18,7 @@ export enum Messages {
   CONNECT_WHITEBOARD = "CONNECT_WHITEBOARD",
   CREATE_COMPUTER = "CREATE_COMPUTER",
   CREATE_WHITEBOARD = "CREATE_WHITEBOARD",
+  SCREEN_SHARING = "SCREEN_SHARING",
 }
 
 export type MessagePayloadMap = {
@@ -47,4 +48,5 @@ export type MessagePayloadMap = {
   CONNECT_WHITEBOARD: { id: string; connect: boolean };
   CREATE_COMPUTER: string;
   CREATE_WHITEBOARD: string;
+  SCREEN_SHARING: { computerId: string; userId: string; shared: boolean };
 };

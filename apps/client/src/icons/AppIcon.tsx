@@ -64,6 +64,7 @@ import { BsCalendarDate } from "react-icons/bs";
 import { ImPhone, ImPhoneHangUp } from "react-icons/im";
 import { BsStarFill } from "react-icons/bs";
 import { BsClockFill } from "react-icons/bs";
+import { LuScreenShare, LuScreenShareOff } from "react-icons/lu";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -150,6 +151,8 @@ const IconMap = {
   ["hang-up"]: ImPhoneHangUp,
   ["star"]: BsStarFill,
   ["clock"]: BsClockFill,
+  ["screen-share"]: LuScreenShare,
+  ["screen-share-off"]: LuScreenShareOff,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

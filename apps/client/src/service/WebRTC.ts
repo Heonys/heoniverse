@@ -194,13 +194,37 @@ export class WebRTC {
     return gameScene.localPlayer;
   }
 
-  startScreenShare() {
-    window.navigator.mediaDevices //
+  async startScreenShare() {
+    return window.navigator.mediaDevices //
       .getDisplayMedia({ video: true, audio: true })
       .then((stream) => {
+        const track = stream.getVideoTracks()[0];
+        track.onended = () => this.stopScreenShare();
+
         this.screenStream = stream;
+        this.network.screenSharing(true);
+        this.broadcastScreenShare();
+        return stream;
       });
   }
 
-  stopScreenShare() {}
+  broadcastScreenShare() {
+    const gameScene = phaserGame.scene.keys.game as Game;
+    const computerId = store.getState().computer.computerId;
+    const computer = gameScene.computersMap.get(computerId!);
+
+    if (computer) {
+      computer.connectedUsers.forEach((userId) => {
+        this.peer.call(userId, this.screenStream!, { metadata: { type: "screen" } });
+      });
+    }
+  }
+
+  stopScreenShare() {
+    if (this.screenStream) {
+      this.screenStream.getTracks().forEach((track) => track.stop());
+      this.screenStream = undefined;
+      this.network.screenSharing(false);
+    }
+  }
 }

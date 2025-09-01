@@ -124,6 +124,14 @@ export class Studio extends Room<StudioState> {
       }
     });
 
+    this.onMessage(Messages.SCREEN_SHARING, (client, payload) => {
+      const computer = this.state.computers.get(payload.computerId);
+      if (computer) {
+        computer.sharingUserId = payload.userId;
+        computer.isSharing = payload.shared;
+      }
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,

@@ -23,6 +23,8 @@ export class ChatMessage extends Schema implements IChatMessage {
 
 export class Computer extends Schema {
   @type({ set: "string" }) connectedUser = new SetSchema<string>();
+  @type("string") sharingUserId = "";
+  @type("boolean") isSharing = false;
 }
 
 export class Whiteboard extends Schema {
