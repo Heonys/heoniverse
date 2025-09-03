@@ -7,12 +7,14 @@ type ComputerState = {
   isOpenDialog: boolean;
   computerId: null | string;
   sharing: Sharing;
+  joinedSharing: boolean;
 };
 
 const initialState: ComputerState = {
   isOpenDialog: false,
   computerId: null,
   sharing: {},
+  joinedSharing: false,
 };
 
 const computerSlice = createSlice({
@@ -33,10 +35,14 @@ const computerSlice = createSlice({
       game.enableKeys();
       state.computerId = null;
     },
-    setSharing(state, action: PayloadAction<{ sharingUserId: string; isSharing: boolean }>) {
-      if (state.computerId) {
-        state.sharing[state.computerId] = action.payload;
-      }
+    setSharing(
+      state,
+      action: PayloadAction<{ computerId: string; sharingUserId: string; isSharing: boolean }>,
+    ) {
+      state.sharing[action.payload.computerId] = action.payload;
+    },
+    setJoinedSharing(state, actoin: PayloadAction<boolean>) {
+      state.joinedSharing = actoin.payload;
     },
   },
   selectors: {
@@ -54,6 +60,7 @@ const computerSlice = createSlice({
   },
 });
 
-export const { openComputerDialog, closeComputerDialog, setSharing } = computerSlice.actions;
+export const { openComputerDialog, closeComputerDialog, setSharing, setJoinedSharing } =
+  computerSlice.actions;
 export const { currentSharing } = computerSlice.selectors;
 export default computerSlice.reducer;

@@ -192,6 +192,7 @@ export class Network {
         if (name !== "") {
           setTimeout(() => {
             eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
+            this.webRTC?.callScreenShareToNewUser(sessionId);
           }, 100);
         }
       });
@@ -214,7 +215,13 @@ export class Network {
 
     $(this.room.state).computers.onAdd((computer, computerId) => {
       $(computer).connectedUser.onAdd((userId) => {
-        eventEmitter.emit("COMPUTER_USER_ADDED", { userId, computerId });
+        setTimeout(() => {
+          eventEmitter.emit("COMPUTER_USER_ADDED", { userId, computerId });
+        });
+      });
+
+      $(computer).connectedUser.onRemove((userId) => {
+        eventEmitter.emit("COMPUTER_USER_REMOVED", { userId, computerId });
       });
 
       $(computer).connectedUser.onRemove((userId) => {
@@ -223,13 +230,17 @@ export class Network {
 
       $(computer).onChange(() => {
         const { sharingUserId, isSharing } = computer;
-        store.dispatch(setSharing({ sharingUserId, isSharing }));
+        if (sharingUserId !== "") {
+          store.dispatch(setSharing({ computerId, sharingUserId, isSharing }));
+        }
       });
     });
 
     $(this.room.state).whiteboards.onAdd((whiteboard, whiteboardId) => {
       $(whiteboard).connectedUser.onAdd((userId) => {
-        eventEmitter.emit("WHITEBOARD_USER_ADDED", { userId, whiteboardId });
+        setTimeout(() => {
+          eventEmitter.emit("WHITEBOARD_USER_ADDED", { userId, whiteboardId });
+        });
       });
 
       $(whiteboard).connectedUser.onRemove((userId) => {

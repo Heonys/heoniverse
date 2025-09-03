@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/hooks";
 import { TooltipButton } from "@/common";
-import { closeComputerDialog } from "@/stores/computerSlice";
+import { closeComputerDialog, setJoinedSharing } from "@/stores/computerSlice";
 import { Desktop } from "@/components/computer";
 import { AppIcon } from "@/icons";
 import { shutdownDesktop } from "@/stores/desktopSlice";
@@ -28,6 +28,7 @@ export const ComputerDialog = () => {
           onClick={() => {
             dispatch(closeComputerDialog());
             dispatch(shutdownDesktop());
+            dispatch(setJoinedSharing(false));
           }}
         >
           <AppIcon iconName="shut-down" color="black" size={25} />

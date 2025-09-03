@@ -17,7 +17,7 @@ export class WebRTC {
   private connectedPeers = new Map<string, MediaConnection>(); // guest
   private network: Network;
   private videoStream?: MediaStream;
-  private screenStream?: MediaStream;
+  screenStream?: MediaStream;
   mediaStreamsMap = new Map<Player, MediaStream>();
 
   constructor(peerId: string, network: Network) {
@@ -44,7 +44,7 @@ export class WebRTC {
           return this.handleDirectCall(call, peerId);
         }
         case "screen": {
-          return this.handleScreenShareCall(call, peerId);
+          return this.handleScreenShareCall(call);
         }
       }
     });
@@ -55,7 +55,7 @@ export class WebRTC {
       call.answer(this.videoStream);
       this.connectedPeers.set(call.peer, call);
 
-      call.on("stream", (stream: MediaStream) => {
+      call.on("stream", (stream) => {
         const otherPlayer = this.getOtherPlayerById(peerId);
         if (otherPlayer) {
           this.mediaStreamsMap.set(otherPlayer, stream);
@@ -76,7 +76,7 @@ export class WebRTC {
           this.network.sendAnswerCall(peerId);
           this.connectedPeers.set(call.peer, call);
 
-          call.on("stream", (stream: MediaStream) => {
+          call.on("stream", (stream) => {
             const otherPlayer = this.getOtherPlayerById(peerId);
             if (otherPlayer) {
               this.mediaStreamsMap.set(otherPlayer, stream);
@@ -90,10 +90,13 @@ export class WebRTC {
     }
   }
 
-  handleScreenShareCall(call: MediaConnection, peerId: string) {
+  handleScreenShareCall(call: MediaConnection) {
     call.answer();
+    call.on("stream", (stream) => {
+      this.screenStream = stream;
+    });
 
-    call.on("stream", (call) => {
+    call.on("close", () => {
       //
     });
   }
@@ -210,12 +213,15 @@ export class WebRTC {
 
   broadcastScreenShare() {
     const gameScene = phaserGame.scene.keys.game as Game;
+    const playerId = gameScene.localPlayer.playerId;
     const computerId = store.getState().computer.computerId;
     const computer = gameScene.computersMap.get(computerId!);
 
     if (computer) {
       computer.connectedUsers.forEach((userId) => {
-        this.peer.call(userId, this.screenStream!, { metadata: { type: "screen" } });
+        if (playerId !== userId) {
+          this.peer.call(userId, this.screenStream!, { metadata: { type: "screen" } });
+        }
       });
     }
   }
@@ -225,6 +231,12 @@ export class WebRTC {
       this.screenStream.getTracks().forEach((track) => track.stop());
       this.screenStream = undefined;
       this.network.screenSharing(false);
+    }
+  }
+
+  callScreenShareToNewUser(userId: string) {
+    if (this.screenStream) {
+      this.peer.call(userId, this.screenStream, { metadata: { type: "screen" } });
     }
   }
 }

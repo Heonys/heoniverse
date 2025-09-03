@@ -12,7 +12,7 @@ export default config({
     gameServer.define(RoomType.PUBLIC, Studio, {
       name: "Public Room",
       description: "모든 사용자가 자유롭게 입장하여 소통할 수 있는 공개 공간입니다.",
-      autoDispose: false,
+      autoDispose: true,
     });
     gameServer.define(RoomType.CUSTOM, Studio).enableRealtimeListing();
   },
