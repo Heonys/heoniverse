@@ -23,13 +23,13 @@ export class Computer extends Item {
   connected(userId: string) {
     if (this.connectedUsers.has(userId)) return;
     this.connectedUsers.add(userId);
-    this.updateStatusBox();
+    // this.updateStatusBox();
   }
 
   disConnected(userId: string) {
     if (!this.connectedUsers.has(userId)) return;
     this.connectedUsers.delete(userId);
-    this.updateStatusBox();
+    // this.updateStatusBox();
   }
 
   onOverlapDialog() {

@@ -81,7 +81,9 @@ export class Studio extends Room<StudioState> {
     });
 
     this.onMessage(Messages.CREATE_COMPUTER, (client, payload) => {
-      this.state.computers.set(payload, new Computer());
+      if (!this.state.computers.has(payload)) {
+        this.state.computers.set(payload, new Computer());
+      }
     });
 
     this.onMessage(Messages.CREATE_WHITEBOARD, (client, payload) => {

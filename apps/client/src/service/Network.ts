@@ -224,10 +224,6 @@ export class Network {
         eventEmitter.emit("COMPUTER_USER_REMOVED", { userId, computerId });
       });
 
-      $(computer).connectedUser.onRemove((userId) => {
-        eventEmitter.emit("COMPUTER_USER_REMOVED", { userId, computerId });
-      });
-
       $(computer).onChange(() => {
         const { sharingUserId, isSharing } = computer;
         if (sharingUserId !== "") {
