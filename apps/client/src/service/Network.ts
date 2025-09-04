@@ -171,6 +171,9 @@ export class Network {
       this.sendMessage("SCREEN_SHARING", { computerId, userId, shared });
     }
   }
+  screenSharingRequest(computerId: string, sharingId: string) {
+    this.sendMessage("SCREEN_SHARING_REQUEST", { computerId, sharingId });
+  }
 
   setupRoom() {
     if (!this.room) return;
@@ -192,7 +195,6 @@ export class Network {
         if (name !== "") {
           setTimeout(() => {
             eventEmitter.emit("OTHER_PLAYER_JOINED", { sessionId, player });
-            this.webRTC?.callScreenShareToNewUser(sessionId);
           }, 100);
         }
       });
@@ -261,6 +263,10 @@ export class Network {
 
     this.onMessage(Messages.SEND_ANSWER_CALL, () => {
       store.dispatch(setIsConnected({ state: true, startedAt: new Date() }));
+    });
+
+    this.onMessage(Messages.SCREEN_SHARING_RESPONSE, (receiverId) => {
+      this.webRTC?.callScreenShareToNewUser(receiverId);
     });
   }
 }

@@ -5,7 +5,7 @@ import { TrafficLights } from "@/components/computer";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { currentSharing, setJoinedSharing } from "@/stores/computerSlice";
-import { ScreenSharingAlert } from "@/components/computer/apps";
+import { ScreenShareAlert, ScreenShareJoinAlert } from "@/components/computer/apps";
 
 export const ScreenSharing = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -15,7 +15,7 @@ export const ScreenSharing = () => {
   const joinedSharing = useAppSelector((state) => state.computer.joinedSharing);
   const { network, getLocalPlayer } = useGame();
 
-  const isMe = sharing && sharing.sharingUserId === getLocalPlayer().playerId;
+  const isSharingMe = sharing && sharing.sharingUserId === getLocalPlayer().playerId;
 
   return (
     <div className="h-full w-full overflow-hidden rounded-2xl bg-[#1e1e1e]">
@@ -24,7 +24,14 @@ export const ScreenSharing = () => {
           <TrafficLights
             id="screen-sharing"
             onClose={() => {
-              if (isMe) network.webRTC?.stopScreenShare();
+              if (isSharingMe) {
+                network.webRTC?.stopScreenShare();
+              } else {
+                if (network.webRTC?.connectedCall) {
+                  network.webRTC.connectedCall.close();
+                  network.webRTC.connectedCall = undefined;
+                }
+              }
               dispatch(setJoinedSharing(false));
             }}
           />
@@ -47,7 +54,7 @@ export const ScreenSharing = () => {
           transition={{ duration: 0.5 }}
         />
         <div className="fixed bottom-3 right-3 z-[9999] flex gap-2">
-          <Condition condition={isMe && isHovered}>
+          <Condition condition={isSharingMe && isHovered}>
             <TooltipButton
               id="desktop-screen-share"
               tooltip="stop sharing"
@@ -64,10 +71,7 @@ export const ScreenSharing = () => {
 
         <AnimatePresence>
           {!sharing && (
-            <ScreenSharingAlert
-              title="화면 공유를 위한 권한 요청"
-              description="공유할 화면을 선택하면 다른 플레이어가 볼 수 있습니다"
-              confirmText="공유 시작"
+            <ScreenShareAlert
               onConfirm={() => {
                 network.webRTC?.startScreenShare().then((stream) => {
                   dispatch(setJoinedSharing(true));
@@ -79,10 +83,8 @@ export const ScreenSharing = () => {
             />
           )}
           {sharing && !joinedSharing && (
-            <ScreenSharingAlert
-              title={`${sharing.sharingUserId}님의 화면 공유`}
-              description="계속하려면 참여하기를 눌러 화면공유에 참여하세요"
-              confirmText="참여하기"
+            <ScreenShareJoinAlert
+              sharingId={sharing.sharingUserId}
               onConfirm={() => {
                 if (network.webRTC?.screenStream) {
                   dispatch(setJoinedSharing(true));

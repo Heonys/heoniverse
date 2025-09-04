@@ -134,6 +134,18 @@ export class Studio extends Room<StudioState> {
       }
     });
 
+    this.onMessage(Messages.SCREEN_SHARING_REQUEST, (client, payload) => {
+      const { computerId, sharingId } = payload;
+      const computer = this.state.computers.get(computerId);
+      const sharer = this.clients.find((c) => c.sessionId === sharingId);
+
+      if (computer && sharer) {
+        if (computer.sharingUserId === sharingId && computer.isSharing) {
+          sharer.send(Messages.SCREEN_SHARING_RESPONSE, client.sessionId);
+        }
+      }
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,
@@ -166,6 +178,10 @@ export class Studio extends Room<StudioState> {
     this.state.computers.forEach((computer) => {
       if (computer.connectedUser.has(clientId)) {
         computer.connectedUser.delete(clientId);
+      }
+      if (computer.sharingUserId === clientId) {
+        computer.sharingUserId = "";
+        computer.isSharing = false;
       }
     });
     this.state.whiteboards.forEach((whiteboard) => {

@@ -19,6 +19,7 @@ export class WebRTC {
   private videoStream?: MediaStream;
   screenStream?: MediaStream;
   mediaStreamsMap = new Map<Player, MediaStream>();
+  connectedCall?: MediaConnection;
 
   constructor(peerId: string, network: Network) {
     this.peer = new Peer(peerId, {
@@ -92,12 +93,16 @@ export class WebRTC {
 
   handleScreenShareCall(call: MediaConnection) {
     call.answer();
+    this.connectedCall = call;
+
     call.on("stream", (stream) => {
+      console.log("공유 시작");
       this.screenStream = stream;
     });
 
     call.on("close", () => {
-      //
+      console.log("화면공유 종료");
+      this.connectedCall = undefined;
     });
   }
 
