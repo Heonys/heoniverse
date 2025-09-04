@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { Condition, TooltipButton } from "@/common";
 import { closeComputerDialog, currentSharing, setJoinedSharing } from "@/stores/computerSlice";
 import { Desktop } from "@/components/computer";
@@ -9,6 +9,7 @@ export const ComputerDialog = () => {
   const dispatch = useAppDispatch();
   const sharing = useAppSelector(currentSharing);
   const { network, getLocalPlayer } = useGame();
+  const { showModal } = useModal();
 
   const isSharingMe = sharing && sharing.sharingUserId === getLocalPlayer().playerId;
 
@@ -23,14 +24,20 @@ export const ComputerDialog = () => {
       </div>
 
       <div className="fixed bottom-2 right-5 z-[9999] flex gap-2">
-        <TooltipButton id="desktop-help" tooltip="help">
+        <TooltipButton
+          id="desktop-help"
+          tooltip="조작 가이드"
+          onClick={() => {
+            showModal("ComputerGuide");
+          }}
+        >
           <AppIcon iconName="help" color="black" size={25} />
         </TooltipButton>
 
         <Condition condition={!isSharingMe}>
           <TooltipButton
             id="desktop-shutdown"
-            tooltip="Shut Down"
+            tooltip="전원 종료"
             onClick={() => {
               dispatch(closeComputerDialog());
               dispatch(shutdownDesktop());

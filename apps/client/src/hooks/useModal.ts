@@ -4,6 +4,8 @@ import {
   LeaveRoom,
   JoinedUsers,
   UserProfile,
+  ComputerGuide,
+  WhiteboardGuide,
 } from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { show, hide } from "@/stores/modalSlice";
@@ -14,6 +16,8 @@ export const modalTemplates = {
   LeaveRoom,
   JoinedUsers,
   UserProfile,
+  ComputerGuide,
+  WhiteboardGuide,
 };
 
 type ModalTemplates = typeof modalTemplates;

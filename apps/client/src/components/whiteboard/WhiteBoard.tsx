@@ -6,7 +6,7 @@ export const WhiteBoard = () => {
   return (
     <div
       id="white-board"
-      className="relative w-full h-full rounded-2xl overflow-hidden bg-neutral-50"
+      className="relative h-full w-full overflow-hidden rounded-2xl bg-neutral-50"
     >
       {/* <ToolBar />
       <ControlBar />

@@ -1,11 +1,12 @@
 import { TooltipButton } from "@/common";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { closeWhiteboardDialog } from "@/stores/whiteboardSlice";
 import { WhiteBoard } from "@/components/whiteboard";
 
 export const WhiteboardDialog = () => {
   const dispatch = useAppDispatch();
+  const { showModal } = useModal();
 
   return (
     <div className="backdrop-blur-xs fixed left-0 top-0 z-[9999] h-full w-full p-5">
@@ -13,7 +14,13 @@ export const WhiteboardDialog = () => {
         <WhiteBoard />
       </div>
       <div className="fixed bottom-2 right-5 z-[9999] flex gap-2">
-        <TooltipButton id="whiteboard-help" tooltip="help">
+        <TooltipButton
+          id="whiteboard-help"
+          tooltip="조작 가이드"
+          onClick={() => {
+            showModal("WhiteboardGuide");
+          }}
+        >
           <AppIcon iconName="help" color="black" size={25} />
         </TooltipButton>
         <TooltipButton

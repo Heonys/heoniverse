@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector, useGame, useModal, useSceneEffect } fro
 import { AppIcon } from "@/icons";
 import { setJoystick, setMinimap } from "@/stores/userSlice";
 import { openURL } from "@/utils";
-import { setIsRinging, setShowIphone } from "@/stores/phoneSlice";
 
 export const HelperGroups = () => {
   const { gameScene } = useGame();
