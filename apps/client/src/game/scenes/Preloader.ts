@@ -75,6 +75,11 @@ export class Preloader extends Phaser.Scene {
       frameHeight: 48,
     });
 
+    this.load.spritesheet("yellow", "/images/character/yellow.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+
     this.load.atlas(
       "cloud_day",
       "/images/background/cloud_day.png",

@@ -1,7 +1,3 @@
-import Adam from "/images/login/Adam_login.png";
-import Ash from "/images/login/Ash_login.png";
-import Lucy from "/images/login/Lucy_login.png";
-import Nancy from "/images/login/Nancy_login.png";
 import AdamSprite from "/images/character/adam.png";
 import AshSprite from "/images/character/ash.png";
 import LucySprite from "/images/character/lucy.png";
@@ -10,13 +6,6 @@ import AdamIcon from "/icons/character/adam-icon.png";
 import AshIcon from "/icons/character/ash-icon.png";
 import LucyIcon from "/icons/character/lucy-icon.png";
 import NancyIcon from "/icons/character/nancy-icon.png";
-
-export const avatars = [
-  { name: "adam", img: Adam },
-  { name: "ash", img: Ash },
-  { name: "lucy", img: Lucy },
-  { name: "nancy", img: Nancy },
-];
 
 export const spriteAvatars = [
   { name: "adam", sprite: AdamSprite },

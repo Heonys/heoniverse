@@ -25,7 +25,7 @@ function App() {
       <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
         <Condition condition={loggedIn} fallback={<LoginDialog />}>
           <IphoneApp />
-          <GameHUD />
+          {/* <GameHUD /> */}
           <GameNoti />
         </Condition>
       </Condition>

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
-import { avatars, spriteAvatars } from "@/constants/game";
+import { spriteAvatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
 import { FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
@@ -31,7 +31,8 @@ export const LoginDialog = () => {
   const onSubmit = (data: FormType) => {
     const player = getLocalPlayer();
     player.setPlayerName(data.name);
-    player.setPlayerAvatar(avatars[avatarIndex].name);
+    player.setPlayerAvatar(spriteAvatars[avatarIndex].name);
+    // player.setPlayerAvatar("yellow");
     player.readyToConnect = true;
     network.readyToConnect();
     gameScene.enableKeys();

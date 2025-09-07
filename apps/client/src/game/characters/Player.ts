@@ -48,13 +48,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setFontFamily("Retro")
       .setFontSize(12)
       .setColor("#000000")
-      .setOrigin(0.5, 1);
+      .setOrigin(0.5);
 
     this.statusCircle = this.scene.add
       .circle(0, 2, 5, 0x01dca2)
       .setStrokeStyle(1.5, 0x000000, 1)
-      .setOrigin(0.5, 1)
-      .setPosition(0, -this.playerName.height - 1);
+      .setOrigin(0.5)
+      .setPosition(0, -this.playerName.height);
 
     // this.callingIcon = this.scene.add
     //   .image(0, 0, "call")

@@ -4,6 +4,172 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
   const animsFrameRate = 15;
 
   anims.create({
+    key: "yellow_idle_right",
+    frames: anims.generateFrameNames("yellow", {
+      start: 56,
+      end: 61,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+  anims.create({
+    key: "yellow_idle_up",
+    frames: anims.generateFrameNames("yellow", {
+      start: 62,
+      end: 67,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+  anims.create({
+    key: "yellow_idle_left",
+    frames: anims.generateFrameNames("yellow", {
+      start: 68,
+      end: 73,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+  anims.create({
+    key: "yellow_idle_down",
+    frames: anims.generateFrameNames("yellow", {
+      start: 74,
+      end: 79,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  anims.create({
+    key: "yellow_run_right",
+    frames: anims.generateFrameNames("yellow", {
+      start: 112,
+      end: 117,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate,
+  });
+
+  anims.create({
+    key: "yellow_run_up",
+    frames: anims.generateFrameNames("yellow", {
+      start: 118,
+      end: 123,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate,
+  });
+
+  anims.create({
+    key: "yellow_run_left",
+    frames: anims.generateFrameNames("yellow", {
+      start: 124,
+      end: 129,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate,
+  });
+
+  anims.create({
+    key: "yellow_run_down",
+    frames: anims.generateFrameNames("yellow", {
+      start: 130,
+      end: 135,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate,
+  });
+  anims.create({
+    key: "yellow_sit_down",
+    frames: anims.generateFrameNames("yellow", {
+      start: 74,
+      end: 79,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  anims.create({
+    key: "yellow_sit_up",
+    frames: anims.generateFrameNames("yellow", {
+      start: 62,
+      end: 67,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  anims.create({
+    key: "yellow_sit_right",
+    frames: anims.generateFrameNames("yellow", {
+      start: 224,
+      end: 229,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  anims.create({
+    key: "yellow_sit_left",
+    frames: anims.generateFrameNames("yellow", {
+      start: 230,
+      end: 235,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  anims.create({
+    key: "yellow_phone",
+    frames: anims.generateFrameNames("yellow", {
+      start: 336,
+      end: 247,
+    }),
+    repeat: -1,
+    frameRate: animsFrameRate * 0.6,
+  });
+
+  /* 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  */
+
+  anims.create({
     key: "nancy_idle_right",
     frames: anims.generateFrameNames("nancy", {
       start: 0,

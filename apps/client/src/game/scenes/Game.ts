@@ -39,7 +39,7 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "adam");
+    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "yellow");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
