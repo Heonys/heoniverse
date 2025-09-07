@@ -1,18 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import { avatarIcons } from "@/constants/game";
 import { Status } from "@heoniverse/shared";
+import { statusColorMap } from "@/constants/common";
 import { cn } from "@/utils";
 
 type Props = {
   texture: string;
   status?: Status;
   className?: string;
-};
-
-const colorMap: Record<Status, string> = {
-  available: "bg-[#01dca2]",
-  busy: "bg-[#fbd359]",
-  focused: "bg-[#e25156]",
 };
 
 export const AvatarIcon = ({ texture, status, className }: Props) => {
@@ -35,7 +30,7 @@ export const AvatarIcon = ({ texture, status, className }: Props) => {
         <div
           className={cn(
             "absolute bottom-0 right-0 size-2.5 rounded-full ring ring-black",
-            colorMap[status],
+            statusColorMap[status],
           )}
         />
       )}

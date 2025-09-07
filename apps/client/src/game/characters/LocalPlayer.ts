@@ -10,9 +10,9 @@ import { Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service";
 import { eventEmitter } from "@/game/events";
 import { JoystickMovement } from "@/components";
-import { getJoystickDirection, spliteAnimKey } from "@/utils";
+import { getJoystickDirection } from "@/utils";
 import { store } from "@/stores";
-import { showConnectBridge } from "@/stores/modalSlice";
+import { showUserProfile } from "@/stores/modalSlice";
 import { Game } from "@/game/scenes";
 import { setUserName, setUserTexture, nextStatus, setUserStatus } from "@/stores/userSlice";
 
@@ -132,15 +132,7 @@ export class LocalPlayer extends Player {
 
         if (isEJustDown && playerSelector.playerOverlap) {
           const otherPlayer = playerSelector.playerOverlap.player;
-          const { character } = spliteAnimKey(otherPlayer.anims.currentAnim!.key);
-
-          store.dispatch(
-            showConnectBridge({
-              id: otherPlayer.playerId,
-              name: otherPlayer.playerName.text,
-              texure: character,
-            }),
-          );
+          store.dispatch(showUserProfile({ otherPlayer }));
         }
 
         let vx = 0;

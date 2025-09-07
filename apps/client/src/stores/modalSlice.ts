@@ -1,3 +1,4 @@
+import { OtherPlayer } from "@/game/characters";
 import { modalTemplates } from "@/hooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -23,7 +24,7 @@ const modalSlice = createSlice({
     hide: (state) => {
       state.modal = { state: "close" };
     },
-    showConnectBridge(state, action: PayloadAction<{ id: string; name: string; texure: string }>) {
+    showUserProfile(state, action: PayloadAction<{ otherPlayer: OtherPlayer }>) {
       state.modal = {
         state: "open",
         component: modalTemplates["UserProfile"],
@@ -33,5 +34,5 @@ const modalSlice = createSlice({
   },
 });
 
-export const { show, hide, showConnectBridge } = modalSlice.actions;
+export const { show, hide, showUserProfile } = modalSlice.actions;
 export default modalSlice.reducer;
