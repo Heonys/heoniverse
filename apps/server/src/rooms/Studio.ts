@@ -146,6 +146,10 @@ export class Studio extends Room<StudioState> {
       }
     });
 
+    this.onMessage(Messages.UPDATE_ELEMENTS, (client, payload: any[]) => {
+      this.broadcast(Messages.UPDATED_ELEMENTS, payload, { except: client });
+    });
+
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {
       this.dispatcher.dispatch(new PushChatUpdateCommand(), {
         sessionId: client.sessionId,

@@ -1,5 +1,6 @@
 import { monitor } from "@colyseus/monitor";
 import config from "@colyseus/tools";
+import { uWebSocketsTransport } from "@colyseus/uwebsockets-transport";
 import express from "express";
 import { RoomType } from "@heoniverse/shared";
 import { Studio } from "./rooms/Studio";
@@ -7,6 +8,12 @@ import { CustomLobbyRoom } from "./rooms/Robby";
 import cors from "cors";
 
 export default config({
+  initializeTransport: function () {
+    return new uWebSocketsTransport({
+      maxPayloadLength: 16 * 1024 * 1024,
+    });
+  },
+
   initializeGameServer: (gameServer) => {
     gameServer.define(RoomType.LOBBY, CustomLobbyRoom);
     gameServer.define(RoomType.PUBLIC, Studio, {

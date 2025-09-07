@@ -175,6 +175,10 @@ export class Network {
     this.sendMessage("SCREEN_SHARING_REQUEST", { computerId, sharingId });
   }
 
+  updateWhiteboard(elements: readonly any[]) {
+    this.sendMessage("UPDATE_ELEMENTS", elements);
+  }
+
   setupRoom() {
     if (!this.room) return;
     this.lobby?.leave();
@@ -267,6 +271,12 @@ export class Network {
 
     this.onMessage(Messages.SCREEN_SHARING_RESPONSE, (receiverId) => {
       this.webRTC?.callScreenShareToNewUser(receiverId);
+    });
+
+    this.onMessage(Messages.UPDATED_ELEMENTS, (payload) => {
+      if (payload.length > 0) {
+        eventEmitter.emit("UPDATED_ELEMENTS", payload);
+      }
     });
   }
 }

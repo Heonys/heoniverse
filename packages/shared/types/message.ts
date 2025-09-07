@@ -21,6 +21,8 @@ export enum Messages {
   SCREEN_SHARING = "SCREEN_SHARING",
   SCREEN_SHARING_REQUEST = "SCREEN_SHARING_REQUEST",
   SCREEN_SHARING_RESPONSE = "SCREEN_SHARING_RESPONSE",
+  UPDATE_ELEMENTS = "UPDATE_ELEMENTS",
+  UPDATED_ELEMENTS = "UPDATED_ELEMENTS",
 }
 
 export type MessagePayloadMap = {
@@ -53,4 +55,6 @@ export type MessagePayloadMap = {
   SCREEN_SHARING: { computerId: string; userId: string; shared: boolean };
   SCREEN_SHARING_REQUEST: { computerId: string; sharingId: string };
   SCREEN_SHARING_RESPONSE: string;
+  UPDATE_ELEMENTS: readonly any[];
+  UPDATED_ELEMENTS: readonly any[];
 };
