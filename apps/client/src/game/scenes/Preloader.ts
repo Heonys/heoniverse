@@ -55,27 +55,41 @@ export class Preloader extends Phaser.Scene {
       frameHeight: 32,
     });
 
-    this.load.spritesheet("adam", "/images/character/adam.png", {
+    this.load.spritesheet("suit", "/images/character/entire/suit.png", {
       frameWidth: 32,
-      frameHeight: 48,
+      frameHeight: 64,
     });
 
-    this.load.spritesheet("ash", "/images/character/ash.png", {
+    this.load.spritesheet("kimono", "/images/character/entire/kimono.png", {
       frameWidth: 32,
-      frameHeight: 48,
+      frameHeight: 64,
     });
 
-    this.load.spritesheet("lucy", "/images/character/lucy.png", {
+    this.load.spritesheet("bald", "/images/character/entire/bald.png", {
       frameWidth: 32,
-      frameHeight: 48,
+      frameHeight: 64,
     });
-
-    this.load.spritesheet("nancy", "/images/character/nancy.png", {
+    this.load.spritesheet("ghost", "/images/character/entire/ghost.png", {
       frameWidth: 32,
-      frameHeight: 48,
+      frameHeight: 64,
     });
-
-    this.load.spritesheet("yellow", "/images/character/yellow.png", {
+    this.load.spritesheet("jobless", "/images/character/entire/jobless.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("police", "/images/character/entire/police.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("rapper", "/images/character/entire/rapper.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("shark", "/images/character/entire/shark.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("sufer", "/images/character/entire/sufer.png", {
       frameWidth: 32,
       frameHeight: 64,
     });

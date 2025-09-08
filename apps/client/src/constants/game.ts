@@ -1,24 +1,45 @@
-import AdamSprite from "/images/character/adam.png";
-import AshSprite from "/images/character/ash.png";
-import LucySprite from "/images/character/lucy.png";
-import NancySprite from "/images/character/nancy.png";
-import AdamIcon from "/icons/character/adam-icon.png";
-import AshIcon from "/icons/character/ash-icon.png";
-import LucyIcon from "/icons/character/lucy-icon.png";
-import NancyIcon from "/icons/character/nancy-icon.png";
+import SuitIcon from "/icons/character/suit.png";
+import KimonoIcon from "/icons/character/kimono.png";
+import BaldIcon from "/icons/character/bald.png";
+import GhostIcon from "/icons/character/ghost.png";
+import JoblessIcon from "/icons/character/jobless.png";
+import PoliceIcon from "/icons/character/police.png";
+import RapperIcon from "/icons/character/rapper.png";
+import SharkIcon from "/icons/character/shark.png";
+import SuferIcon from "/icons/character/sufer.png";
+
+import SuitSprite from "/images/character/idle/suit.png";
+import KimonoSprite from "/images/character/idle/kimono.png";
+import BaldSprite from "/images/character/idle/bald.png";
+import GhostSprite from "/images/character/idle/ghost.png";
+import JoblessSprite from "/images/character/idle/jobless.png";
+import PoliceSprite from "/images/character/idle/police.png";
+import RapperSprite from "/images/character/idle/rapper.png";
+import SharkSprite from "/images/character/idle/shark.png";
+import SuferSprite from "/images/character/idle/sufer.png";
 
 export const spriteAvatars = [
-  { name: "adam", sprite: AdamSprite },
-  { name: "ash", sprite: AshSprite },
-  { name: "lucy", sprite: LucySprite },
-  { name: "nancy", sprite: NancySprite },
+  { name: "suit", sprite: SuitSprite },
+  { name: "kimono", sprite: KimonoSprite },
+  { name: "shark", sprite: SharkSprite },
+  { name: "bald", sprite: BaldSprite },
+  { name: "sufer", sprite: SuferSprite },
+  { name: "ghost", sprite: GhostSprite },
+  { name: "rapper", sprite: RapperSprite },
+  { name: "jobless", sprite: JoblessSprite },
+  { name: "police", sprite: PoliceSprite },
 ];
 
 export const avatarIcons = [
-  { name: "adam", icon: AdamIcon },
-  { name: "ash", icon: AshIcon },
-  { name: "lucy", icon: LucyIcon },
-  { name: "nancy", icon: NancyIcon },
+  { name: "suit", icon: SuitIcon },
+  { name: "kimono", icon: KimonoIcon },
+  { name: "shark", icon: SharkIcon },
+  { name: "bald", icon: BaldIcon },
+  { name: "sufer", icon: SuferIcon },
+  { name: "ghost", icon: GhostIcon },
+  { name: "rapper", icon: RapperIcon },
+  { name: "jobless", icon: JoblessIcon },
+  { name: "police", icon: PoliceIcon },
 ];
 
 export enum Direction {

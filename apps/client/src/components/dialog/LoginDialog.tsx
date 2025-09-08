@@ -32,7 +32,6 @@ export const LoginDialog = () => {
     const player = getLocalPlayer();
     player.setPlayerName(data.name);
     player.setPlayerAvatar(spriteAvatars[avatarIndex].name);
-    // player.setPlayerAvatar("yellow");
     player.readyToConnect = true;
     network.readyToConnect();
     gameScene.enableKeys();
@@ -64,7 +63,7 @@ export const LoginDialog = () => {
                   startFrame={18}
                   endFrame={23}
                   frameWidth={32}
-                  frameHeight={48}
+                  frameHeight={54}
                 />
               </div>
             ))}

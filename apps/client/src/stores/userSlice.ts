@@ -15,7 +15,7 @@ type UserState = {
 };
 
 const initialState: UserState = {
-  texture: "adam",
+  texture: "suit",
   userName: "",
   loggedIn: false,
   otherPlayersName: new Map<string, string>(),

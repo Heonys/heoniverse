@@ -39,7 +39,7 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "yellow");
+    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "police");
     this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
@@ -307,7 +307,7 @@ export class Game extends Phaser.Scene {
     if (this.ohterPlayersMap.has(id)) return;
 
     const { name, x, y } = player;
-    const otherPlayer = new OtherPlayer(this, id, name, x, y, "adam");
+    const otherPlayer = new OtherPlayer(this, id, name, x, y, "suit");
     this.otherPlayers.add(otherPlayer);
     this.ohterPlayerOverlapZone.add(otherPlayer.playerOverlap);
     this.ohterPlayersMap.set(id, otherPlayer);
