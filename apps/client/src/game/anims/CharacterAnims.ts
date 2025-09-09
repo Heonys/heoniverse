@@ -124,9 +124,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "suit_phone",
     frames: anims.generateFrameNames("suit", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -251,9 +251,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "kimono_phone",
     frames: anims.generateFrameNames("kimono", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -378,9 +378,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "bald_phone",
     frames: anims.generateFrameNames("bald", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -505,9 +505,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "ghost_phone",
     frames: anims.generateFrameNames("ghost", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -632,9 +632,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "jobless_phone",
     frames: anims.generateFrameNames("jobless", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -759,9 +759,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "police_phone",
     frames: anims.generateFrameNames("police", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -886,9 +886,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "rapper_phone",
     frames: anims.generateFrameNames("rapper", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -1013,9 +1013,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "shark_phone",
     frames: anims.generateFrameNames("shark", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 
@@ -1140,9 +1140,9 @@ export const createCharacterAnims = (anims: Phaser.Animations.AnimationManager) 
     key: "sufer_phone",
     frames: anims.generateFrameNames("sufer", {
       start: 336,
-      end: 247,
+      end: 242,
     }),
-    repeat: -1,
+    repeat: 0,
     frameRate: animsFrameRate * 0.6,
   });
 };

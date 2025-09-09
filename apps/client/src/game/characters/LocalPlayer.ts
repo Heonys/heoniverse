@@ -87,6 +87,7 @@ export class LocalPlayer extends Player {
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
         const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE);
+        const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR);
 
         if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
           const chairObject = selectedItem as Chair;
@@ -118,19 +119,19 @@ export class LocalPlayer extends Player {
           return;
         }
 
-        if (isEJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
+        if (isRJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
           const computerObject = selectedItem as Computer;
           computerObject.openDialog();
           return;
         }
 
-        if (isEJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
+        if (isRJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
           const whiteboardObject = selectedItem as Whiteboard;
           whiteboardObject.openDialog();
           return;
         }
 
-        if (isEJustDown && playerSelector.playerOverlap) {
+        if (isRJustDown && playerSelector.playerOverlap) {
           const otherPlayer = playerSelector.playerOverlap.player;
           store.dispatch(showUserProfile({ otherPlayer }));
         }

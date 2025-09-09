@@ -96,12 +96,10 @@ export class WebRTC {
     this.connectedCall = call;
 
     call.on("stream", (stream) => {
-      console.log("공유 시작");
       this.screenStream = stream;
     });
 
     call.on("close", () => {
-      console.log("화면공유 종료");
       this.connectedCall = undefined;
     });
   }

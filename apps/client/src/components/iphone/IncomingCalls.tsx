@@ -20,7 +20,10 @@ export const IncomingCalls = ({ callerId }: Props) => {
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: -15, opacity: 0 }}
     >
-      <AvatarIcon texture="adam" className="size-[30px] bg-white ring-2 ring-white/30" />
+      <AvatarIcon
+        texture={player ? player.playerTexture : "suit"}
+        className="size-[30px] bg-white ring-2 ring-white/30"
+      />
       <div className="flex flex-1 flex-col">
         <div className="text-[10px] text-white/50">{roomName}</div>
         <div className="text-[13px]">{player ? player.playerName.text : "Unknown"}</div>

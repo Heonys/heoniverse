@@ -48,20 +48,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setFontFamily("Retro")
       .setFontSize(12)
       .setColor("#000000")
-      .setOrigin(0.5);
+      .setOrigin(0.5, 0.25);
 
     this.statusCircle = this.scene.add
       .circle(0, 2, 5, 0x01dca2)
       .setStrokeStyle(1.5, 0x000000, 1)
-      .setOrigin(0.5)
+      .setOrigin(0.5, 0.25)
       .setPosition(0, -this.playerName.height);
-
-    // this.callingIcon = this.scene.add
-    //   .image(0, 0, "call")
-    //   .setDisplaySize(15, 15)
-    //   .setOrigin(0.5, 1)
-    //   .setPosition(0, this.height / 2)
-    //   .setVisible(false);
 
     this.playerContainer = this.scene.add
       .container(this.x, this.y - this.height / 2, [
@@ -105,7 +98,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setColor("#000000")
       .setOrigin(0.5);
 
-    innerText.setY(-(innerText.height / 2) - this.playerName.height - 2);
+    innerText.setY(-(innerText.height / 2) - this.playerName.height + 8);
 
     const boxWidth = innerText.width + 8;
     const boxHeight = innerText.height + 3;
@@ -137,7 +130,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setFontSize(12)
       .setColor("#000000")
       .setOrigin(0.5)
-      .setY(this.height / 2);
+      .setY(this.height / 2 + 5);
 
     const statusBoxWidth = innerText.width + 4;
     const statusBoxHeight = innerText.height + 2;
