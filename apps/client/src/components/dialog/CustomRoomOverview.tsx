@@ -121,7 +121,7 @@ export const CustomRoomOverview = ({ onPrevious, onCreate }: Props) => {
         onClick={onPrevious}
       >
         <AppIcon iconName="chevron-left" size={18} />
-        <div className="text-xs font-medium">메인화면</div>
+        <div className="text-xs font-medium">메인메뉴</div>
       </div>
 
       <div className="flex items-center justify-center gap-2">

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { AppButton, Switch, Case } from "@/common";
 import { useAppSelector, useGame } from "@/hooks";
-import { CustomRoomOverview, CreateRoomForm } from "@/components/dialog";
+import { CustomRoomOverview, CreateRoomForm, HelpMenu } from "@/components/dialog";
 import Cityscape from "/images/background/cityscape-icon.jpeg";
+import { AppIcon } from "@/icons";
 
 const enum DialogView {
   Select,
   Overview,
   Create,
+  Guide,
 }
 
 export const SelectMenuDialog = () => {
@@ -20,7 +22,7 @@ export const SelectMenuDialog = () => {
       <div className="relative flex select-none items-center justify-center gap-4 rounded-xl bg-[#323338] text-[#eee]">
         <Switch switch={dialogView}>
           <Case case={DialogView.Select}>
-            <div className="flex w-96 flex-col items-center justify-center gap-3 p-8 px-10">
+            <div className="flex w-96 flex-col items-center justify-center gap-3 p-8 px-12">
               <div className="mb-4 flex flex-col items-center justify-center gap-1">
                 <img
                   className="size-20 rounded-2xl"
@@ -59,6 +61,16 @@ export const SelectMenuDialog = () => {
               >
                 커스텀 방 생성 / 입장
               </AppButton>
+
+              <AppButton
+                className="w-full bg-[#62666f] p-2.5 font-medium"
+                onClick={() => setDialogView(DialogView.Guide)}
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <div>도움말</div>
+                  <AppIcon iconName="help" size={17} />
+                </div>
+              </AppButton>
             </div>
           </Case>
           <Case case={DialogView.Overview}>
@@ -69,6 +81,9 @@ export const SelectMenuDialog = () => {
           </Case>
           <Case case={DialogView.Create}>
             <CreateRoomForm onPrevious={() => setDialogView(DialogView.Overview)} />
+          </Case>
+          <Case case={DialogView.Guide}>
+            <HelpMenu onPrevious={() => setDialogView(DialogView.Select)} />
           </Case>
         </Switch>
       </div>

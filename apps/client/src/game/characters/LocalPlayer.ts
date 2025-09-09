@@ -21,9 +21,12 @@ export class LocalPlayer extends Player {
   facing: Direction = Direction.DOWN;
   activeChair?: Chair;
   speed = 200;
+  isPhoneAnimating = false;
 
   keyE!: Phaser.Input.Keyboard.Key;
   keyR!: Phaser.Input.Keyboard.Key;
+  keyESC!: Phaser.Input.Keyboard.Key;
+  keySPACE!: Phaser.Input.Keyboard.Key;
   joystickMovement?: JoystickMovement;
 
   constructor(
@@ -69,6 +72,8 @@ export class LocalPlayer extends Player {
   registerKeys() {
     this.keyE = this.scene.input.keyboard!.addKey("E");
     this.keyR = this.scene.input.keyboard!.addKey("R");
+    this.keyESC = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    this.keySPACE = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.scene.input.keyboard!.disableGlobalCapture();
   }
 
@@ -88,6 +93,7 @@ export class LocalPlayer extends Player {
       case PlayerBehavior.IDLE: {
         const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE);
         const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR);
+        const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(this.keySPACE);
 
         if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
           const chairObject = selectedItem as Chair;
@@ -134,6 +140,38 @@ export class LocalPlayer extends Player {
         if (isRJustDown && playerSelector.playerOverlap) {
           const otherPlayer = playerSelector.playerOverlap.player;
           store.dispatch(showUserProfile({ otherPlayer }));
+        }
+
+        if (this.isPhoneAnimating) {
+          this.anims.play(`${this.playerTexture}_phone_show`, true);
+          this.playerBehavior = PlayerBehavior.PHONE;
+          this.sendPlayerPosition(network);
+
+          this.once(
+            Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + `${this.playerTexture}_phone_show`,
+            () => {
+              this.anims.play(`${this.playerTexture}_phone_idle`, true);
+              this.sendPlayerPosition(network);
+            },
+          );
+          return;
+        }
+
+        if (isSpaceJustDown) {
+          this.playerBehavior = PlayerBehavior.PUNCHING;
+          this.anims.play(`${this.playerTexture}_punch_${this.facing}`, true);
+          this.sendPlayerPosition(network);
+
+          this.once(
+            Phaser.Animations.Events.ANIMATION_COMPLETE_KEY +
+              `${this.playerTexture}_punch_${this.facing}`,
+            () => {
+              this.playerBehavior = PlayerBehavior.IDLE;
+              this.anims.play(`${this.playerTexture}_idle_${this.facing}`, true);
+              this.sendPlayerPosition(network);
+            },
+          );
+          return;
         }
 
         let vx = 0;
@@ -194,6 +232,34 @@ export class LocalPlayer extends Player {
           playerSelector.setPosition(this.x, this.y);
           this.sendPlayerPosition(network);
         }
+        break;
+      }
+      case PlayerBehavior.PHONE: {
+        const isESCJustDown = Phaser.Input.Keyboard.JustDown(this.keyESC);
+        const joystic = getJoystickDirection(this.joystickMovement);
+        if (
+          isESCJustDown ||
+          cursor.left.isDown ||
+          cursor.right.isDown ||
+          cursor.up.isDown ||
+          cursor.down.isDown ||
+          cursor.W.isDown ||
+          cursor.A.isDown ||
+          cursor.S.isDown ||
+          cursor.D.isDown ||
+          joystic.up ||
+          joystic.down ||
+          joystic.left ||
+          joystic.right
+        ) {
+          this.playerBehavior = PlayerBehavior.IDLE;
+          this.isPhoneAnimating = false;
+          this.play(`${this.playerTexture}_idle_${this.facing}`, true);
+          this.sendPlayerPosition(network);
+        }
+        break;
+      }
+      case PlayerBehavior.PUNCHING: {
         break;
       }
     }

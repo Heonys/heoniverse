@@ -6,7 +6,7 @@ import JoblessIcon from "/icons/character/jobless.png";
 import PoliceIcon from "/icons/character/police.png";
 import RapperIcon from "/icons/character/rapper.png";
 import SharkIcon from "/icons/character/shark.png";
-import SuferIcon from "/icons/character/sufer.png";
+import DoctorIcon from "/icons/character/doctor.png";
 
 import SuitSprite from "/images/character/idle/suit.png";
 import KimonoSprite from "/images/character/idle/kimono.png";
@@ -16,14 +16,14 @@ import JoblessSprite from "/images/character/idle/jobless.png";
 import PoliceSprite from "/images/character/idle/police.png";
 import RapperSprite from "/images/character/idle/rapper.png";
 import SharkSprite from "/images/character/idle/shark.png";
-import SuferSprite from "/images/character/idle/sufer.png";
+import DoctorSprite from "/images/character/idle/doctor.png";
 
 export const spriteAvatars = [
   { name: "suit", sprite: SuitSprite },
   { name: "kimono", sprite: KimonoSprite },
   { name: "shark", sprite: SharkSprite },
   { name: "bald", sprite: BaldSprite },
-  { name: "sufer", sprite: SuferSprite },
+  { name: "doctor", sprite: DoctorSprite },
   { name: "ghost", sprite: GhostSprite },
   { name: "rapper", sprite: RapperSprite },
   { name: "jobless", sprite: JoblessSprite },
@@ -35,7 +35,7 @@ export const avatarIcons = [
   { name: "kimono", icon: KimonoIcon },
   { name: "shark", icon: SharkIcon },
   { name: "bald", icon: BaldIcon },
-  { name: "sufer", icon: SuferIcon },
+  { name: "doctor", icon: DoctorIcon },
   { name: "ghost", icon: GhostIcon },
   { name: "rapper", icon: RapperIcon },
   { name: "jobless", icon: JoblessIcon },
@@ -52,6 +52,8 @@ export enum Direction {
 export enum PlayerBehavior {
   IDLE,
   SITTING,
+  PHONE,
+  PUNCHING,
 }
 
 export enum ItemType {

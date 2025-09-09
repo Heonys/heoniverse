@@ -36,7 +36,7 @@ export const HelperGroups = () => {
 
       <Condition condition={loggedIn}>
         <TooltipButton
-          id="joystick"
+          id="minimap"
           tooltip={`미니맵 ${showMinimap ? "비활성화" : "활성화"}`}
           onClick={() => {
             if (showMinimap) gameScene.removeMinimapCamera();
@@ -59,20 +59,22 @@ export const HelperGroups = () => {
         </TooltipButton>
       </Condition>
 
-      <TooltipButton
-        id="control-guide"
-        tooltip="조작 가이드"
-        onClick={() => {
-          showModal("ControlGuide");
-        }}
-      >
-        <AppIcon iconName="help" color="black" size={25} />
-      </TooltipButton>
+      <Condition condition={loggedIn}>
+        <TooltipButton
+          id="control-guide"
+          tooltip="조작 가이드"
+          onClick={() => {
+            showModal("ControlGuide");
+          }}
+        >
+          <AppIcon iconName="help" color="black" size={25} />
+        </TooltipButton>
+      </Condition>
 
       <Condition condition={import.meta.env.DEV}>
         <TooltipButton
           id="monitoring"
-          tooltip="모니터링"
+          tooltip="서버 모니터링"
           onClick={() => {
             openURL(`http://${import.meta.env.VITE_SERVER_URL}/colyseus`);
           }}
@@ -83,7 +85,7 @@ export const HelperGroups = () => {
 
       <TooltipButton
         id="github"
-        tooltip="깃허브 저장소"
+        tooltip="Github"
         onClick={() => {
           openURL("https://github.com/Heonys/heoniverse");
         }}

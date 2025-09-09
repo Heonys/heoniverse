@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { Pages, setShowIphone } from "@/stores/phoneSlice";
 import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
@@ -14,6 +14,7 @@ const pagesMap: Record<Pages, React.ComponentType<any>> = {
 };
 
 export const IphoneApp = () => {
+  const { getLocalPlayer } = useGame();
   const dispatch = useAppDispatch();
   const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
@@ -73,7 +74,10 @@ export const IphoneApp = () => {
               className="size-11"
               id="phone"
               tooltip="휴대폰 열기"
-              onClick={() => dispatch(setShowIphone(true))}
+              onClick={() => {
+                getLocalPlayer().isPhoneAnimating = true;
+                dispatch(setShowIphone(true));
+              }}
             >
               <AppIcon iconName="phone" color="black" size={28} />
               {unReadMessageCount > 0 && (

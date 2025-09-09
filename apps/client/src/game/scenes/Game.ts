@@ -219,6 +219,7 @@ export class Game extends Phaser.Scene {
       store.dispatch(setShowIphone(true));
       store.dispatch(setCurrentPage({ page: "messages" }));
       store.dispatch(setFocusChat(true));
+      this.localPlayer.isPhoneAnimating = true;
     });
 
     this.input.keyboard?.on("keydown-ESC", () => {
