@@ -21,6 +21,29 @@ export class Preloader extends Phaser.Scene {
 
     this.load.tilemapTiledJSON("tilemap", "/images/map/heoniversemap.tmj");
 
+    //
+
+    this.load.spritesheet("tileset_1x2", "/images/tileset/object1x2.png", {
+      frameWidth: 32,
+      frameHeight: 64,
+    });
+
+    this.load.spritesheet("tileset_1x3", "/images/tileset/object1x3.png", {
+      frameWidth: 32,
+      frameHeight: 96,
+    });
+
+    this.load.spritesheet("tileset_2x2", "/images/tileset/object2x2.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+
+    this.load.spritesheet("tileset_3x2", "/images/tileset/object3x2.png", {
+      frameWidth: 96,
+      frameHeight: 64,
+    });
+
+    //
     this.load.spritesheet("tileset_wall", "/images/map/FloorAndGround.png", {
       frameWidth: 32,
       frameHeight: 32,

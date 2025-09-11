@@ -53,41 +53,41 @@ export class Game extends Phaser.Scene {
 
     // this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
 
-    // const chairs = this.addInteractiveGroupFromTiled(
-    //   Chair,
-    //   "Chair",
-    //   "tileset_chairs",
-    //   "chair",
-    //   (chair, _index, tileObject) => {
-    //     chair.direction = tileObject.properties[0].value as Direction;
-    //   },
-    // );
+    const chairs = this.addInteractiveGroupFromTiled(
+      Chair,
+      "Chair",
+      "tileset_1x2",
+      "object1x2",
+      (chair, _index, tileObject) => {
+        chair.direction = tileObject.properties[0].value as Direction;
+      },
+    );
 
-    // const computers = this.addInteractiveGroupFromTiled(
-    //   Computer,
-    //   "Computer",
-    //   "tileset_computers",
-    //   "computer",
-    //   (computer, index) => {
-    //     const id = `${index}`;
-    //     computer.id = id;
-    //     this.computersMap.set(id, computer);
-    //     this.network.createComputer(id);
-    //   },
-    // );
+    const computers = this.addInteractiveGroupFromTiled(
+      Computer,
+      "Computer",
+      "tileset_3x2",
+      "object3x2",
+      (computer, index) => {
+        const id = `${index}`;
+        computer.id = id;
+        this.computersMap.set(id, computer);
+        this.network.createComputer(id);
+      },
+    );
 
-    // const whiteboard = this.addInteractiveGroupFromTiled(
-    //   Whiteboard,
-    //   "Whiteboard",
-    //   "tileset_whiteboards",
-    //   "whiteboard",
-    //   (whiteboard, index) => {
-    //     const id = `${index}`;
-    //     whiteboard.id = id;
-    //     this.whiteboardsMap.set(id, whiteboard);
-    //     this.network.createWhiteboard(id);
-    //   },
-    // );
+    const whiteboard = this.addInteractiveGroupFromTiled(
+      Whiteboard,
+      "Whiteboard",
+      "tileset_2x2",
+      "object2x2",
+      (whiteboard, index) => {
+        const id = `${index}`;
+        whiteboard.id = id;
+        this.whiteboardsMap.set(id, whiteboard);
+        this.network.createWhiteboard(id);
+      },
+    );
 
     this.physics.add.overlap(this.localPlayer, this.otherPlayers, (object1, object2) => {
       const localPlayer = object1 as LocalPlayer;
@@ -111,27 +111,27 @@ export class Game extends Phaser.Scene {
       },
     );
 
-    // this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
-    // this.physics.add.overlap(
-    //   this.playerSelector,
-    //   [chairs, computers, whiteboard],
-    //   (object1, object2) => {
-    //     const playerSelector = object1 as PlayerSelector;
-    //     const overlappedItem = object2 as Item;
+    this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
+    this.physics.add.overlap(
+      this.playerSelector,
+      [chairs, computers, whiteboard],
+      (object1, object2) => {
+        const playerSelector = object1 as PlayerSelector;
+        const overlappedItem = object2 as Item;
 
-    //     if (playerSelector.selectedItem) {
-    //       if (
-    //         playerSelector.selectedItem === overlappedItem ||
-    //         playerSelector.depth >= overlappedItem.depth
-    //       ) {
-    //         return;
-    //       }
-    //       playerSelector.selectedItem.clearDialogBox();
-    //     }
-    //     playerSelector.selectedItem = overlappedItem;
-    //     overlappedItem.onOverlapDialog();
-    //   },
-    // );
+        if (playerSelector.selectedItem) {
+          if (
+            playerSelector.selectedItem === overlappedItem ||
+            playerSelector.depth >= overlappedItem.depth
+          ) {
+            return;
+          }
+          playerSelector.selectedItem.clearDialogBox();
+        }
+        playerSelector.selectedItem = overlappedItem;
+        overlappedItem.onOverlapDialog();
+      },
+    );
   }
 
   setupCamera() {

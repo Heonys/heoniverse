@@ -64,10 +64,10 @@ export enum ItemType {
 
 // [offsetX, offsetY, offsetDepth]
 export const sittingOffset: Record<Direction, [number, number, number]> = {
-  up: [0, -12, -10],
+  up: [0, -16, -10],
   down: [0, -6, 10],
-  left: [-2, -18, 10],
-  right: [2, -18, 10],
+  left: [-2, -21, 10],
+  right: [2, -21, 10],
 };
 
 export type WASD = {
