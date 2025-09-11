@@ -17,10 +17,9 @@ export class Preloader extends Phaser.Scene {
 
   preload() {
     this.load.image("backdrop", "/images/background/backdrop_day.png");
-    this.load.image("backdrop_night", "/images/background/backdrop_night.png");
     this.load.image("call", "/icons/call.png");
 
-    this.load.tilemapTiledJSON("tilemap", "/images/map/tilemap.tmj");
+    this.load.tilemapTiledJSON("tilemap", "/images/map/heoniversemap.tmj");
 
     this.load.spritesheet("tileset_wall", "/images/map/FloorAndGround.png", {
       frameWidth: 32,
@@ -98,12 +97,6 @@ export class Preloader extends Phaser.Scene {
       "cloud_day",
       "/images/background/cloud_day.png",
       "/images/background/cloud_day.json",
-    );
-
-    this.load.atlas(
-      "cloud_night",
-      "/images/background/cloud_night.png",
-      "/images/background/cloud_night.json",
     );
 
     this.load.on("complete", () => {

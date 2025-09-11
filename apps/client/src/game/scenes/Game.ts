@@ -39,8 +39,8 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, 705, 500, "police");
-    this.playerSelector = new PlayerSelector(this, 705, 500, 16, 16);
+    this.localPlayer = new LocalPlayer(this, network.sessionId, 45 * 32, 42 * 32, "police");
+    this.playerSelector = new PlayerSelector(this, 45 * 32, 42 * 32, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
 
@@ -48,46 +48,46 @@ export class Game extends Phaser.Scene {
     this.disableKeys();
 
     const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tileset_wall")!;
-    const groundLayer = this.map.createLayer("Ground", floorAndGroundTileset)!;
-    groundLayer.setCollisionByProperty({ collides: true });
+    const groundLayer = this.map.createLayer("Floor", floorAndGroundTileset)!;
+    // groundLayer.setCollisionByProperty({ collides: true });
 
-    this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
+    // this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
 
-    const chairs = this.addInteractiveGroupFromTiled(
-      Chair,
-      "Chair",
-      "tileset_chairs",
-      "chair",
-      (chair, _index, tileObject) => {
-        chair.direction = tileObject.properties[0].value as Direction;
-      },
-    );
+    // const chairs = this.addInteractiveGroupFromTiled(
+    //   Chair,
+    //   "Chair",
+    //   "tileset_chairs",
+    //   "chair",
+    //   (chair, _index, tileObject) => {
+    //     chair.direction = tileObject.properties[0].value as Direction;
+    //   },
+    // );
 
-    const computers = this.addInteractiveGroupFromTiled(
-      Computer,
-      "Computer",
-      "tileset_computers",
-      "computer",
-      (computer, index) => {
-        const id = `${index}`;
-        computer.id = id;
-        this.computersMap.set(id, computer);
-        this.network.createComputer(id);
-      },
-    );
+    // const computers = this.addInteractiveGroupFromTiled(
+    //   Computer,
+    //   "Computer",
+    //   "tileset_computers",
+    //   "computer",
+    //   (computer, index) => {
+    //     const id = `${index}`;
+    //     computer.id = id;
+    //     this.computersMap.set(id, computer);
+    //     this.network.createComputer(id);
+    //   },
+    // );
 
-    const whiteboard = this.addInteractiveGroupFromTiled(
-      Whiteboard,
-      "Whiteboard",
-      "tileset_whiteboards",
-      "whiteboard",
-      (whiteboard, index) => {
-        const id = `${index}`;
-        whiteboard.id = id;
-        this.whiteboardsMap.set(id, whiteboard);
-        this.network.createWhiteboard(id);
-      },
-    );
+    // const whiteboard = this.addInteractiveGroupFromTiled(
+    //   Whiteboard,
+    //   "Whiteboard",
+    //   "tileset_whiteboards",
+    //   "whiteboard",
+    //   (whiteboard, index) => {
+    //     const id = `${index}`;
+    //     whiteboard.id = id;
+    //     this.whiteboardsMap.set(id, whiteboard);
+    //     this.network.createWhiteboard(id);
+    //   },
+    // );
 
     this.physics.add.overlap(this.localPlayer, this.otherPlayers, (object1, object2) => {
       const localPlayer = object1 as LocalPlayer;
@@ -111,31 +111,31 @@ export class Game extends Phaser.Scene {
       },
     );
 
-    this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
-    this.physics.add.overlap(
-      this.playerSelector,
-      [chairs, computers, whiteboard],
-      (object1, object2) => {
-        const playerSelector = object1 as PlayerSelector;
-        const overlappedItem = object2 as Item;
+    // this.physics.add.collider([this.localPlayer, this.localPlayer.playerContainer], groundLayer);
+    // this.physics.add.overlap(
+    //   this.playerSelector,
+    //   [chairs, computers, whiteboard],
+    //   (object1, object2) => {
+    //     const playerSelector = object1 as PlayerSelector;
+    //     const overlappedItem = object2 as Item;
 
-        if (playerSelector.selectedItem) {
-          if (
-            playerSelector.selectedItem === overlappedItem ||
-            playerSelector.depth >= overlappedItem.depth
-          ) {
-            return;
-          }
-          playerSelector.selectedItem.clearDialogBox();
-        }
-        playerSelector.selectedItem = overlappedItem;
-        overlappedItem.onOverlapDialog();
-      },
-    );
+    //     if (playerSelector.selectedItem) {
+    //       if (
+    //         playerSelector.selectedItem === overlappedItem ||
+    //         playerSelector.depth >= overlappedItem.depth
+    //       ) {
+    //         return;
+    //       }
+    //       playerSelector.selectedItem.clearDialogBox();
+    //     }
+    //     playerSelector.selectedItem = overlappedItem;
+    //     overlappedItem.onOverlapDialog();
+    //   },
+    // );
   }
 
   setupCamera() {
-    this.cameras.main.setZoom(1.45);
+    this.cameras.main.setZoom(1.2);
     this.cameras.main.startFollow(this.localPlayer);
   }
 
