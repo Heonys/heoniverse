@@ -18,10 +18,9 @@ export function KeyboardUI() {
         <Key contents="Enter" width={80} />
       </div>
 
-      {/* <div className="flex gap-1 w-full pl-7">
-        <Key contents="Z" />
-        <Key contents="Space" width={136} />
-      </div> */}
+      <div className="flex w-full gap-1 pl-7">
+        <Key contents="Space" width={150} />
+      </div>
     </div>
   );
 }

@@ -160,6 +160,8 @@ export class LocalPlayer extends Player {
         if (isSpaceJustDown) {
           this.playerBehavior = PlayerBehavior.PUNCHING;
           this.anims.play(`${this.playerTexture}_punch_${this.facing}`, true);
+          this.setVelocity(0, 0);
+          this.containerBody.setVelocity(0, 0);
           this.sendPlayerPosition(network);
 
           this.once(
@@ -181,10 +183,14 @@ export class LocalPlayer extends Player {
         if (cursor.up.isDown || cursor.W.isDown || joystic.up) {
           vy -= this.speed;
           this.facing = Direction.UP;
+          // this.setDepth(this.y);
+          this.setDepth(this.y + this.height / 2);
         }
         if (cursor.down.isDown || cursor.S.isDown || joystic.down) {
           vy += this.speed;
           this.facing = Direction.DOWN;
+          // this.setDepth(this.y);
+          this.setDepth(this.y + this.height / 2);
         }
         if (cursor.left.isDown || cursor.A.isDown || joystic.left) {
           vx -= this.speed;
@@ -195,7 +201,6 @@ export class LocalPlayer extends Player {
           this.facing = Direction.RIGHT;
         }
 
-        this.setDepth(this.y);
         this.setVelocity(vx, vy);
         this.body!.velocity.setLength(this.speed);
         this.containerBody.setVelocity(vx, vy);

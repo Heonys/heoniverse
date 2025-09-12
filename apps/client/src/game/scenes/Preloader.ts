@@ -92,6 +92,11 @@ export class Preloader extends Phaser.Scene {
       frameHeight: 32,
     });
 
+    this.load.spritesheet("tileset_hospital", "/images/tileset/Hospital.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     this.load.spritesheet("suit", "/images/character/entire/suit.png", {
       frameWidth: 32,
       frameHeight: 64,

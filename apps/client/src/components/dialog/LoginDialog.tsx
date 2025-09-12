@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
 import { spriteAvatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
@@ -18,6 +18,7 @@ export const LoginDialog = () => {
   const dispatch = useAppDispatch();
   const { name, description, roomType } = useAppSelector((state) => state.room);
   const { gameScene, getLocalPlayer, network } = useGame();
+  const { showModal } = useModal();
 
   const {
     register,
@@ -36,6 +37,7 @@ export const LoginDialog = () => {
     network.readyToConnect();
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));
+    showModal("ControlGuide");
   };
 
   return (

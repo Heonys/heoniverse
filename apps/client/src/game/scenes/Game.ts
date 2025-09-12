@@ -11,6 +11,8 @@ import { hide } from "@/stores/modalSlice";
 import { setFocusChat, pushJoinedMessage, pushLeftMessage, markAsRead } from "@/stores/chatSlice";
 import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
 
+const START_POINT = [1455, 1400];
+
 export class Game extends Phaser.Scene {
   private cursor!: ExtendedCursorKeys;
   private map!: Phaser.Tilemaps.Tilemap;
@@ -39,8 +41,14 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, 46 * 32, 36 * 32, "police");
-    this.playerSelector = new PlayerSelector(this, 46 * 32, 36 * 32, 16, 16);
+    this.localPlayer = new LocalPlayer(
+      this,
+      network.sessionId,
+      START_POINT[0],
+      START_POINT[1],
+      "suit",
+    );
+    this.playerSelector = new PlayerSelector(this, START_POINT[0], START_POINT[1], 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
 
@@ -62,6 +70,7 @@ export class Game extends Phaser.Scene {
     this.addGroupFromTiled("Jail", "tileset_jail", "Jail", true);
     this.addGroupFromTiled("Basement", "tileset_basement", "Basement", true);
     this.addGroupFromTiled("Kitchen", "tileset_kitchen", "Kitchen", true);
+    this.addGroupFromTiled("Hospital", "tileset_hospital", "Hospital", true);
 
     const chairs = this.addInteractiveGroupFromTiled(
       Chair,
@@ -70,6 +79,10 @@ export class Game extends Phaser.Scene {
       "object1x2",
       (chair, _index, tileObject) => {
         chair.direction = tileObject.properties[0].value as Direction;
+
+        if (chair.direction === "down") {
+          chair.setDepth(chair.y - chair.height / 2);
+        }
       },
     );
 
@@ -83,7 +96,6 @@ export class Game extends Phaser.Scene {
         computer.id = id;
         this.computersMap.set(id, computer);
         this.network.createComputer(id);
-        computer.setDepth(5555);
       },
     );
 
@@ -259,7 +271,7 @@ export class Game extends Phaser.Scene {
     const actualY = object.y! - object.height! * 0.5;
     const obj = group
       .get(actualX, actualY, texture, object.gid! - this.map.getTileset(tilesetName)!.firstgid)
-      .setDepth(actualY);
+      .setDepth(actualY + object.height! / 2);
     return obj;
   }
 
