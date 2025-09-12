@@ -19,9 +19,14 @@ export class Preloader extends Phaser.Scene {
     this.load.image("backdrop", "/images/background/backdrop_day.png");
     this.load.image("call", "/icons/call.png");
 
-    this.load.tilemapTiledJSON("tilemap", "/images/map/heoniversemap.tmj");
+    this.load.tilemapTiledJSON("tilemap", "/images/map/tilemap.tmj");
 
     //
+
+    this.load.spritesheet("tileset_wall_3d", "/images/tileset/Wall_3d.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
 
     this.load.spritesheet("tileset_1x2", "/images/tileset/object1x2.png", {
       frameWidth: 32,
@@ -64,7 +69,7 @@ export class Preloader extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 72,
     });
-    this.load.spritesheet("tileset_office", "/images/tileset/Modern_Office_Black_Shadow.png", {
+    this.load.spritesheet("tileset_office", "/images/tileset/Office.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
@@ -73,6 +78,16 @@ export class Preloader extends Phaser.Scene {
       frameHeight: 32,
     });
     this.load.spritesheet("tileset_generic", "/images/tileset/Generic.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
+    this.load.spritesheet("tileset_jail", "/images/tileset/Jail.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
+    this.load.spritesheet("tileset_kitchen", "/images/tileset/Kitchen.png", {
       frameWidth: 32,
       frameHeight: 32,
     });

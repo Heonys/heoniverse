@@ -39,8 +39,8 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, 45 * 32, 42 * 32, "police");
-    this.playerSelector = new PlayerSelector(this, 45 * 32, 42 * 32, 16, 16);
+    this.localPlayer = new LocalPlayer(this, network.sessionId, 46 * 32, 36 * 32, "police");
+    this.playerSelector = new PlayerSelector(this, 46 * 32, 36 * 32, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.ohterPlayerOverlapZone = this.physics.add.group();
 
@@ -48,10 +48,20 @@ export class Game extends Phaser.Scene {
     this.disableKeys();
 
     const floorAndGroundTileset = this.map.addTilesetImage("FloorAndGround", "tileset_wall")!;
-    const groundLayer = this.map.createLayer("Floor", floorAndGroundTileset)!;
-    // groundLayer.setCollisionByProperty({ collides: true });
+    const floorAndGroundTileset3d = this.map.addTilesetImage("Wall_3d", "tileset_wall_3d")!;
+    const groundLayer = this.map.createLayer("Floor", [
+      floorAndGroundTileset,
+      floorAndGroundTileset3d,
+    ])!;
+    groundLayer.setCollisionByProperty({ collides: true });
 
-    // this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
+    this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
+    this.addGroupFromTiled("Collidable", "tileset_office", "Office", true);
+    this.addGroupFromTiled("NonCollidable", "tileset_office", "Office", false);
+    this.addGroupFromTiled("Generic", "tileset_generic", "Generic", false);
+    this.addGroupFromTiled("Jail", "tileset_jail", "Jail", true);
+    this.addGroupFromTiled("Basement", "tileset_basement", "Basement", true);
+    this.addGroupFromTiled("Kitchen", "tileset_kitchen", "Kitchen", true);
 
     const chairs = this.addInteractiveGroupFromTiled(
       Chair,
@@ -73,6 +83,7 @@ export class Game extends Phaser.Scene {
         computer.id = id;
         this.computersMap.set(id, computer);
         this.network.createComputer(id);
+        computer.setDepth(5555);
       },
     );
 
@@ -135,14 +146,14 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera() {
-    this.cameras.main.setZoom(1.2);
+    this.cameras.main.setZoom(1.3);
     this.cameras.main.startFollow(this.localPlayer);
   }
 
   setupMinimapCamera() {
     this.minimap = this.cameras
       .add(0, 0, 160, 160, false, "minimap")
-      .setZoom(0.14)
+      .setZoom(0.15)
       .setBackgroundColor("#000")
       .startFollow(this.localPlayer);
     this.minimap.postFX.addColorMatrix().grayscale(0.8);
