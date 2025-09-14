@@ -16,7 +16,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
 
     const handleClick = () => {
       if (onClose) onClose();
-      else hideModal();
+      hideModal();
     };
 
     return (
@@ -40,7 +40,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
                 className,
               )}
             >
-              <button className="absolute right-2 top-2 cursor-pointer" onClick={hideModal}>
+              <button className="absolute right-2 top-2 cursor-pointer" onClick={handleClick}>
                 <AppIcon iconName="x-mark" color="white" size={20} />
               </button>
               {children}

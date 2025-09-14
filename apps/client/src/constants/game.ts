@@ -65,7 +65,7 @@ export enum ItemType {
 // [offsetX, offsetY, offsetDepth]
 export const sittingOffset: Record<Direction, [number, number, number]> = {
   up: [0, -16, -10],
-  down: [0, -6, 10],
+  down: [0, -6, 1],
   left: [-2, -21, 10],
   right: [2, -21, 10],
 };

@@ -11,7 +11,7 @@ import { hide } from "@/stores/modalSlice";
 import { setFocusChat, pushJoinedMessage, pushLeftMessage, markAsRead } from "@/stores/chatSlice";
 import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
 
-const START_POINT = [1455, 1400];
+const START_POINT = [1455, 1200];
 
 export class Game extends Phaser.Scene {
   private cursor!: ExtendedCursorKeys;
@@ -67,7 +67,8 @@ export class Game extends Phaser.Scene {
     this.addGroupFromTiled("Collidable", "tileset_office", "Office", true);
     this.addGroupFromTiled("NonCollidable", "tileset_office", "Office", false);
     this.addGroupFromTiled("Generic", "tileset_generic", "Generic", false);
-    this.addGroupFromTiled("Jail", "tileset_jail", "Jail", true);
+    this.addGroupFromTiled("JailCollidable", "tileset_jail", "Jail", true);
+    this.addGroupFromTiled("JailNonCollidable", "tileset_jail", "Jail", false);
     this.addGroupFromTiled("Basement", "tileset_basement", "Basement", true);
     this.addGroupFromTiled("Kitchen", "tileset_kitchen", "Kitchen", true);
     this.addGroupFromTiled("Hospital", "tileset_hospital", "Hospital", true);
@@ -80,7 +81,7 @@ export class Game extends Phaser.Scene {
       (chair, _index, tileObject) => {
         chair.direction = tileObject.properties[0].value as Direction;
 
-        if (chair.direction === "down") {
+        if (chair.direction !== "up") {
           chair.setDepth(chair.y - chair.height / 2);
         }
       },
@@ -248,13 +249,9 @@ export class Game extends Phaser.Scene {
     this.input.keyboard?.on("keydown-ESC", () => {
       const state = store.getState();
 
-      if (state.chat.showChat) {
-        store.dispatch(setShowIphone(false));
-        store.dispatch(setFocusChat(false));
-        store.dispatch(markAsRead());
-      }
       if (state.phone.showIphone) {
         store.dispatch(setShowIphone(false));
+        store.dispatch(setFocusChat(false));
       }
       store.dispatch(hide());
     });

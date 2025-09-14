@@ -22,7 +22,7 @@ export const IphoneApp = () => {
   const CurrentComponent = pagesMap[currentPage.page];
 
   const unReadMessageCount = chatMessages.filter((it) => {
-    if (it.type === "CHAT" && it.message.createdAt > lastReadAt) return it;
+    return it.type === "CHAT" && it.message.createdAt > lastReadAt;
   }).length;
 
   useEffect(() => {

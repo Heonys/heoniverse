@@ -4,15 +4,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
-    showChat: false,
     chatMessages: [] as { type: ChatType; message: IChatMessage }[],
     focused: false,
-    lastReadAt: Infinity,
+    lastReadAt: 0,
   },
   reducers: {
-    setShowChat: (state, action: PayloadAction<boolean>) => {
-      state.showChat = action.payload;
-    },
     setFocusChat(state, action: PayloadAction<boolean>) {
       state.focused = action.payload;
     },
@@ -47,12 +43,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const {
-  setShowChat,
-  setFocusChat,
-  pushMessage,
-  pushJoinedMessage,
-  pushLeftMessage,
-  markAsRead,
-} = chatSlice.actions;
+export const { setFocusChat, pushMessage, pushJoinedMessage, pushLeftMessage, markAsRead } =
+  chatSlice.actions;
 export default chatSlice.reducer;

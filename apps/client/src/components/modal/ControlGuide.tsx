@@ -17,7 +17,7 @@ export const ControlGuide = () => {
             <Kbd>A</Kbd>
             <Kbd>S</Kbd>
             <Kbd>D</Kbd>
-            <div className="ml-1">또는 방향키 및 조이스틱으로 캐릭터 조작</div>
+            <div className="ml-1">또는 방향키로 캐릭터 조작</div>
           </div>
           <div className="flex items-center gap-2">
             <Kbd>E</Kbd>
@@ -25,7 +25,7 @@ export const ControlGuide = () => {
           </div>
           <div className="flex items-center gap-2">
             <Kbd>R</Kbd>
-            <div>컴퓨터, 화이트보드와 같은 인터랙션 오브젝트와 상호작용</div>
+            <div>컴퓨터, 화이트보드 오브젝트와 상호작용</div>
           </div>
           <div className="flex items-center gap-2">
             <Kbd>Space</Kbd>
@@ -37,7 +37,7 @@ export const ControlGuide = () => {
           </div>
           <div className="flex items-center gap-2">
             <Kbd>Esc</Kbd>
-            <div>채팅창 또는 팝업창 닫기</div>
+            <div>스마트폰 또는 팝업창 닫기</div>
           </div>
         </div>
         <div className="flex flex-col gap-2 p-2 pl-4 text-sm text-[#c2c2c2]">

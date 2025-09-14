@@ -1,12 +1,17 @@
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useAppDispatch, useCurrentTime } from "@/hooks";
+import { useAppDispatch, useAppSelector, useCurrentTime } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
 
 export const Home = () => {
   const time = useCurrentTime();
   const dispatch = useAppDispatch();
+  const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
+
+  const unReadMessageCount = chatMessages.filter((it) => {
+    return it.type === "CHAT" && it.message.createdAt > lastReadAt;
+  }).length;
 
   return (
     <div
@@ -90,12 +95,19 @@ export const Home = () => {
           alt="phone"
           onClick={() => dispatch(setCurrentPage({ page: "contacts" }))}
         />
-        <img
-          src="/icons/messages.png"
-          className="no-pixel size-13 hover:brightness-80 cursor-pointer transition-all"
-          alt="messages"
-          onClick={() => dispatch(setCurrentPage({ page: "messages" }))}
-        />
+        <div className="relative">
+          <img
+            src="/icons/messages.png"
+            className="no-pixel size-13 hover:brightness-80 cursor-pointer transition-all"
+            alt="messages"
+            onClick={() => dispatch(setCurrentPage({ page: "messages" }))}
+          />
+          {unReadMessageCount > 0 && (
+            <div className="absolute -right-0.5 -top-0.5 flex size-5 items-center justify-center rounded-full bg-red-500 p-1 text-xs text-white">
+              {unReadMessageCount}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

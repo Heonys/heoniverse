@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Input } from "@headlessui/react";
 import { AppIcon } from "@/icons";
 import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
-import { setFocusChat } from "@/stores/chatSlice";
+import { markAsRead, setFocusChat } from "@/stores/chatSlice";
 import { ChatMessage } from "@/components/iphone";
 import { setCurrentPage } from "@/stores/phoneSlice";
 
@@ -17,7 +17,7 @@ export const Chat = () => {
   const { network, getLocalPlayer } = useGame();
   const time = useCurrentTime();
   const dispatch = useAppDispatch();
-  const { showChat, focused, chatMessages } = useAppSelector((state) => state.chat);
+  const { focused, chatMessages } = useAppSelector((state) => state.chat);
   const RoomName = useAppSelector((state) => state.room.name);
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
 
@@ -43,7 +43,9 @@ export const Chat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [chatMessages, showChat]);
+    dispatch(markAsRead());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatMessages]);
 
   return (
     <div className="rounded-4xl flex size-full flex-col bg-white">
