@@ -1,4 +1,4 @@
-import { Messages } from "@heoniverse/shared";
+import { Messages } from "../../../../packages/shared";
 import { Client, LobbyRoom, matchMaker } from "colyseus";
 
 export class CustomLobbyRoom extends LobbyRoom {

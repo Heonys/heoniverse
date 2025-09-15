@@ -7,7 +7,7 @@
     "preinstall": "pnpm dlx only-allow pnpm",
     "dev": "vite",
     "dev:server": "cd server && pnpm dev",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

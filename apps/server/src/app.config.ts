@@ -2,7 +2,8 @@ import { monitor } from "@colyseus/monitor";
 import config from "@colyseus/tools";
 import { uWebSocketsTransport } from "@colyseus/uwebsockets-transport";
 import express from "express";
-import { RoomType } from "@heoniverse/shared";
+import { RoomType } from "../../../packages/shared";
+
 import { Studio } from "./rooms/Studio";
 import { CustomLobbyRoom } from "./rooms/Robby";
 import cors from "cors";
@@ -30,7 +31,5 @@ export default config({
     app.use("/colyseus", monitor());
   },
 
-  beforeListen: () => {
-    console.log("server is started");
-  },
+  beforeListen: () => {},
 });

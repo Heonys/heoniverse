@@ -1,8 +1,8 @@
 import { useState, MouseEvent, RefObject } from "react";
 
 export const useCanvasScale = (canvasRef: RefObject<HTMLCanvasElement | null>) => {
-  const [scale, setScale] = useState(1);
-  const [scaleOffset, setScaleOffset] = useState({ x: 0, y: 0 });
+  const [scale, _setScale] = useState(1);
+  const [scaleOffset, _setScaleOffset] = useState({ x: 0, y: 0 });
 
   const getMouseCoordinates = (event: MouseEvent<HTMLCanvasElement>) => {
     const rect = canvasRef.current!.getBoundingClientRect();

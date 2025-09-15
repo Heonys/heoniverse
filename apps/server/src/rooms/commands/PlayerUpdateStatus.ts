@@ -1,5 +1,5 @@
 import { Command } from "@colyseus/command";
-import { Status } from "@heoniverse/shared";
+import { Status } from "../../../../../packages/shared";
 import { Studio } from "../Studio";
 
 type Payload = {

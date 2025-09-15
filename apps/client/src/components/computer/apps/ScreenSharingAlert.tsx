@@ -1,4 +1,3 @@
-import { eventEmitter } from "@/game/events";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { closeApp } from "@/stores/desktopSlice";
 import { motion } from "motion/react";

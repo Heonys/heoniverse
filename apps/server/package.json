@@ -6,7 +6,8 @@
   "main": "dist/index.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc --project tsconfig.server.json"
+    "start": "node dist/apps/server/src/index.js",
+    "build": "tsc --project tsconfig.json"
   },
   "keywords": [],
   "author": "",

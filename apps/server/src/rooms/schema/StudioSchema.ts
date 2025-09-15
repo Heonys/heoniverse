@@ -1,5 +1,5 @@
 import { Schema, type, MapSchema, SetSchema, ArraySchema } from "@colyseus/schema";
-import { IPlayer, IStudioState, IChatMessage, Status } from "@heoniverse/shared";
+import { IPlayer, IStudioState, IChatMessage, Status } from "../../../../../packages/shared";
 
 export class Player extends Schema implements IPlayer {
   @type("string") name = "";

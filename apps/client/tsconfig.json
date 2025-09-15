@@ -8,5 +8,7 @@
       "@heoniverse/shared": ["../../packages/shared/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["../server"]
 }
+

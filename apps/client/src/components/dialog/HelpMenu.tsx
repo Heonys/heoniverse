@@ -1,5 +1,4 @@
 import { AppIcon } from "@/icons";
-import { Kbd } from "@/components/modal/KeyboardUI";
 
 type Props = {
   onPrevious: () => void;

@@ -8,7 +8,7 @@ import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName } from "@/stores/userSlice";
 import { hide } from "@/stores/modalSlice";
-import { setFocusChat, pushJoinedMessage, pushLeftMessage, markAsRead } from "@/stores/chatSlice";
+import { setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
 import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
 
 const START_POINT = [1455, 1200];

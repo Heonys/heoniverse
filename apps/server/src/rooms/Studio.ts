@@ -2,7 +2,7 @@ import { Room, Client, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player, Computer, Whiteboard } from "./schema/StudioSchema";
-import { Messages, IRoom, Status } from "@heoniverse/shared";
+import { Messages, IRoom, Status } from "../../../../packages/shared";
 import {
   PlayerUpdateCommand,
   PlayerNameUpdateCommand,
