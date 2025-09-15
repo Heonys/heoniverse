@@ -3,8 +3,7 @@ const os = require('os');
 module.exports = {
   apps : [{
     name: "heoniverse",
-    script: 'dist/apps/server/src/index.js',
-    cwd: 'apps/server',
+    script: 'apps/server/dist/apps/server/src/index.js',
     time: true,
     watch: false,
     instances: os.cpus().length,
@@ -21,7 +20,7 @@ module.exports = {
       "ref"  : "origin/master",
       "repo" : "https://github.com/Heonys/heoniverse.git",
       "path" : "/home/deploy",
-      "post-deploy" : "pnpm install && pnpm build && pnpm exec start"
+      "post-deploy" : "pnpm install && pnpm build:server && pnpm start:server"
     }
   }
 };
