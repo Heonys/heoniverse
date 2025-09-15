@@ -9,6 +9,7 @@
     "lint": "pnpm -r lint",
     "dev:client": "pnpm -F @heoniverse/client dev",
     "dev:server": "pnpm -F @heoniverse/server dev",
+    "build:client": "pnpm -F @heoniverse/client build",
     "build:server": "pnpm -F @heoniverse/server build",
     "start:server": "pnpm -F @heoniverse/server start"
   },

@@ -1,0 +1,9 @@
+[build]  
+  command = "pnpm install && pnpm build:client"
+  publish = "apps/client/dist"
+
+# Rule for router history mode
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
