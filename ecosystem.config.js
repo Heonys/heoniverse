@@ -1,3 +1,5 @@
+const os = require('os');
+
 module.exports = {
   apps : [{
     name: "heoniverse",
@@ -14,10 +16,10 @@ module.exports = {
   }],
   deploy : {
     production : {
-      "user" : "heoniverse-app",
+      "user" : "root",
       "host" : ["141.164.36.123"],
-      "ref"  : "origin/main",
-      "repo" : "git@github.com:Heonys/heoniverse.git",
+      "ref"  : "origin/master",
+      "repo" : "https://github.com/Heonys/heoniverse.git",
       "path" : "/home/deploy",
       "post-deploy" : "pnpm install && pnpm build && pnpm exec colyseus-post-deploy"
     }
