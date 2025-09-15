@@ -68,10 +68,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this.playerContainer);
 
     const collisionScale = [0.5, 0.2];
-    const playContainerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
+    const playerContainerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
     const spriteBody = this.body as Phaser.Physics.Arcade.Body;
 
-    playContainerBody
+    playerContainerBody
       .setSize(this.width * collisionScale[0], this.height * collisionScale[1])
       .setOffset(-this.width / 4, this.height * (1 - collisionScale[1]));
 

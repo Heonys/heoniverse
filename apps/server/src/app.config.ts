@@ -30,5 +30,7 @@ export default config({
     app.use("/colyseus", monitor());
   },
 
-  beforeListen: () => {},
+  beforeListen: () => {
+    console.log("server is started");
+  },
 });

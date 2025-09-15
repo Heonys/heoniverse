@@ -23,7 +23,7 @@ export class OtherPlayer extends Player {
     scene.physics.add.existing(this.playerOverlap);
 
     const spriteBody = this.body as Phaser.Physics.Arcade.Body;
-    spriteBody.setSize(this.width * 4, this.height * 2.5);
+    spriteBody.setSize(this.width * 8, this.height * 4);
   }
 
   tryConnectWithPeer(localPlayer: LocalPlayer, webRTC: WebRTC) {
