@@ -21,7 +21,7 @@ module.exports = {
       "ref"  : "origin/master",
       "repo" : "https://github.com/Heonys/heoniverse.git",
       "path" : "/home/deploy",
-      "post-deploy" : "pnpm install && pnpm build && pnpm exec colyseus-post-deploy"
+      "post-deploy" : "pnpm install && pnpm build && pnpm exec start"
     }
   }
 };
