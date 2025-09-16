@@ -24,7 +24,7 @@ export class WebRTC {
   constructor(peerId: string, network: Network) {
     this.peer = new Peer(peerId, {
       host: import.meta.env.PROD ? import.meta.env.VITE_PEER_URL : "localhost",
-      port: Number(import.meta.env.VITE_PEER_PORT),
+      port: import.meta.env.PROD ? 443 : Number(import.meta.env.VITE_PEER_PORT),
       path: "/peerjs",
       secure: false,
     });
