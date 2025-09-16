@@ -5,8 +5,8 @@ import { listen } from "@colyseus/tools";
 import { ExpressPeerServer } from "peer";
 import app from "./app.config";
 
-const GAME_SERVER_PORT = Number(process.env.GAME_SERVER_PORT ?? 5123);
-const PEER_SERVER_PORT = Number(process.env.PEER_SERVER_PORT ?? 5124);
+const GAME_SERVER_PORT = Number(process.env.GAME_SERVER_PORT ?? 2567);
+const PEER_SERVER_PORT = Number(process.env.PEER_SERVER_PORT ?? 2568);
 
 listen(app, GAME_SERVER_PORT);
 
