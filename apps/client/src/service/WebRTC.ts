@@ -22,12 +22,7 @@ export class WebRTC {
   connectedCall?: MediaConnection;
 
   constructor(peerId: string, network: Network) {
-    this.peer = new Peer(peerId, {
-      host: import.meta.env.PROD ? import.meta.env.VITE_PEER_URL : "localhost",
-      port: Number(import.meta.env.VITE_PEER_PORT),
-      path: "/peerjs",
-      secure: true,
-    });
+    this.peer = new Peer(peerId);
     this.network = network;
     this.setupPeerEvents();
   }
