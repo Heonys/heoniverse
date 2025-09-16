@@ -27,7 +27,12 @@ export default config({
 
   initializeExpress: (app) => {
     app.use(express.json());
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "https://heoniverse.netlify.app",
+        credentials: true,
+      }),
+    );
     app.use("/colyseus", monitor());
   },
 
