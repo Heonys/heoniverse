@@ -56,7 +56,13 @@
     overflow: hidden;
     background:
       url("/images/background/iphone-wallpaper.jpg") no-repeat -9999px -9999px,
-      url("/svg/iphone15.svg") no-repeat -9999px -9999px;
+      url("/svg/iphone15.svg") no-repeat -9999px -9999px,
+      url("/icons/phone.png") no-repeat -9999px -9999px,
+      url("/icons/messages.png") no-repeat -9999px -9999px,
+      url("/icons/note.png") no-repeat -9999px -9999px,
+      url("/icons/photos.png") no-repeat -9999px -9999px,
+      url("/icons/maps.png") no-repeat -9999px -9999px,
+      url("/icons/music.png") no-repeat -9999px -9999px;
   }
 
   #desktop {
