@@ -49,7 +49,15 @@ pnpm dev:server
 pnpm dev:client
 ```
 
-## 🎮 Screenshot 
+## 🎮 Controls
+- *`W, A, S, D`* 또는 방향키로 캐릭터 조작
+- *`E`* 의자 오브젝트 상호작용 
+- *`R`* 컴퓨터, 화이트보드 오브젝트와 상호작용
+- *`Space`* 캐릭터 펀치 애니메이션
+- *`Enter`* 스마트폰 채팅창 열기
+- *`Esc`* 스마트폰 또는 팝업창 닫기
+
+## 🖼️ Screenshot 
 
 <details>
 <summary>
@@ -66,6 +74,14 @@ pnpm dev:client
 ![Whiteboard Object][whiteboard-screenshot]
 
 </details>
+
+## 🙏 Credits
+
+- 픽셀 아트 에셋은 [LimeZu](https://itch.io) 아티스트님의 에셋을 사용했습니다. 
+- 프로젝트를 시작하는데 오픈소스 [SkyOffice](https://github.com/kevinshen56714/SkyOffice)의 많은 도움을 받았습니다. 
+- 웹에서 `MacOS` 환경을 클론하는데 [macos-web](https://github.com/puruvj/macos-web) 저장소를 참고했습니다. 
+
+
 
 <!-- Markdown links and Images -->
 
