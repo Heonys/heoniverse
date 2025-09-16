@@ -12,16 +12,19 @@ type Props = {
   mouseX: MotionValue;
   dockSize: number;
   dockMag: number;
+  available: boolean;
 };
 
-export function DockItem({ id, img, mouseX, dockSize, dockMag, title }: Props) {
+export function DockItem({ id, img, mouseX, dockSize, dockMag, title, available }: Props) {
   const ref = useRef<HTMLImageElement>(null);
   const { width } = useDockHoverAnimation(mouseX, ref, dockSize, dockMag);
   const dispatch = useAppDispatch();
   const showApps = useAppSelector((state) => state.desktop.showApps);
 
   const handleClick = () => {
-    dispatch(openApp({ id, title }));
+    if (available) {
+      dispatch(openApp({ id, title }));
+    }
   };
 
   return (

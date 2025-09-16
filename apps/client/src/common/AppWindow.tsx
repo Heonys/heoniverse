@@ -7,13 +7,28 @@ type Props = {
   id: string;
   title: string;
   component?: React.ReactNode;
-  initPosition?: { x: number; y: number; width: number; height: number };
+  initPosition?: { width: number; height: number };
 };
 
-// #f6f6f4 #1e1e1e
 export const AppWindow = ({ id, title, component, initPosition }: Props) => {
+  const parent = document.getElementById("desktop-inner");
+  const parentWidth = parent?.clientWidth ?? window.innerWidth;
+  const parentHeight = parent?.clientHeight ?? window.innerHeight;
+
   const [position, setPosition] = useState(
-    initPosition ?? { x: 337, y: 20, width: 800, height: 480 },
+    initPosition
+      ? {
+          x: (parentWidth - initPosition.width) / 2,
+          y: (parentHeight - initPosition.height) / 6,
+          width: initPosition.width,
+          height: initPosition.height,
+        }
+      : {
+          x: (parentWidth - 800) / 2,
+          y: (parentHeight - 480) / 6,
+          width: 800,
+          height: 480,
+        },
   );
   const dispatch = useAppDispatch();
   const zIndexMap = useAppSelector((state) => state.desktop.zIndexMap);

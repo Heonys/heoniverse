@@ -1,4 +1,4 @@
-import { VSCode, Messages, ScreenSharing, Safari, Music, Photo } from "@/components/computer/apps";
+import { VSCode, Messages, ScreenSharing, Safari } from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -6,9 +6,7 @@ type AppsData = {
   img: string;
   link?: string;
   component?: React.ReactNode;
-  initPosition?: {
-    x: number;
-    y: number;
+  position?: {
     width: number;
     height: number;
   };
@@ -25,7 +23,7 @@ export const appsData: AppsData[] = [
     title: "Screen Sharing",
     img: "/icons/screen-sharing.webp",
     component: <ScreenSharing />,
-    initPosition: { x: 232, y: 10, width: 1009, height: 562 },
+    position: { width: 1009, height: 562 },
   },
   {
     id: "messages",
@@ -43,13 +41,11 @@ export const appsData: AppsData[] = [
     id: "music",
     title: "Music",
     img: "/icons/music.png",
-    component: <Music />,
   },
   {
     id: "photo",
     title: "Photo",
     img: "/icons/photos.png",
-    component: <Photo />,
   },
   {
     id: "vscode",

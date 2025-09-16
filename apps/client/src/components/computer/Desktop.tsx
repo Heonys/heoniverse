@@ -7,6 +7,7 @@ export const Desktop = () => {
   const showApps = useAppSelector((state) => state.desktop.showApps);
   return (
     <div
+      id="desktop-inner"
       className="relative h-full w-full overflow-hidden rounded-2xl bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('/images/background/wallpaper.jpg')" }}
     >
@@ -21,7 +22,7 @@ export const Desktop = () => {
                 id={app.id}
                 title={app.title}
                 component={app.component}
-                initPosition={app.initPosition}
+                initPosition={app.position}
               />
             );
           } else {

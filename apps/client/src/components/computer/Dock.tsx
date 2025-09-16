@@ -14,7 +14,7 @@ export function Dock() {
         onMouseMove={(e) => mouseX.set(e.clientX)}
         onMouseLeave={() => mouseX.set(null)}
       >
-        {appsData.map(({ id, img, title }) => (
+        {appsData.map(({ id, img, title, component }) => (
           <DockItem
             key={id}
             id={id}
@@ -23,6 +23,7 @@ export function Dock() {
             mouseX={mouseX}
             dockSize={dockSize}
             dockMag={dockMag}
+            available={!!component}
           />
         ))}
       </ul>
