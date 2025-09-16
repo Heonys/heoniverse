@@ -12,7 +12,6 @@ module.exports = {
     env_production: {
       NODE_ENV: 'production',
       GAME_SERVER_PORT: 2567, 
-      PEER_SERVER_PORT: 2568 
     }
   }],
   deploy : {

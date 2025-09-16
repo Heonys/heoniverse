@@ -26,7 +26,11 @@ export class Network {
   webRTC?: WebRTC;
 
   constructor() {
-    this.client = new Client(import.meta.env.VITE_WEBSOCKET_URL);
+    const endPoint = import.meta.env.PROD
+      ? import.meta.env.VITE_WEBSOCKET_URL
+      : "ws://localhost:2567";
+
+    this.client = new Client(endPoint);
     this.joinLobbyRoom().then(() => {
       store.dispatch(setLobbyJoined(true));
     });

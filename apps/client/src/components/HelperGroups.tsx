@@ -76,7 +76,7 @@ export const HelperGroups = () => {
           id="monitoring"
           tooltip="서버 모니터링"
           onClick={() => {
-            openURL(`${import.meta.env.VITE_SERVER_URL}/colyseus`);
+            openURL("http://localhost:2567/colyseus");
           }}
         >
           <AppIcon iconName="monitor" color="black" size={25} />
