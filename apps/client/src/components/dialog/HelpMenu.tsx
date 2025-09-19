@@ -21,7 +21,7 @@ export const HelpMenu = ({ onPrevious }: Props) => {
       </div>
 
       <div className="mt-2 flex flex-col items-start justify-center gap-0.5 text-sm text-[#c2c2c2]">
-        <div className="flex w-[500px] flex-col gap-2">
+        <div className="flex w-[540px] flex-col gap-2">
           <div>
             <span className="font-bold text-rose-300">Heoniverse</span>는 HTML5 게임 엔진
             <a
@@ -36,18 +36,24 @@ export const HelpMenu = ({ onPrevious }: Props) => {
             메타버스 협업 플랫폼입니다.
           </div>
           <div>
-            <a
-              href="https://gather.town/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pr-1 text-blue-400 underline"
-            >
-              Gather
-            </a>
-            라는 메타버스 서비스에서 영감을 받아 개발되었으며, 플레이어간 실시간 상호작용과 협업
-            도구를 제공합니다. 또한 직관적인 UI와 다양한 인터랙션 요소를 통해 더욱 몰입감 있는
-            환경을 제공하는 것을 목표로 하여 사용자들은 마치 같은 공간에 있는 듯한 소통과 새로운
-            협업 방식을 경험할 수 있습니다.
+            <div>
+              <a
+                href="https://gather.town/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pr-1 text-blue-400 underline"
+              >
+                Gather
+              </a>
+              라는 메타버스 서비스에서 영감을 받아 개발되었으며, 다른 원격 협업 도구들이 제공하지
+              못하는 게임적 몰입감과 자연스러운 소통 경험을 제공하는 것을 목표로 하였습니다.
+            </div>
+            <div>
+              플레이어간 실시간 상호작용과 협업 도구를 제공하며, 직관적인 UI와 다양한 인터랙션
+              요소를 통해 더욱 몰입감 있는 환경을 제공하는 것을 목표로 합니다. 사용자들은 마치 같은
+              공간에 있는 듯한 경험을 하면서도 게임적 요소를 더해 재밌고 몰입감 있는 환경을
+              제공합니다.
+            </div>
           </div>
         </div>
       </div>
