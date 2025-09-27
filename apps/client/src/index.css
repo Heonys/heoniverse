@@ -73,36 +73,42 @@
     font-family: MiSansLatin;
     font-weight: normal;
     src: url("/fonts/MiSansLatin-Normal.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
     font-family: MiSansLatin;
     font-weight: 500;
     src: url("/fonts/MiSansLatin-Medium.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
     font-family: MiSansLatin;
     font-weight: 600;
     src: url("/fonts/MiSansLatin-Semibold.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
     font-family: NotoSansKR;
     font-weight: 400;
     src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
     font-family: NotoSansKR;
     font-weight: 500;
     src: url("/fonts/NotoSansKR-Medium.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
     font-family: NotoSansKR;
     font-weight: 700;
     src: url("/fonts/NotoSansKR-Bold.ttf") format("truetype");
+    font-display: swap;
   }
 
   @font-face {
