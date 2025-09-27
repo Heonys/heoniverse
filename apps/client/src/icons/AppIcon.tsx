@@ -65,6 +65,7 @@ import { ImPhone, ImPhoneHangUp } from "react-icons/im";
 import { BsStarFill } from "react-icons/bs";
 import { BsClockFill } from "react-icons/bs";
 import { LuScreenShare, LuScreenShareOff } from "react-icons/lu";
+import { IoWarning } from "react-icons/io5";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -129,6 +130,7 @@ const IconMap = {
   ["eye"]: IoEye,
   ["eye-off"]: IoEyeOff,
   ["warning"]: RiErrorWarningLine,
+  ["warning-tri"]: IoWarning,
   ["door"]: FaDoorOpen,
   ["wand"]: SlMagicWand,
   ["display"]: MdMonitor,

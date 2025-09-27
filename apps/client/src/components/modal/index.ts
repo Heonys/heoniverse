@@ -6,3 +6,4 @@ export * from "./JoinedUsers";
 export * from "./UserProfile";
 export * from "./ComputerGuide";
 export * from "./WhiteboardGuide";
+export * from "./NonDesktop";

@@ -6,6 +6,7 @@ import {
   UserProfile,
   ComputerGuide,
   WhiteboardGuide,
+  NonDesktop,
 } from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { show, hide } from "@/stores/modalSlice";
@@ -18,6 +19,7 @@ export const modalTemplates = {
   UserProfile,
   ComputerGuide,
   WhiteboardGuide,
+  NonDesktop,
 };
 
 type ModalTemplates = typeof modalTemplates;
