@@ -14,7 +14,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
   ({ onClose, className, children }, ref) => {
     const { modalState, hideModal } = useModal();
 
-    const handleClick = () => {
+    const handleClose = () => {
       if (onClose) onClose();
       hideModal();
     };
@@ -27,7 +27,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bottom-0 left-0 right-0 top-0 z-[99999] flex h-screen w-full flex-col items-center justify-center bg-black/60 backdrop-blur-sm"
-            onClick={handleClick}
+            onClick={handleClose}
           >
             <motion.div
               ref={ref}
@@ -40,7 +40,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
                 className,
               )}
             >
-              <button className="absolute right-2 top-2 cursor-pointer" onClick={handleClick}>
+              <button className="absolute right-2 top-2 cursor-pointer" onClick={handleClose}>
                 <AppIcon iconName="x-mark" color="white" size={20} />
               </button>
               {children}
