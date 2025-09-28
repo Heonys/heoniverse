@@ -28,6 +28,8 @@ export class LocalPlayer extends Player {
   keyESC!: Phaser.Input.Keyboard.Key;
   keySPACE!: Phaser.Input.Keyboard.Key;
   joystickMovement?: JoystickMovement;
+  joystickEPressed?: boolean;
+  joystickRPressed?: boolean;
 
   constructor(
     public scene: Game,
@@ -75,6 +77,11 @@ export class LocalPlayer extends Player {
     this.keyESC = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     this.keySPACE = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.scene.input.keyboard!.disableGlobalCapture();
+
+    eventEmitter.on("JOYSTICK_KEY_PRESSED", (key) => {
+      if (key === "keyE") this.joystickEPressed = true;
+      if (key === "keyR") this.joystickRPressed = true;
+    });
   }
 
   sendPlayerPosition(network: Network) {
@@ -91,11 +98,12 @@ export class LocalPlayer extends Player {
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
-        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE);
-        const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR);
+        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
+        const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR) || this.joystickRPressed;
         const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(this.keySPACE);
 
         if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
+          this.joystickEPressed = false;
           const chairObject = selectedItem as Chair;
           this.activeChair = chairObject;
 
@@ -126,18 +134,21 @@ export class LocalPlayer extends Player {
         }
 
         if (isRJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
+          this.joystickRPressed = false;
           const computerObject = selectedItem as Computer;
           computerObject.openDialog();
           return;
         }
 
         if (isRJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
+          this.joystickRPressed = false;
           const whiteboardObject = selectedItem as Whiteboard;
           whiteboardObject.openDialog();
           return;
         }
 
         if (isRJustDown && playerSelector.playerOverlap) {
+          this.joystickRPressed = false;
           const otherPlayer = playerSelector.playerOverlap.player;
           store.dispatch(showUserProfile({ otherPlayer }));
         }
@@ -224,7 +235,9 @@ export class LocalPlayer extends Player {
         break;
       }
       case PlayerBehavior.SITTING: {
-        if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
+        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
+        if (isEJustDown) {
+          this.joystickEPressed = false;
           const split = this.anims.currentAnim!.key.split("_");
           split[1] = "idle";
           this.anims.play(split.join("_"), true);

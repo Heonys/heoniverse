@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { isBrowser } from "react-device-detect";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
 import { spriteAvatars } from "@/constants/game";
 import { setLoggedIn } from "@/stores/userSlice";
-import { FormSchema } from "@/utils";
+import { cn, FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
 import { SpriteAnimation } from "@/common/SpriteAnimation";
@@ -37,13 +38,16 @@ export const LoginDialog = () => {
     network.readyToConnect();
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));
-    showModal("ControlGuide");
+    if (isBrowser) showModal("ControlGuide");
   };
 
   return (
     <form
       noValidate
-      className="-translate-1/2 fixed left-1/2 top-1/2 z-[9999] w-[600px] max-w-none select-none rounded-2xl bg-[#323338] p-6 px-16 shadow-xl"
+      className={cn(
+        "-translate-1/2 fixed left-1/2 top-1/2 z-[9999] select-none rounded-2xl bg-[#323338] shadow-xl",
+        isBrowser ? "w-[600px] p-5 px-16" : "w-[390px] py-5",
+      )}
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-4 text-[#eee]">

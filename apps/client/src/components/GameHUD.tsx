@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
+import { isBrowser } from "react-device-detect";
 import { createPortal } from "react-dom";
 import { AnimatePresence } from "motion/react";
 import NumberFlow from "@number-flow/react";
@@ -97,14 +98,15 @@ export const GameHUD = () => {
     <>
       <div
         className={cn(
-          "fixed bottom-2 left-1/2 flex w-[440px] -translate-x-1/2 select-none items-center gap-1 rounded-full",
+          "fixed bottom-2 left-1/2 flex -translate-x-1/2 select-none items-center rounded-full",
           "border-2 border-white/30 bg-slate-800 px-3 py-2",
+          isBrowser ? "w-[440px] gap-1" : "w-[375px]",
         )}
       >
         {/* left */}
         <div className="flex gap-2">
           <AvatarIcon texture={texture} status={status} />
-          <div className="flex w-20 flex-col gap-0.5 text-xs text-white">
+          <div className="flex flex-col gap-0.5 text-xs text-white">
             <div className="text-sm font-medium">{userName}</div>
             <div
               className="flex cursor-pointer items-center gap-1 text-[#c2c2c2]"
@@ -123,7 +125,7 @@ export const GameHUD = () => {
           style={{ fontFamily: "Retro" }}
         >
           <div className="flex items-center justify-center gap-1">
-            <AppIcon iconName="room" size={14} />
+            <AppIcon iconName="room" size={16} />
             <div>{name}</div>
           </div>
           <div className="flex items-center justify-center gap-0.5">
@@ -144,11 +146,15 @@ export const GameHUD = () => {
             tooltip={`${mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근"}`}
             onClick={() => toggleMedia(mediaConnected)}
             className={cn(
-              "size-9 transition-all",
+              "transition-all",
+              isBrowser ? "size-8.5" : "size-7.5",
               mediaConnected ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
             )}
           >
-            <AppIcon iconName={mediaConnected ? "link-on" : "link-off"} size={20} />
+            <AppIcon
+              iconName={mediaConnected ? "link-on" : "link-off"}
+              size={isBrowser ? 18 : 16}
+            />
           </TooltipButton>
 
           <TooltipButton
@@ -157,11 +163,15 @@ export const GameHUD = () => {
             tooltip={`카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleVideo(videoEnabled)}
             className={cn(
-              "size-9 transition-all",
+              "transition-all",
+              isBrowser ? "size-8.5" : "size-7.5",
               videoEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
             )}
           >
-            <AppIcon iconName={videoEnabled ? "video-on" : "video-off"} size={20} />
+            <AppIcon
+              iconName={videoEnabled ? "video-on" : "video-off"}
+              size={isBrowser ? 18 : 16}
+            />
           </TooltipButton>
 
           <TooltipButton
@@ -170,11 +180,12 @@ export const GameHUD = () => {
             tooltip={`마이크 ${micEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleMic(micEnabled)}
             className={cn(
-              "size-9 transition-all",
+              "transition-all",
+              isBrowser ? "size-8.5" : "size-7.5",
               micEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
             )}
           >
-            <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={20} />
+            <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={isBrowser ? 18 : 16} />
           </TooltipButton>
         </div>
       </div>

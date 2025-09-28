@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { isBrowser } from "react-device-detect";
+import NumberFlow from "@number-flow/react";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
-import { TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
+import { Condition, TooltipButton } from "@/common";
+import { useAppDispatch, useAppSelector, useGame, useModal, useSceneEffect } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { Pages, setShowIphone } from "@/stores/phoneSlice";
 import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
+import { cn } from "@/utils";
 
 const pagesMap: Record<Pages, React.ComponentType<any>> = {
   home: Home,
@@ -14,12 +17,19 @@ const pagesMap: Record<Pages, React.ComponentType<any>> = {
 };
 
 export const IphoneApp = () => {
-  const { getLocalPlayer } = useGame();
+  const { gameScene, getLocalPlayer } = useGame();
+  const { showModal } = useModal();
   const dispatch = useAppDispatch();
   const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
   const [scope, animate] = useAnimate();
   const CurrentComponent = pagesMap[currentPage.page];
+
+  const [users, setUsers] = useState(0);
+
+  useSceneEffect(gameScene, () => {
+    setUsers(gameScene.ohterPlayersMap.size + 1);
+  }, []);
 
   const unReadMessageCount = chatMessages.filter((it) => {
     return it.type === "CHAT" && it.message.createdAt > lastReadAt;
@@ -40,7 +50,7 @@ export const IphoneApp = () => {
   }, [isRinging, scope, animate]);
 
   return (
-    <div className="fixed bottom-2 left-0 select-none">
+    <div className={cn("fixed left-0 z-50 select-none", isBrowser ? "bottom-2" : "bottom-18")}>
       <AnimatePresence>
         {showIphone ? (
           <motion.div
@@ -67,6 +77,18 @@ export const IphoneApp = () => {
             <AnimatePresence>
               {isRinging.state && <IncomingCalls callerId={isRinging.caller} />}
             </AnimatePresence>
+            <Condition condition={!isBrowser}>
+              <div className="absolute right-0 top-0">
+                <TooltipButton
+                  className="size-9"
+                  id="close-phone"
+                  tooltip="휴대폰 닫기"
+                  onClick={() => dispatch(setShowIphone(false))}
+                >
+                  <AppIcon iconName="exit" color="black" size={24} />
+                </TooltipButton>
+              </div>
+            </Condition>
           </motion.div>
         ) : (
           <div className="absolute bottom-2 left-6 flex gap-2">
@@ -86,6 +108,21 @@ export const IphoneApp = () => {
                 </div>
               )}
             </TooltipButton>
+
+            <Condition condition={!isBrowser}>
+              <TooltipButton
+                id="users"
+                tooltip="플레이어 목록"
+                onClick={() => {
+                  showModal("JoinedUsers");
+                }}
+              >
+                <AppIcon iconName="people" color="black" size={25} />
+                <div className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-slate-600 p-1 text-xs text-white">
+                  <NumberFlow value={users} />
+                </div>
+              </TooltipButton>
+            </Condition>
           </div>
         )}
       </AnimatePresence>

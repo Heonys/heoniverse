@@ -21,6 +21,7 @@ type EventsPayloadMap = {
   WHITEBOARD_USER_ADDED: { userId: string; whiteboardId: string };
   WHITEBOARD_USER_REMOVED: { userId: string; whiteboardId: string };
   UPDATED_ELEMENTS: readonly any[];
+  JOYSTICK_KEY_PRESSED: "keyE" | "keyR";
 };
 
 class PhaserEventEmitter<EventsMap> {
