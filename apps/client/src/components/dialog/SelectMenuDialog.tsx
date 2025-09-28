@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { AppButton, Switch, Case } from "@/common";
+import { AppButton, Switch, Case, Condition } from "@/common";
 import { useAppSelector, useGame } from "@/hooks";
 import { CustomRoomOverview, CreateRoomForm, HelpMenu } from "@/components/dialog";
 import Cityscape from "/images/background/cityscape-icon.jpeg";
 import { AppIcon } from "@/icons";
+import { ProgressBar } from "@/components";
 
 const enum DialogView {
   Select,
@@ -23,7 +24,7 @@ export const SelectMenuDialog = () => {
         <Switch switch={dialogView}>
           <Case case={DialogView.Select}>
             <div className="flex w-96 flex-col items-center justify-center gap-3 p-8 px-12">
-              <div className="mb-4 flex flex-col items-center justify-center gap-1">
+              <div className="mb-2 flex flex-col items-center justify-center gap-1">
                 <img
                   className="size-20 rounded-2xl"
                   draggable={false}
@@ -36,10 +37,14 @@ export const SelectMenuDialog = () => {
                 <div className="text-sm text-[#c2c2c2]">
                   함께 모여 소소하게 즐기고 이야기하는 곳
                 </div>
-                <div className="mt-1 flex items-center gap-1.5 text-xs">
+                <div className="my-1 flex items-center gap-1.5 text-xs">
                   <div className="size-2 rounded-full bg-[#42a25a] ring ring-black/20"></div>
                   <div>{Math.max(totalClients - 1, 0)}명 온라인</div>
                 </div>
+
+                <Condition condition={!lobbyJoined}>
+                  <ProgressBar message="Connecting to server..." />
+                </Condition>
               </div>
 
               <AppButton

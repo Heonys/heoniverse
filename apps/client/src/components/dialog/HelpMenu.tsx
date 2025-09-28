@@ -1,4 +1,7 @@
+import { isBrowser } from "react-device-detect";
 import { AppIcon } from "@/icons";
+import { cn } from "@/utils";
+import { Condition } from "@/common";
 
 type Props = {
   onPrevious: () => void;
@@ -17,11 +20,11 @@ export const HelpMenu = ({ onPrevious }: Props) => {
 
       <div className="flex items-center justify-center gap-2">
         <AppIcon iconName="help" size={23} className="translate-y-0.5" />
-        <div className="text-2xl font-bold leading-none tracking-tight">Control Guide</div>
+        <div className="text-2xl font-bold leading-none tracking-tight">Help</div>
       </div>
 
       <div className="mt-2 flex flex-col items-start justify-center gap-0.5 text-sm text-[#c2c2c2]">
-        <div className="flex w-[540px] flex-col gap-2">
+        <div className={cn("flex flex-col gap-2", isBrowser ? "w-[540px]" : "w-[360px]")}>
           <div>
             <span className="font-bold text-rose-300">Heoniverse</span>는 HTML5 게임 엔진
             <a
@@ -58,15 +61,17 @@ export const HelpMenu = ({ onPrevious }: Props) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 p-2 pl-4 text-sm text-[#c2c2c2]">
-        <ul className="list-inside list-disc space-y-1">
-          <li>거리 기반으로 플레이어간 카메라·마이크 자동 연결</li>
-          <li>플레이어간 전화, 메시지를 제공하는 스마트폰 UI 지원</li>
-          <li>컴퓨터 오브젝트를 통한 사용자 화면공유 지원</li>
-          <li>화이트보드 오브젝트를 통한 실시간 아이디어 공유 가능</li>
-          <li>하단 메뉴를 통해 미니맵, 조이스틱 등의 편의기능 활성화 가능</li>
-        </ul>
-      </div>
+      <Condition condition={isBrowser}>
+        <div className="flex flex-col gap-2 p-2 pl-4 text-sm text-[#c2c2c2]">
+          <ul className="list-inside list-disc space-y-1">
+            <li>거리 기반으로 플레이어간 카메라·마이크 자동 연결</li>
+            <li>플레이어간 전화, 메시지를 제공하는 스마트폰 UI 지원</li>
+            <li>컴퓨터 오브젝트를 통한 사용자 화면공유 지원</li>
+            <li>화이트보드 오브젝트를 통한 실시간 아이디어 공유 가능</li>
+            <li>하단 메뉴를 통해 미니맵, 조이스틱 등의 편의기능 활성화 가능</li>
+          </ul>
+        </div>
+      </Condition>
     </div>
   );
 };

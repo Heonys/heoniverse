@@ -32,7 +32,9 @@ export class Network {
 
     this.client = new Client(endPoint);
     this.joinLobbyRoom().then(() => {
-      store.dispatch(setLobbyJoined(true));
+      setTimeout(() => {
+        store.dispatch(setLobbyJoined(true));
+      }, 1500);
     });
     this.registerEventHandler();
   }
