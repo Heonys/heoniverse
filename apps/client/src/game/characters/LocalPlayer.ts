@@ -96,14 +96,16 @@ export class LocalPlayer extends Player {
     const selectedItem = playerSelector.selectedItem;
     this.playerMarker.setPosition(this.x, this.y);
 
+    const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
+    const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR) || this.joystickRPressed;
+    this.joystickEPressed = false;
+    this.joystickRPressed = false;
+
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
-        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
-        const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR) || this.joystickRPressed;
         const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(this.keySPACE);
 
         if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
-          this.joystickEPressed = false;
           const chairObject = selectedItem as Chair;
           this.activeChair = chairObject;
 
@@ -134,21 +136,18 @@ export class LocalPlayer extends Player {
         }
 
         if (isRJustDown && selectedItem?.itemType === ItemType.COMPUTER) {
-          this.joystickRPressed = false;
           const computerObject = selectedItem as Computer;
           computerObject.openDialog();
           return;
         }
 
         if (isRJustDown && selectedItem?.itemType === ItemType.WHITEBOARD) {
-          this.joystickRPressed = false;
           const whiteboardObject = selectedItem as Whiteboard;
           whiteboardObject.openDialog();
           return;
         }
 
         if (isRJustDown && playerSelector.playerOverlap) {
-          this.joystickRPressed = false;
           const otherPlayer = playerSelector.playerOverlap.player;
           store.dispatch(showUserProfile({ otherPlayer }));
         }
@@ -235,7 +234,6 @@ export class LocalPlayer extends Player {
         break;
       }
       case PlayerBehavior.SITTING: {
-        const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
         if (isEJustDown) {
           this.joystickEPressed = false;
           const split = this.anims.currentAnim!.key.split("_");

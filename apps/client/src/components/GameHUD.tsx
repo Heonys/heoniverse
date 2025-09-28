@@ -106,7 +106,7 @@ export const GameHUD = () => {
         {/* left */}
         <div className="flex gap-2">
           <AvatarIcon texture={texture} status={status} />
-          <div className="flex flex-col gap-0.5 text-xs text-white">
+          <div className="flex min-w-[66px] flex-col gap-0.5 text-xs text-white">
             <div className="text-sm font-medium">{userName}</div>
             <div
               className="flex cursor-pointer items-center gap-1 text-[#c2c2c2]"
@@ -143,7 +143,9 @@ export const GameHUD = () => {
         <div className="flex items-center justify-end gap-1.5 px-1 text-white">
           <TooltipButton
             id="media-enabled"
-            tooltip={`${mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근"}`}
+            tooltip={
+              isBrowser && (mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근")
+            }
             onClick={() => toggleMedia(mediaConnected)}
             className={cn(
               "transition-all",
@@ -160,7 +162,7 @@ export const GameHUD = () => {
           <TooltipButton
             id="camera-enabled"
             disabled={!mediaConnected}
-            tooltip={`카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
+            tooltip={isBrowser && `카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleVideo(videoEnabled)}
             className={cn(
               "transition-all",
@@ -177,7 +179,7 @@ export const GameHUD = () => {
           <TooltipButton
             id="mic-enabled"
             disabled={!mediaConnected}
-            tooltip={`마이크 ${micEnabled ? "비활성화" : "활성화"}`}
+            tooltip={isBrowser && `마이크 ${micEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleMic(micEnabled)}
             className={cn(
               "transition-all",

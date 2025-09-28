@@ -1,18 +1,21 @@
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useAppDispatch, useAppSelector, useCurrentTime } from "@/hooks";
+import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
 
 export const Home = () => {
+  const { getLocalPlayer } = useGame();
   const time = useCurrentTime();
   const dispatch = useAppDispatch();
   const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
 
-  const unReadMessageCount = chatMessages.filter((it) => {
-    return it.type === "CHAT" && it.message.createdAt > lastReadAt;
-  }).length;
-
+  const unReadMessageCount = chatMessages.filter(
+    (it) =>
+      it.type === "CHAT" &&
+      it.message.clientId !== getLocalPlayer().playerId &&
+      it.message.createdAt > lastReadAt,
+  ).length;
   return (
     <div
       className="rounded-4xl flex size-full flex-col bg-cover bg-center bg-no-repeat"

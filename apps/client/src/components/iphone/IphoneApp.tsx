@@ -17,6 +17,7 @@ const pagesMap: Record<Pages, React.ComponentType<any>> = {
 };
 
 export const IphoneApp = () => {
+  const [users, setUsers] = useState(0);
   const { gameScene, getLocalPlayer } = useGame();
   const { showModal } = useModal();
   const dispatch = useAppDispatch();
@@ -25,15 +26,16 @@ export const IphoneApp = () => {
   const [scope, animate] = useAnimate();
   const CurrentComponent = pagesMap[currentPage.page];
 
-  const [users, setUsers] = useState(0);
-
   useSceneEffect(gameScene, () => {
     setUsers(gameScene.ohterPlayersMap.size + 1);
   }, []);
 
-  const unReadMessageCount = chatMessages.filter((it) => {
-    return it.type === "CHAT" && it.message.createdAt > lastReadAt;
-  }).length;
+  const unReadMessageCount = chatMessages.filter(
+    (it) =>
+      it.type === "CHAT" &&
+      it.message.clientId !== getLocalPlayer().playerId &&
+      it.message.createdAt > lastReadAt,
+  ).length;
 
   useEffect(() => {
     if (!scope.current) return;
@@ -91,7 +93,7 @@ export const IphoneApp = () => {
             </Condition>
           </motion.div>
         ) : (
-          <div className="absolute bottom-2 left-6 flex gap-2">
+          <div className="absolute bottom-2 left-6 flex items-center gap-2">
             <TooltipButton
               className="size-11"
               id="phone"
@@ -111,7 +113,8 @@ export const IphoneApp = () => {
 
             <Condition condition={!isBrowser}>
               <TooltipButton
-                id="users"
+                className="size-11"
+                id="left-users"
                 tooltip="플레이어 목록"
                 onClick={() => {
                   showModal("JoinedUsers");
