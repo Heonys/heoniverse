@@ -7,11 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppButton, AppSlider, InputBox, TextareaBox } from "@/common";
 import { spriteAvatars } from "@/constants/game";
-import { setLoggedIn } from "@/stores/userSlice";
+import { grantAdmin, setLoggedIn } from "@/stores/userSlice";
 import { cn, FormSchema } from "@/utils";
 import { AppIcon } from "@/icons";
 import { RoomType } from "@heoniverse/shared";
 import { SpriteAnimation } from "@/common/SpriteAnimation";
+import { createLoginMetrics } from "@/service/appwrite";
 
 type FormType = z.infer<typeof FormSchema>;
 
@@ -31,6 +32,11 @@ export const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState(0);
 
   const onSubmit = (data: FormType) => {
+    const isAdmin = data.name === import.meta.env.VITE_ADMIN_ID;
+    if (isAdmin) {
+      dispatch(grantAdmin());
+      data = { ...data, name: "admin" };
+    }
     const player = getLocalPlayer();
     player.setPlayerName(data.name);
     player.setPlayerAvatar(spriteAvatars[avatarIndex].name);
@@ -39,6 +45,15 @@ export const LoginDialog = () => {
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));
     if (isBrowser) showModal("ControlGuide");
+
+    if (!isAdmin && import.meta.env.PROD) {
+      createLoginMetrics({
+        client_id: player.playerId,
+        avatar: spriteAvatars[avatarIndex].name,
+        nickname: data.name,
+        room_name: name,
+      });
+    }
   };
 
   return (

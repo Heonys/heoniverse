@@ -10,7 +10,7 @@ export const HelperGroups = () => {
   const { gameScene } = useGame();
   const { showModal } = useModal();
   const dispatch = useAppDispatch();
-  const { showJoystick, loggedIn, showMinimap } = useAppSelector((state) => state.user);
+  const { showJoystick, loggedIn, showMinimap, isAdmin } = useAppSelector((state) => state.user);
   const [users, setUsers] = useState(0);
 
   useSceneEffect(gameScene, () => {
@@ -63,9 +63,7 @@ export const HelperGroups = () => {
         <TooltipButton
           id="control-guide"
           tooltip="조작 가이드"
-          onClick={() => {
-            showModal("ControlGuide");
-          }}
+          onClick={() => showModal("ControlGuide")}
         >
           <AppIcon iconName="help" color="black" size={25} />
         </TooltipButton>
@@ -75,20 +73,26 @@ export const HelperGroups = () => {
         <TooltipButton
           id="monitoring"
           tooltip="서버 모니터링"
-          onClick={() => {
-            openURL("http://localhost:2567/colyseus");
-          }}
+          onClick={() => openURL("http://localhost:2567/colyseus")}
         >
           <AppIcon iconName="monitor" color="black" size={25} />
+        </TooltipButton>
+      </Condition>
+
+      <Condition condition={isAdmin}>
+        <TooltipButton
+          id="user-metrics"
+          tooltip="사용자 지표"
+          onClick={() => showModal("UserMetrics")}
+        >
+          <AppIcon iconName="admin" color="black" size={25} />
         </TooltipButton>
       </Condition>
 
       <TooltipButton
         id="github"
         tooltip="Github"
-        onClick={() => {
-          openURL("https://github.com/Heonys/heoniverse");
-        }}
+        onClick={() => openURL("https://github.com/Heonys/heoniverse")}
       >
         <AppIcon iconName="github" color="black" size={25} />
       </TooltipButton>

@@ -8,3 +8,4 @@ export * from "./useModal";
 export * from "./useGame";
 export * from "./useSceneEffect";
 export * from "./useCurrentTime";
+export * from "./useAppFetch";

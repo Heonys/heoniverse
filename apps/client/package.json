@@ -20,6 +20,7 @@
     "@rooks/use-raf": "^4.11.2",
     "@tanstack/react-table": "^8.21.3",
     "ahooks": "^3.9.5",
+    "appwrite": "^20.1.0",
     "clsx": "^2.1.1",
     "colyseus.js": "^0.16.19",
     "date-fns": "^4.1.0",

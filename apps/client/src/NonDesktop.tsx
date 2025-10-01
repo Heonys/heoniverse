@@ -1,7 +1,6 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { AppIcon } from "@/icons";
-import { motion } from "motion/react";
-import { AnimatePresence } from "motion/react";
 import { Condition } from "./common";
 
 type Props = {

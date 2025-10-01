@@ -12,6 +12,7 @@ type UserState = {
   videoEnabled: boolean;
   micEnabled: boolean;
   status: Status;
+  isAdmin: boolean;
 };
 
 const initialState: UserState = {
@@ -25,6 +26,7 @@ const initialState: UserState = {
   videoEnabled: true,
   micEnabled: true,
   status: "available",
+  isAdmin: false,
 };
 
 const userSlice = createSlice({
@@ -68,6 +70,9 @@ const userSlice = createSlice({
       state.videoEnabled = true;
       state.micEnabled = true;
     },
+    grantAdmin: (state) => {
+      state.isAdmin = true;
+    },
   },
   selectors: {
     nextStatus: (state) => {
@@ -92,6 +97,7 @@ export const {
   setUserName,
   setUserTexture,
   initMediaState,
+  grantAdmin,
 } = userSlice.actions;
 export const { nextStatus } = userSlice.selectors;
 export default userSlice.reducer;
