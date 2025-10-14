@@ -33,6 +33,14 @@ const columns = [
     header: "방 이름",
     cell: (info) => <div className="w-[90px] truncate text-xs">{info.getValue()}</div>,
   }),
+  columnHelper.accessor("desktop", {
+    header: "플랫폼",
+    cell: (info) => (
+      <div className="ml-2 w-[40px]">
+        <AppIcon iconName={info.getValue() ? "desktop" : "desktop"} size={22} />
+      </div>
+    ),
+  }),
   columnHelper.accessor("$createdAt", {
     header: "생성시간",
     cell: (info) => (
@@ -54,7 +62,7 @@ export const UserMetrics = () => {
   });
 
   return (
-    <Backdrop className="max-w-2xl">
+    <Backdrop className="max-w-3xl">
       <div className="flex w-full select-none flex-col items-center gap-5">
         <div className="flex w-full flex-col space-y-1.5 text-left">
           <div className="flex items-center gap-1">

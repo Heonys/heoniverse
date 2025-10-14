@@ -5,6 +5,7 @@ export type Metrics = {
   nickname: string;
   avatar: string;
   room_name: string;
+  desktop: boolean;
   left_at?: Date;
 };
 

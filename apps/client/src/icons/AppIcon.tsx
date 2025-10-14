@@ -67,6 +67,7 @@ import { BsClockFill } from "react-icons/bs";
 import { LuScreenShare, LuScreenShareOff } from "react-icons/lu";
 import { IoWarning } from "react-icons/io5";
 import { RiAdminFill } from "react-icons/ri";
+import { IoDesktopOutline } from "react-icons/io5";
 
 export type IconNames = keyof typeof IconMap;
 const IconMap = {
@@ -157,6 +158,7 @@ const IconMap = {
   ["screen-share"]: LuScreenShare,
   ["screen-share-off"]: LuScreenShareOff,
   ["admin"]: RiAdminFill,
+  ["desktop"]: IoDesktopOutline,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

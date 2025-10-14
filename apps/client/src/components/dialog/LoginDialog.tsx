@@ -52,6 +52,7 @@ export const LoginDialog = () => {
         avatar: spriteAvatars[avatarIndex].name,
         nickname: data.name,
         room_name: name,
+        desktop: isBrowser,
       });
     }
   };
