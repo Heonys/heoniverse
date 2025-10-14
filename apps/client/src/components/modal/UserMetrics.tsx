@@ -37,7 +37,7 @@ const columns = [
     header: "플랫폼",
     cell: (info) => (
       <div className="ml-2 w-[40px]">
-        <AppIcon iconName={info.getValue() ? "desktop" : "desktop"} size={22} />
+        <AppIcon iconName={info.getValue() ? "desktop" : "phone"} size={22} />
       </div>
     ),
   }),
