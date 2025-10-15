@@ -44,7 +44,7 @@ export interface IStudioState {
   players: MapSchema<IPlayer>;
 }
 
-export type ChatType = "JOINED" | "LEFT" | "CHAT";
+export type ChatType = "JOINED" | "LEFT" | "CHAT" | "NOTICE";
 export type IChatMessage = {
   clientId: string;
   author: string;

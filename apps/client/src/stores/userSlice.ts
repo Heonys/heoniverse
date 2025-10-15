@@ -13,6 +13,7 @@ type UserState = {
   micEnabled: boolean;
   status: Status;
   isAdmin: boolean;
+  single: boolean;
 };
 
 const initialState: UserState = {
@@ -27,6 +28,7 @@ const initialState: UserState = {
   micEnabled: true,
   status: "available",
   isAdmin: false,
+  single: false,
 };
 
 const userSlice = createSlice({
@@ -73,6 +75,9 @@ const userSlice = createSlice({
     grantAdmin: (state) => {
       state.isAdmin = true;
     },
+    setSingleMode: (state, actoin: PayloadAction<boolean>) => {
+      state.single = actoin.payload;
+    },
   },
   selectors: {
     nextStatus: (state) => {
@@ -98,6 +103,7 @@ export const {
   setUserTexture,
   initMediaState,
   grantAdmin,
+  setSingleMode,
 } = userSlice.actions;
 export const { nextStatus } = userSlice.selectors;
 export default userSlice.reducer;

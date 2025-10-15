@@ -29,10 +29,17 @@ export const ChatMessage = ({ chatId, messageType, chatMessage }: Props) => {
       <Condition
         condition={messageType === "CHAT"}
         fallback={
-          <div className="flex w-full items-center justify-center gap-1 px-1 py-0.5 text-xs text-black/50">
-            <div className="underline">{chatMessage.author}</div>
-            <div>{chatMessage.content}</div>
-          </div>
+          messageType === "JOINED" ? (
+            <div className="flex w-full items-center justify-center gap-1 px-1 py-0.5 text-xs text-black/50">
+              <div className="underline">{chatMessage.author}</div>
+              <div>{chatMessage.content}</div>
+            </div>
+          ) : (
+            <div className="flex w-full items-center justify-center gap-1 px-1 py-0.5 text-xs text-black/50">
+              <AppIcon iconName="warning-tri" className="text-[#ffb056]" size={20} />
+              <div>{chatMessage.content}</div>
+            </div>
+          )
         }
       >
         <div className="flex w-full items-center gap-1 break-all py-1 text-xs">

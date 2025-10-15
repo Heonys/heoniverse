@@ -9,9 +9,9 @@
     <a href="https://heoniverse.netlify.app">
         <img src="https://img.shields.io/netlify/801f271f-66aa-4895-bc56-df75ee7124fa" alt="Netlify Status">
     </a>
-    <a>
+    <!-- <a>
         <img src="https://img.shields.io/website?url=https%3A%2F%2F158-247-233-164.colyseus.dev%2Fcolyseus&label=game%20server" alt="Game Server">
-    </a>
+    </a> -->
 </p>
 
 <div align="center">

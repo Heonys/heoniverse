@@ -17,6 +17,8 @@ import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
 import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
 import { setSharing } from "@/stores/computerSlice";
+import { nanoid } from "@reduxjs/toolkit";
+import { setSingleMode } from "@/stores/userSlice";
 
 export class Network {
   client: Client;
@@ -104,10 +106,10 @@ export class Network {
   }
 
   sendMessage<T extends keyof MessagePayloadMap>(type: T, message?: MessagePayloadMap[T]) {
-    if (!this.room) {
-      throw new Error("방에 입장하지 않았습니다.");
+    if (this.room) {
+      this.room.send(type, message);
     }
-    this.room.send(type, message);
+    // throw new Error("방에 입장하지 않았습니다.");
   }
 
   onMessage<T extends keyof MessagePayloadMap>(
@@ -181,6 +183,22 @@ export class Network {
 
   updateWhiteboard(elements: readonly any[]) {
     this.sendMessage("UPDATE_ELEMENTS", elements);
+  }
+
+  async joinSingleRoom() {
+    store.dispatch(setLobbyJoined(false));
+    store.dispatch(setSingleMode(true));
+    this.sessionId = nanoid(10);
+    this.webRTC = new WebRTC(this.sessionId, this);
+
+    store.dispatch(
+      setJoinedRoomData({
+        id: this.sessionId,
+        name: "Offline Mode",
+        description: "서버 연결이 제한된 오프라인 환경으로, UI 및 인터랙션을 확인할 수 있습니다.",
+        roomType: RoomType.CUSTOM,
+      }),
+    );
   }
 
   setupRoom() {

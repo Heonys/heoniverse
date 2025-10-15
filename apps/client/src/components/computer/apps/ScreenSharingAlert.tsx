@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { closeApp } from "@/stores/desktopSlice";
+import { cn } from "@/utils";
 import { motion } from "motion/react";
 import { useEffect } from "react";
 
@@ -9,6 +10,7 @@ type AlertProps = {
 
 export const ScreenShareAlert = ({ onConfirm }: AlertProps) => {
   const dispatch = useAppDispatch();
+  const single = useAppSelector((state) => state.user.single);
 
   return (
     <motion.div
@@ -28,6 +30,7 @@ export const ScreenShareAlert = ({ onConfirm }: AlertProps) => {
           <div className="text-xs text-black/80">
             공유할 화면을 선택하면 다른 플레이어가 볼 수 있습니다
           </div>
+          <div className="text-xs text-black/80">{`※ 오프라인 모드에선 연결되지 않습니다`}</div>
         </div>
       </div>
       <div className="absolute bottom-3 right-5 flex gap-3 text-xs font-semibold text-black/70">
@@ -38,8 +41,12 @@ export const ScreenShareAlert = ({ onConfirm }: AlertProps) => {
           취소
         </button>
         <button
-          className="cursor-pointer rounded-md border border-black/20 bg-[#f5f5f5] p-1 px-2 shadow-2xl hover:bg-white"
+          className={cn(
+            "rounded-md border border-black/20 bg-[#f5f5f5] p-1 px-2 shadow-2xl hover:bg-white",
+            single ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+          )}
           onClick={onConfirm}
+          disabled={single}
         >
           공유 시작
         </button>

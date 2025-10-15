@@ -47,6 +47,19 @@ export const SelectMenuDialog = () => {
                 </Condition>
               </div>
 
+              <Condition condition={!lobbyJoined}>
+                <AppButton
+                  className="w-full p-2.5 font-medium"
+                  onClick={() => {
+                    preloaderScene.network.joinSingleRoom().then(() => {
+                      preloaderScene.launchGame();
+                    });
+                  }}
+                >
+                  오프라인 모드
+                </AppButton>
+              </Condition>
+
               <AppButton
                 className="w-full p-2.5 font-medium"
                 disabled={!lobbyJoined}

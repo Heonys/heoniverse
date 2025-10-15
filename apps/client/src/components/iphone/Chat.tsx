@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks
 import { markAsRead, setFocusChat } from "@/stores/chatSlice";
 import { ChatMessage } from "@/components/iphone";
 import { setCurrentPage } from "@/stores/phoneSlice";
+import { Condition } from "@/common";
 
 type FormType = { message: string };
 
@@ -19,6 +20,7 @@ export const Chat = () => {
   const dispatch = useAppDispatch();
   const { focused, chatMessages } = useAppSelector((state) => state.chat);
   const RoomName = useAppSelector((state) => state.room.name);
+  const single = useAppSelector((state) => state.user.single);
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
 
   const onSubmit = ({ message }: FormType) => {
@@ -83,8 +85,8 @@ export const Chat = () => {
         }}
       >
         <ChatMessage
-          key={-1}
-          chatId={-1}
+          key={-2}
+          chatId={-2}
           messageType="JOINED"
           chatMessage={{
             clientId: getLocalPlayer().playerId,
@@ -93,6 +95,19 @@ export const Chat = () => {
             createdAt: new Date().getTime(),
           }}
         />
+        <Condition condition={single}>
+          <ChatMessage
+            key={-1}
+            chatId={-1}
+            messageType="NOTICE"
+            chatMessage={{
+              clientId: getLocalPlayer().playerId,
+              author: getLocalPlayer().playerName.text,
+              content: "오프라인 모드에선 연결되지 않습니다",
+              createdAt: new Date().getTime(),
+            }}
+          />
+        </Condition>
         {chatMessages.map(({ type, message }, index) => {
           return (
             <ChatMessage key={index} chatId={index} messageType={type} chatMessage={message} />

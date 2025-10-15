@@ -11,7 +11,7 @@ export const ProgressBar = ({ message }: Props) => {
         <div className="text-center text-sm font-medium text-[#e0e0e0]">{message}</div>
         <TooltipButton
           id="progress-warning"
-          tooltip="연결되지 않을 경우 새로고침을 시도해주세요"
+          tooltip="연결되지 않을 경우 오프라인 모드에서 테스트 가능합니다"
           className="size-5 border-none bg-transparent"
         >
           <AppIcon iconName="warning-tri" className="text-[#ffb056]" />
