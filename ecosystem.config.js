@@ -17,7 +17,7 @@ module.exports = {
   deploy : {
     production : {
       "user" : "root",
-      "host" : ["158.247.233.164"],
+      "host" : ["158.247.220.204"],
       "ref"  : "origin/master",
       "repo" : "https://github.com/Heonys/heoniverse.git",
       "path" : "/home/deploy",
