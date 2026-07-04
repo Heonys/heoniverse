@@ -7,12 +7,12 @@ export const useGame = () => {
   const game = useMemo(() => phaserGame.scene.keys.game as Game, []);
 
   const isConnectedPlayer = (id: string) => {
-    if (!game.ohterPlayersMap.has(id)) return;
-    return game.ohterPlayersMap.get(id)!;
+    if (!game.otherPlayersMap.has(id)) return;
+    return game.otherPlayersMap.get(id)!;
   };
 
   const getOtherPlayerById = (id: string) => {
-    return game.ohterPlayersMap.get(id);
+    return game.otherPlayersMap.get(id);
   };
 
   return {

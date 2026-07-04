@@ -1,4 +1,3 @@
-import { enableMapSet } from "immer";
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import roomReducer from "./roomSlice";
@@ -10,14 +9,12 @@ import drawContextSlice from "./drawContextSlice";
 import modalSlice from "./modalSlice";
 import phoneSlice from "./phoneSlice";
 
-enableMapSet();
-
 export const store = configureStore({
   reducer: {
     user: userReducer,
     room: roomReducer,
     computer: computerReducer,
-    whitebaord: whiteboardSlice,
+    whiteboard: whiteboardSlice,
     chat: chatSlice,
     desktop: desktopSlice,
     drawContext: drawContextSlice,
@@ -32,3 +29,4 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type AppThunk = (dispatch: AppDispatch, getState: () => RootState) => void;

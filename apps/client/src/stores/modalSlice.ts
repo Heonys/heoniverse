@@ -1,4 +1,3 @@
-import { OtherPlayer } from "@/game/characters";
 import { modalTemplates } from "@/hooks";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -24,7 +23,8 @@ const modalSlice = createSlice({
     hide: (state) => {
       state.modal = { state: "close" };
     },
-    showUserProfile(state, action: PayloadAction<{ otherPlayer: OtherPlayer }>) {
+    // Phaser 객체를 스토어에 넣지 않도록 playerId만 저장한다
+    showUserProfile(state, action: PayloadAction<{ playerId: string }>) {
       state.modal = {
         state: "open",
         component: modalTemplates["UserProfile"],

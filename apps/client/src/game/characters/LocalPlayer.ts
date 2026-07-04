@@ -16,12 +16,17 @@ import { showUserProfile } from "@/stores/modalSlice";
 import { Game } from "@/game/scenes";
 import { setUserName, setUserTexture, nextStatus, setUserStatus } from "@/stores/userSlice";
 
+// Colyseus 서버의 기본 patch rate(50ms)와 동일 — 이보다 잦은 전송은 다른 클라이언트에 보이지 않는다
+const SEND_INTERVAL_MS = 50;
+
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
   facing: Direction = Direction.DOWN;
   activeChair?: Chair;
   speed = 200;
   isPhoneAnimating = false;
+  private sendAccumulator = 0;
+  private lastSent = { x: 0, y: 0, animKey: "" };
 
   keyE!: Phaser.Input.Keyboard.Key;
   keyR!: Phaser.Input.Keyboard.Key;
@@ -84,15 +89,32 @@ export class LocalPlayer extends Player {
     });
   }
 
+  // 앉기/펀치처럼 즉시 반영이 필요한 상태 전환용 (스로틀 무시)
   sendPlayerPosition(network: Network) {
-    network.sendMessage("UPDATE_PLAYER", {
-      x: this.x,
-      y: this.y,
-      animKey: this.anims.currentAnim!.key,
-    });
+    const animKey = this.anims.currentAnim!.key;
+    this.lastSent = { x: this.x, y: this.y, animKey };
+    this.sendAccumulator = 0;
+    network.sendMessage("UPDATE_PLAYER", { x: this.x, y: this.y, animKey });
   }
 
-  update(playerSelector: PlayerSelector, cursor: ExtendedCursorKeys, network: Network) {
+  private throttledSendPlayerPosition(network: Network, delta: number) {
+    this.sendAccumulator += delta;
+    if (this.sendAccumulator < SEND_INTERVAL_MS) return;
+
+    const animKey = this.anims.currentAnim!.key;
+    const { x, y } = this;
+    if (x === this.lastSent.x && y === this.lastSent.y && animKey === this.lastSent.animKey) {
+      return;
+    }
+    this.sendPlayerPosition(network);
+  }
+
+  update(
+    playerSelector: PlayerSelector,
+    cursor: ExtendedCursorKeys,
+    network: Network,
+    delta: number,
+  ) {
     const selectedItem = playerSelector.selectedItem;
     this.playerMarker.setPosition(this.x, this.y);
 
@@ -149,7 +171,7 @@ export class LocalPlayer extends Player {
 
         if (isRJustDown && playerSelector.playerOverlap) {
           const otherPlayer = playerSelector.playerOverlap.player;
-          store.dispatch(showUserProfile({ otherPlayer }));
+          store.dispatch(showUserProfile({ playerId: otherPlayer.playerId }));
         }
 
         if (this.isPhoneAnimating) {
@@ -229,7 +251,7 @@ export class LocalPlayer extends Player {
             this.sendPlayerPosition(network);
           }
         }
-        if (vx !== 0 || vy !== 0) this.sendPlayerPosition(network);
+        if (vx !== 0 || vy !== 0) this.throttledSendPlayerPosition(network, delta);
 
         break;
       }

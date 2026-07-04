@@ -108,10 +108,8 @@ export const Chat = () => {
             }}
           />
         </Condition>
-        {chatMessages.map(({ type, message }, index) => {
-          return (
-            <ChatMessage key={index} chatId={index} messageType={type} chatMessage={message} />
-          );
+        {chatMessages.map(({ id, type, message }, index) => {
+          return <ChatMessage key={id} chatId={index} messageType={type} chatMessage={message} />;
         })}
         <div ref={messageEndRef} />
       </div>

@@ -5,7 +5,7 @@ type UserState = {
   texture: string;
   userName: string;
   loggedIn: boolean;
-  otherPlayersName: Map<string, string>;
+  otherPlayersName: Record<string, string>;
   showJoystick: boolean;
   showMinimap: boolean;
   mediaConnected: boolean;
@@ -20,7 +20,7 @@ const initialState: UserState = {
   texture: "suit",
   userName: "",
   loggedIn: false,
-  otherPlayersName: new Map<string, string>(),
+  otherPlayersName: {},
   showJoystick: false,
   showMinimap: false,
   mediaConnected: false,
@@ -45,10 +45,10 @@ const userSlice = createSlice({
       state.loggedIn = action.payload;
     },
     addPlayerName(state, action: PayloadAction<{ id: string; name: string }>) {
-      state.otherPlayersName.set(action.payload.id, action.payload.name);
+      state.otherPlayersName[action.payload.id] = action.payload.name;
     },
     removePlayerName(state, action: PayloadAction<string>) {
-      state.otherPlayersName.delete(action.payload);
+      delete state.otherPlayersName[action.payload];
     },
     setJoystick(state, action: PayloadAction<boolean>) {
       state.showJoystick = action.payload;
@@ -59,7 +59,7 @@ const userSlice = createSlice({
     setMediaConnected(state, action: PayloadAction<boolean>) {
       state.mediaConnected = action.payload;
     },
-    setViedeoEnabled(state, action: PayloadAction<boolean>) {
+    setVideoEnabled(state, action: PayloadAction<boolean>) {
       state.videoEnabled = action.payload;
     },
     setMicEnabled(state, action: PayloadAction<boolean>) {
@@ -75,8 +75,8 @@ const userSlice = createSlice({
     grantAdmin: (state) => {
       state.isAdmin = true;
     },
-    setSingleMode: (state, actoin: PayloadAction<boolean>) => {
-      state.single = actoin.payload;
+    setSingleMode: (state, action: PayloadAction<boolean>) => {
+      state.single = action.payload;
     },
   },
   selectors: {
@@ -95,7 +95,7 @@ export const {
   removePlayerName,
   setJoystick,
   setMediaConnected,
-  setViedeoEnabled,
+  setVideoEnabled,
   setMicEnabled,
   setMinimap,
   setUserStatus,

@@ -1,7 +1,6 @@
-import { useState } from "react";
 import NumberFlow from "@number-flow/react";
 import { Condition, TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector, useGame, useModal, useSceneEffect } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { setJoystick, setMinimap } from "@/stores/userSlice";
 import { openURL } from "@/utils";
@@ -11,11 +10,7 @@ export const HelperGroups = () => {
   const { showModal } = useModal();
   const dispatch = useAppDispatch();
   const { showJoystick, loggedIn, showMinimap, isAdmin } = useAppSelector((state) => state.user);
-  const [users, setUsers] = useState(0);
-
-  useSceneEffect(gameScene, () => {
-    setUsers(gameScene.ohterPlayersMap.size + 1);
-  }, []);
+  const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
 
   return (
     <div className="fixed bottom-2 right-6 flex gap-2">

@@ -18,13 +18,13 @@ export function openURL(url: string) {
   }
 }
 
-export function spliteAnimKey(key: string) {
-  const splited = key.split("_");
+export function splitAnimKey(key: string) {
+  const parts = key.split("_");
   return {
-    character: splited[0],
-    state: splited[1],
-    direction: splited[2] as Direction,
-    sittingOffset: sittingOffset[splited[2] as Direction],
+    character: parts[0],
+    state: parts[1],
+    direction: parts[2] as Direction,
+    sittingOffset: sittingOffset[parts[2] as Direction],
   };
 }
 

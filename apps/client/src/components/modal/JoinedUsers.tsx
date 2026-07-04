@@ -11,7 +11,7 @@ export const JoinedUsers = () => {
   const { otherPlayersName } = useAppSelector((state) => state.user);
 
   const player = getLocalPlayer();
-  const users = [...otherPlayersName.entries()].map(([id, name]) => ({ id, name }));
+  const users = Object.entries(otherPlayersName).map(([id, name]) => ({ id, name }));
 
   return (
     <Backdrop className="max-w-lg">

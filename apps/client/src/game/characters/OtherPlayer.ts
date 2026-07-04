@@ -1,5 +1,5 @@
 import { LocalPlayer, Player, PlayerOverlap } from "@/game/characters";
-import { spliteAnimKey } from "@/utils";
+import { splitAnimKey } from "@/utils";
 import { IPlayer } from "@heoniverse/shared";
 import { Game } from "@/game/scenes";
 import { WebRTC } from "@/service";
@@ -13,6 +13,9 @@ export class OtherPlayer extends Player {
 
   hasBeenConnected = false;
   connectionBufferTime = 0;
+  // preUpdate에서 매 프레임 문자열 파싱을 피하기 위한 캐시
+  private parsedAnimKey = "";
+  private parsedAnim?: ReturnType<typeof splitAnimKey>;
 
   constructor(scene: Game, id: string, name: string, x: number, y: number, texture: string) {
     super(scene, id, x, y, texture);
@@ -62,15 +65,16 @@ export class OtherPlayer extends Player {
       micEnabled,
       isCalling,
     } = player;
-    this.playerName.setText(name);
+    // 서버 패치마다 호출되므로 변경된 값만 반영한다
+    if (this.playerName.text !== name) this.playerName.setText(name);
     this.destination = { x, y };
     this.readyToConnect = readyToConnect;
     this.mediaConnect = mediaConnect;
     this.videoEnabled = videoEnabled;
     this.micEnabled = micEnabled;
-    this.setCallingState(isCalling);
-    this.anims.play(animKey, true);
-    this.setPlayerStatus(status);
+    if (this.isCalling !== isCalling) this.setCallingState(isCalling);
+    if (this.anims.currentAnim?.key !== animKey) this.anims.play(animKey, true);
+    if (this.playerStatus !== status) this.setPlayerStatus(status);
   }
 
   protected preUpdate(time: number, delta: number) {
@@ -110,7 +114,12 @@ export class OtherPlayer extends Player {
     this.containerBody.velocity.setLength(this.speed);
 
     this.setDepth(this.y + this.height / 2);
-    const { character, state, sittingOffset } = spliteAnimKey(this.anims.currentAnim!.key);
+    const currentAnimKey = this.anims.currentAnim!.key;
+    if (this.parsedAnimKey !== currentAnimKey) {
+      this.parsedAnimKey = currentAnimKey;
+      this.parsedAnim = splitAnimKey(currentAnimKey);
+    }
+    const { character, state, sittingOffset } = this.parsedAnim!;
     this.playerTexture = character;
     if (state === "sit") {
       if (sittingOffset) {

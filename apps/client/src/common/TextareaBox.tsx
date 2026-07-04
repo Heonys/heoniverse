@@ -6,7 +6,7 @@ type Props = {
   required?: boolean;
   topLabel?: boolean;
   autoFocus?: boolean;
-  regiser?: UseFormRegisterReturn<any>;
+  register?: UseFormRegisterReturn<any>;
 };
 
 export const TextareaBox = ({
@@ -14,7 +14,7 @@ export const TextareaBox = ({
   required = false,
   topLabel = true,
   autoFocus,
-  regiser,
+  register,
 }: Props) => {
   return (
     <Field className="mx-auto w-full">
@@ -31,7 +31,7 @@ export const TextareaBox = ({
           placeholder={label}
           required={required}
           className="bg-background border-1 w-full resize-none rounded-sm border-transparent bg-[#1e1f23] p-2 text-sm outline-none placeholder:text-sm focus-within:border-white/70"
-          {...regiser}
+          {...register}
         />
       </div>
     </Field>

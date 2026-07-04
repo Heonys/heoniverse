@@ -94,9 +94,9 @@ export const LoginDialog = () => {
 
         <div className="my-auto p-2">
           <div className="flex flex-col gap-1.5">
-            <InputBox label="Nickname" regiser={register("name")} required autoFocus />
+            <InputBox label="Nickname" register={register("name")} required autoFocus />
             <div className="ml-1 text-xs text-red-400">{errors.name?.message}</div>
-            <TextareaBox label="Status Message" regiser={register("message")} />
+            <TextareaBox label="Status Message" register={register("message")} />
           </div>
         </div>
       </div>

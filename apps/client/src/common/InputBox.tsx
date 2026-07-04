@@ -6,7 +6,7 @@ type Props = {
   required?: boolean;
   topLabel?: boolean;
   autoFocus?: boolean;
-  regiser?: UseFormRegisterReturn<any>;
+  register?: UseFormRegisterReturn<any>;
   value?: string;
   onChange?: (password: string) => void;
 };
@@ -16,7 +16,7 @@ export const InputBox = ({
   required = false,
   topLabel = true,
   autoFocus,
-  regiser,
+  register,
   value,
   onChange,
 }: Props) => {
@@ -40,7 +40,7 @@ export const InputBox = ({
           onChange={(event) => {
             onChange?.(event.target.value);
           }}
-          {...regiser}
+          {...register}
         />
       </div>
     </Field>

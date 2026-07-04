@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { isBrowser } from "react-device-detect";
 import { createPortal } from "react-dom";
@@ -6,11 +6,11 @@ import { AnimatePresence } from "motion/react";
 import NumberFlow from "@number-flow/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "./AvatarIcon";
-import { useAppDispatch, useAppSelector, useGame, useSceneEffect } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { cn } from "@/utils";
 import { TooltipButton } from "@/common";
 import { SelfVideo, RemoteVideo } from "@/components/webcam";
-import { setMicEnabled, setViedeoEnabled } from "@/stores/userSlice";
+import { setMicEnabled, setVideoEnabled } from "@/stores/userSlice";
 import { eventEmitter } from "@/game/events";
 
 export const GameHUD = () => {
@@ -20,9 +20,11 @@ export const GameHUD = () => {
   const { mediaConnected, micEnabled, videoEnabled, status, userName, texture } = useAppSelector(
     (state) => state.user,
   );
+  const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
   const [frame, setFrame] = useState(0);
-  const [users, setUsers] = useState(0);
   const videoRef = useRef<Webcam>(null);
+  // mediaStreamsMap은 mutable Map이라 변경 이벤트를 받아 리렌더를 트리거한다
+  const [, forceStreamsUpdate] = useReducer((x: number) => x + 1, 0);
 
   const handleMicEnabled = async (isEnabled: boolean) => {
     if (videoRef.current) {
@@ -66,11 +68,11 @@ export const GameHUD = () => {
 
   const toggleVideo = (isEnabled: boolean) => {
     if (isEnabled) {
-      dispatch(setViedeoEnabled(false));
+      dispatch(setVideoEnabled(false));
       handleVideoEnabled(false);
       network.updateMediaEnabled({ video: false });
     } else {
-      dispatch(setViedeoEnabled(true));
+      dispatch(setVideoEnabled(true));
       handleVideoEnabled(true);
       network.updateMediaEnabled({ video: true });
     }
@@ -89,9 +91,18 @@ export const GameHUD = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useSceneEffect(gameScene, () => {
-    setFrame(gameScene.game.loop.actualFps);
-    setUsers(gameScene.ohterPlayersMap.size + 1);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setFrame(Math.round(gameScene.game.loop.actualFps));
+    }, 1000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const handler = () => forceStreamsUpdate();
+    eventEmitter.on("MEDIA_STREAMS_CHANGED", handler);
+    return () => eventEmitter.off("MEDIA_STREAMS_CHANGED", handler);
   }, []);
 
   return (

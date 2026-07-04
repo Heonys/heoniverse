@@ -20,8 +20,8 @@ export class Game extends Phaser.Scene {
   playerSelector!: PlayerSelector;
   network!: Network;
   otherPlayers!: Phaser.Physics.Arcade.Group;
-  ohterPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
-  ohterPlayersMap = new Map<string, OtherPlayer>();
+  otherPlayerOverlapZone!: Phaser.Physics.Arcade.Group;
+  otherPlayersMap = new Map<string, OtherPlayer>();
   computersMap = new Map<string, Computer>();
   whiteboardsMap = new Map<string, Whiteboard>();
   minimap?: Phaser.Cameras.Scene2D.Camera;
@@ -50,7 +50,7 @@ export class Game extends Phaser.Scene {
     );
     this.playerSelector = new PlayerSelector(this, START_POINT[0], START_POINT[1], 16, 16);
     this.otherPlayers = this.physics.add.group();
-    this.ohterPlayerOverlapZone = this.physics.add.group();
+    this.otherPlayerOverlapZone = this.physics.add.group();
 
     this.setupCamera();
     this.disableKeys();
@@ -121,7 +121,7 @@ export class Game extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.playerSelector,
-      this.ohterPlayerOverlapZone,
+      this.otherPlayerOverlapZone,
       (object1, object2) => {
         const playerSelector = object1 as PlayerSelector;
         const otherPlayer = object2 as PlayerOverlap;
@@ -176,7 +176,7 @@ export class Game extends Phaser.Scene {
     this.minimap.setMask(mask);
 
     this.localPlayer.setupMinimap();
-    this.ohterPlayersMap.forEach((player) => {
+    this.otherPlayersMap.forEach((player) => {
       player.setupMinimap();
     });
   }
@@ -187,54 +187,97 @@ export class Game extends Phaser.Scene {
     }
   }
 
-  update(_time: number, _delta: number) {
+  update(_time: number, delta: number) {
     if (this.localPlayer) {
-      this.localPlayer.update(this.playerSelector, this.cursor, this.network);
+      this.localPlayer.update(this.playerSelector, this.cursor, this.network, delta);
       this.playerSelector.update(this.localPlayer, this.cursor);
     }
   }
 
   registerEventHandler() {
-    eventEmitter.on("OTHER_PLAYER_JOINED", ({ sessionId, player }) => {
+    const onPlayerJoined = ({ sessionId, player }: { sessionId: string; player: IPlayer }) => {
       this.playerJoined(sessionId, player);
-    });
-    eventEmitter.on("OTHER_PLAYER_UPDATED", ({ sessionId, player }) => {
+    };
+    const onPlayerUpdated = ({ sessionId, player }: { sessionId: string; player: IPlayer }) => {
       this.playerUpdated(sessionId, player);
-    });
-    eventEmitter.on("OTHER_PLAYER_LEFT", ({ sessionId, player }) => {
+    };
+    const onPlayerLeft = ({ sessionId, player }: { sessionId: string; player: IPlayer }) => {
       this.playerLeft(sessionId, player);
-    });
-    eventEmitter.on("UPDATED_CHAT_MESSAGE", ({ sessionId, message }) => {
-      const otherPlayer = this.ohterPlayersMap.get(sessionId);
+    };
+    const onChatMessage = ({ sessionId, message }: { sessionId: string; message: string }) => {
+      const otherPlayer = this.otherPlayersMap.get(sessionId);
       if (otherPlayer) {
         otherPlayer.openBubble(message);
       }
-    });
-
-    eventEmitter.on("COMPUTER_USER_ADDED", ({ userId, computerId }) => {
+    };
+    const onComputerUserAdded = ({
+      userId,
+      computerId,
+    }: {
+      userId: string;
+      computerId: string;
+    }) => {
       const computer = this.computersMap.get(computerId);
       if (computer) {
         computer.connected(userId);
       }
-    });
-    eventEmitter.on("COMPUTER_USER_REMOVED", ({ userId, computerId }) => {
+    };
+    const onComputerUserRemoved = ({
+      userId,
+      computerId,
+    }: {
+      userId: string;
+      computerId: string;
+    }) => {
       const computer = this.computersMap.get(computerId);
       if (computer) {
         computer.disConnected(userId);
       }
-    });
-
-    eventEmitter.on("WHITEBOARD_USER_ADDED", ({ userId, whiteboardId }) => {
+    };
+    const onWhiteboardUserAdded = ({
+      userId,
+      whiteboardId,
+    }: {
+      userId: string;
+      whiteboardId: string;
+    }) => {
       const whiteboard = this.whiteboardsMap.get(whiteboardId);
       if (whiteboard) {
         whiteboard.connected(userId);
       }
-    });
-    eventEmitter.on("WHITEBOARD_USER_REMOVED", ({ userId, whiteboardId }) => {
+    };
+    const onWhiteboardUserRemoved = ({
+      userId,
+      whiteboardId,
+    }: {
+      userId: string;
+      whiteboardId: string;
+    }) => {
       const whiteboard = this.whiteboardsMap.get(whiteboardId);
       if (whiteboard) {
         whiteboard.disConnected(userId);
       }
+    };
+
+    eventEmitter.on("OTHER_PLAYER_JOINED", onPlayerJoined);
+    eventEmitter.on("OTHER_PLAYER_UPDATED", onPlayerUpdated);
+    eventEmitter.on("OTHER_PLAYER_LEFT", onPlayerLeft);
+    eventEmitter.on("UPDATED_CHAT_MESSAGE", onChatMessage);
+    eventEmitter.on("COMPUTER_USER_ADDED", onComputerUserAdded);
+    eventEmitter.on("COMPUTER_USER_REMOVED", onComputerUserRemoved);
+    eventEmitter.on("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
+    eventEmitter.on("WHITEBOARD_USER_REMOVED", onWhiteboardUserRemoved);
+
+    // 씬이 재시작돼도 핸들러가 중복 등록되지 않도록 정리한다
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      eventEmitter.off("OTHER_PLAYER_JOINED", onPlayerJoined);
+      eventEmitter.off("OTHER_PLAYER_UPDATED", onPlayerUpdated);
+      eventEmitter.off("OTHER_PLAYER_LEFT", onPlayerLeft);
+      eventEmitter.off("UPDATED_CHAT_MESSAGE", onChatMessage);
+      eventEmitter.off("COMPUTER_USER_ADDED", onComputerUserAdded);
+      eventEmitter.off("COMPUTER_USER_REMOVED", onComputerUserRemoved);
+      eventEmitter.off("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
+      eventEmitter.off("WHITEBOARD_USER_REMOVED", onWhiteboardUserRemoved);
     });
   }
 
@@ -325,24 +368,24 @@ export class Game extends Phaser.Scene {
   }
 
   playerJoined(id: string, player: IPlayer) {
-    if (this.ohterPlayersMap.has(id)) return;
+    if (this.otherPlayersMap.has(id)) return;
 
     const { name, x, y } = player;
     const otherPlayer = new OtherPlayer(this, id, name, x, y, "suit");
     this.otherPlayers.add(otherPlayer);
-    this.ohterPlayerOverlapZone.add(otherPlayer.playerOverlap);
-    this.ohterPlayersMap.set(id, otherPlayer);
+    this.otherPlayerOverlapZone.add(otherPlayer.playerOverlap);
+    this.otherPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
     store.dispatch(pushJoinedMessage({ id, name }));
     otherPlayer.updatePlayer(player);
   }
 
   playerLeft(id: string, player: IPlayer) {
-    if (this.ohterPlayersMap.has(id)) {
-      const otherPlayer = this.ohterPlayersMap.get(id)!;
+    if (this.otherPlayersMap.has(id)) {
+      const otherPlayer = this.otherPlayersMap.get(id)!;
       this.otherPlayers.remove(otherPlayer, true, true);
-      this.ohterPlayerOverlapZone.remove(otherPlayer.playerOverlap, true, true);
-      this.ohterPlayersMap.delete(id);
+      this.otherPlayerOverlapZone.remove(otherPlayer.playerOverlap, true, true);
+      this.otherPlayersMap.delete(id);
       otherPlayer.playerMarker.destroy();
 
       store.dispatch(removePlayerName(id));
@@ -351,7 +394,7 @@ export class Game extends Phaser.Scene {
   }
 
   playerUpdated(id: string, payload: IPlayer) {
-    const otherPlayer = this.ohterPlayersMap.get(id);
+    const otherPlayer = this.otherPlayersMap.get(id);
     if (!otherPlayer) return;
     otherPlayer.updatePlayer(payload);
   }

@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { isBrowser } from "react-device-detect";
 import NumberFlow from "@number-flow/react";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { Condition, TooltipButton } from "@/common";
-import { useAppDispatch, useAppSelector, useGame, useModal, useSceneEffect } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { Pages, setShowIphone } from "@/stores/phoneSlice";
+import { unreadMessageCount } from "@/stores/chatSlice";
 import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
 import { cn } from "@/utils";
 
@@ -16,26 +17,33 @@ const pagesMap: Record<Pages, React.ComponentType<any>> = {
   dialing: Dialing,
 };
 
+const PRELOAD_IMAGES = [
+  "/images/background/iphone-wallpaper.webp",
+  "/svg/iphone15.svg",
+  "/icons/phone.png",
+  "/icons/messages.png",
+  "/icons/note.png",
+  "/icons/photos.png",
+  "/icons/maps.png",
+  "/icons/music.png",
+];
+
 export const IphoneApp = () => {
-  const [users, setUsers] = useState(0);
-  const { gameScene, getLocalPlayer } = useGame();
+  const { getLocalPlayer } = useGame();
   const { showModal } = useModal();
   const dispatch = useAppDispatch();
   const { showIphone, currentPage, isRinging } = useAppSelector((state) => state.phone);
-  const { chatMessages, lastReadAt } = useAppSelector((state) => state.chat);
+  const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
+  const localPlayerId = getLocalPlayer().playerId;
+  const unReadMessageCount = useAppSelector((state) => unreadMessageCount(state, localPlayerId));
   const [scope, animate] = useAnimate();
   const CurrentComponent = pagesMap[currentPage.page];
 
-  useSceneEffect(gameScene, () => {
-    setUsers(gameScene.ohterPlayersMap.size + 1);
+  useEffect(() => {
+    PRELOAD_IMAGES.forEach((src) => {
+      new Image().src = src;
+    });
   }, []);
-
-  const unReadMessageCount = chatMessages.filter(
-    (it) =>
-      it.type === "CHAT" &&
-      it.message.clientId !== getLocalPlayer().playerId &&
-      it.message.createdAt > lastReadAt,
-  ).length;
 
   useEffect(() => {
     if (!scope.current) return;

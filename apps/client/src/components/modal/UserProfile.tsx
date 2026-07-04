@@ -1,14 +1,37 @@
+import { useEffect } from "react";
 import { spriteAvatars } from "@/constants/game";
 import { Backdrop } from "./Backdrop";
 import { SpriteAnimation } from "@/common/SpriteAnimation";
-import { OtherPlayer } from "@/game/characters";
-import { cn, spliteAnimKey } from "@/utils";
+import { useGame, useModal } from "@/hooks";
+import { cn, splitAnimKey } from "@/utils";
 import { statusColorMap } from "@/constants/common";
+import { eventEmitter } from "@/game/events";
 
-type Props = { otherPlayer: OtherPlayer };
+type Props = { playerId: string };
 
-export const UserProfile = ({ otherPlayer }: Props) => {
-  const { character } = spliteAnimKey(otherPlayer.anims.currentAnim!.key);
+export const UserProfile = ({ playerId }: Props) => {
+  const { getOtherPlayerById } = useGame();
+  const { hideModal } = useModal();
+  const otherPlayer = getOtherPlayerById(playerId);
+
+  // 프로필을 보는 도중 해당 플레이어가 퇴장하면 모달을 닫는다
+  useEffect(() => {
+    const handler = ({ sessionId }: { sessionId: string }) => {
+      if (sessionId === playerId) hideModal();
+    };
+    eventEmitter.on("OTHER_PLAYER_LEFT", handler);
+    return () => eventEmitter.off("OTHER_PLAYER_LEFT", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerId]);
+
+  useEffect(() => {
+    if (!otherPlayer) hideModal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otherPlayer]);
+
+  if (!otherPlayer) return null;
+
+  const { character } = splitAnimKey(otherPlayer.anims.currentAnim!.key);
   const sprite = spriteAvatars.find((it) => it.name === character)!.sprite;
 
   return (

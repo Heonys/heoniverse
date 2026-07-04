@@ -16,7 +16,7 @@ export const Contacts = () => {
   const { getOtherPlayerById, network } = useGame();
   const { otherPlayersName } = useAppSelector((state) => state.user);
 
-  const users = [...otherPlayersName.entries()].map(([id, name]) => ({ id, name }));
+  const users = Object.entries(otherPlayersName).map(([id, name]) => ({ id, name }));
 
   return (
     <div className="rounded-4xl flex size-full flex-col bg-white">

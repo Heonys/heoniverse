@@ -5,13 +5,13 @@ import { AppIcon } from "@/icons";
 
 type Props = {
   required?: boolean;
-  regiser?: UseFormRegisterReturn<any>;
+  register?: UseFormRegisterReturn<any>;
   autoFocus?: boolean;
   value?: string;
   onChange?: (password: string) => void;
 };
 
-export const PasswordBox = ({ required, autoFocus, regiser, value, onChange }: Props) => {
+export const PasswordBox = ({ required, autoFocus, register, value, onChange }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -32,7 +32,7 @@ export const PasswordBox = ({ required, autoFocus, regiser, value, onChange }: P
           onChange={(event) => {
             onChange?.(event.target.value);
           }}
-          {...regiser}
+          {...register}
         />
         <div
           className="absolute right-4 top-2.5 cursor-pointer text-2xl text-gray-500"
