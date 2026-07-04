@@ -26,3 +26,5 @@ dist-ssr
 .env
 _note.md
 .deploy
+REFACTORING_NOTES.md
+DEPLOYMENT.md

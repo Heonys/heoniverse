@@ -3,11 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/apps/server/src/index.js",
-    "build": "tsc --project tsconfig.json"
+    "start": "node dist/index.js",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.13",
-    "ts-node-dev": "^2.0.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.10.2",
     "typescript": "~5.7.2"
   },
@@ -31,7 +32,6 @@
     "colyseus": "^0.16.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
-    "express": "^5.1.0",
-    "peer": "^1.0.2"
+    "express": "^5.1.0"
   }
 }

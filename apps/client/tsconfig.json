@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.app.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "experimentalDecorators": true,
     "paths": {
       "@/*": ["src/*"],
       "@server/*": ["../server/src/*"],
