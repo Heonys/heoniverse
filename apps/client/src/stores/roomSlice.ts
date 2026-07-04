@@ -3,10 +3,15 @@ import { RoomMetadata, RoomType } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isCustomRoom } from "@/utils";
 
+// connecting: 접속 시도 중 (잠든 서버 깨우기 재시도 포함) / failed: 재시도 소진
+export type LobbyStatus = "connecting" | "connected" | "failed";
+
 const roomSlice = createSlice({
   name: "room",
   initialState: {
     lobbyJoined: false,
+    lobbyStatus: "connecting" as LobbyStatus,
+    lobbyAttempt: 0,
     roomJoined: false,
     id: "",
     name: "",
@@ -18,6 +23,11 @@ const roomSlice = createSlice({
   reducers: {
     setLobbyJoined: (state, action: PayloadAction<boolean>) => {
       state.lobbyJoined = action.payload;
+      if (action.payload) state.lobbyStatus = "connected";
+    },
+    setLobbyStatus: (state, action: PayloadAction<{ status: LobbyStatus; attempt?: number }>) => {
+      state.lobbyStatus = action.payload.status;
+      if (action.payload.attempt !== undefined) state.lobbyAttempt = action.payload.attempt;
     },
     setRoomJoined: (state, action: PayloadAction<boolean>) => {
       state.roomJoined = action.payload;
@@ -64,6 +74,7 @@ const roomSlice = createSlice({
 
 export const {
   setLobbyJoined,
+  setLobbyStatus,
   setRoomJoined,
   setJoinedRoomData,
   setAvailableRoom,

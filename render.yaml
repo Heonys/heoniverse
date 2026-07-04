@@ -1,0 +1,18 @@
+# Render 블루프린트 — 대시보드에서 New > Blueprint로 이 저장소를 연결하면
+# 아래 정의대로 서비스가 생성된다. 자세한 절차는 DEPLOYMENT.md 참고.
+services:
+  - type: web
+    name: heoniverse-server
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: pnpm install && pnpm build:server
+    startCommand: node apps/server/dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONITOR_PASSWORD
+        sync: false # 대시보드에서 직접 입력 (/colyseus 모니터 basic-auth 비밀번호)
+      - key: CORS_ORIGIN
+        value: https://heoniverse.netlify.app

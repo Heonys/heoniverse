@@ -5,6 +5,7 @@ import { store } from "@/stores";
 import {
   setJoinedRoomData,
   setLobbyJoined,
+  setLobbyStatus,
   setAvailableRoom,
   addAvailableRoom,
   removeAvailableRoom,
@@ -33,10 +34,36 @@ export class Network {
       : "ws://localhost:2567";
 
     this.client = new Client(endPoint);
-    this.joinLobbyRoom().then(() => {
-      setTimeout(() => store.dispatch(setLobbyJoined(true)), import.meta.env.PROD ? 1500 : 0);
-    });
+    this.connectToLobby();
     this.registerEventHandler();
+  }
+
+  // 무료 호스팅(Render)은 유휴 시 서버가 잠들고 첫 접속에 ~1분 정도 걸리므로
+  // 깨어날 때까지 재시도한다. 최종 실패 시 UI가 오프라인 모드를 안내한다.
+  private async connectToLobby() {
+    const MAX_ATTEMPTS = 6;
+    const RETRY_DELAY_MS = 15_000;
+
+    store.dispatch(setLobbyStatus({ status: "connecting", attempt: 1 }));
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      // 재시도 중 사용자가 오프라인 모드로 진입했으면 중단
+      if (store.getState().user.single) return;
+
+      try {
+        await this.joinLobbyRoom();
+        store.dispatch(setLobbyJoined(true));
+        return;
+      } catch (error) {
+        console.error(`로비 접속 실패 (${attempt}/${MAX_ATTEMPTS}):`, error);
+        if (attempt < MAX_ATTEMPTS) {
+          // 실패 직후 attempt를 올려서 UI가 "깨우는 중" 상태와 오프라인 버튼을 바로 노출하게 한다
+          store.dispatch(setLobbyStatus({ status: "connecting", attempt: attempt + 1 }));
+          await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+        }
+      }
+    }
+    store.dispatch(setLobbyStatus({ status: "failed" }));
   }
 
   registerEventHandler() {
@@ -98,6 +125,9 @@ export class Network {
   }
 
   async leaveCurrentRoom() {
+    this.webRTC?.dispose();
+    this.webRTC = undefined;
+
     if (!this.room) return;
 
     await this.room.leave();
@@ -105,33 +135,28 @@ export class Network {
     this.room = null;
   }
 
+  // 오프라인 모드에선 room이 없으므로 두 메서드 모두 조용히 무시한다
   sendMessage<T extends keyof MessagePayloadMap>(type: T, message?: MessagePayloadMap[T]) {
-    if (this.room) {
-      this.room.send(type, message);
-    }
-    // throw new Error("방에 입장하지 않았습니다.");
+    this.room?.send(type, message);
   }
 
   onMessage<T extends keyof MessagePayloadMap>(
     type: T,
     callback: (message: MessagePayloadMap[T]) => void,
   ) {
-    if (!this.room) {
-      throw new Error("방에 입장하지 않았습니다.");
-    }
-    this.room.onMessage(type, callback);
+    this.room?.onMessage(type, callback);
   }
 
   readyToConnect() {
     this.sendMessage("READY_TO_CONNECT");
   }
 
-  updateMideaConnect(payload: boolean) {
+  updateMediaConnect(payload: boolean) {
     this.sendMessage("UPDATE_MEDIA_CONNECT", payload);
   }
 
   updateMediaEnabled({ video, microphone }: { video?: boolean; microphone?: boolean }) {
-    this.sendMessage("UPDATE_MEDIA_ENABELD", { video, microphone });
+    this.sendMessage("UPDATE_MEDIA_ENABLED", { video, microphone });
   }
 
   updateIsCalling(payload: boolean) {
@@ -189,7 +214,8 @@ export class Network {
     store.dispatch(setLobbyJoined(false));
     store.dispatch(setSingleMode(true));
     this.sessionId = nanoid(10);
-    this.webRTC = new WebRTC(this.sessionId, this);
+    this.webRTC?.dispose();
+    this.webRTC = new WebRTC(this.sessionId, this, { offline: true });
 
     store.dispatch(
       setJoinedRoomData({
@@ -205,6 +231,7 @@ export class Network {
     if (!this.room) return;
     this.lobby?.leave();
     store.dispatch(setLobbyJoined(false));
+    this.webRTC?.dispose();
     this.webRTC = new WebRTC(this.room.sessionId, this);
 
     this.sessionId = this.room.sessionId;

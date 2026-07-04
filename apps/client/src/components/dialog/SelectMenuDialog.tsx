@@ -15,7 +15,9 @@ const enum DialogView {
 
 export const SelectMenuDialog = () => {
   const [dialogView, setDialogView] = useState<DialogView>(DialogView.Select);
-  const { lobbyJoined, totalClients } = useAppSelector((state) => state.room);
+  const { lobbyJoined, lobbyStatus, lobbyAttempt, totalClients } = useAppSelector(
+    (state) => state.room,
+  );
   const { preloaderScene } = useGame();
 
   return (
@@ -42,12 +44,20 @@ export const SelectMenuDialog = () => {
                   <div>{Math.max(totalClients - 1, 0)}명 온라인</div>
                 </div>
 
-                <Condition condition={!lobbyJoined}>
-                  <ProgressBar message="Connecting to server..." />
+                <Condition condition={lobbyStatus === "connecting"}>
+                  <ProgressBar
+                    message={
+                      lobbyAttempt > 1 ? "서버를 켜는 중... (최대 1분)" : "서버에 연결하는 중..."
+                    }
+                  />
+                </Condition>
+                <Condition condition={lobbyStatus === "failed"}>
+                  <div className="text-xs text-[#e07777]">서버에 연결할 수 없습니다</div>
                 </Condition>
               </div>
 
-              <Condition condition={!lobbyJoined}>
+              {/* 첫 시도가 실패한 뒤부터 오프라인 모드로 빠질 수 있는 탈출구 제공 */}
+              <Condition condition={!lobbyJoined && (lobbyStatus === "failed" || lobbyAttempt > 1)}>
                 <AppButton
                   className="w-full p-2.5 font-medium"
                   onClick={() => {
