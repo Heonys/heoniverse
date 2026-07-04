@@ -2,7 +2,7 @@ import { TooltipButton } from "@/common";
 import { useAppDispatch, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
 import { closeWhiteboardDialog } from "@/stores/whiteboardSlice";
-import { WhiteBoard } from "@/components/whiteboard";
+import { WhiteBoard } from "./WhiteBoard";
 
 export const WhiteboardDialog = () => {
   const dispatch = useAppDispatch();

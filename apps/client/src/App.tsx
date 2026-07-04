@@ -1,21 +1,27 @@
+import { lazy, Suspense } from "react";
 import { isBrowser } from "react-device-detect";
 import { HelperGroups, VirtualJoystick, GameHUD, GameNoti } from "@/components";
 import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
 import { ComputerDialog } from "@/components/computer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
-import { WhiteboardDialog } from "@/components/whiteboard";
 import { ModalComponent } from "@/components/modal";
 import { IphoneApp } from "@/components/iphone";
 import { NonDesktop } from "@/NonDesktop";
 import { closeComputerDialog } from "./stores/computerSlice";
+
+const WhiteboardDialog = lazy(() =>
+  import("@/components/whiteboard/WhiteboardDialog").then((module) => ({
+    default: module.WhiteboardDialog,
+  })),
+);
 
 function App() {
   const dispatch = useAppDispatch();
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);
-  const whiteboardDialogOpen = useAppSelector((state) => state.whitebaord.isOpenDialog);
+  const whiteboardDialogOpen = useAppSelector((state) => state.whiteboard.isOpenDialog);
 
   return (
     <div className="absolute h-full w-full">
@@ -48,7 +54,9 @@ function App() {
       </Condition>
 
       <Condition condition={whiteboardDialogOpen}>
-        <WhiteboardDialog />
+        <Suspense fallback={null}>
+          <WhiteboardDialog />
+        </Suspense>
       </Condition>
     </div>
   );

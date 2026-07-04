@@ -1,4 +1,4 @@
-import { ToolButton } from "@/components/whiteboard";
+import { ToolButton } from "./ToolButton";
 import { toolItems, Tools } from "@/constants/drawing";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { changeTool } from "@/stores/drawContextSlice";
@@ -12,8 +12,8 @@ export const ToolBar = () => {
   };
 
   return (
-    <div className="fixed left-1/2 top-3 -translate-x-1/2 flex gap-3 select-none z-50">
-      <div className="flex gap-2 p-2 px-4 rounded-xl shadow-xl border border-black/20 bg-white">
+    <div className="fixed left-1/2 top-3 z-50 flex -translate-x-1/2 select-none gap-3">
+      <div className="flex gap-2 rounded-xl border border-black/20 bg-white p-2 px-4 shadow-xl">
         {toolItems.map(({ name, label, iconName }) => {
           return (
             <ToolButton
