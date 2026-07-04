@@ -12,6 +12,10 @@ services:
     startCommand: node apps/server/dist/index.js
     healthCheckPath: /health
     envVars:
+      # uWebSockets.js는 Node 18/20/21/22 prebuilt만 제공한다.
+      # Render 기본 Node(24)에선 바이너리를 못 찾아 크래시하므로 22로 고정.
+      - key: NODE_VERSION
+        value: "22"
       - key: NODE_ENV
         value: production
       - key: MONITOR_PASSWORD
