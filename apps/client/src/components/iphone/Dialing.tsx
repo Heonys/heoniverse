@@ -18,7 +18,7 @@ export const Dialing = ({ remoteId }: Props) => {
   return (
     <div
       className="rounded-4xl size-full bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/background/iphone-wallpaper.jpg')" }}
+      style={{ backgroundImage: "url('/images/background/iphone-wallpaper.webp')" }}
     >
       <div className="rounded-4xl flex size-full flex-col bg-black/40 backdrop-blur-xl">
         {/* header */}

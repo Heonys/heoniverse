@@ -1,10 +1,14 @@
 @import "tailwindcss";
+@import "@fontsource/noto-sans-kr/400.css";
+@import "@fontsource/noto-sans-kr/500.css";
+@import "@fontsource/noto-sans-kr/600.css";
+@import "@fontsource/noto-sans-kr/700.css";
 
 @layer base {
   html,
   body {
     @apply m-0 box-border h-screen w-screen overflow-hidden p-0;
-    font-family: MiSansLatin, NotoSansKR;
+    font-family: MiSansLatin, "Noto Sans KR", sans-serif;
   }
 
   img:not(.no-pixel) {
@@ -48,23 +52,6 @@
     background-color: #c0c0c0;
   }
 
-  body::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    background:
-      url("/images/background/iphone-wallpaper.jpg") no-repeat -9999px -9999px,
-      url("/svg/iphone15.svg") no-repeat -9999px -9999px,
-      url("/icons/phone.png") no-repeat -9999px -9999px,
-      url("/icons/messages.png") no-repeat -9999px -9999px,
-      url("/icons/note.png") no-repeat -9999px -9999px,
-      url("/icons/photos.png") no-repeat -9999px -9999px,
-      url("/icons/maps.png") no-repeat -9999px -9999px,
-      url("/icons/music.png") no-repeat -9999px -9999px;
-  }
-
   #desktop {
     cursor: url("/cursor/normal-select.svg"), auto;
   }
@@ -72,47 +59,27 @@
   @font-face {
     font-family: MiSansLatin;
     font-weight: normal;
-    src: url("/fonts/MiSansLatin-Normal.ttf") format("truetype");
+    src: url("/fonts/MiSansLatin-Normal.woff2") format("woff2");
     font-display: swap;
   }
 
   @font-face {
     font-family: MiSansLatin;
     font-weight: 500;
-    src: url("/fonts/MiSansLatin-Medium.ttf") format("truetype");
+    src: url("/fonts/MiSansLatin-Medium.woff2") format("woff2");
     font-display: swap;
   }
 
   @font-face {
     font-family: MiSansLatin;
     font-weight: 600;
-    src: url("/fonts/MiSansLatin-Semibold.ttf") format("truetype");
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: NotoSansKR;
-    font-weight: 400;
-    src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: NotoSansKR;
-    font-weight: 500;
-    src: url("/fonts/NotoSansKR-Medium.ttf") format("truetype");
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: NotoSansKR;
-    font-weight: 700;
-    src: url("/fonts/NotoSansKR-Bold.ttf") format("truetype");
+    src: url("/fonts/MiSansLatin-Semibold.woff2") format("woff2");
     font-display: swap;
   }
 
   @font-face {
     font-family: Retro;
-    src: url("/fonts/Retro Gaming.ttf") format("truetype");
+    src: url("/fonts/RetroGaming.woff2") format("woff2");
+    font-display: swap;
   }
 }

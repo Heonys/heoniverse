@@ -19,7 +19,7 @@ export const Home = () => {
   return (
     <div
       className="rounded-4xl flex size-full flex-col bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/background/iphone-wallpaper.jpg')" }}
+      style={{ backgroundImage: "url('/images/background/iphone-wallpaper.webp')" }}
     >
       {/* header */}
       <div className="rounded-t-4xl relative flex flex-col text-lg font-bold text-white">
