@@ -6,7 +6,9 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: pnpm install && pnpm build:server
+    # NODE_ENV=production이면 pnpm이 devDependencies(tsup 등)를 건너뛰어 빌드가 깨진다.
+    # install 단계에서만 NODE_ENV를 덮어써 빌드 도구를 확보한다 (런타임은 production 유지).
+    buildCommand: NODE_ENV=development pnpm install && pnpm build:server
     startCommand: node apps/server/dist/index.js
     healthCheckPath: /health
     envVars:
