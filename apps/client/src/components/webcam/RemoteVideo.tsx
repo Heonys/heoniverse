@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "../AvatarIcon";
@@ -12,18 +12,19 @@ type Props = {
   player: Player;
 };
 
-export const RemoteVideo = ({ stream, player }: Props) => {
+export const RemoteVideo = memo(({ stream, player }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { micEnabled, videoEnabled, playerName, playerTexture, playerStatus, playerId } = player;
   const [status, setStatus] = useState<Status>(playerStatus);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      videoRef.current.addEventListener("loadeddata", () => {
-        videoRef.current?.play();
-      });
-    }
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.srcObject = stream;
+    const handleLoadedData = () => video.play();
+    video.addEventListener("loadeddata", handleLoadedData);
+    return () => video.removeEventListener("loadeddata", handleLoadedData);
   }, [stream]);
 
   useEffect(() => {
@@ -74,4 +75,4 @@ export const RemoteVideo = ({ stream, player }: Props) => {
       <video ref={videoRef} className="size-full rounded-2xl" playsInline />
     </motion.div>
   );
-};
+});

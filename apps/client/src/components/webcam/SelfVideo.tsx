@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import Webcam from "react-webcam";
 import { useAppSelector, useGame } from "@/hooks";
@@ -9,11 +9,14 @@ import { cn } from "@/utils";
 
 export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const { network, getLocalPlayer } = useGame();
   const { videoEnabled, micEnabled } = useAppSelector((state) => state.user);
   const player = getLocalPlayer();
 
-  const onUserMedia = (stream: MediaStream) => {
+  useEffect(() => {
+    if (!stream) return;
+
     const audioCtx = new AudioContext();
     const source = audioCtx.createMediaStreamSource(stream);
     const analyser = audioCtx.createAnalyser();
@@ -21,14 +24,21 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
 
     source.connect(analyser);
     const dataArray = new Uint8Array(analyser.fftSize);
+    let rafId = 0;
     const checkVoice = () => {
       analyser.getByteTimeDomainData(dataArray);
       const avg = dataArray.reduce((sum, val) => sum + Math.abs(val - 128), 0) / dataArray.length;
       setIsSpeaking(avg > 3);
-      requestAnimationFrame(checkVoice);
+      rafId = requestAnimationFrame(checkVoice);
     };
     checkVoice();
-  };
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      source.disconnect();
+      audioCtx.close();
+    };
+  }, [stream]);
 
   return (
     <motion.div
@@ -68,7 +78,7 @@ export const SelfVideo = forwardRef<Webcam, any>((_, ref) => {
         muted
         onUserMedia={(stream) => {
           network.webRTC?.setupMediaStream(stream);
-          onUserMedia(stream);
+          setStream(stream);
           player.readyToStream = true;
         }}
       />
