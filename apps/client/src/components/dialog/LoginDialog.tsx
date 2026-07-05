@@ -44,6 +44,8 @@ export const LoginDialog = () => {
     network.readyToConnect();
     gameScene.enableKeys();
     dispatch(setLoggedIn(true));
+    // 이 시점의 방·프로필 스냅샷을 저장해 새로고침 시 자동 재접속에 사용한다
+    network.persistSession();
     if (isBrowser) showModal("ControlGuide");
 
     if (!isAdmin && import.meta.env.PROD) {

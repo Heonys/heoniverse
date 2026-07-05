@@ -26,6 +26,12 @@ export enum Messages {
   UPDATED_ELEMENTS = "UPDATED_ELEMENTS",
   SEND_EMOTE = "SEND_EMOTE",
   UPDATED_EMOTE = "UPDATED_EMOTE",
+  NPC_TALK_START = "NPC_TALK_START",
+  NPC_TALK_END = "NPC_TALK_END",
+  NPC_SAY = "NPC_SAY",
+  NPC_SAID = "NPC_SAID",
+  NPC_USER_SAY = "NPC_USER_SAY",
+  NPC_USER_SAID = "NPC_USER_SAID",
 }
 
 export type MessagePayloadMap = {
@@ -63,4 +69,12 @@ export type MessagePayloadMap = {
   UPDATED_ELEMENTS: readonly any[];
   SEND_EMOTE: string;
   UPDATED_EMOTE: { sessionId: string; emote: string };
+  // AI NPC 대화: 시작/종료로 서버 잠금(한 명만), SAY는 점유자가 AI 답변을 보내면 서버가 모두에게 브로드캐스트
+  NPC_TALK_START: void;
+  NPC_TALK_END: void;
+  NPC_SAY: string;
+  NPC_SAID: { message: string };
+  // 대화 중인 유저가 친 말 — 방의 다른 사람에게 그 유저 말풍선으로 전파(채팅 로그엔 안 남김)
+  NPC_USER_SAY: string;
+  NPC_USER_SAID: { sessionId: string; message: string };
 };

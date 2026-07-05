@@ -36,4 +36,6 @@ export class StudioState extends Schema implements IStudioState {
   @type({ map: Computer }) computers = new MapSchema<Computer>();
   @type({ map: Whiteboard }) whiteboards = new MapSchema<Whiteboard>();
   @type([ChatMessage]) messages = new ArraySchema<ChatMessage>();
+  // 현재 AI NPC와 대화 중인 클라이언트 sessionId ("" = 아무도 대화 안 함). 한 번에 한 명만.
+  @type("string") npcTalkingUser = "";
 }

@@ -13,6 +13,7 @@ import { JoystickMovement } from "@/components";
 import { getJoystickDirection } from "@/utils";
 import { store } from "@/stores";
 import { showUserProfile } from "@/stores/modalSlice";
+import { startNpcTalk } from "@/stores/aiSlice";
 import { Game } from "@/game/scenes";
 import { setUserName, setUserTexture, nextStatus, setUserStatus } from "@/stores/userSlice";
 
@@ -171,7 +172,20 @@ export class LocalPlayer extends Player {
 
         if (isRJustDown && playerSelector.playerOverlap) {
           const otherPlayer = playerSelector.playerOverlap.player;
-          store.dispatch(showUserProfile({ playerId: otherPlayer.playerId }));
+          if (otherPlayer.isNpc) {
+            const busyBy = store.getState().ai.npcBusyBy;
+            if (busyBy && busyBy !== this.playerId) {
+              // 다른 사람이 대화 중 — 잠깐 안내만 (잠금은 서버가 관리)
+              playerSelector.playerOverlap.setDialogBox(["다른 사람이 대화 중"]);
+            } else {
+              // 대화 시작 — 하단 전용 입력바가 뜨고 이동키가 잠긴다 (스마트폰 안 씀).
+              // 대화 중엔 머리 위 "R: 말 걸기" 안내가 거슬리므로 지운다.
+              store.dispatch(startNpcTalk());
+              playerSelector.playerOverlap.clearDialogBox();
+            }
+          } else {
+            store.dispatch(showUserProfile({ playerId: otherPlayer.playerId }));
+          }
         }
 
         if (this.isPhoneAnimating) {

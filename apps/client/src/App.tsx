@@ -1,6 +1,13 @@
 import { lazy, Suspense } from "react";
 import { isBrowser } from "react-device-detect";
-import { HelperGroups, VirtualJoystick, GameHUD, GameNoti } from "@/components";
+import {
+  HelperGroups,
+  VirtualJoystick,
+  GameHUD,
+  GameNoti,
+  ReconnectingScreen,
+  NpcChatBar,
+} from "@/components";
 import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
 import { ComputerDialog } from "@/components/computer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
@@ -19,9 +26,11 @@ const WhiteboardDialog = lazy(() =>
 function App() {
   const dispatch = useAppDispatch();
   const roomJoined = useAppSelector((state) => state.room.roomJoined);
+  const reconnecting = useAppSelector((state) => state.room.reconnecting);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);
   const whiteboardDialogOpen = useAppSelector((state) => state.whiteboard.isOpenDialog);
+  const npcTalking = useAppSelector((state) => state.ai.talking);
 
   return (
     <div className="absolute h-full w-full">
@@ -36,12 +45,22 @@ function App() {
         <HelperGroups />
       </Condition>
 
-      <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
-        <Condition condition={loggedIn} fallback={<LoginDialog />}>
-          <IphoneApp />
-          <GameHUD />
-          <GameNoti />
-        </Condition>
+      <Condition
+        condition={reconnecting}
+        fallback={
+          <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
+            <Condition condition={loggedIn} fallback={<LoginDialog />}>
+              <IphoneApp />
+              <GameHUD />
+              <GameNoti />
+              <Condition condition={npcTalking}>
+                <NpcChatBar />
+              </Condition>
+            </Condition>
+          </Condition>
+        }
+      >
+        <ReconnectingScreen />
       </Condition>
 
       <Condition condition={computerDialogOpen}>

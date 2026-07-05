@@ -12,6 +12,11 @@ type EventsPayloadMap = {
   OTHER_PLAYER_LEFT: { sessionId: string; player: IPlayer };
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
   UPDATED_EMOTE: { sessionId: string; emote: string };
+  // AI NPC 대화 잠금 상태 변화(누가 점유 중인지)와 NPC의 답풍선(방 전체로 브로드캐스트됨)
+  NPC_TALKING_CHANGED: { sessionId: string };
+  NPC_SAID: { message: string };
+  // 대화 중인 유저의 말 — 다른 사람 화면에서 그 유저 말풍선으로 표시
+  NPC_USER_SAID: { sessionId: string; message: string };
   CLOSE_PEER_CALL: string;
   DISCONNECT_PEER_CALL: string;
   MEDIA_ENABLED_CHANGE: boolean;

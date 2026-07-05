@@ -21,6 +21,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   micEnabled = true;
   readyToStream = false;
   isCalling = false;
+  isNpc = false;
+  // 말풍선을 이름표 위로 얼마나 더 띄울지 (기본 0, NPC는 'AI' 뱃지에 안 가리게 올림)
+  protected bubbleOffsetY = 0;
 
   constructor(
     public scene: Game,
@@ -101,7 +104,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       .setColor("#000000")
       .setOrigin(0.5);
 
-    innerText.setY(-(innerText.height / 2) - this.playerName.height + 8);
+    innerText.setY(-(innerText.height / 2) - this.playerName.height + 8 - this.bubbleOffsetY);
 
     const boxWidth = innerText.width + 8;
     const boxHeight = innerText.height + 3;

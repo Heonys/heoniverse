@@ -1,4 +1,6 @@
 import { OtherPlayer } from "@/game/characters";
+import { store } from "@/stores";
+import type { Game } from "@/game/scenes";
 
 export class PlayerOverlap extends Phaser.GameObjects.Zone {
   private dialogBox: Phaser.GameObjects.Container;
@@ -61,6 +63,18 @@ export class PlayerOverlap extends Phaser.GameObjects.Zone {
   }
 
   onOverlapDialog() {
+    if (this.player.isNpc) {
+      // 내가 이미 대화 중이면 안내를 띄우지 않는다 (전용 입력바가 떠 있음)
+      if (store.getState().ai.talking) {
+        this.clearDialogBox();
+        return;
+      }
+      const { npcBusyBy } = store.getState().ai;
+      const localId = (this.scene as Game).localPlayer?.playerId;
+      const busyByOther = npcBusyBy !== "" && npcBusyBy !== localId;
+      this.setDialogBox([busyByOther ? "AI 도우미 (대화 중)" : "R: 말 걸기"]);
+      return;
+    }
     this.setDialogBox(["R: 프로필 보기"]);
   }
 }

@@ -2,6 +2,8 @@ import { RoomAvailable } from "colyseus.js";
 import { RoomMetadata, RoomType } from "@heoniverse/shared";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isCustomRoom } from "@/utils";
+// 리프 모듈에서 직접 import (service 배럴은 Network를 끌어와 순환 참조가 된다)
+import { loadSession } from "@/service/session";
 
 // connecting: 접속 시도 중 (잠든 서버 깨우기 재시도 포함) / failed: 재시도 소진
 export type LobbyStatus = "connecting" | "connected" | "failed";
@@ -12,6 +14,11 @@ const roomSlice = createSlice({
     lobbyJoined: false,
     lobbyStatus: "connecting" as LobbyStatus,
     lobbyAttempt: 0,
+    // 접속이 오래 걸리면(콜드스타트 hang) true — "서버 켜는 중" 안내와 오프라인 버튼을 노출한다
+    lobbyWaking: false,
+    // 부팅 시 저장된 세션으로 자동 재접속을 시도하는 동안 true — 그 사이 메뉴가 깜빡이지 않게 오버레이를 띄운다.
+    // 세션이 있으면 첫 렌더부터 오버레이가 보이도록 초기값을 세션 유무로 정한다.
+    reconnecting: loadSession() !== null,
     roomJoined: false,
     id: "",
     name: "",
@@ -23,14 +30,23 @@ const roomSlice = createSlice({
   reducers: {
     setLobbyJoined: (state, action: PayloadAction<boolean>) => {
       state.lobbyJoined = action.payload;
-      if (action.payload) state.lobbyStatus = "connected";
+      if (action.payload) {
+        state.lobbyStatus = "connected";
+        state.lobbyWaking = false;
+      }
     },
     setLobbyStatus: (state, action: PayloadAction<{ status: LobbyStatus; attempt?: number }>) => {
       state.lobbyStatus = action.payload.status;
       if (action.payload.attempt !== undefined) state.lobbyAttempt = action.payload.attempt;
     },
+    setLobbyWaking: (state, action: PayloadAction<boolean>) => {
+      state.lobbyWaking = action.payload;
+    },
     setRoomJoined: (state, action: PayloadAction<boolean>) => {
       state.roomJoined = action.payload;
+    },
+    setReconnecting: (state, action: PayloadAction<boolean>) => {
+      state.reconnecting = action.payload;
     },
     setAvailableRoom: (state, action: PayloadAction<RoomAvailable[]>) => {
       state.availableRooms = action.payload.filter((room) => isCustomRoom(room.name));
@@ -75,7 +91,9 @@ const roomSlice = createSlice({
 export const {
   setLobbyJoined,
   setLobbyStatus,
+  setLobbyWaking,
   setRoomJoined,
+  setReconnecting,
   setJoinedRoomData,
   setAvailableRoom,
   addAvailableRoom,

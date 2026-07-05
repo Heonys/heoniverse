@@ -214,6 +214,41 @@ export class Studio extends Room<StudioState> {
         { except: client },
       );
     });
+
+    // AI NPC 대화 잠금: 비어 있을 때만 획득 (점유 중이면 무시 — 클라가 상태로 busy 인지)
+    this.onMessage(Messages.NPC_TALK_START, (client) => {
+      if (this.state.npcTalkingUser === "") {
+        this.state.npcTalkingUser = client.sessionId;
+      }
+    });
+
+    this.onMessage(Messages.NPC_TALK_END, (client) => {
+      if (this.state.npcTalkingUser === client.sessionId) {
+        this.state.npcTalkingUser = "";
+      }
+    });
+
+    // 점유자만 NPC 답변을 방 전체에 브로드캐스트(보낸 사람은 로컬에서 이미 렌더)
+    this.onMessage(Messages.NPC_SAY, (client, payload: string) => {
+      if (typeof payload !== "string") return;
+      if (this.state.npcTalkingUser !== client.sessionId) return;
+      const message = payload.slice(0, CHAT_MESSAGE_MAX);
+      if (!message.trim()) return;
+      this.broadcast(Messages.NPC_SAID, { message }, { except: client });
+    });
+
+    // 대화 중인 유저의 말 — 다른 사람에게 그 유저의 말풍선으로 전파(state.messages에 저장 안 함 → 채팅 로그 미기록)
+    this.onMessage(Messages.NPC_USER_SAY, (client, payload: string) => {
+      if (typeof payload !== "string") return;
+      if (this.state.npcTalkingUser !== client.sessionId) return;
+      const message = payload.slice(0, CHAT_MESSAGE_MAX);
+      if (!message.trim()) return;
+      this.broadcast(
+        Messages.NPC_USER_SAID,
+        { sessionId: client.sessionId, message },
+        { except: client },
+      );
+    });
   }
 
   onJoin(client: Client, options: any) {
@@ -226,7 +261,23 @@ export class Studio extends Room<StudioState> {
     });
   }
 
-  onLeave(client: Client, consented: boolean) {
+  async onLeave(client: Client, consented: boolean) {
+    // 연결이 끊기면 AI NPC 잠금은 즉시 해제한다 — 재접속 유예(30초) 동안 다른 사람이 못 쓰면 안 되므로.
+    if (this.state.npcTalkingUser === client.sessionId) {
+      this.state.npcTalkingUser = "";
+    }
+
+    // 예기치 않은 끊김(새로고침·네트워크 순단)이면 잠시 자리를 비워두고 재접속을 기다린다.
+    // 유예시간 안에 돌아오면 플레이어·컴퓨터/화이트보드 멤버십이 그대로 유지됨.
+    if (!consented) {
+      try {
+        await this.allowReconnection(client, 30);
+        return;
+      } catch {
+        // 유예시간 초과 → 아래 정리 진행
+      }
+    }
+
     const clientId = client.sessionId;
     if (this.state.players.has(clientId)) {
       this.state.players.delete(clientId);

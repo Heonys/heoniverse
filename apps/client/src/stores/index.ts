@@ -8,6 +8,7 @@ import desktopSlice from "./desktopSlice";
 import drawContextSlice from "./drawContextSlice";
 import modalSlice from "./modalSlice";
 import phoneSlice from "./phoneSlice";
+import aiSlice from "./aiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     drawContext: drawContextSlice,
     modal: modalSlice,
     phone: phoneSlice,
+    ai: aiSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

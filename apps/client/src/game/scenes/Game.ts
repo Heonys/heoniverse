@@ -1,12 +1,22 @@
 import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
-import { LocalPlayer, OtherPlayer, PlayerOverlap, PlayerSelector } from "@/game/characters";
+import {
+  LocalPlayer,
+  NpcPlayer,
+  OtherPlayer,
+  PlayerOverlap,
+  PlayerSelector,
+} from "@/game/characters";
 import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
 import { Network } from "@/service";
-import { IPlayer } from "@heoniverse/shared";
+import type { RestoreData } from "@/service";
+import { getAIResponse } from "@/service/ai";
+import { IPlayer, IChatMessage } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
-import { addPlayerName, removePlayerName } from "@/stores/userSlice";
+import { addPlayerName, removePlayerName, setLoggedIn } from "@/stores/userSlice";
+import { setReconnecting } from "@/stores/roomSlice";
+import { setNpcBusyBy } from "@/stores/aiSlice";
 import { hide } from "@/stores/modalSlice";
 import { setFocusChat, pushJoinedMessage, pushLeftMessage } from "@/stores/chatSlice";
 import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
@@ -24,13 +34,16 @@ export class Game extends Phaser.Scene {
   otherPlayersMap = new Map<string, OtherPlayer>();
   computersMap = new Map<string, Computer>();
   whiteboardsMap = new Map<string, Whiteboard>();
+  npc?: NpcPlayer;
+  // 내가 NPC와 나눈 대화 기록 (AI 컨텍스트용). 대화가 끝나면 비운다.
+  npcHistory: IChatMessage[] = [];
   minimap?: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
     super("game");
   }
 
-  create({ network }: { network: Network }) {
+  create({ network, restore }: { network: Network; restore?: RestoreData }) {
     this.network = network;
     this.cursor = {
       ...this.input.keyboard!.createCursorKeys(),
@@ -41,14 +54,27 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    // 모두가 같은 지점에 스폰되면 입장 즉시 근접 자동연결이 걸리므로 스폰을 살짝 분산한다
-    const spawnX = START_POINT[0] + Phaser.Math.Between(-48, 48);
-    const spawnY = START_POINT[1] + Phaser.Math.Between(-96, 96);
+    // 재접속이면 이전 좌표/아바타 그대로, 아니면 스폰을 살짝 분산한다
+    // (모두 같은 지점에 스폰되면 입장 즉시 근접 자동연결이 걸린다)
+    const spawnX = restore ? restore.x : START_POINT[0] + Phaser.Math.Between(-48, 48);
+    const spawnY = restore ? restore.y : START_POINT[1] + Phaser.Math.Between(-96, 96);
+    const avatar = restore ? restore.avatar : "suit";
 
-    this.localPlayer = new LocalPlayer(this, network.sessionId, spawnX, spawnY, "suit");
+    this.localPlayer = new LocalPlayer(this, network.sessionId, spawnX, spawnY, avatar);
     this.playerSelector = new PlayerSelector(this, spawnX, spawnY, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.otherPlayerOverlapZone = this.physics.add.group();
+
+    // AI 도우미 NPC — 스폰 근처 개활지에 고정 배치 (다가가 R로 대화). 좌표는 튜닝 가능
+    this.npc = new NpcPlayer(this, "ai-npc", "AI 도우미", 1455, 1040, "ghost");
+    this.otherPlayers.add(this.npc);
+    this.otherPlayerOverlapZone.add(this.npc.playerOverlap);
+
+    // 입장 시 이미 다른 사람이 대화 중일 수 있으므로 현재 잠금 상태를 초기 반영
+    // (상태 리스너의 최초 콜백은 이 씬의 핸들러 등록 전에 지나가 놓칠 수 있음)
+    const npcUser = network.room?.state.npcTalkingUser ?? "";
+    store.dispatch(setNpcBusyBy(npcUser));
+    this.npc.setBusy(npcUser !== "" && npcUser !== this.localPlayer.playerId);
 
     this.setupCamera();
     this.disableKeys();
@@ -154,6 +180,20 @@ export class Game extends Phaser.Scene {
         overlappedItem.onOverlapDialog();
       },
     );
+
+    // 자동 재접속이면 로그인 UI를 거치지 않으므로 LoginDialog가 하던 마무리를 여기서 재현한다
+    if (restore) this.applyRestoredSession(restore);
+  }
+
+  // 저장된 프로필로 로그인 없이 곧장 플레이 가능한 상태로 만든다 (LoginDialog.onSubmit 꼬리와 동일)
+  private applyRestoredSession(restore: RestoreData) {
+    this.localPlayer.setPlayerName(restore.nickname);
+    this.localPlayer.setPlayerAvatar(restore.avatar);
+    this.localPlayer.readyToConnect = true;
+    this.network.readyToConnect();
+    this.enableKeys();
+    store.dispatch(setLoggedIn(true));
+    store.dispatch(setReconnecting(false));
   }
 
   setupCamera() {
@@ -192,6 +232,38 @@ export class Game extends Phaser.Scene {
     }
   }
 
+  // 전용 입력바에서 NPC에게 말하기: 내 말풍선(로컬+전파) → AI 답 → NPC 말풍선(로컬+전파).
+  // 비동기 왕복은 씬 생명주기에 묶여 안전.
+  sendToNpc(message: string) {
+    if (!store.getState().ai.talking || !this.npc) return;
+    const content = message.trim();
+    if (!content) return;
+
+    // 내 말 — 말풍선(로컬) + 다른 사람에게 전파 (방 채팅 로그엔 안 남김)
+    this.localPlayer.openBubble(content);
+    this.network.sendMessage("NPC_USER_SAY", content);
+
+    this.npcHistory.push({
+      clientId: this.localPlayer.playerId,
+      author: this.localPlayer.playerName.text,
+      content,
+      createdAt: Date.now(),
+    });
+
+    getAIResponse(this.npcHistory).then((reply) => {
+      // 답이 오기 전에 대화가 끝났으면 버린다
+      if (!store.getState().ai.talking || !this.npc) return;
+      this.npcHistory.push({
+        clientId: "ai-npc",
+        author: "AI 도우미",
+        content: reply,
+        createdAt: Date.now(),
+      });
+      this.npc.openBubble(reply); // 내 화면 (브로드캐스트는 나를 제외하므로 로컬 렌더)
+      this.network.sayAsNpc(reply); // 방의 다른 사람들에게 NPC 답풍선 전파
+    });
+  }
+
   registerEventHandler() {
     const onPlayerJoined = ({ sessionId, player }: { sessionId: string; player: IPlayer }) => {
       this.playerJoined(sessionId, player);
@@ -210,6 +282,20 @@ export class Game extends Phaser.Scene {
     };
     const onEmote = ({ sessionId, emote }: { sessionId: string; emote: string }) => {
       this.otherPlayersMap.get(sessionId)?.showEmote(emote);
+    };
+    // 다른 사람이 대화 중인 NPC의 답풍선 (내가 보낸 건 로컬에서 이미 렌더됨)
+    const onNpcSaid = ({ message }: { message: string }) => {
+      this.npc?.openBubble(message);
+    };
+    // 대화 중인 유저가 친 말 — 그 유저 캐릭터 위 말풍선으로 (내 화면엔 로컬에서 이미 렌더됨)
+    const onNpcUserSaid = ({ sessionId, message }: { sessionId: string; message: string }) => {
+      this.otherPlayersMap.get(sessionId)?.openBubble(message);
+    };
+    // NPC 점유 상태 변화 — 리덕스에 반영하고 NPC 위 "대화 중" 라벨을 토글
+    const onNpcTalkingChanged = ({ sessionId }: { sessionId: string }) => {
+      store.dispatch(setNpcBusyBy(sessionId));
+      const occupiedByOther = sessionId !== "" && sessionId !== this.localPlayer?.playerId;
+      this.npc?.setBusy(occupiedByOther);
     };
     const onComputerUserAdded = ({
       userId,
@@ -265,6 +351,9 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("OTHER_PLAYER_LEFT", onPlayerLeft);
     eventEmitter.on("UPDATED_CHAT_MESSAGE", onChatMessage);
     eventEmitter.on("UPDATED_EMOTE", onEmote);
+    eventEmitter.on("NPC_SAID", onNpcSaid);
+    eventEmitter.on("NPC_USER_SAID", onNpcUserSaid);
+    eventEmitter.on("NPC_TALKING_CHANGED", onNpcTalkingChanged);
     eventEmitter.on("COMPUTER_USER_ADDED", onComputerUserAdded);
     eventEmitter.on("COMPUTER_USER_REMOVED", onComputerUserRemoved);
     eventEmitter.on("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
@@ -277,6 +366,9 @@ export class Game extends Phaser.Scene {
       eventEmitter.off("OTHER_PLAYER_LEFT", onPlayerLeft);
       eventEmitter.off("UPDATED_CHAT_MESSAGE", onChatMessage);
       eventEmitter.off("UPDATED_EMOTE", onEmote);
+      eventEmitter.off("NPC_SAID", onNpcSaid);
+      eventEmitter.off("NPC_USER_SAID", onNpcUserSaid);
+      eventEmitter.off("NPC_TALKING_CHANGED", onNpcTalkingChanged);
       eventEmitter.off("COMPUTER_USER_ADDED", onComputerUserAdded);
       eventEmitter.off("COMPUTER_USER_REMOVED", onComputerUserRemoved);
       eventEmitter.off("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);

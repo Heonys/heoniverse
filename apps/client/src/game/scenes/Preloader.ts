@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { Network } from "@/service";
+import type { RestoreData } from "@/service";
 import { store } from "@/stores";
 import { setRoomJoined } from "@/stores/roomSlice";
 
@@ -148,9 +149,13 @@ export class Preloader extends Phaser.Scene {
     });
   }
 
-  launchGame() {
-    if (!this.preloadComplete) return;
-    this.scene.launch("game", { network: this.network });
+  launchGame(restore?: RestoreData) {
+    // 자동 재접속은 에셋 로딩보다 먼저 끝날 수 있으므로, 아직이면 로딩 완료 후 실행한다
+    if (!this.preloadComplete) {
+      this.load.once("complete", () => this.launchGame(restore));
+      return;
+    }
+    this.scene.launch("game", { network: this.network, restore });
     store.dispatch(setRoomJoined(true));
   }
 }
