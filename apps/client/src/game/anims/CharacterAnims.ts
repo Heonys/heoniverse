@@ -30,10 +30,10 @@ const animationTypes: Record<string, AnimConfig[]> = {
   phone_show: [{ key: "default", start: 336, end: 339, repeat: 0, speed: 0.6 }],
   phone_idle: [{ key: "default", start: 339, end: 344, repeat: -1, speed: 0.6 }],
   punch: [
-    { key: "right", start: 728, end: 733, repeat: 0, speed: 0.6 },
-    { key: "up", start: 734, end: 739, repeat: 0, speed: 0.6 },
-    { key: "left", start: 740, end: 745, repeat: 0, speed: 0.6 },
-    { key: "down", start: 746, end: 751, repeat: 0, speed: 0.6 },
+    { key: "right", start: 728, end: 733, repeat: 0 },
+    { key: "up", start: 734, end: 739, repeat: 0 },
+    { key: "left", start: 740, end: 745, repeat: 0 },
+    { key: "down", start: 746, end: 751, repeat: 0 },
   ],
 };
 

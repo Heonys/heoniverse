@@ -7,11 +7,11 @@ import {
   PlayerOverlap,
   PlayerSelector,
 } from "@/game/characters";
-import { Item, Chair, Computer, Whiteboard } from "@/game/objects";
+import { Item, Chair, Computer, Whiteboard, Ball, BALL_RADIUS } from "@/game/objects";
 import { Network } from "@/service";
 import type { RestoreData } from "@/service";
 import { getAIResponse } from "@/service/ai";
-import { IPlayer, IChatMessage } from "@heoniverse/shared";
+import { IPlayer, IChatMessage, BALL_SPAWN } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
 import { addPlayerName, removePlayerName, setLoggedIn } from "@/stores/userSlice";
@@ -35,6 +35,7 @@ export class Game extends Phaser.Scene {
   computersMap = new Map<string, Computer>();
   whiteboardsMap = new Map<string, Whiteboard>();
   npc?: NpcPlayer;
+  ball?: Ball;
   // 내가 NPC와 나눈 대화 기록 (AI 컨텍스트용). 대화가 끝나면 비운다.
   npcHistory: IChatMessage[] = [];
   minimap?: Phaser.Cameras.Scene2D.Camera;
@@ -88,14 +89,17 @@ export class Game extends Phaser.Scene {
     groundLayer.setCollisionByProperty({ collides: true });
 
     this.addGroupFromTiled("Wall", "tileset_wall", "FloorAndGround", false);
-    this.addGroupFromTiled("Collidable", "tileset_office", "Office", true);
     this.addGroupFromTiled("NonCollidable", "tileset_office", "Office", false);
     this.addGroupFromTiled("Generic", "tileset_generic", "Generic", false);
-    this.addGroupFromTiled("JailCollidable", "tileset_jail", "Jail", true);
     this.addGroupFromTiled("JailNonCollidable", "tileset_jail", "Jail", false);
-    this.addGroupFromTiled("Basement", "tileset_basement", "Basement", true);
-    this.addGroupFromTiled("Kitchen", "tileset_kitchen", "Kitchen", true);
-    this.addGroupFromTiled("Hospital", "tileset_hospital", "Hospital", true);
+    // 플레이어가 막히는 고체 그룹 — 공도 같은 벽에 튕기도록 참조를 모아둔다
+    const wallGroups = [
+      this.addGroupFromTiled("Collidable", "tileset_office", "Office", true),
+      this.addGroupFromTiled("JailCollidable", "tileset_jail", "Jail", true),
+      this.addGroupFromTiled("Basement", "tileset_basement", "Basement", true),
+      this.addGroupFromTiled("Kitchen", "tileset_kitchen", "Kitchen", true),
+      this.addGroupFromTiled("Hospital", "tileset_hospital", "Hospital", true),
+    ];
 
     const chairs = this.addInteractiveGroupFromTiled(
       Chair,
@@ -180,6 +184,15 @@ export class Game extends Phaser.Scene {
         overlappedItem.onOverlapDialog();
       },
     );
+
+    // 공유 물리 공 — 벽/바닥과 충돌하고 월드 경계를 넘지 않는다. 플레이어와는 충돌 안 함(Space로만 참).
+    this.createBallTexture();
+    this.physics.world.setBounds(0, 0, 2400, 1600); // 공만 collideWorldBounds — 플레이어엔 영향 없음
+    const ballStart = network.room?.state.ball ?? BALL_SPAWN;
+    this.ball = new Ball(this, network, network.sessionId, ballStart.x, ballStart.y);
+    if (!network.room) this.ball.becomeLocalToy(); // 오프라인이면 로컬 장난감으로
+    wallGroups.forEach((group) => this.physics.add.collider(this.ball!, group));
+    this.physics.add.collider(this.ball, groundLayer);
 
     // 자동 재접속이면 로그인 UI를 거치지 않으므로 LoginDialog가 하던 마무리를 여기서 재현한다
     if (restore) this.applyRestoredSession(restore);
@@ -345,6 +358,10 @@ export class Game extends Phaser.Scene {
         whiteboard.disConnected(userId);
       }
     };
+    // 공 서버 상태 변화 → 공 스프라이트에 반영(주인이면 무시, 아니면 보간)
+    const onBallChanged = ({ x, y, ownerId }: { x: number; y: number; ownerId: string }) => {
+      this.ball?.applyServer(x, y, ownerId);
+    };
 
     eventEmitter.on("OTHER_PLAYER_JOINED", onPlayerJoined);
     eventEmitter.on("OTHER_PLAYER_UPDATED", onPlayerUpdated);
@@ -358,6 +375,7 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("COMPUTER_USER_REMOVED", onComputerUserRemoved);
     eventEmitter.on("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
     eventEmitter.on("WHITEBOARD_USER_REMOVED", onWhiteboardUserRemoved);
+    eventEmitter.on("BALL_CHANGED", onBallChanged);
 
     // 씬이 재시작돼도 핸들러가 중복 등록되지 않도록 정리한다
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -373,6 +391,7 @@ export class Game extends Phaser.Scene {
       eventEmitter.off("COMPUTER_USER_REMOVED", onComputerUserRemoved);
       eventEmitter.off("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
       eventEmitter.off("WHITEBOARD_USER_REMOVED", onWhiteboardUserRemoved);
+      eventEmitter.off("BALL_CHANGED", onBallChanged);
     });
   }
 
@@ -399,6 +418,37 @@ export class Game extends Phaser.Scene {
       if (store.getState().chat.focused) return;
       eventEmitter.emit("TOGGLE_EMOTE_WHEEL");
     });
+  }
+
+  // 코드로 축구공 텍스처를 1회 생성(에셋 불필요): 흰 공 + 진한 테두리 +
+  // 중앙 검은 오각형 1개와 테두리 쪽 오각형 5개(그 사이 흰 공간이 육각형처럼 읽힘)
+  private createBallTexture() {
+    if (this.textures.exists("ball")) return;
+    const R = BALL_RADIUS;
+    const DARK = 0x111827;
+    const g = this.add.graphics();
+
+    g.fillStyle(0xf8fafc, 1).fillCircle(R, R, R);
+    g.lineStyle(2, DARK, 1).strokeCircle(R, R, R - 1);
+
+    // (cx,cy) 중심의 오각형 꼭짓점들 (rot=회전 라디안)
+    const pentagon = (cx: number, cy: number, r: number, rot: number) =>
+      Array.from({ length: 5 }, (_, i) => {
+        const a = rot + (-90 + i * 72) * Phaser.Math.DEG_TO_RAD;
+        return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+      });
+
+    g.fillStyle(DARK, 1);
+    g.fillPoints(pentagon(R, R, R * 0.32, 0), true); // 중앙
+    for (let i = 0; i < 5; i++) {
+      const a = (-90 + i * 72) * Phaser.Math.DEG_TO_RAD;
+      const cx = R + R * 0.62 * Math.cos(a);
+      const cy = R + R * 0.62 * Math.sin(a);
+      g.fillPoints(pentagon(cx, cy, R * 0.22, Math.PI), true); // 테두리 쪽(안쪽을 향해 뒤집음)
+    }
+
+    g.generateTexture("ball", R * 2, R * 2);
+    g.destroy();
   }
 
   private addObjectFromTiled(

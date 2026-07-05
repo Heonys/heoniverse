@@ -1,14 +1,12 @@
 @import "tailwindcss";
-@import "@fontsource/noto-sans-kr/400.css";
-@import "@fontsource/noto-sans-kr/500.css";
-@import "@fontsource/noto-sans-kr/600.css";
-@import "@fontsource/noto-sans-kr/700.css";
+/* Pretendard Variable — unicode-range woff2 dynamic subset (한 파일로 전 weight, 필요한 글리프 조각만 로드) */
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 
 @layer base {
   html,
   body {
     @apply m-0 box-border h-screen w-screen overflow-hidden p-0;
-    font-family: MiSansLatin, "Noto Sans KR", sans-serif;
+    font-family: MiSansLatin, "Pretendard Variable", Pretendard, sans-serif;
   }
 
   img:not(.no-pixel) {

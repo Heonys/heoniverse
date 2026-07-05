@@ -1,5 +1,5 @@
 import { Schema, type, MapSchema, SetSchema, ArraySchema } from "@colyseus/schema";
-import { IPlayer, IStudioState, IChatMessage, Status } from "@heoniverse/shared";
+import { IPlayer, IStudioState, IChatMessage, Status, BALL_SPAWN } from "@heoniverse/shared";
 
 export class Player extends Schema implements IPlayer {
   @type("string") name = "";
@@ -31,6 +31,13 @@ export class Whiteboard extends Schema {
   @type({ set: "string" }) connectedUser = new SetSchema<string>();
 }
 
+// 공유 물리 공. 위치는 현재 주인(ownerId) 클라가 시뮬레이션해 스트리밍하고, 서버는 검증·중계만 한다.
+export class Ball extends Schema {
+  @type("number") x = BALL_SPAWN.x;
+  @type("number") y = BALL_SPAWN.y;
+  @type("string") ownerId = ""; // 지금 시뮬레이션 중인 클라 sessionId ("" = 정지/무소유)
+}
+
 export class StudioState extends Schema implements IStudioState {
   @type({ map: Player }) players = new MapSchema<Player>();
   @type({ map: Computer }) computers = new MapSchema<Computer>();
@@ -38,4 +45,5 @@ export class StudioState extends Schema implements IStudioState {
   @type([ChatMessage]) messages = new ArraySchema<ChatMessage>();
   // 현재 AI NPC와 대화 중인 클라이언트 sessionId ("" = 아무도 대화 안 함). 한 번에 한 명만.
   @type("string") npcTalkingUser = "";
+  @type(Ball) ball = new Ball();
 }

@@ -249,6 +249,22 @@ export class Studio extends Room<StudioState> {
         { except: client },
       );
     });
+
+    // 공을 차면 소유권이 그 클라로 넘어간다(게임 규칙). 실제 물리는 주인 클라가 돌리고, 서버는 위치만 검증·보관.
+    this.onMessage(Messages.KICK_BALL, (client, payload: { x: number; y: number }) => {
+      if (!payload || !Number.isFinite(payload.x) || !Number.isFinite(payload.y)) return;
+      this.state.ball.ownerId = client.sessionId;
+      this.state.ball.x = clamp(payload.x, WORLD_BOUNDS.minX, WORLD_BOUNDS.maxX);
+      this.state.ball.y = clamp(payload.y, WORLD_BOUNDS.minY, WORLD_BOUNDS.maxY);
+    });
+
+    // 주인만 공 위치를 갱신할 수 있다(스푸핑 차단). 나머지는 스키마 동기화로 이 값을 받아 보간한다.
+    this.onMessage(Messages.UPDATE_BALL, (client, payload: { x: number; y: number }) => {
+      if (this.state.ball.ownerId !== client.sessionId) return;
+      if (!payload || !Number.isFinite(payload.x) || !Number.isFinite(payload.y)) return;
+      this.state.ball.x = clamp(payload.x, WORLD_BOUNDS.minX, WORLD_BOUNDS.maxX);
+      this.state.ball.y = clamp(payload.y, WORLD_BOUNDS.minY, WORLD_BOUNDS.maxY);
+    });
   }
 
   onJoin(client: Client, options: any) {
@@ -265,6 +281,11 @@ export class Studio extends Room<StudioState> {
     // 연결이 끊기면 AI NPC 잠금은 즉시 해제한다 — 재접속 유예(30초) 동안 다른 사람이 못 쓰면 안 되므로.
     if (this.state.npcTalkingUser === client.sessionId) {
       this.state.npcTalkingUser = "";
+    }
+
+    // 공 주인이 나가면 즉시 무소유로 — 공은 마지막 위치에 멈추고 다음 킥이 소유권을 가져간다.
+    if (this.state.ball.ownerId === client.sessionId) {
+      this.state.ball.ownerId = "";
     }
 
     // 예기치 않은 끊김(새로고침·네트워크 순단)이면 잠시 자리를 비워두고 재접속을 기다린다.

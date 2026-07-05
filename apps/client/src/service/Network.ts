@@ -428,6 +428,15 @@ export class Network {
       eventEmitter.emit("NPC_TALKING_CHANGED", { sessionId });
     });
 
+    // 공유 물리 공의 위치·주인 변화 — Game 씬이 받아 공 스프라이트에 반영.
+    // ball은 중첩 스키마라 초기 디코드 전엔 refId가 없다 → listen으로 값이 준비된 뒤 onChange를 건다.
+    $(this.room.state).listen("ball", (ball) => {
+      const emit = () =>
+        eventEmitter.emit("BALL_CHANGED", { x: ball.x, y: ball.y, ownerId: ball.ownerId });
+      $(ball).onChange(emit);
+      emit(); // 초기 상태 1회 반영
+    });
+
     this.onMessage(Messages.SEND_ROOM_DATA, (data) => {
       store.dispatch(setJoinedRoomData(data));
     });

@@ -70,6 +70,21 @@ export const sittingOffset: Record<Direction, [number, number, number]> = {
   right: [2, -21, 10],
 };
 
+// 바라보는 방향 → 공 차기 임펄스 방향(단위 벡터). 크기는 KICK_FORCE가 정함.
+export const KICK_DIR: Record<Direction, [number, number]> = {
+  up: [0, -1],
+  down: [0, 1],
+  left: [-1, 0],
+  right: [1, 0],
+};
+
+// 공 차기 임펄스 크기(px/s). 튜닝 가능.
+export const KICK_FORCE = 420;
+// 이 거리(px) 안의 공을 찰 수 있다 (발밑·정면 모두 포용, 정면 존보다 너그럽게).
+export const KICK_RANGE = 48;
+// 스페이스 입력 후 실제로 공이 나가기까지의 지연(ms) — 펀치 애니가 뻗는 순간에 맞춘다.
+export const KICK_DELAY_MS = 180;
+
 export type WASD = {
   W: Phaser.Input.Keyboard.Key;
   S: Phaser.Input.Keyboard.Key;

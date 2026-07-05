@@ -32,6 +32,8 @@ export enum Messages {
   NPC_SAID = "NPC_SAID",
   NPC_USER_SAY = "NPC_USER_SAY",
   NPC_USER_SAID = "NPC_USER_SAID",
+  KICK_BALL = "KICK_BALL",
+  UPDATE_BALL = "UPDATE_BALL",
 }
 
 export type MessagePayloadMap = {
@@ -77,4 +79,7 @@ export type MessagePayloadMap = {
   // 대화 중인 유저가 친 말 — 방의 다른 사람에게 그 유저 말풍선으로 전파(채팅 로그엔 안 남김)
   NPC_USER_SAY: string;
   NPC_USER_SAID: { sessionId: string; message: string };
+  // 공유 물리 공: KICK은 소유권 주장(=찬 사람이 주인), UPDATE는 주인이 위치를 스트리밍
+  KICK_BALL: { x: number; y: number };
+  UPDATE_BALL: { x: number; y: number };
 };

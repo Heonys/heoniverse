@@ -4,6 +4,10 @@ import {
   ItemType,
   PlayerBehavior,
   sittingOffset,
+  KICK_DIR,
+  KICK_FORCE,
+  KICK_RANGE,
+  KICK_DELAY_MS,
 } from "@/constants/game";
 import { Player, PlayerSelector } from "@/game/characters";
 import { Chair, Computer, Whiteboard } from "@/game/objects";
@@ -20,6 +24,9 @@ import { setUserName, setUserTexture, nextStatus, setUserStatus } from "@/stores
 // Colyseus 서버의 기본 patch rate(50ms)와 동일 — 이보다 잦은 전송은 다른 클라이언트에 보이지 않는다
 const SEND_INTERVAL_MS = 50;
 
+// Shift를 누르고 이동하면 달리기 (기본 속도 200의 약 1.7배)
+const SPRINT_SPEED = 340;
+
 export class LocalPlayer extends Player {
   containerBody: Phaser.Physics.Arcade.Body;
   facing: Direction = Direction.DOWN;
@@ -33,6 +40,7 @@ export class LocalPlayer extends Player {
   keyR!: Phaser.Input.Keyboard.Key;
   keyESC!: Phaser.Input.Keyboard.Key;
   keySPACE!: Phaser.Input.Keyboard.Key;
+  keyShift!: Phaser.Input.Keyboard.Key;
   joystickMovement?: JoystickMovement;
   joystickEPressed?: boolean;
   joystickRPressed?: boolean;
@@ -82,6 +90,7 @@ export class LocalPlayer extends Player {
     this.keyR = this.scene.input.keyboard!.addKey("R");
     this.keyESC = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     this.keySPACE = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.keyShift = this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     this.scene.input.keyboard!.disableGlobalCapture();
 
     eventEmitter.on("JOYSTICK_KEY_PRESSED", (key) => {
@@ -204,6 +213,31 @@ export class LocalPlayer extends Player {
         }
 
         if (isSpaceJustDown) {
+          // 근처(KICK_RANGE)에 공이 있으면 "몸에서 밀어내는 방향"(내 위치 → 공)으로 찬다 →
+          // 접근 각도에 따라 360° 자유 방향. 공은 즉시가 아니라 주먹이 뻗는 순간(KICK_DELAY_MS)에 나간다.
+          const ball = this.scene.ball;
+          if (ball && Phaser.Math.Distance.Between(this.x, this.y, ball.x, ball.y) < KICK_RANGE) {
+            let dx = ball.x - this.x;
+            let dy = ball.y - this.y;
+            const len = Math.hypot(dx, dy);
+            if (len < 1) {
+              [dx, dy] = KICK_DIR[this.facing]; // 정확히 겹쳐 있으면 바라보는 방향으로 폴백
+            } else {
+              dx /= len;
+              dy /= len;
+            }
+            // 펀치 애니가 공 나가는 쪽을 향하도록 facing 정렬
+            if (Math.abs(dx) > Math.abs(dy)) {
+              this.facing = dx > 0 ? Direction.RIGHT : Direction.LEFT;
+            } else {
+              this.facing = dy > 0 ? Direction.DOWN : Direction.UP;
+            }
+            this.scene.time.delayedCall(KICK_DELAY_MS, () => {
+              ball.kick(dx * KICK_FORCE, dy * KICK_FORCE);
+              network.sendMessage("KICK_BALL", { x: ball.x, y: ball.y });
+            });
+          }
+
           this.playerBehavior = PlayerBehavior.PUNCHING;
           this.anims.play(`${this.playerTexture}_punch_${this.facing}`, true);
           this.setVelocity(0, 0);
@@ -243,11 +277,14 @@ export class LocalPlayer extends Player {
           this.facing = Direction.RIGHT;
         }
 
+        // Shift를 누르면 스프린트 (성분은 방향만, setLength가 실제 속도를 정함)
+        const moveSpeed = this.keyShift.isDown ? SPRINT_SPEED : this.speed;
+
         this.setDepth(this.y + this.height / 2);
         this.setVelocity(vx, vy);
-        this.body!.velocity.setLength(this.speed);
+        this.body!.velocity.setLength(moveSpeed);
         this.containerBody.setVelocity(vx, vy);
-        this.containerBody.velocity.setLength(this.speed);
+        this.containerBody.velocity.setLength(moveSpeed);
 
         if (vx > 0) {
           this.play(`${this.playerTexture}_run_right`, true);
