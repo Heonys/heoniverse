@@ -2,73 +2,37 @@
   <img src='./.docs/logo.png' alt="logo" width='200' />
 </p>
 
+<!-- <h3 align="center">게임처럼 모여 일하고 소통하는 실시간 메타버스 협업 플랫폼</h3> -->
+
 <p align="center">
   <a href="https://phaser.io/">
-      <img src="https://img.shields.io/github/package-json/dependency-version/Heonys/heoniverse/phaser?filename=apps%2Fclient%2Fpackage.json" alt="Phaser version">
+    <img src="https://img.shields.io/github/package-json/dependency-version/Heonys/heoniverse/phaser?filename=apps%2Fclient%2Fpackage.json" alt="Phaser version" />
   </a>
-    <a href="https://heoniverse.netlify.app">
-        <img src="https://img.shields.io/netlify/801f271f-66aa-4895-bc56-df75ee7124fa" alt="Netlify Status">
-    </a>
-    <!-- <a>
-        <img src="https://img.shields.io/website?url=https%3A%2F%2F158-247-233-164.colyseus.dev%2Fcolyseus&label=game%20server" alt="Game Server">
-    </a> -->
+  <a href="https://colyseus.io/">
+    <img src="https://img.shields.io/github/package-json/dependency-version/Heonys/heoniverse/colyseus.js?filename=apps%2Fclient%2Fpackage.json&label=colyseus" alt="Colyseus version" />
+  </a>
+  <a href="https://heoniverse.netlify.app">
+    <img src="https://img.shields.io/netlify/801f271f-66aa-4895-bc56-df75ee7124fa" alt="Netlify Status" />
+  </a>
 </p>
-
-<div align="center">
-
-</div>
 
 ## 🚀 Introduction
 
-**Heoniverse**는 HTML5 게임 엔진 `Phaser`를 기반으로, 게임 인터페이스를 통해 가상 오피스와 화상회의를 제공하는 몰입형 메타버스 협업 플랫폼입니다. [Gather](https://www.gather.town) 라는 메타버스 서비스에서 영감을 받았으며, 다른 원격 협업 도구들이 제공하지 못하는 게임적 몰입감과 자연스러운 소통 경험을 제공하는 것을 목표로 하였습니다. 플레이어간 실시간 상호작용과 협업 도구를 제공하며, 직관적인 UI와 다양한 인터랙션 요소를 통해 더욱 몰입감 있는 환경을 제공하는 것을 목표로 합니다. 사용자들은 마치 같은 공간에 있는 듯한 경험을 하면서도 게임적 요소를 더해 재밌고 몰입감 있는 환경을 제공합니다.
+**Heoniverse**는 HTML5 게임 엔진 `Phaser`를 기반으로, 게임 인터페이스를 통해 가상 오피스와 화상회의를 제공하는 몰입형 메타버스 협업 플랫폼입니다. [Gather](https://www.gather.town)에서 영감을 받아, 여느 원격 협업 도구가 주지 못하는 **게임적 몰입감과 자연스러운 소통 경험**을 목표로 했습니다. 플레이어 간 실시간 상호작용과 협업 도구를 제공하며, 직관적인 UI와 다양한 인터랙션으로 마치 같은 공간에 있는 듯한 경험을 제공합니다.
 
-> **notice**: 데스크탑 환경의 브라우저에 최적화 되어있습니다. 모바일 환경에서는 일부 기능이 제한됩니다.
+**🔗 라이브 데모** — https://heoniverse.netlify.app
 
+> **notice**: 데스크탑 환경의 브라우저에 최적화되어 있습니다. 모바일에서는 일부 기능이 제한됩니다.
 
+## 🎬 미리보기
 
-## ✨ Features
-- `Phaser` 기반의 몰입감 있는 게임 인터페이스 
-- `Colyseus` 웹소켓 서버 기반의 공개/커스텀 방 생성 및 참여
-- `WebRTC` 기반의 영상·음성 통화 
-- 거리 기반의 플레이어간 카메라·마이크 자동 연결 
-- 플레이어간 전화·채팅 기능을 관리하는 스마트폰 UI
-- `MacOS` 환경의 데스크탑 오브젝트를 통한 화면 공유
-- `Excalidraw` 기반의 화이트보드 오브젝트로 실시간 아이디어 시각화·공유
-- 미니맵, 조이스틱 등의 편의 기능 제공 
-
-
-## 🎉 Getting Started
-
-- #### 개발 환경 셋업
-```sh
-# 의존성 설치
-pnpm install
-
-# 서버 실행
-pnpm dev:server
-
-# 클라이언트 개발 서버 실행 
-pnpm dev:client
-```
-
-## 🎮 Controls
-- *`W, A, S, D`* 또는 방향키로 캐릭터 조작
-- *`E`* 의자 오브젝트 상호작용 
-- *`R`* 컴퓨터, 화이트보드 오브젝트와 상호작용
-- *`Space`* 캐릭터 펀치 애니메이션
-- *`Enter`* 스마트폰 채팅창 열기
-- *`Esc`* 스마트폰 또는 팝업창 닫기
-
-## 🖼️ Screenshot 
+![In-Game][in-game-screenshot]
 
 <details>
-<summary>
-  <strong>스크린샷을 확인 하려면 펼쳐주세요</strong>
-</summary>
+<summary><strong>스크린샷 더 보기</strong></summary>
 
 ![Main Menu][main-screenshot]
 ![Select Custom Room][select-custom-room-screenshot]
-![In-Game][in-game-screenshot]
 ![Distance Based Chat][distance-based-cat-screenshot]
 ![Multiple Chat][multiple-chat-screenshot]
 ![Direct Chat][direct-chat-screenshot]
@@ -77,13 +41,115 @@ pnpm dev:client
 
 </details>
 
+## ✨ Features
+
+#### 실시간 멀티플레이어 · 협업
+
+- `Colyseus` 웹소켓 서버 기반의 **공개/커스텀 방**(비밀번호 지원) 생성 및 참여
+- 플레이어 위치·상태 **실시간 동기화** (권위 서버 + 스키마 상태 패치)
+- `WebRTC` 기반 **영상·음성 통화**, 거리 기반 카메라·마이크 **자동 연결**
+- **거리 기반 스페이셜 오디오** — 가까울수록 크게, 멀어질수록 작아지는 볼륨 감쇠
+- `MacOS` 스타일 데스크탑 오브젝트를 통한 **화면 공유**
+- `Excalidraw` 기반 **화이트보드**로 실시간 아이디어 시각화·공유
+
+#### 게임 인터랙션
+
+- `Phaser` 기반의 몰입감 있는 게임 인터페이스와 캐릭터 조작
+- 의자 앉기, 펀치, 프로필 보기 등 오브젝트/플레이어 상호작용
+- **감정 표현 이모트** — `G`로 원형 이모지 메뉴를 열어 감정 표현
+- **NPC** — `R`로 말을 걸면 AI가 대답해주는 인게임 도우미 NPC
+- 플레이어 간 전화·채팅을 관리하는 **스마트폰 UI**, 미니맵·조이스틱 편의 기능
+
+#### 안정성 · 접근성
+
+- **로그인 없이 즉시 입장** — 회원가입·소셜 로그인 없이 닉네임·아바타만으로 바로 참여 (세션 단위 신원)
+- **새로고침시 재접속** — 메인 메뉴 없이 **이전 방·위치·아바타로 자동 복귀**
+- **오프라인 모드** — 서버 없이도 UI·인터랙션을 체험 (배포 서버 콜드스타트 대비 탈출구)
+
+## 🏗️ Architecture
+
+클라이언트·서버·공통 코드를 **모노레포**로 관리합니다. 클라이언트와 서버가 `packages/shared`의 타입(메시지·스키마)을 함께 사용하기 때문에, 둘 사이의 통신 규약이 어긋나면 빌드 단계에서 곧바로 드러납니다.
+
+```mermaid
+flowchart TB
+    shared["packages/shared<br/>공통 타입 (메시지 · 스키마)"]
+
+    subgraph client ["브라우저 · 클라이언트"]
+        direction LR
+        React["React · Redux"]
+        Phaser["Phaser"]
+        React <-->|eventEmitter | Phaser
+    end
+
+    server["Colyseus Server"]
+    peers["다른 플레이어들"]
+
+    Phaser <-->|WebSocket 상태 동기화| server
+    server -->|Broadcast| peers
+    client <-.->|WebRTC P2P · 영상/음성| peers
+    shared -.-> client
+    shared -.-> server
+```
+
+**설계 포인트**
+
+- **서버가 모든 입력을 검증** — 좌표·닉네임·채팅·아이템 생성 등 모든 입력을 서버가 검증/보정(클라이언트를 신뢰하지 않음)
+- **React ↔ Phaser 디커플링** — 타입이 붙은 `eventEmitter` 브리지로 UI와 게임 로직을 분리, 상태는 Redux가 담당
+- **게임 상태 · P2P 미디어 분리** — 게임 상태는 Colyseus로, 무거운 영상·음성 스트림은 클라이언트 간 WebRTC 메시로.
+
+## 🔧 성능·안정성 개선
+
+| 개선                      | 내용                                                                        |
+| ------------------------- | --------------------------------------------------------------------------- |
+| ⚡ *_초기 로딩 속도 개선_ | 한글 폰트 woff2 서브셋 · 프리로드 제거 · 코드 스플리팅 · 캐시 헤더          |
+| 🔌 **WebRTC 누수 제거**   | 방 이동 시 남던 `Peer`·미디어 트랙·오디오 루프를 `dispose()`로 일괄 정리    |
+| 🔒 **서버 권위화**        | 입력 검증·좌표 clamp·공유자 스푸핑 차단·페이로드 상한, 모니터 basic-auth    |
+| 🚀 **런타임 최적화**      | 이동 패킷 60→17 스로틀, 매 프레임 리렌더되던 `GameHUD`를 이벤트 기반으로    |
+| 🔁 **새로고침 재접속**    | `allowReconnection` + `sessionStorage`로 새로고침 후 같은 방·위치 자동 복귀 |
+
+## ⚖️ 확장 시 고려사항
+
+> 데모에 맞춰 단순하게 설계하였고 규모를 키운다면 아래를 개선할 수 있습니다.
+
+- **영상·음성은 P2P 풀메시 연결** — 참가자끼리 직접 연결하는 구조라, 한 공간의 인원이 많아질수록 연결 수가 급격히 늘어 부담이 커진다. 대규모 통화가 필요하면 스트림을 중앙에서 중계하는 **SFU(미디어 서버)** 로 바꿔야함
+- **WebRTC 시그널링이 PeerJS 공개 클라우드에 의존** — 연결 정보를 무료 공용 브로커로 주고받아 안정성·사용 한도 보장이 없다. 프로덕션에선 자체 **PeerServer** 호스팅으로 안정화해야함
+- **서버 상태를 메모리에만 보관** — 방·플레이어 정보를 한 서버의 메모리에 들고 있어, 서버를 재시작하면 진행 중인 방이 사라지고 서버를 여러 대로 늘리기 어렵다. 트래픽이 커지면 **Redis** 같은 공유 저장소로 인스턴스끼리 상태를 나눠야함
+- **Render 무료 플랜** — 서버가 잠들면 첫 접속에 시간이 걸린다. 유료 상시 가동이나 주기적 웜업으로 없앨 수 있지만, 데모 운영 비용을 0으로 두기 위한 선택 (오프라인 모드로 바로 입장 가능)
+
+## 🎉 Getting Started
+
+```sh
+# 의존성 설치
+pnpm install
+
+# 게임 서버 실행 (Colyseus, localhost:2567)
+pnpm dev:server
+
+# 클라이언트 개발 서버 실행 (Vite, localhost:5173)
+pnpm dev:client
+```
+
+> 로컬 개발 시 클라이언트는 기본으로 `ws://localhost:2567`에 접속하므로 별도의 환경변수가 필요 없습니다.
+
+## 🎮 Controls
+
+| 키                       | 동작                                              |
+| ------------------------ | ------------------------------------------------- |
+| `W` `A` `S` `D` / 방향키 | 캐릭터 이동                                       |
+| `E`                      | 의자 오브젝트 상호작용(앉기/일어나기)             |
+| `R`                      | 컴퓨터·화이트보드 상호작용, NPC 대화, 프로필 보기 |
+| `Space`                  | 펀치 애니메이션                                   |
+| `Enter`                  | 스마트폰 채팅창 열기                              |
+| `G`                      | 감정표현                                          |
+| `Esc`                    | 스마트폰·팝업 닫기 / NPC 대화 종료                |
+
+우측 하단 HUD의 **나가기** 버튼으로 언제든 메인 메뉴로 돌아갈 수 있습니다.
+
 ## 🙏 Credits
 
-- 픽셀 아트 에셋은 [LimeZu](https://limezu.itch.io) 아티스트님의 에셋을 사용했습니다. 
-- 프로젝트를 시작하는데 오픈소스 [SkyOffice](https://github.com/kevinshen56714/SkyOffice)의 많은 도움을 받았습니다. 
-- 웹에서 `MacOS` 환경을 클론하는데 [macos-web](https://github.com/puruvj/macos-web) 저장소를 참고했습니다. 
-
-
+- 픽셀 아트 에셋은 [LimeZu](https://limezu.itch.io) 아티스트님의 에셋을 사용했습니다.
+- 프로젝트를 시작하는 데 오픈소스 [SkyOffice](https://github.com/kevinshen56714/SkyOffice)의 많은 도움을 받았습니다.
+- 웹에서 `MacOS` 환경을 클론하는 데 [macos-web](https://github.com/puruvj/macos-web) 저장소를 참고했습니다.
 
 <!-- Markdown links and Images -->
 
@@ -95,9 +161,3 @@ pnpm dev:client
 [direct-chat-screenshot]: ./.docs/direct-chat.png
 [computer-screenshot]: ./.docs/computer-object.png
 [whiteboard-screenshot]: ./.docs/whiteboard-object.png
-
-
-
-
-
-
