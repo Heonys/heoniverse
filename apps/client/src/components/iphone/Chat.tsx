@@ -12,7 +12,6 @@ import { Condition } from "@/common";
 type FormType = { message: string };
 
 export const Chat = () => {
-  const readyToSubmit = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const { network, getLocalPlayer } = useGame();
@@ -24,10 +23,6 @@ export const Chat = () => {
   const { register, handleSubmit, setFocus, reset } = useForm<FormType>();
 
   const onSubmit = ({ message }: FormType) => {
-    if (!readyToSubmit.current) {
-      readyToSubmit.current = true;
-      return;
-    }
     reset();
     if (!message.trim()) return;
     inputRef.current?.blur();
@@ -135,12 +130,10 @@ export const Chat = () => {
           onFocus={() => {
             if (!focused) {
               dispatch(setFocusChat(true));
-              readyToSubmit.current = true;
             }
           }}
           onBlur={() => {
             dispatch(setFocusChat(false));
-            readyToSubmit.current = false;
           }}
         />
       </form>

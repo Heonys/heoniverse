@@ -164,6 +164,11 @@ export class WebRTC {
   }
 
   setupMediaStream(stream: MediaStream) {
+    // getUserMedia로 연 스트림을 react-webcam이 연 스트림으로 교체할 때
+    // 이전 스트림 트랙을 정리하지 않으면 카메라가 계속 켜진 채 남는다
+    if (this.videoStream && this.videoStream !== stream) {
+      this.videoStream.getTracks().forEach((track) => track.stop());
+    }
     this.videoStream = stream;
   }
 
@@ -175,7 +180,9 @@ export class WebRTC {
       this.network.updateMediaConnect(true);
       this.getLocalPlayer().mediaConnect = true;
       return true;
-    } catch {
+    } catch (error) {
+      // 권한 거부·비보안 컨텍스트 등 실패 원인을 남긴다 (배포 환경 디버깅용)
+      console.error("카메라/마이크 접근 실패:", error);
       return false;
     }
   }

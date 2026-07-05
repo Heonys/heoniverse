@@ -144,8 +144,8 @@ export const GameHUD = () => {
               <AppIcon iconName="people" size={14} />
               <NumberFlow value={users} />
             </div>
-            <div className="flex items-center gap-0.5">
-              <div className="w-5">{frame.toFixed(0)}</div>
+            <div className="flex items-center gap-1">
+              <div className="w-6">{frame.toFixed(0)}</div>
               <div className="">fps</div>
             </div>
           </div>
