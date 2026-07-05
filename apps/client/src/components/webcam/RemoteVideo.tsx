@@ -45,6 +45,15 @@ export const RemoteVideo = memo(({ stream, player }: Props) => {
     return () => eventEmitter.off("RENDER_TO_STATUS", handler);
   }, [playerId]);
 
+  // 거리 기반 오디오 볼륨 (리렌더 없이 <video>.volume만 직접 조절)
+  useEffect(() => {
+    const handler = ({ id, volume }: { id: string; volume: number }) => {
+      if (playerId === id && videoRef.current) videoRef.current.volume = volume;
+    };
+    eventEmitter.on("PROXIMITY_VOLUME_CHANGED", handler);
+    return () => eventEmitter.off("PROXIMITY_VOLUME_CHANGED", handler);
+  }, [playerId]);
+
   return (
     <motion.div
       className="w-50 relative z-50 h-[150px] select-none rounded-2xl border border-black/50 bg-black shadow-lg"

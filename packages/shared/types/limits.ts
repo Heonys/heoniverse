@@ -8,3 +8,6 @@ export const WHITEBOARD_ELEMENTS_MAX = 5000;
 
 // tilemap 크기(2400x1600px) + 오브젝트 오프셋 여유분
 export const WORLD_BOUNDS = { minX: -100, maxX: 2500, minY: -100, maxY: 1700 };
+
+// 이모트 허용 셋 (클라 피커 + 서버 검증 공용)
+export const EMOTES = ["👍", "❤️", "😂", "🎉", "👏", "😮"] as const;

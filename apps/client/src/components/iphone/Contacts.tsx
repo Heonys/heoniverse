@@ -63,16 +63,17 @@ export const Contacts = () => {
                   disabled={player.isCalling}
                   onClick={() => {
                     network.webRTC?.getUserMedia().then((allowed) => {
-                      if (allowed) {
-                        network.updateIsCalling(true);
-                        network.webRTC?.peerCall(id, "direct");
-                        dispatch(
-                          setCurrentPage({
-                            page: "dialing",
-                            props: { remoteId: player.playerId },
-                          }),
-                        );
-                      }
+                      if (!allowed) return;
+                      // 통화가 실제로 걸렸을 때만 통화 상태로 전환 (실패 시 발신자 고착 방지)
+                      const placed = network.webRTC?.peerCall(id, "direct");
+                      if (!placed) return;
+                      network.updateIsCalling(true);
+                      dispatch(
+                        setCurrentPage({
+                          page: "dialing",
+                          props: { remoteId: player.playerId },
+                        }),
+                      );
                     });
                   }}
                 >

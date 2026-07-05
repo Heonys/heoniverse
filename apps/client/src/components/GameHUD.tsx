@@ -8,10 +8,11 @@ import { AppIcon } from "@/icons";
 import { AvatarIcon } from "./AvatarIcon";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { cn } from "@/utils";
-import { TooltipButton } from "@/common";
+import { TooltipButton, Condition } from "@/common";
 import { SelfVideo, RemoteVideo } from "@/components/webcam";
 import { setMicEnabled, setVideoEnabled } from "@/stores/userSlice";
 import { eventEmitter } from "@/game/events";
+import { EMOTES } from "@heoniverse/shared";
 
 export const GameHUD = () => {
   const { gameScene, network } = useGame();
@@ -22,7 +23,14 @@ export const GameHUD = () => {
   );
   const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
   const [frame, setFrame] = useState(0);
+  const [emoteWheelOpen, setEmoteWheelOpen] = useState(false);
   const videoRef = useRef<Webcam>(null);
+
+  const sendEmote = (emote: string) => {
+    gameScene.localPlayer.showEmote(emote);
+    network.sendMessage("SEND_EMOTE", emote);
+    setEmoteWheelOpen(false);
+  };
   // mediaStreamsMap은 mutable Map이라 변경 이벤트를 받아 리렌더를 트리거한다
   const [, forceStreamsUpdate] = useReducer((x: number) => x + 1, 0);
 
@@ -105,6 +113,22 @@ export const GameHUD = () => {
     return () => eventEmitter.off("MEDIA_STREAMS_CHANGED", handler);
   }, []);
 
+  // G 키(게임 씬) 또는 HUD 버튼으로 이모트 휠 토글
+  useEffect(() => {
+    const handler = () => setEmoteWheelOpen((prev) => !prev);
+    eventEmitter.on("TOGGLE_EMOTE_WHEEL", handler);
+    return () => eventEmitter.off("TOGGLE_EMOTE_WHEEL", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!emoteWheelOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setEmoteWheelOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [emoteWheelOpen]);
+
   return (
     <>
       <div
@@ -152,6 +176,21 @@ export const GameHUD = () => {
         </div>
         {/* right */}
         <div className="flex items-center justify-end gap-1.5 px-1 text-white">
+          {/* 데스크탑은 G 키로 여니까 버튼은 키보드 없는 모바일에서만 노출 */}
+          <Condition condition={!isBrowser}>
+            <TooltipButton
+              id="emote"
+              onClick={() => setEmoteWheelOpen((prev) => !prev)}
+              className={cn(
+                "transition-all",
+                "size-7.5",
+                emoteWheelOpen ? "bg-slate-500/70" : "bg-white/90",
+              )}
+            >
+              <div className="text-lg leading-none">😀</div>
+            </TooltipButton>
+          </Condition>
+
           <TooltipButton
             id="media-enabled"
             tooltip={
@@ -202,6 +241,42 @@ export const GameHUD = () => {
           </TooltipButton>
         </div>
       </div>
+
+      {/* 이모트 라디얼 휠 — 캐릭터(화면 중앙) 주변에 원형으로 표시 */}
+      <Condition condition={emoteWheelOpen}>
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20"
+          onClick={() => setEmoteWheelOpen(false)}
+        >
+          <div className="relative size-52" onClick={(e) => e.stopPropagation()}>
+            {EMOTES.map((emote, i) => {
+              const angle = (-90 + i * (360 / EMOTES.length)) * (Math.PI / 180);
+              const radius = 92;
+              const x = Math.cos(angle) * radius;
+              const y = Math.sin(angle) * radius;
+              return (
+                <div
+                  key={emote}
+                  className="absolute"
+                  style={{
+                    left: `calc(50% + ${x}px)`,
+                    top: `calc(50% + ${y}px)`,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <button
+                    className="flex size-12 items-center justify-center rounded-full border border-white/20 bg-slate-800 text-2xl shadow-lg transition-transform hover:scale-110"
+                    onClick={() => sendEmote(emote)}
+                  >
+                    {emote}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Condition>
+
       {createPortal(
         <div className="absolute left-1/2 top-3 flex -translate-x-1/2 gap-2">
           <AnimatePresence>

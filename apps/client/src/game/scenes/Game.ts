@@ -41,14 +41,12 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    this.localPlayer = new LocalPlayer(
-      this,
-      network.sessionId,
-      START_POINT[0],
-      START_POINT[1],
-      "suit",
-    );
-    this.playerSelector = new PlayerSelector(this, START_POINT[0], START_POINT[1], 16, 16);
+    // 모두가 같은 지점에 스폰되면 입장 즉시 근접 자동연결이 걸리므로 스폰을 살짝 분산한다
+    const spawnX = START_POINT[0] + Phaser.Math.Between(-48, 48);
+    const spawnY = START_POINT[1] + Phaser.Math.Between(-96, 96);
+
+    this.localPlayer = new LocalPlayer(this, network.sessionId, spawnX, spawnY, "suit");
+    this.playerSelector = new PlayerSelector(this, spawnX, spawnY, 16, 16);
     this.otherPlayers = this.physics.add.group();
     this.otherPlayerOverlapZone = this.physics.add.group();
 
@@ -210,6 +208,9 @@ export class Game extends Phaser.Scene {
         otherPlayer.openBubble(message);
       }
     };
+    const onEmote = ({ sessionId, emote }: { sessionId: string; emote: string }) => {
+      this.otherPlayersMap.get(sessionId)?.showEmote(emote);
+    };
     const onComputerUserAdded = ({
       userId,
       computerId,
@@ -263,6 +264,7 @@ export class Game extends Phaser.Scene {
     eventEmitter.on("OTHER_PLAYER_UPDATED", onPlayerUpdated);
     eventEmitter.on("OTHER_PLAYER_LEFT", onPlayerLeft);
     eventEmitter.on("UPDATED_CHAT_MESSAGE", onChatMessage);
+    eventEmitter.on("UPDATED_EMOTE", onEmote);
     eventEmitter.on("COMPUTER_USER_ADDED", onComputerUserAdded);
     eventEmitter.on("COMPUTER_USER_REMOVED", onComputerUserRemoved);
     eventEmitter.on("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
@@ -274,6 +276,7 @@ export class Game extends Phaser.Scene {
       eventEmitter.off("OTHER_PLAYER_UPDATED", onPlayerUpdated);
       eventEmitter.off("OTHER_PLAYER_LEFT", onPlayerLeft);
       eventEmitter.off("UPDATED_CHAT_MESSAGE", onChatMessage);
+      eventEmitter.off("UPDATED_EMOTE", onEmote);
       eventEmitter.off("COMPUTER_USER_ADDED", onComputerUserAdded);
       eventEmitter.off("COMPUTER_USER_REMOVED", onComputerUserRemoved);
       eventEmitter.off("WHITEBOARD_USER_ADDED", onWhiteboardUserAdded);
@@ -297,6 +300,12 @@ export class Game extends Phaser.Scene {
         store.dispatch(setFocusChat(false));
       }
       store.dispatch(hide());
+    });
+
+    this.input.keyboard?.on("keydown-G", () => {
+      // 채팅 입력 중이면 그냥 'g' 타이핑 (휠 열지 않음)
+      if (store.getState().chat.focused) return;
+      eventEmitter.emit("TOGGLE_EMOTE_WHEEL");
     });
   }
 

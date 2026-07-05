@@ -14,6 +14,7 @@ export enum Messages {
   UPDATED_CALLING = "UPDATED_CALLING",
   SEND_REJECTED_CALL = "SEND_REJECTED_CALL",
   SEND_ANSWER_CALL = "SEND_ANSWER_CALL",
+  END_CALL = "END_CALL",
   CONNECT_COMPUTER = "CONNECT_COMPUTER",
   CONNECT_WHITEBOARD = "CONNECT_WHITEBOARD",
   CREATE_COMPUTER = "CREATE_COMPUTER",
@@ -23,6 +24,8 @@ export enum Messages {
   SCREEN_SHARING_RESPONSE = "SCREEN_SHARING_RESPONSE",
   UPDATE_ELEMENTS = "UPDATE_ELEMENTS",
   UPDATED_ELEMENTS = "UPDATED_ELEMENTS",
+  SEND_EMOTE = "SEND_EMOTE",
+  UPDATED_EMOTE = "UPDATED_EMOTE",
 }
 
 export type MessagePayloadMap = {
@@ -48,6 +51,7 @@ export type MessagePayloadMap = {
   UPDATED_CALLING: boolean;
   SEND_REJECTED_CALL: string;
   SEND_ANSWER_CALL: string;
+  END_CALL: string;
   CONNECT_COMPUTER: { id: string; connect: boolean };
   CONNECT_WHITEBOARD: { id: string; connect: boolean };
   CREATE_COMPUTER: string;
@@ -57,4 +61,6 @@ export type MessagePayloadMap = {
   SCREEN_SHARING_RESPONSE: string;
   UPDATE_ELEMENTS: readonly any[];
   UPDATED_ELEMENTS: readonly any[];
+  SEND_EMOTE: string;
+  UPDATED_EMOTE: { sessionId: string; emote: string };
 };

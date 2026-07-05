@@ -13,6 +13,7 @@ import {
   ITEM_MAP_MAX,
   WHITEBOARD_ELEMENTS_MAX,
   WORLD_BOUNDS,
+  EMOTES,
 } from "@heoniverse/shared";
 import {
   PlayerUpdateCommand,
@@ -141,6 +142,13 @@ export class Studio extends Room<StudioState> {
       }
     });
 
+    this.onMessage(Messages.END_CALL, (client, peerId) => {
+      const target = this.clients.find((c) => c.sessionId === peerId);
+      if (target) {
+        target.send(Messages.END_CALL, client.sessionId);
+      }
+    });
+
     this.onMessage(Messages.SEND_ANSWER_CALL, (client, peerId) => {
       const caller = this.clients.find((c) => c.sessionId === peerId);
       if (caller) {
@@ -178,6 +186,16 @@ export class Studio extends Room<StudioState> {
     this.onMessage(Messages.UPDATE_ELEMENTS, (client, payload: any[]) => {
       if (!Array.isArray(payload) || payload.length > WHITEBOARD_ELEMENTS_MAX) return;
       this.broadcast(Messages.UPDATED_ELEMENTS, payload, { except: client });
+    });
+
+    this.onMessage(Messages.SEND_EMOTE, (client, payload: string) => {
+      // 허용된 이모지만 브로드캐스트 (상태 저장 없음 — 채팅에 안 남음)
+      if (!(EMOTES as readonly string[]).includes(payload)) return;
+      this.broadcast(
+        Messages.UPDATED_EMOTE,
+        { sessionId: client.sessionId, emote: payload },
+        { except: client },
+      );
     });
 
     this.onMessage(Messages.PUSH_CHAT_MESSAGE, (client, payload: string) => {

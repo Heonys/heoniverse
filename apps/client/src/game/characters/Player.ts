@@ -8,6 +8,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   playerContainer: Phaser.GameObjects.Container;
   playerBubble: Phaser.GameObjects.Container;
   playerStatusBox: Phaser.GameObjects.Container;
+  playerEmote: Phaser.GameObjects.Container;
   playerName: Phaser.GameObjects.Text;
   playerBehavior = PlayerBehavior.IDLE;
   playerMarker: Phaser.GameObjects.Arc;
@@ -42,6 +43,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.cameras.main.ignore([this.playerMarker]);
     this.playerBubble = this.scene.add.container(0, 0).setDepth(9999);
     this.playerStatusBox = this.scene.add.container(0, 0).setDepth(9999);
+    this.playerEmote = this.scene.add.container(0, 0).setDepth(9999);
 
     this.playerName = this.scene.add
       .text(0, 0, "")
@@ -62,6 +64,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.statusCircle,
         this.playerStatusBox,
         this.playerBubble,
+        this.playerEmote,
       ])
       .setDepth(9999);
 
@@ -121,6 +124,35 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   closeBubble() {
     this.playerBubble.removeAll(true);
+  }
+
+  // 캐릭터 머리 위에 이모지가 팝 하고 떠올라 한동안 머물렀다 천천히 사라짐 (채팅과 무관, 화면 전용)
+  showEmote(emote: string) {
+    const text = this.scene.add
+      .text(0, -this.playerName.height - 6, emote)
+      .setFontSize(28)
+      .setOrigin(0.5)
+      .setScale(0);
+    this.playerEmote.add(text);
+
+    // 팝인
+    this.scene.tweens.add({
+      targets: text,
+      scale: 1,
+      duration: 220,
+      ease: "Back.Out",
+    });
+
+    // 약 1초 머문 뒤 위로 떠오르며 페이드아웃
+    this.scene.tweens.add({
+      targets: text,
+      y: text.y - 18,
+      alpha: 0,
+      delay: 1000,
+      duration: 500,
+      ease: "Cubic.In",
+      onComplete: () => text.destroy(),
+    });
   }
 
   openStatusBox(text: string) {

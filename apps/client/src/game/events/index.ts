@@ -5,11 +5,13 @@ type EventsPayloadMap = {
   UPDATE_PLAYER_NAME: string;
   UPDATE_PLAYER_STATUS: Status;
   RENDER_TO_STATUS: { id: string; status: Status };
+  PROXIMITY_VOLUME_CHANGED: { id: string; volume: number };
   UPDATE_PLAYER_TEXTURE: MessagePayloadMap["UPDATE_PLAYER"];
   OTHER_PLAYER_JOINED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_UPDATED: { sessionId: string; player: IPlayer };
   OTHER_PLAYER_LEFT: { sessionId: string; player: IPlayer };
   UPDATED_CHAT_MESSAGE: { sessionId: string; message: string };
+  UPDATED_EMOTE: { sessionId: string; emote: string };
   CLOSE_PEER_CALL: string;
   DISCONNECT_PEER_CALL: string;
   MEDIA_ENABLED_CHANGE: boolean;
@@ -23,6 +25,7 @@ type EventsPayloadMap = {
   WHITEBOARD_USER_REMOVED: { userId: string; whiteboardId: string };
   UPDATED_ELEMENTS: readonly any[];
   JOYSTICK_KEY_PRESSED: "keyE" | "keyR";
+  TOGGLE_EMOTE_WHEEL: void;
 };
 
 class PhaserEventEmitter<EventsMap> {

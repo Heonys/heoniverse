@@ -16,7 +16,7 @@ import { pushMessage } from "@/stores/chatSlice";
 import { WebRTC } from "@/service";
 import { phaserGame } from "@/game";
 import { Game } from "@/game/scenes";
-import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
+import { setIsConnected } from "@/stores/phoneSlice";
 import { setSharing } from "@/stores/computerSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import { setSingleMode } from "@/stores/userSlice";
@@ -84,8 +84,14 @@ export class Network {
     });
 
     eventEmitter.on("DISCONNECT_PEER_CALL", (peerId) => {
-      this.webRTC?.closePeerCall(peerId);
+      this.webRTC?.handlePeerLeft(peerId);
     });
+  }
+
+  // 전화 끊기: 상대에게 종료 신호를 보내고 내 통화 상태도 정리 (peerjs close에 의존하지 않음)
+  hangUp(peerId: string) {
+    this.sendMessage("END_CALL", peerId);
+    this.webRTC?.endCall(peerId);
   }
 
   async joinLobbyRoom() {
@@ -307,15 +313,20 @@ export class Network {
       eventEmitter.emit("UPDATED_CHAT_MESSAGE", payload);
     });
 
+    this.onMessage(Messages.UPDATED_EMOTE, (payload) => {
+      eventEmitter.emit("UPDATED_EMOTE", payload);
+    });
+
     this.onMessage(Messages.SEND_REJECTED_CALL, (peerId) => {
-      this.updateIsCalling(false);
-      store.dispatch(setCurrentPage({ page: "home" }));
-      store.dispatch(setIsConnected({ state: false }));
-      eventEmitter.emit("CLOSE_PEER_CALL", peerId);
+      this.webRTC?.endCall(peerId);
     });
 
     this.onMessage(Messages.SEND_ANSWER_CALL, () => {
       store.dispatch(setIsConnected({ state: true, startedAt: new Date() }));
+    });
+
+    this.onMessage(Messages.END_CALL, (peerId) => {
+      this.webRTC?.endCall(peerId);
     });
 
     this.onMessage(Messages.SCREEN_SHARING_RESPONSE, (receiverId) => {

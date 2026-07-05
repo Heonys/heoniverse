@@ -1,7 +1,6 @@
 import { format, differenceInSeconds } from "date-fns";
-import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
+import { useAppSelector, useCurrentTime, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
-import { setCurrentPage, setIsConnected } from "@/stores/phoneSlice";
 import { cn, formatElapsedTime } from "@/utils";
 import { eventEmitter } from "@/game/events";
 
@@ -10,7 +9,6 @@ type Props = { remoteId: string };
 export const Dialing = ({ remoteId }: Props) => {
   const time = useCurrentTime(1000);
   const { network, getOtherPlayerById } = useGame();
-  const dispatch = useAppDispatch();
   const isConnected = useAppSelector((state) => state.phone.isConnected);
   const { mediaConnected, micEnabled, videoEnabled } = useAppSelector((state) => state.user);
   const player = getOtherPlayerById(remoteId);
@@ -84,10 +82,7 @@ export const Dialing = ({ remoteId }: Props) => {
             <div
               className="flex cursor-pointer flex-col items-center gap-1 text-[10px]"
               onClick={() => {
-                network.updateIsCalling(false);
-                dispatch(setCurrentPage({ page: "home" }));
-                dispatch(setIsConnected({ state: false }));
-                eventEmitter.emit("CLOSE_PEER_CALL", remoteId);
+                network.hangUp(remoteId);
               }}
             >
               <div className="size-13 flex cursor-pointer items-center justify-center rounded-full bg-[#fa4837] p-2">

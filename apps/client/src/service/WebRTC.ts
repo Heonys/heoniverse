@@ -22,6 +22,10 @@ export class WebRTC {
   screenStream?: MediaStream;
   mediaStreamsMap = new Map<Player, MediaStream>();
   connectedCall?: MediaConnection;
+  // 전화(direct) 통화 상태 추적 — 종료/퇴장 시 어느 정리 경로를 탈지 판단용
+  private ringingPeer?: string; // 나에게 전화 걸어와 울리는 중인 상대
+  private activeCallPeer?: string; // 현재 전화 통화 중/발신 중인 상대
+  private pendingCallResponse?: (result: "answer" | "reject") => void;
 
   constructor(peerId: string, network: Network, options?: { offline?: boolean }) {
     this.network = network;
@@ -76,9 +80,15 @@ export class WebRTC {
     if (!this.connectedPeers.has(peerId)) {
       store.dispatch(setShowIphone(true));
       store.dispatch(setIsRinging({ state: true, caller: peerId }));
+      this.ringingPeer = peerId;
 
-      eventEmitter.once("CALL_RESPONSE", (result) => {
+      // 발신자가 울리는 중 나가면 이 리스너를 취소할 수 있도록 ref로 보관
+      this.clearPendingCallResponse();
+      const handler = (result: "answer" | "reject") => {
+        this.clearPendingCallResponse();
+        this.ringingPeer = undefined;
         if (result === "answer") {
+          this.activeCallPeer = peerId;
           call.answer(this.videoStream);
           this.network.sendAnswerCall(peerId);
           this.connectedPeers.set(call.peer, call);
@@ -90,11 +100,13 @@ export class WebRTC {
               eventEmitter.emit("MEDIA_STREAMS_CHANGED");
             }
           });
-          call.on("close", () => this.onCloseCall(peerId));
+          call.on("close", () => this.endCall(peerId));
         } else {
           this.network.sendRejectCall(peerId);
         }
-      });
+      };
+      this.pendingCallResponse = handler;
+      eventEmitter.on("CALL_RESPONSE", handler);
     }
   }
 
@@ -111,25 +123,31 @@ export class WebRTC {
     });
   }
 
-  peerCall(peerId: string, callType: CallType) {
-    if (!this.peer) return;
+  // 통화를 실제로 걸었으면 true, 이미 연결됐거나 한도 초과 등으로 못 걸면 false
+  peerCall(peerId: string, callType: CallType): boolean {
+    if (!this.peer) return false;
     const currentConnections = this.peersMap.size + this.connectedPeers.size + 1;
-    if (currentConnections >= MAX_PEERS) return;
+    if (currentConnections >= MAX_PEERS) return false;
+    if (this.peersMap.has(peerId)) return false;
 
-    if (!this.peersMap.has(peerId)) {
-      const call = this.peer.call(peerId, this.videoStream!, { metadata: { type: callType } });
-      this.peersMap.set(peerId, call);
+    const call = this.peer.call(peerId, this.videoStream!, { metadata: { type: callType } });
+    this.peersMap.set(peerId, call);
+    if (callType === "direct") this.activeCallPeer = peerId;
 
-      call.on("stream", (mediaStream) => {
-        const otherPlayer = this.getOtherPlayerById(peerId);
-        if (otherPlayer) {
-          this.mediaStreamsMap.set(otherPlayer, mediaStream);
-          eventEmitter.emit("MEDIA_STREAMS_CHANGED");
-        }
-      });
+    call.on("stream", (mediaStream) => {
+      const otherPlayer = this.getOtherPlayerById(peerId);
+      if (otherPlayer) {
+        this.mediaStreamsMap.set(otherPlayer, mediaStream);
+        eventEmitter.emit("MEDIA_STREAMS_CHANGED");
+      }
+    });
 
-      call.on("close", () => this.onCloseCall(peerId));
-    }
+    // 전화 콜만 종료 시 전화 UI까지 리셋, 근접 콜은 연결만 정리
+    call.on("close", () => {
+      if (callType === "direct") this.endCall(peerId);
+      else this.closePeerCall(peerId);
+    });
+    return true;
   }
 
   closePeerCall(peerId: string) {
@@ -156,11 +174,42 @@ export class WebRTC {
     }
   }
 
-  onCloseCall(peerId: string) {
+  private clearPendingCallResponse() {
+    if (this.pendingCallResponse) {
+      eventEmitter.off("CALL_RESPONSE", this.pendingCallResponse);
+      this.pendingCallResponse = undefined;
+    }
+  }
+
+  // 전화 통화 전체 종료 — peer/스트림 정리 + 통화 상태·전화 UI 리셋 (양쪽에서 동일하게 호출)
+  endCall(peerId: string) {
+    this.clearPendingCallResponse();
+    this.ringingPeer = undefined;
+    this.activeCallPeer = undefined;
     this.closePeerCall(peerId);
     this.network.updateIsCalling(false);
+    store.dispatch(setIsRinging({ state: false }));
     store.dispatch(setCurrentPage({ page: "home" }));
     store.dispatch(setIsConnected({ state: false }));
+  }
+
+  // 나에게 걸려와 울리던 전화가 취소됨(발신자 퇴장 등) — 벨 UI만 정리
+  cancelIncomingCall(peerId: string) {
+    if (this.ringingPeer !== peerId) return;
+    this.clearPendingCallResponse();
+    this.ringingPeer = undefined;
+    store.dispatch(setIsRinging({ state: false }));
+  }
+
+  // 상대 퇴장 시: 통화 상대면 전체 종료, 울리던 발신자면 벨 취소, 그 외(근접)는 연결만 정리
+  handlePeerLeft(peerId: string) {
+    if (this.activeCallPeer === peerId) {
+      this.endCall(peerId);
+    } else if (this.ringingPeer === peerId) {
+      this.cancelIncomingCall(peerId);
+    } else {
+      this.closePeerCall(peerId);
+    }
   }
 
   setupMediaStream(stream: MediaStream) {

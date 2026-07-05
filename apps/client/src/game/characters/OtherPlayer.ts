@@ -5,6 +5,9 @@ import { Game } from "@/game/scenes";
 import { WebRTC } from "@/service";
 import { eventEmitter } from "@/game/events";
 
+// 이 거리(px)에서 볼륨이 0에 수렴 — 근접 연결 반경(약 128px)보다 살짝 크게
+const PROXIMITY_AUDIO_RADIUS = 150;
+
 export class OtherPlayer extends Player {
   playerOverlap: PlayerOverlap;
   containerBody: Phaser.Physics.Arcade.Body;
@@ -16,6 +19,9 @@ export class OtherPlayer extends Player {
   // preUpdate에서 매 프레임 문자열 파싱을 피하기 위한 캐시
   private parsedAnimKey = "";
   private parsedAnim?: ReturnType<typeof splitAnimKey>;
+  // 마지막으로 전송한 근접 볼륨 (변화 시에만 emit하기 위한 캐시)
+  private lastVolume = -1;
+  private volumeEmitAccum = 0;
 
   constructor(scene: Game, id: string, name: string, x: number, y: number, texture: string) {
     super(scene, id, x, y, texture);
@@ -49,6 +55,7 @@ export class OtherPlayer extends Player {
       eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
       this.hasBeenConnected = false;
       this.connectionBufferTime = 0;
+      this.lastVolume = -1;
     }
   }
 
@@ -127,11 +134,36 @@ export class OtherPlayer extends Player {
       }
     }
 
-    this.connectionBufferTime += delta;
-    if (this.hasBeenConnected && !spriteBody.embedded && spriteBody.touching.none) {
-      eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
+    // 근접 연결된 상대의 오디오 볼륨을 거리에 따라 조절 (연결/해제 로직은 그대로)
+    if (this.hasBeenConnected) {
+      const local = (this.scene as Game).localPlayer;
+      if (local) {
+        const dx = local.x - this.x;
+        const dy = local.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const volume = Math.min(1, Math.max(0, 1 - dist / PROXIMITY_AUDIO_RADIUS));
+        // 볼륨이 유의미하게 바뀌거나, 정지 상태에서도 0.5초마다 재전송(늦게 마운트된 RemoteVideo 동기화)
+        this.volumeEmitAccum += delta;
+        if (Math.abs(volume - this.lastVolume) > 0.02 || this.volumeEmitAccum > 500) {
+          this.lastVolume = volume;
+          this.volumeEmitAccum = 0;
+          eventEmitter.emit("PROXIMITY_VOLUME_CHANGED", { id: this.playerId, volume });
+        }
+      }
+    }
+
+    // 실제로 겹쳐 있을 때만 근접 체류 시간을 누적한다.
+    // (스쳐 지나감이나 스폰 지점 겹침으로 인한 원치 않는 자동 연결 방지)
+    const overlapping = spriteBody.embedded || !spriteBody.touching.none;
+    if (overlapping) {
+      this.connectionBufferTime += delta;
+    } else {
       this.connectionBufferTime = 0;
-      this.hasBeenConnected = false;
+      if (this.hasBeenConnected) {
+        eventEmitter.emit("CLOSE_PEER_CALL", this.playerId);
+        this.hasBeenConnected = false;
+        this.lastVolume = -1;
+      }
     }
   }
   destroy(fromScene?: boolean) {
