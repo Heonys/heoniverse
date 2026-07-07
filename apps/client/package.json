@@ -38,11 +38,9 @@
     "react-joystick-component": "^6.2.1",
     "react-redux": "^9.2.0",
     "react-rnd": "^10.5.2",
-    "react-slick": "^0.30.3",
     "react-tooltip": "^5.29.1",
     "react-webcam": "^7.2.0",
     "roughjs": "^4.6.6",
-    "slick-carousel": "^1.8.1",
     "tailwind-merge": "^3.0.2",
     "zod": "^4.0.5"
   },
@@ -50,7 +48,6 @@
     "@tailwindcss/vite": "^4.0.17",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "@types/react-slick": "^0.23.13",
     "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.0.17"
   }

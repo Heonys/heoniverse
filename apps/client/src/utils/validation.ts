@@ -7,7 +7,6 @@ export const FormSchema = z.object({
     .refine((value) => value === import.meta.env.VITE_ADMIN_ID || value.length <= 6, {
       message: "최대 6글자까지 입력가능 합니다.",
     }),
-  message: z.string().optional(),
 });
 
 export const CreateFormSchema = z.object({

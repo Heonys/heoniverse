@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import { Network } from "@/service";
 import type { RestoreData } from "@/service";
-import { store } from "@/stores";
-import { setRoomJoined } from "@/stores/roomSlice";
 
 export class Preloader extends Phaser.Scene {
   private preloadComplete = false;
@@ -149,13 +147,13 @@ export class Preloader extends Phaser.Scene {
     });
   }
 
-  launchGame(restore?: RestoreData) {
+  // 신규 입장(EntryScreen)·자동 재접속 공용 진입점 — 프로필(닉네임·아바타·좌표)을 씬에 넘긴다
+  launchGame(profile?: RestoreData) {
     // 자동 재접속은 에셋 로딩보다 먼저 끝날 수 있으므로, 아직이면 로딩 완료 후 실행한다
     if (!this.preloadComplete) {
-      this.load.once("complete", () => this.launchGame(restore));
+      this.load.once("complete", () => this.launchGame(profile));
       return;
     }
-    this.scene.launch("game", { network: this.network, restore });
-    store.dispatch(setRoomJoined(true));
+    this.scene.launch("game", { network: this.network, profile });
   }
 }

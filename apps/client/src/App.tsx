@@ -8,7 +8,7 @@ import {
   ReconnectingScreen,
   NpcChatBar,
 } from "@/components";
-import { LoginDialog, SelectMenuDialog } from "@/components/dialog";
+import { EntryScreen } from "@/components/entry";
 import { ComputerDialog } from "@/components/computer";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { Condition } from "@/common";
@@ -25,7 +25,6 @@ const WhiteboardDialog = lazy(() =>
 
 function App() {
   const dispatch = useAppDispatch();
-  const roomJoined = useAppSelector((state) => state.room.roomJoined);
   const reconnecting = useAppSelector((state) => state.room.reconnecting);
   const loggedIn = useAppSelector((state) => state.user.loggedIn);
   const computerDialogOpen = useAppSelector((state) => state.computer.isOpenDialog);
@@ -45,17 +44,16 @@ function App() {
         <HelperGroups />
       </Condition>
 
+      {/* pre-join: 방·캐릭터·닉네임을 EntryScreen에서 모두 정하고, join 완료(loggedIn) 시 인게임 */}
       <Condition
         condition={reconnecting}
         fallback={
-          <Condition condition={roomJoined} fallback={<SelectMenuDialog />}>
-            <Condition condition={loggedIn} fallback={<LoginDialog />}>
-              <IphoneApp />
-              <GameHUD />
-              <GameNoti />
-              <Condition condition={npcTalking}>
-                <NpcChatBar />
-              </Condition>
+          <Condition condition={loggedIn} fallback={<EntryScreen />}>
+            <IphoneApp />
+            <GameHUD />
+            <GameNoti />
+            <Condition condition={npcTalking}>
+              <NpcChatBar />
             </Condition>
           </Condition>
         }

@@ -1,5 +1,4 @@
 import {
-  CustomRoomPassword,
   ControlGuide,
   LeaveRoom,
   JoinedUsers,
@@ -7,12 +6,13 @@ import {
   ComputerGuide,
   WhiteboardGuide,
   UserMetrics,
+  WelcomeModal,
 } from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { show, hide } from "@/stores/modalSlice";
 
 export const modalTemplates = {
-  CustomRoomPassword,
+  Welcome: WelcomeModal,
   ControlGuide,
   LeaveRoom,
   JoinedUsers,

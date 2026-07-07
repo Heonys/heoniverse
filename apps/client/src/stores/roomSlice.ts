@@ -19,7 +19,6 @@ const roomSlice = createSlice({
     // 부팅 시 저장된 세션으로 자동 재접속을 시도하는 동안 true — 그 사이 메뉴가 깜빡이지 않게 오버레이를 띄운다.
     // 세션이 있으면 첫 렌더부터 오버레이가 보이도록 초기값을 세션 유무로 정한다.
     reconnecting: loadSession() !== null,
-    roomJoined: false,
     id: "",
     name: "",
     description: "",
@@ -41,9 +40,6 @@ const roomSlice = createSlice({
     },
     setLobbyWaking: (state, action: PayloadAction<boolean>) => {
       state.lobbyWaking = action.payload;
-    },
-    setRoomJoined: (state, action: PayloadAction<boolean>) => {
-      state.roomJoined = action.payload;
     },
     setReconnecting: (state, action: PayloadAction<boolean>) => {
       state.reconnecting = action.payload;
@@ -92,7 +88,6 @@ export const {
   setLobbyJoined,
   setLobbyStatus,
   setLobbyWaking,
-  setRoomJoined,
   setReconnecting,
   setJoinedRoomData,
   setAvailableRoom,

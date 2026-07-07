@@ -44,7 +44,7 @@ export class Game extends Phaser.Scene {
     super("game");
   }
 
-  create({ network, restore }: { network: Network; restore?: RestoreData }) {
+  create({ network, profile }: { network: Network; profile?: RestoreData }) {
     this.network = network;
     this.cursor = {
       ...this.input.keyboard!.createCursorKeys(),
@@ -55,11 +55,11 @@ export class Game extends Phaser.Scene {
     this.registerEventHandler();
     this.registerKeyHandler();
 
-    // 재접속이면 이전 좌표/아바타 그대로, 아니면 스폰을 살짝 분산한다
+    // 재접속이면 이전 좌표 그대로, 신규 입장이면 스폰을 살짝 분산한다
     // (모두 같은 지점에 스폰되면 입장 즉시 근접 자동연결이 걸린다)
-    const spawnX = restore ? restore.x : START_POINT[0] + Phaser.Math.Between(-48, 48);
-    const spawnY = restore ? restore.y : START_POINT[1] + Phaser.Math.Between(-96, 96);
-    const avatar = restore ? restore.avatar : "suit";
+    const spawnX = profile?.x ?? START_POINT[0] + Phaser.Math.Between(-48, 48);
+    const spawnY = profile?.y ?? START_POINT[1] + Phaser.Math.Between(-96, 96);
+    const avatar = profile?.avatar ?? "suit";
 
     this.localPlayer = new LocalPlayer(this, network.sessionId, spawnX, spawnY, avatar);
     this.playerSelector = new PlayerSelector(this, spawnX, spawnY, 16, 16);
@@ -194,19 +194,21 @@ export class Game extends Phaser.Scene {
     wallGroups.forEach((group) => this.physics.add.collider(this.ball!, group));
     this.physics.add.collider(this.ball, groundLayer);
 
-    // 자동 재접속이면 로그인 UI를 거치지 않으므로 LoginDialog가 하던 마무리를 여기서 재현한다
-    if (restore) this.applyRestoredSession(restore);
+    // 신규 입장(EntryScreen)·자동 재접속 모두 프로필을 들고 들어온다 — 여기서 로그인 마무리
+    if (profile) this.applyProfile(profile);
   }
 
-  // 저장된 프로필로 로그인 없이 곧장 플레이 가능한 상태로 만든다 (LoginDialog.onSubmit 꼬리와 동일)
-  private applyRestoredSession(restore: RestoreData) {
-    this.localPlayer.setPlayerName(restore.nickname);
-    this.localPlayer.setPlayerAvatar(restore.avatar);
+  // 프로필(닉네임·아바타)로 곧장 플레이 가능한 상태로 만든다 (신규 입장·재접속 공용)
+  private applyProfile(profile: RestoreData) {
+    this.localPlayer.setPlayerName(profile.nickname);
+    this.localPlayer.setPlayerAvatar(profile.avatar);
     this.localPlayer.readyToConnect = true;
     this.network.readyToConnect();
     this.enableKeys();
     store.dispatch(setLoggedIn(true));
     store.dispatch(setReconnecting(false));
+    // 이 시점의 방·프로필 스냅샷을 저장해 새로고침 시 자동 재접속에 사용 (오프라인 모드는 내부에서 무시)
+    this.network.persistSession();
   }
 
   setupCamera() {

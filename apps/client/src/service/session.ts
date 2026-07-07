@@ -14,8 +14,10 @@ export type ReconnectSession = {
   y: number;
 };
 
-// 씬 복원에 필요한 프로필/좌표만 추린 것 (launchGame → Game.create로 전달)
-export type RestoreData = Pick<ReconnectSession, "x" | "y" | "avatar" | "nickname">;
+// 씬 진입에 필요한 프로필 (launchGame → Game.create로 전달)
+// 좌표는 재접속에만 있다 — 신규 입장은 스폰 지점을 분산해서 정한다
+export type RestoreData = Pick<ReconnectSession, "avatar" | "nickname"> &
+  Partial<Pick<ReconnectSession, "x" | "y">>;
 
 const SESSION_KEY = "heoniverse:reconnect";
 
