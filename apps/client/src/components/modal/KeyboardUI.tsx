@@ -50,7 +50,7 @@ type KbdProps = {
 export const Kbd = ({ children, onClick }: KbdProps) => {
   return (
     <div
-      className="flex items-center justify-center rounded-[4px] border-[0.8px] border-b-2 border-b-[color(srgb_0.093811_0.0938339_0.105878/_0.2)] bg-[oklch(98%_0_0)] px-2 py-0.5 text-xs font-semibold text-[oklch(0.21_0.006_285.885)]"
+      className="flex h-[26px] min-w-[26px] items-center justify-center rounded-md border border-b-[2.5px] border-white/[0.14] bg-[#101115] px-2 text-xs font-semibold text-[#d6d8de]"
       onClick={onClick}
     >
       {children}

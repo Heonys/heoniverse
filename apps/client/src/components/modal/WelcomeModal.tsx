@@ -30,8 +30,8 @@ export const WelcomeModal = ({ nickname }: Props) => {
         </div>
         <div className="font-retro text-[13.5px] leading-[1.75] tracking-[0.2px] text-[#e8eaf0]">
           어서 와, {nickname}. 여긴 Heoniverse —{" "}
-          <b className="text-voice font-normal">가까이 가면 목소리가 들리는</b> 곳이지. 천천히
-          둘러보라구.
+          <b className="text-voice font-normal"> 자연스럽게 대화가 시작되는</b>{" "}
+          곳이야. 천천히 둘러보라구.
         </div>
         <div className="animate-retro-blink font-retro text-accent-hi absolute bottom-2 right-[11px] text-xs">
           ▼
@@ -42,7 +42,7 @@ export const WelcomeModal = ({ nickname }: Props) => {
         onClick={hideModal}
         className="bg-accent mx-auto mt-[17px] flex h-11 w-fit cursor-pointer items-center justify-center rounded-[13px] px-[30px] text-sm font-semibold text-white shadow-[0_6px_14px_-11px_rgba(86,101,214,0.36),inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:brightness-[1.06] active:translate-y-px"
       >
-        둘러보기 시작
+        둘러보기
       </button>
       <div className="text-text-faint mt-3 text-center text-[11px]">
         막히면 우하단 &quot;조작 가이드&quot;를 눌러봐

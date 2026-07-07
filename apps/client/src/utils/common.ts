@@ -132,3 +132,14 @@ export function shuffle(array: any[]) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+
+// 인게임 플로팅 버튼(우하단 헬퍼·아이폰 버튼 공용).
+// 패널(HUD·모달)은 다크, 맵 위에 떠 있는 액션 버튼은 밝게 — 어두운 맵에서 확실히 눈에 띄도록.
+// 활성 토글은 아이콘만 인디고로 물들인다.
+export function helperButtonClass(active = false) {
+  return [
+    "size-10 rounded-xl border-black/10 bg-white/95 shadow-[0_6px_16px_-9px_rgba(0,0,0,0.6)] backdrop-blur-md",
+    "hover:bg-white",
+    active ? "text-accent" : "text-[#33353d] hover:text-black",
+  ].join(" ");
+}

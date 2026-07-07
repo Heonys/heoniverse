@@ -4,7 +4,7 @@ import {
   HelperGroups,
   VirtualJoystick,
   GameHUD,
-  GameNoti,
+  MinimapFrame,
   ReconnectingScreen,
   NpcChatBar,
 } from "@/components";
@@ -51,7 +51,7 @@ function App() {
           <Condition condition={loggedIn} fallback={<EntryScreen />}>
             <IphoneApp />
             <GameHUD />
-            <GameNoti />
+            <MinimapFrame />
             <Condition condition={npcTalking}>
               <NpcChatBar />
             </Condition>

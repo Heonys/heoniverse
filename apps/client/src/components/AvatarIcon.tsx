@@ -16,7 +16,7 @@ export const AvatarIcon = ({ texture, status, className }: Props) => {
   return (
     <div
       className={twMerge(
-        "relative flex size-[38px] items-center justify-center rounded-full bg-[#1e1f23] p-1.5",
+        "bg-surface relative flex size-[38px] items-center justify-center rounded-xl border border-white/[0.07] p-1.5",
         className,
       )}
     >

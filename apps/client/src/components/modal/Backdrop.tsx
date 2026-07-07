@@ -36,7 +36,8 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
               exit={{ opacity: 0, y: 8 }}
               onClick={(e) => e.stopPropagation()}
               className={cn(
-                "w-full max-w-md rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-3xl",
+                "from-panel-top to-panel-bot w-full max-w-md rounded-[20px] border border-white/10 bg-gradient-to-b p-6",
+                "shadow-[0_30px_70px_-20px_rgba(10,20,40,0.75),inset_0_1px_0_rgba(255,255,255,0.06)]",
                 className,
               )}
             >

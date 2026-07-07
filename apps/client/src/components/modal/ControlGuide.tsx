@@ -1,55 +1,41 @@
+import { PropsWithChildren } from "react";
 import { Backdrop } from "./Backdrop";
 import { Kbd } from "./KeyboardUI";
 
 export const ControlGuide = () => {
   return (
-    <Backdrop className="max-w-lg">
-      <div className="flex w-full select-none flex-col items-center gap-5">
-        <div className="flex w-full flex-col space-y-1.5 text-left">
-          <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
-            Control Guide
-          </h2>
-          <p className="text-sm text-[#c2c2c2]">기본 조작 안내</p>
+    <Backdrop className="max-w-[440px]">
+      <div className="w-full select-none">
+        <h2 className="text-[17px] font-semibold tracking-[-0.01em] text-white">조작 가이드</h2>
+
+        <div className="mt-4">
+          <GuideRow keys={["W", "A", "S", "D"]}>이동 — 방향키도 돼요</GuideRow>
+          <GuideRow keys={["Shift"]}>달리기</GuideRow>
+          <GuideRow keys={["E"]}>의자에 앉기</GuideRow>
+          <GuideRow keys={["R"]}>컴퓨터·화이트보드·NPC 사용하기</GuideRow>
+          <GuideRow keys={["Space"]}>공 차기</GuideRow>
+          <GuideRow keys={["Enter"]}>채팅</GuideRow>
+          <GuideRow keys={["G"]}>감정 표현</GuideRow>
+          <GuideRow keys={["Esc"]}>창 닫기</GuideRow>
         </div>
-        <div className="flex flex-col gap-2 p-2 text-xs text-[#c2c2c2]">
-          <div className="flex items-center gap-0.5">
-            <Kbd>W</Kbd>
-            <Kbd>A</Kbd>
-            <Kbd>S</Kbd>
-            <Kbd>D</Kbd>
-            <div className="ml-1">또는 방향키로 캐릭터 조작</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Kbd>E</Kbd>
-            <div>의자 오브젝트와 상호작용</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Kbd>R</Kbd>
-            <div>컴퓨터, 화이트보드 오브젝트와 상호작용</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Kbd>Space</Kbd>
-            <div>캐릭터 펀치 애니메이션</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Kbd>Enter</Kbd>
-            <div>스마트폰 채팅창 열기</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Kbd>Esc</Kbd>
-            <div>스마트폰 또는 팝업창 닫기</div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 p-2 pl-4 text-sm text-[#c2c2c2]">
-          <ul className="list-inside list-disc space-y-1">
-            <li>거리 기반으로 플레이어간 카메라·마이크 자동 연결</li>
-            <li>플레이어간 전화, 메시지를 제공하는 스마트폰 UI 지원</li>
-            <li>컴퓨터 오브젝트를 통한 사용자 화면공유 지원</li>
-            <li>화이트보드 오브젝트를 통한 실시간 아이디어 공유 가능</li>
-            <li>하단 메뉴를 통해 미니맵 및 조이스틱 등의 편의기능 활성화 가능</li>
-          </ul>
-        </div>
+
+        {/* <div className="text-text-faint mt-3.5 border-t border-white/[0.06] pt-3 text-[11.5px] leading-relaxed">
+          컴퓨터·화이트보드·NPC 곁에 서면 사용할 수 있는 키가 머리 위에 떠요.
+        </div> */}
       </div>
     </Backdrop>
+  );
+};
+
+const GuideRow = ({ keys, children }: PropsWithChildren<{ keys: string[] }>) => {
+  return (
+    <div className="flex items-center gap-3.5 py-1.5">
+      <div className="flex w-32 flex-none gap-1">
+        {keys.map((key) => (
+          <Kbd key={key}>{key}</Kbd>
+        ))}
+      </div>
+      <div className="text-text-dim text-[12.5px]">{children}</div>
+    </div>
   );
 };

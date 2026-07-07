@@ -21,7 +21,8 @@ const initialState: UserState = {
   userName: "",
   loggedIn: false,
   otherPlayersName: {},
-  showJoystick: false,
+  // 모바일은 조이스틱이 기본 표시 (헬퍼 토글은 모바일 전용, 데스크탑에선 렌더 자체가 안 됨)
+  showJoystick: true,
   showMinimap: false,
   mediaConnected: false,
   videoEnabled: true,

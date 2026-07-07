@@ -14,6 +14,16 @@ import { setMicEnabled, setVideoEnabled } from "@/stores/userSlice";
 import { eventEmitter } from "@/game/events";
 import { EMOTES } from "@heoniverse/shared";
 
+// 미디어 토글 공통 룩 — 켜짐 = 인디고, 꺼짐 = 다크 고스트
+const toggleClass = (active: boolean) =>
+  cn(
+    "rounded-[11px] border shadow-none transition-all",
+    isBrowser ? "size-8.5" : "size-7.5",
+    active
+      ? "border-transparent bg-accent text-white shadow-[0_4px_12px_-6px_rgba(86,101,214,0.36),inset_0_1px_0_rgba(255,255,255,0.14)]"
+      : "bg-surface-2 text-text-faint hover:text-app-text border-white/[0.07] hover:bg-[#24252b]",
+  );
+
 export const GameHUD = () => {
   const { gameScene, network } = useGame();
   const dispatch = useAppDispatch();
@@ -24,6 +34,8 @@ export const GameHUD = () => {
   const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
   const [frame, setFrame] = useState(0);
   const [emoteWheelOpen, setEmoteWheelOpen] = useState(false);
+  // 연결 안내 말풍선 — 연결 버튼 위에 붙어서, 켜거나 닫으면 사라진다 (구 GameNoti 토스트 대체)
+  const [showLinkHint, setShowLinkHint] = useState(true);
   const videoRef = useRef<Webcam>(null);
 
   const sendEmote = (emote: string) => {
@@ -133,8 +145,8 @@ export const GameHUD = () => {
     <>
       <div
         className={cn(
-          "fixed bottom-2 left-1/2 flex -translate-x-1/2 select-none items-center rounded-full",
-          "border-2 border-white/30 bg-slate-800 px-3 py-2",
+          "from-panel-top to-panel-bot fixed bottom-2 left-1/2 flex -translate-x-1/2 select-none items-center rounded-2xl",
+          "border border-white/10 bg-gradient-to-b px-3 py-2 shadow-[0_14px_34px_-14px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.06)]",
           isBrowser ? "w-[440px] gap-1" : "w-[375px]",
         )}
       >
@@ -144,13 +156,17 @@ export const GameHUD = () => {
           <div className="flex min-w-[66px] flex-col gap-0.5 text-xs text-white">
             <div className="text-sm font-medium">{userName}</div>
             <div
-              className="flex cursor-pointer items-center gap-1 text-[#c2c2c2]"
+              className="text-text-dim hover:text-app-text group flex cursor-pointer items-center gap-1 transition-colors"
               onClick={() => {
                 gameScene.localPlayer.togglePlayerStatus();
               }}
             >
               <div className="capitalize">{status}</div>
-              <AppIcon iconName="chevron-right" size={13} />
+              <AppIcon
+                iconName="chevron-right"
+                size={13}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
             </div>
           </div>
         </div>
@@ -160,12 +176,12 @@ export const GameHUD = () => {
           style={{ fontFamily: "Retro" }}
         >
           <div className="flex items-center justify-center gap-1">
-            <AppIcon iconName="room" size={16} />
+            <AppIcon iconName="room" size={16} className="text-accent-hi" />
             <div>{name}</div>
           </div>
-          <div className="flex items-center justify-center gap-0.5">
+          <div className="text-text-faint flex items-center justify-center gap-0.5 text-[11px]">
             <div className="flex w-8 items-center gap-1">
-              <AppIcon iconName="people" size={14} />
+              <AppIcon iconName="people" size={13} />
               <NumberFlow value={users} />
             </div>
             <div className="flex items-center gap-1">
@@ -181,44 +197,49 @@ export const GameHUD = () => {
             <TooltipButton
               id="emote"
               onClick={() => setEmoteWheelOpen((prev) => !prev)}
-              className={cn(
-                "transition-all",
-                "size-7.5",
-                emoteWheelOpen ? "bg-slate-500/70" : "bg-white/90",
-              )}
+              className={toggleClass(emoteWheelOpen)}
             >
               <div className="text-lg leading-none">😀</div>
             </TooltipButton>
           </Condition>
 
-          <TooltipButton
-            id="media-enabled"
-            tooltip={
-              isBrowser && (mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근")
-            }
-            onClick={() => toggleMedia(mediaConnected)}
-            className={cn(
-              "transition-all",
-              isBrowser ? "size-8.5" : "size-7.5",
-              mediaConnected ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
-            )}
-          >
-            <AppIcon
-              iconName={mediaConnected ? "link-on" : "link-off"}
-              size={isBrowser ? 18 : 16}
-            />
-          </TooltipButton>
+          <div className="relative">
+            {/* 연결 안내 — 켜는 버튼 바로 위에 붙는 말풍선 */}
+            <Condition condition={isBrowser && showLinkHint && !mediaConnected}>
+              <div className="absolute bottom-[calc(100%+14px)] left-1/2 z-[45] w-max -translate-x-1/2">
+                <div className="animate-hint-bob relative rounded-[11px] bg-white py-2 pl-3 pr-7 text-xs font-semibold leading-normal text-[#16171c] shadow-[0_10px_26px_-10px_rgba(0,0,0,0.55)] after:absolute after:-bottom-[5px] after:left-1/2 after:size-2.5 after:-translate-x-1/2 after:rotate-45 after:bg-white after:content-['']">
+                  음성·영상을 켜두면, 가까이 갔을 때 바로 대화가 시작돼요
+                  <button
+                    className="absolute right-1.5 top-1.5 grid size-4 cursor-pointer place-items-center rounded text-black/40 hover:text-black"
+                    onClick={() => setShowLinkHint(false)}
+                  >
+                    <AppIcon iconName="x-mark" size={13} />
+                  </button>
+                </div>
+              </div>
+            </Condition>
+            <TooltipButton
+              id="media-enabled"
+              tooltip={
+                isBrowser &&
+                (mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근")
+              }
+              onClick={() => toggleMedia(mediaConnected)}
+              className={toggleClass(mediaConnected)}
+            >
+              <AppIcon
+                iconName={mediaConnected ? "link-on" : "link-off"}
+                size={isBrowser ? 18 : 16}
+              />
+            </TooltipButton>
+          </div>
 
           <TooltipButton
             id="camera-enabled"
             disabled={!mediaConnected}
             tooltip={isBrowser && `카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleVideo(videoEnabled)}
-            className={cn(
-              "transition-all",
-              isBrowser ? "size-8.5" : "size-7.5",
-              videoEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
-            )}
+            className={toggleClass(videoEnabled)}
           >
             <AppIcon
               iconName={videoEnabled ? "video-on" : "video-off"}
@@ -231,11 +252,7 @@ export const GameHUD = () => {
             disabled={!mediaConnected}
             tooltip={isBrowser && `마이크 ${micEnabled ? "비활성화" : "활성화"}`}
             onClick={() => toggleMic(micEnabled)}
-            className={cn(
-              "transition-all",
-              isBrowser ? "size-8.5" : "size-7.5",
-              micEnabled ? "bg-slate-500/70 text-white" : "bg-white/90 text-black",
-            )}
+            className={toggleClass(micEnabled)}
           >
             <AppIcon iconName={micEnabled ? "mic-on" : "mic-off"} size={isBrowser ? 18 : 16} />
           </TooltipButton>
@@ -265,7 +282,7 @@ export const GameHUD = () => {
                   }}
                 >
                   <button
-                    className="flex size-12 items-center justify-center rounded-full border border-white/20 bg-slate-800 text-2xl shadow-lg transition-transform hover:scale-110"
+                    className="from-panel-top to-panel-bot hover:border-accent flex size-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-gradient-to-b text-2xl shadow-lg transition-all hover:scale-110 hover:shadow-[0_0_0_3px_rgba(86,101,214,0.36)]"
                     onClick={() => sendEmote(emote)}
                   >
                     {emote}
