@@ -52,7 +52,7 @@ import { BsChatFill } from "react-icons/bs";
 import { IoBatteryFullOutline } from "react-icons/io5";
 import { FaSignal } from "react-icons/fa";
 import { HiMapPin } from "react-icons/hi2";
-import { IoNotificationsSharp, IoNotificationsOffSharp } from "react-icons/io5";
+import { IoNotificationsSharp, IoNotificationsOffSharp, IoCheckmarkSharp } from "react-icons/io5";
 import { FaVideo, FaVideoSlash } from "react-icons/fa6";
 import { IoMdMic, IoMdMicOff } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
@@ -144,6 +144,7 @@ const IconMap = {
   ["video-off"]: FaVideoSlash,
   ["noti-on"]: IoNotificationsSharp,
   ["noti-off"]: IoNotificationsOffSharp,
+  ["check"]: IoCheckmarkSharp,
   ["user-cirlce"]: FaUserCircle,
   ["link-on"]: FaLink,
   ["link-off"]: FaLinkSlash,

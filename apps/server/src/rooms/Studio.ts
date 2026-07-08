@@ -14,6 +14,7 @@ import {
   WHITEBOARD_ELEMENTS_MAX,
   WORLD_BOUNDS,
   EMOTES,
+  NUDGE_COOLDOWN_MS,
 } from "@heoniverse/shared";
 import {
   PlayerUpdateCommand,
@@ -30,6 +31,8 @@ export class Studio extends Room<StudioState> {
   name!: string;
   description!: string;
   password?: string;
+  // 콕 찌르기 쿨다운: "보낸이>대상" 쌍별 마지막 전송 시각 (방과 수명이 같은 인메모리)
+  private lastNudgeAt = new Map<string, number>();
 
   async onCreate(options: IRoom) {
     this.name = options.name;
@@ -156,6 +159,22 @@ export class Studio extends Room<StudioState> {
       }
     });
 
+    // 콕 찌르기: 대상 한 명에게만 릴레이. 이름은 클라 페이로드 대신 서버 state에서(스푸핑 방지),
+    // 같은 대상 연타는 쿨다운으로 조용히 무시한다.
+    this.onMessage(Messages.SEND_NUDGE, (client, targetId) => {
+      if (typeof targetId !== "string" || targetId === client.sessionId) return;
+      const target = this.clients.find((c) => c.sessionId === targetId);
+      if (!target) return;
+
+      const key = `${client.sessionId}>${targetId}`;
+      const now = Date.now();
+      if (now - (this.lastNudgeAt.get(key) ?? 0) < NUDGE_COOLDOWN_MS) return;
+      this.lastNudgeAt.set(key, now);
+
+      const sender = this.state.players.get(client.sessionId);
+      target.send(Messages.NUDGED, { sessionId: client.sessionId, name: sender?.name ?? "" });
+    });
+
     this.onMessage(Messages.SCREEN_SHARING, (client, payload) => {
       if (!payload || typeof payload.shared !== "boolean") return;
       const computer = this.state.computers.get(payload.computerId);
@@ -278,7 +297,7 @@ export class Studio extends Room<StudioState> {
   }
 
   async onLeave(client: Client, consented: boolean) {
-    // 연결이 끊기면 AI NPC 잠금은 즉시 해제한다 — 재접속 유예(30초) 동안 다른 사람이 못 쓰면 안 되므로.
+    // 연결이 끊기면 AI NPC 잠금은 즉시 해제한다 — 재접속 유예(5초) 동안 다른 사람이 못 쓰면 안 되므로.
     if (this.state.npcTalkingUser === client.sessionId) {
       this.state.npcTalkingUser = "";
     }
@@ -290,9 +309,12 @@ export class Studio extends Room<StudioState> {
 
     // 예기치 않은 끊김(새로고침·네트워크 순단)이면 잠시 자리를 비워두고 재접속을 기다린다.
     // 유예시간 안에 돌아오면 플레이어·컴퓨터/화이트보드 멤버십이 그대로 유지됨.
+    // 탭 종료도 같은 경로(consented=false)로 들어오지만 서버는 둘을 구분할 수 없다. 새로고침 재접속은
+    // 이미 깨어 있는 서버로 부팅 즉시(생성자에서) 시도돼 보통 1~2초면 끝나므로, 유예를 짧게(5초) 둬
+    // 탭 종료 시 유령 플레이어가 오래 남지 않게 한다. (유예를 넘긴 새로고침은 메뉴로 폴백)
     if (!consented) {
       try {
-        await this.allowReconnection(client, 30);
+        await this.allowReconnection(client, 5);
         return;
       } catch {
         // 유예시간 초과 → 아래 정리 진행
@@ -316,6 +338,9 @@ export class Studio extends Room<StudioState> {
       if (whiteboard.connectedUser.has(clientId)) {
         whiteboard.connectedUser.delete(clientId);
       }
+    });
+    this.lastNudgeAt.forEach((_, key) => {
+      if (key.includes(clientId)) this.lastNudgeAt.delete(key);
     });
   }
 

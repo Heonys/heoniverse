@@ -296,6 +296,10 @@ export class Network {
     this.sendMessage("SEND_ANSWER_CALL", peerId);
   }
 
+  sendNudge(peerId: string) {
+    this.sendMessage("SEND_NUDGE", peerId);
+  }
+
   createComputer(id: string) {
     this.sendMessage("CREATE_COMPUTER", id);
   }
@@ -471,6 +475,10 @@ export class Network {
 
     this.onMessage(Messages.SCREEN_SHARING_RESPONSE, (receiverId) => {
       this.webRTC?.callScreenShareToNewUser(receiverId);
+    });
+
+    this.onMessage(Messages.NUDGED, (payload) => {
+      eventEmitter.emit("NUDGED", payload);
     });
 
     this.onMessage(Messages.UPDATED_ELEMENTS, (payload) => {

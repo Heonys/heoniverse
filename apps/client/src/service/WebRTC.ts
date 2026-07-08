@@ -131,6 +131,9 @@ export class WebRTC {
     if (this.peersMap.has(peerId)) return false;
 
     const call = this.peer.call(peerId, this.videoStream!, { metadata: { type: callType } });
+    // 피어가 아직 시그널링 서버에 완전히 open 되기 전이면 call이 undefined로 온다.
+    // 여기서 막지 않으면 아래 call.on(...)에서 터진다 — false 반환 시 다음 프레임에 재시도된다.
+    if (!call) return false;
     this.peersMap.set(peerId, call);
     if (callType === "direct") this.activeCallPeer = peerId;
 
@@ -228,6 +231,11 @@ export class WebRTC {
       store.dispatch(setMediaConnected(true));
       this.network.updateMediaConnect(true);
       this.getLocalPlayer().mediaConnect = true;
+      // 미디어 권한을 허용한 직후가 알림(콕 찌르기 수신) 권한을 묻기 가장 자연스러운 순간.
+      // 거부돼도 인앱 토스트는 동작하므로 fire-and-forget.
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
       return true;
     } catch (error) {
       // 권한 거부·비보안 컨텍스트 등 실패 원인을 남긴다 (배포 환경 디버깅용)

@@ -30,8 +30,8 @@ export const WelcomeModal = ({ nickname }: Props) => {
         </div>
         <div className="font-retro text-[13.5px] leading-[1.75] tracking-[0.2px] text-[#e8eaf0]">
           어서 와, {nickname}. 여긴 Heoniverse —{" "}
-          <b className="text-voice font-normal"> 자연스럽게 대화가 시작되는</b>{" "}
-          곳이야. 천천히 둘러보라구.
+          <b className="text-voice font-normal"> 자연스럽게 대화가 시작되는</b> 곳이야. 천천히
+          둘러보라구.
         </div>
         <div className="animate-retro-blink font-retro text-accent-hi absolute bottom-2 right-[11px] text-xs">
           ▼

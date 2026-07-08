@@ -34,6 +34,8 @@ export enum Messages {
   NPC_USER_SAID = "NPC_USER_SAID",
   KICK_BALL = "KICK_BALL",
   UPDATE_BALL = "UPDATE_BALL",
+  SEND_NUDGE = "SEND_NUDGE",
+  NUDGED = "NUDGED",
 }
 
 export type MessagePayloadMap = {
@@ -82,4 +84,7 @@ export type MessagePayloadMap = {
   // 공유 물리 공: KICK은 소유권 주장(=찬 사람이 주인), UPDATE는 주인이 위치를 스트리밍
   KICK_BALL: { x: number; y: number };
   UPDATE_BALL: { x: number; y: number };
+  // 콕 찌르기: SEND는 대상 sessionId, NUDGED의 이름은 서버 state에서 채운다(스푸핑 방지)
+  SEND_NUDGE: string;
+  NUDGED: { sessionId: string; name: string };
 };

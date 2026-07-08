@@ -77,6 +77,18 @@ export class Game extends Phaser.Scene {
     store.dispatch(setNpcBusyBy(npcUser));
     this.npc.setBusy(npcUser !== "" && npcUser !== this.localPlayer.playerId);
 
+    // 이미 방에 있던 플레이어를 초기 state에서 직접 스폰한다.
+    // join 직후 100ms 뒤 발사되는 OTHER_PLAYER_JOINED는 이 씬의 핸들러 등록 전에
+    // 지나갈 수 있고(유실되면 이후 UPDATED도 전부 버려져 영영 안 보인다), playerJoined가
+    // 멱등이라 늦게 도착한 emit과 겹쳐도 무해하다.
+    // players는 중첩 스키마라 입장 직후엔 아직 디코드 전일 수 있다(undefined) → 옵셔널 체이닝.
+    // 이 경우 스냅샷은 건너뛰지만, create가 이미 리스너를 등록했으니 100ms emit이 대신 잡는다.
+    network.room?.state.players?.forEach((player, sessionId) => {
+      if (sessionId === network.sessionId) return;
+      if (player.name === "") return; // 이름 미설정 유저는 listen("name") 경로가 스폰
+      this.playerJoined(sessionId, player, false);
+    });
+
     this.setupCamera();
     this.disableKeys();
 
@@ -520,7 +532,8 @@ export class Game extends Phaser.Scene {
     down.reset();
   }
 
-  playerJoined(id: string, player: IPlayer) {
+  // announce=false는 입장 시 이미 있던 플레이어의 스냅샷 스폰용 — "입장" 메시지를 생략한다
+  playerJoined(id: string, player: IPlayer, announce = true) {
     if (this.otherPlayersMap.has(id)) return;
 
     const { name, x, y } = player;
@@ -529,7 +542,7 @@ export class Game extends Phaser.Scene {
     this.otherPlayerOverlapZone.add(otherPlayer.playerOverlap);
     this.otherPlayersMap.set(id, otherPlayer);
     store.dispatch(addPlayerName({ id, name }));
-    store.dispatch(pushJoinedMessage({ id, name }));
+    if (announce) store.dispatch(pushJoinedMessage({ id, name }));
     otherPlayer.updatePlayer(player);
   }
 

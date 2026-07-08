@@ -33,6 +33,8 @@ type EventsPayloadMap = {
   TOGGLE_EMOTE_WHEEL: void;
   // 공유 물리 공의 서버 상태 변화(위치·주인) — Game 씬이 받아 공 스프라이트에 반영
   BALL_CHANGED: { x: number; y: number; ownerId: string };
+  // 다른 유저가 나를 콕 찌름 — NudgeToast가 받아 인앱 토스트/데스크탑 알림으로 분기
+  NUDGED: { sessionId: string; name: string };
 };
 
 class PhaserEventEmitter<EventsMap> {

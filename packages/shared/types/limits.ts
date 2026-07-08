@@ -14,3 +14,6 @@ export const BALL_SPAWN = { x: 1600, y: 1200 };
 
 // 이모트 허용 셋 (클라 피커 + 서버 검증 공용)
 export const EMOTES = ["👍", "❤️", "😂", "🎉", "👏", "😮"] as const;
+
+// 콕 찌르기 쿨다운 — 보낸이→대상 쌍 기준 (서버 게이트 + 클라 버튼 비활성 공용)
+export const NUDGE_COOLDOWN_MS = 30_000;

@@ -7,6 +7,7 @@ import {
   MinimapFrame,
   ReconnectingScreen,
   NpcChatBar,
+  NudgeToast,
 } from "@/components";
 import { EntryScreen } from "@/components/entry";
 import { ComputerDialog } from "@/components/computer";
@@ -52,6 +53,7 @@ function App() {
             <IphoneApp />
             <GameHUD />
             <MinimapFrame />
+            <NudgeToast />
             <Condition condition={npcTalking}>
               <NpcChatBar />
             </Condition>

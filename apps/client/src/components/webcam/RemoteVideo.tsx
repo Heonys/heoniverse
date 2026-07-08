@@ -4,8 +4,10 @@ import { AppIcon } from "@/icons";
 import { AvatarIcon } from "../AvatarIcon";
 import { Condition } from "@/common";
 import { Player } from "@/game/characters";
-import { Status } from "@heoniverse/shared";
+import { Status, NUDGE_COOLDOWN_MS } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
+import { useGame } from "@/hooks";
+import { cn } from "@/utils";
 
 type Props = {
   stream: MediaStream;
@@ -16,6 +18,18 @@ export const RemoteVideo = memo(({ stream, player }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { micEnabled, videoEnabled, playerName, playerTexture, playerStatus, playerId } = player;
   const [status, setStatus] = useState<Status>(playerStatus);
+  const { network } = useGame();
+  const [nudged, setNudged] = useState(false);
+  const nudgeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // 클릭 즉시 "보냈어요"로 바꾸고 서버 쿨다운만큼 비활성 (낙관적 피드백)
+  const handleNudge = () => {
+    network.sendNudge(playerId);
+    setNudged(true);
+    nudgeTimer.current = setTimeout(() => setNudged(false), NUDGE_COOLDOWN_MS);
+  };
+
+  useEffect(() => () => clearTimeout(nudgeTimer.current), []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -73,11 +87,22 @@ export const RemoteVideo = memo(({ stream, player }: Props) => {
         <div className="-translate-1/2 absolute left-1/2 top-1/2 flex flex-col items-center gap-2">
           <AvatarIcon texture={playerTexture} status={status} className="ring-2 ring-white/30" />
         </div>
-        <Condition condition={status !== "focused"}>
-          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5 rounded-lg border border-white/50 px-2 py-1 text-white/90">
-            <AppIcon iconName="noti-on" size={15} />
-            <button className="cursor-pointer text-xs outline-none">알림 보내기</button>
-          </div>
+        {/* 카메라·마이크 둘 다 끄고(=자리 비운 듯) 집중 상태가 아닐 때만 — 목소리로 대화 중인 사람은 제외 */}
+        <Condition condition={!micEnabled && status !== "focused"}>
+          <button
+            onClick={handleNudge}
+            disabled={nudged}
+            className={cn(
+              "absolute bottom-4 left-1/2 flex -translate-x-1/2 cursor-pointer items-center justify-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs outline-none transition active:scale-95 disabled:cursor-default",
+              // 보냄: 인디고 틴트 + 체크 + 문구 변경으로 눌렸음을 확실히 표시
+              nudged
+                ? "border-accent/60 bg-accent/30 text-white"
+                : "border-white/50 text-white/90 hover:bg-white/10",
+            )}
+          >
+            <AppIcon iconName={nudged ? "check" : "noti-on"} size={15} />
+            {nudged ? "보냈어요" : "알림 보내기"}
+          </button>
         </Condition>
       </Condition>
 

@@ -46,8 +46,10 @@ export class OtherPlayer extends Player {
       localPlayer.readyToStream &&
       this.playerId > localPlayer.playerId
     ) {
-      this.hasBeenConnected = true;
-      webRTC.peerCall(this.playerId, "proximity");
+      // 성공했을 때만 연결됨으로 마크 — 피어가 아직 안 열려 실패하면 다음 프레임에 재시도되게 flag를 남긴다
+      if (webRTC.peerCall(this.playerId, "proximity")) {
+        this.hasBeenConnected = true;
+      }
     } else if (
       this.hasBeenConnected &&
       (!this.mediaConnect || !localPlayer.mediaConnect || this.isCalling || localPlayer.isCalling)
