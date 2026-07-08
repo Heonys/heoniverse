@@ -170,6 +170,7 @@ export class OtherPlayer extends Player {
   }
   destroy(fromScene?: boolean) {
     this.playerContainer.destroy();
+    this.playerBubble.destroy(); // 별도 레이어로 뺀 말풍선도 함께 정리
     super.destroy(fromScene);
   }
 }

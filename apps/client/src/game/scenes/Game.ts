@@ -277,9 +277,15 @@ export class Game extends Phaser.Scene {
       createdAt: Date.now(),
     });
 
+    // 답이 오기 전까지 NPC 머리 위에 '생각 중' 애니메이션을 띄운다
+    this.npc.openThinkingBubble();
+
     getAIResponse(this.npcHistory).then((reply) => {
-      // 답이 오기 전에 대화가 끝났으면 버린다
-      if (!store.getState().ai.talking || !this.npc) return;
+      // 답이 오기 전에 대화가 끝났으면 '생각 중' 말풍선을 정리하고 버린다
+      if (!store.getState().ai.talking || !this.npc) {
+        this.npc?.closeBubble();
+        return;
+      }
       this.npcHistory.push({
         clientId: "ai-npc",
         author: "AI 도우미",

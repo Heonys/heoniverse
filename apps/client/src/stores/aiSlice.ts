@@ -38,6 +38,7 @@ export const endNpcTalk = (): AppThunk => (dispatch, getState) => {
   if (!getState().ai.talking) return;
   const game = phaserGame.scene.keys.game as Game;
   game.network.endNpcTalk();
+  game.npc?.closeBubble(); // 대기 중이던 '생각 중' 말풍선 즉시 정리
   game.enableKeys();
   dispatch(setTalking(false));
 };

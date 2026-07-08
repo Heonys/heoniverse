@@ -19,6 +19,10 @@ export class NpcPlayer extends OtherPlayer {
     this.playerName.setColor("#1d4ed8");
     this.bubbleOffsetY = 20;
 
+    // NPC 답변은 문장이라 길다 — 잘리지 않게 글자 한도만 넉넉히(폭은 기본), 표시시간은 조금만 늘림.
+    this.bubbleMaxLength = 200;
+    this.bubbleDuration = 5000;
+
     const badge = scene.add
       .text(0, -this.playerName.height, "NPC", {
         fontFamily: "Retro",

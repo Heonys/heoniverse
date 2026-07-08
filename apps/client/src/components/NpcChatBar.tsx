@@ -18,11 +18,35 @@ export const NpcChatBar = () => {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") dispatch(endNpcTalk());
+      if (e.key === "Escape") {
+        dispatch(endNpcTalk());
+        return;
+      }
+      // 포커스를 잃은 상태(입력창 밖)에서 Enter를 누르면 입력창으로 포커스를 다시 잡아준다.
+      if (e.key === "Enter") {
+        const el = document.activeElement;
+        const typing = el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement;
+        if (!typing) {
+          e.preventDefault();
+          setFocus("message");
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch]);
+  }, [dispatch, setFocus]);
+
+  // 게임 화면(캔버스)을 클릭하면 입력창이 포커스를 잃어 엔터가 안 먹는다 →
+  // 게임 화면을 클릭했을 때만 다음 프레임에 포커스를 회수한다(HUD 등 다른 UI 클릭은 건드리지 않음).
+  useEffect(() => {
+    const gameEl = document.getElementById("game-container");
+    const refocus = (e: MouseEvent) => {
+      if (!gameEl?.contains(e.target as Node)) return;
+      requestAnimationFrame(() => setFocus("message"));
+    };
+    window.addEventListener("mousedown", refocus);
+    return () => window.removeEventListener("mousedown", refocus);
+  }, [setFocus]);
 
   const onSubmit = ({ message }: FormType) => {
     const text = message.trim();

@@ -7,6 +7,7 @@ import { RoomType } from "@heoniverse/shared";
 
 import { Studio } from "./rooms/Studio";
 import { CustomLobbyRoom } from "./rooms/Lobby";
+import { generateNpcReply } from "./services/npcAgent";
 import cors from "cors";
 
 // 모니터 대시보드 보호: MONITOR_PASSWORD가 있으면 basic-auth,
@@ -54,9 +55,18 @@ export default config({
   initializeExpress: (app) => {
     app.use(express.json());
     app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? true }));
-    // Render 헬스체크 및 잠든 서버 깨우기 핑 용도 (모니터 인증과 무관한 공개 경로)
+    // Render 헬스체크 및 잠든 서버 깨우기 핑
     app.get("/health", (_req, res) => {
       res.status(200).send("ok");
+    });
+    app.post("/api/npc-chat", async (req, res) => {
+      const messages = req.body?.messages;
+      if (!Array.isArray(messages)) {
+        res.status(400).json({ error: "messages must be an array" });
+        return;
+      }
+      const reply = await generateNpcReply(messages);
+      res.json({ reply });
     });
     app.use("/colyseus", monitorAuth, monitor());
   },
