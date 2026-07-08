@@ -5,3 +5,9 @@ export const statusColorMap: Record<Status, string> = {
   busy: "bg-[#fbd359]",
   focused: "bg-[#e25156]",
 };
+
+export const statusLabelMap: Record<Status, string> = {
+  available: "온라인",
+  busy: "바쁨",
+  focused: "집중",
+};

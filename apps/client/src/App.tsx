@@ -8,6 +8,7 @@ import {
   ReconnectingScreen,
   NpcChatBar,
   NudgeToast,
+  FollowIndicator,
 } from "@/components";
 import { EntryScreen } from "@/components/entry";
 import { ComputerDialog } from "@/components/computer";
@@ -54,6 +55,7 @@ function App() {
             <GameHUD />
             <MinimapFrame />
             <NudgeToast />
+            <FollowIndicator />
             <Condition condition={npcTalking}>
               <NpcChatBar />
             </Condition>

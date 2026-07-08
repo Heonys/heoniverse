@@ -14,6 +14,8 @@ type UserState = {
   status: Status;
   isAdmin: boolean;
   single: boolean;
+  // 지금 따라가는 중인 상대 (null = 안 따라감). HUD 인디케이터용 — 실제 이동 로직은 LocalPlayer.followTargetId
+  following: { id: string; name: string } | null;
 };
 
 const initialState: UserState = {
@@ -30,6 +32,7 @@ const initialState: UserState = {
   status: "available",
   isAdmin: false,
   single: false,
+  following: null,
 };
 
 const userSlice = createSlice({
@@ -79,6 +82,9 @@ const userSlice = createSlice({
     setSingleMode: (state, action: PayloadAction<boolean>) => {
       state.single = action.payload;
     },
+    setFollowing: (state, action: PayloadAction<{ id: string; name: string } | null>) => {
+      state.following = action.payload;
+    },
   },
   selectors: {
     nextStatus: (state) => {
@@ -105,6 +111,7 @@ export const {
   initMediaState,
   grantAdmin,
   setSingleMode,
+  setFollowing,
 } = userSlice.actions;
 export const { nextStatus } = userSlice.selectors;
 export default userSlice.reducer;

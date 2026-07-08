@@ -4,15 +4,9 @@ import { Backdrop } from "./Backdrop";
 import { AvatarIcon } from "@/components";
 import { Player } from "@/game/characters";
 import { Status } from "@heoniverse/shared";
-import { statusColorMap } from "@/constants/common";
+import { statusColorMap, statusLabelMap } from "@/constants/common";
 import { eventEmitter } from "@/game/events";
 import { cn } from "@/utils";
-
-const statusLabelMap: Record<Status, string> = {
-  available: "온라인",
-  busy: "바쁨",
-  focused: "집중",
-};
 
 export const JoinedUsers = () => {
   const { getLocalPlayer, getOtherPlayerById } = useGame();

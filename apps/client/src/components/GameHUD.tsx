@@ -141,6 +141,9 @@ export const GameHUD = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [emoteWheelOpen]);
 
+  // 안내 말풍선이 떠 있는 동안엔 미디어 버튼 툴팁을 모두 숨긴다(말풍선과 겹치거나 산만해짐)
+  const linkHintVisible = isBrowser && showLinkHint && !mediaConnected;
+
   return (
     <>
       <div
@@ -221,6 +224,7 @@ export const GameHUD = () => {
             <TooltipButton
               id="media-enabled"
               tooltip={
+                !linkHintVisible &&
                 isBrowser &&
                 (mediaConnected ? "카메라 및 마이크 접근 거부" : "카메라 및 마이크 접근")
               }
@@ -237,7 +241,9 @@ export const GameHUD = () => {
           <TooltipButton
             id="camera-enabled"
             disabled={!mediaConnected}
-            tooltip={isBrowser && `카메라 ${videoEnabled ? "비활성화" : "활성화"}`}
+            tooltip={
+              !linkHintVisible && isBrowser && `카메라 ${videoEnabled ? "비활성화" : "활성화"}`
+            }
             onClick={() => toggleVideo(videoEnabled)}
             className={toggleClass(videoEnabled)}
           >
@@ -250,7 +256,9 @@ export const GameHUD = () => {
           <TooltipButton
             id="mic-enabled"
             disabled={!mediaConnected}
-            tooltip={isBrowser && `마이크 ${micEnabled ? "비활성화" : "활성화"}`}
+            tooltip={
+              !linkHintVisible && isBrowser && `마이크 ${micEnabled ? "비활성화" : "활성화"}`
+            }
             onClick={() => toggleMic(micEnabled)}
             className={toggleClass(micEnabled)}
           >

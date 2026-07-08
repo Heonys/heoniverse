@@ -1,3 +1,4 @@
+import { isBrowser } from "react-device-detect";
 import { OtherPlayer } from "@/game/characters";
 import { store } from "@/stores";
 import type { Game } from "@/game/scenes";
@@ -75,6 +76,7 @@ export class PlayerOverlap extends Phaser.GameObjects.Zone {
       this.setDialogBox([busyByOther ? "AI 도우미 (대화 중)" : "R: 말 걸기"]);
       return;
     }
-    this.setDialogBox(["R: 프로필 보기"]);
+    // 따라가기는 F키라 데스크탑에서만 안내
+    this.setDialogBox(isBrowser ? ["R: 프로필 보기", "F: 따라가기"] : ["R: 프로필 보기"]);
   }
 }
