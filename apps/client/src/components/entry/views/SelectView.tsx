@@ -3,7 +3,7 @@ import { AppIcon } from "@/icons";
 import { Condition } from "@/common";
 import { ProgressBar } from "@/components/ProgressBar";
 import { EntryButton } from "../primitives";
-import LogoIcon from "/images/background/logo-icon.png";
+import LogoIcon from "/images/background/logo-icon.webp";
 
 type Props = {
   onPublic: () => void;
