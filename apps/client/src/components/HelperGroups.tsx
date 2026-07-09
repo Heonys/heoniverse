@@ -4,14 +4,14 @@ import NumberFlow from "@number-flow/react";
 import { Condition, TooltipButton } from "@/common";
 import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { AppIcon } from "@/icons";
-import { setJoystick, setMinimap } from "@/stores/userSlice";
+import { setMinimap } from "@/stores/userSlice";
 import { openURL, helperButtonClass as helperClass } from "@/utils";
 
 export const HelperGroups = () => {
   const { gameScene, network } = useGame();
   const { showModal } = useModal();
   const dispatch = useAppDispatch();
-  const { showJoystick, loggedIn, showMinimap, isAdmin } = useAppSelector((state) => state.user);
+  const { loggedIn, showMinimap, isAdmin } = useAppSelector((state) => state.user);
   const users = useAppSelector((state) => Object.keys(state.user.otherPlayersName).length + 1);
   const [exitConfirm, setExitConfirm] = useState(false);
 
@@ -20,6 +20,9 @@ export const HelperGroups = () => {
     await network.leaveCurrentRoom();
     window.location.reload();
   };
+
+  // 모바일은 HUD의 ⋯ 액션 시트(MobileActionSheet)가 이 역할을 대신한다
+  if (!isBrowser) return null;
 
   return (
     <div className="fixed bottom-2 right-6 flex gap-2">
@@ -87,18 +90,6 @@ export const HelperGroups = () => {
           }}
         >
           <AppIcon iconName="map" size={21} />
-        </TooltipButton>
-      </Condition>
-
-      {/* 조이스틱은 모바일 전용 — 데스크탑은 키보드가 있으니 버튼 자체를 숨긴다 */}
-      <Condition condition={loggedIn && !isBrowser}>
-        <TooltipButton
-          id="joystick"
-          tooltip={`조이스틱 ${showJoystick ? "비활성화" : "활성화"}`}
-          className={helperClass(showJoystick)}
-          onClick={() => dispatch(setJoystick(!showJoystick))}
-        >
-          <AppIcon iconName="joystick" size={21} />
         </TooltipButton>
       </Condition>
 

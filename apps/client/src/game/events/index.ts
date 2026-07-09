@@ -29,7 +29,7 @@ type EventsPayloadMap = {
   WHITEBOARD_USER_ADDED: { userId: string; whiteboardId: string };
   WHITEBOARD_USER_REMOVED: { userId: string; whiteboardId: string };
   UPDATED_ELEMENTS: readonly any[];
-  JOYSTICK_KEY_PRESSED: "keyE" | "keyR";
+  JOYSTICK_KEY_PRESSED: "keyE" | "keyR" | "keySpace";
   TOGGLE_EMOTE_WHEEL: void;
   // 공유 물리 공의 서버 상태 변화(위치·주인) — Game 씬이 받아 공 스프라이트에 반영
   BALL_CHANGED: { x: number; y: number; ownerId: string };

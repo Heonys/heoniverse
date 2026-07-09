@@ -42,9 +42,11 @@ function deriveActivity(player: OtherPlayer, network: Network, npcBusyBy: string
 }
 
 export const UserProfile = ({ playerId }: Props) => {
-  const { getOtherPlayerById, network } = useGame();
+  const { getOtherPlayerById, getLocalPlayer, network } = useGame();
   const { hideModal } = useModal();
   const npcBusyBy = useAppSelector((s) => s.ai.npcBusyBy);
+  const following = useAppSelector((s) => s.user.following);
+  const isFollowing = following?.id === playerId;
   const otherPlayer = getOtherPlayerById(playerId);
   const [status, setStatus] = useState<Status>(otherPlayer?.playerStatus ?? "available");
   const [activity, setActivity] = useState<Activity>({ label: "둘러보는 중", icon: "move" });
@@ -125,6 +127,26 @@ export const UserProfile = ({ playerId }: Props) => {
             {activity.label}
           </span>
         </div>
+
+        {/* 따라가기 — F 단축키의 접점(모바일은 이 버튼이 유일한 수단) */}
+        <button
+          type="button"
+          onClick={() => {
+            const localPlayer = getLocalPlayer();
+            if (isFollowing) localPlayer.stopFollow();
+            else localPlayer.startFollow(playerId, otherPlayer.playerName.text);
+            hideModal();
+          }}
+          className={cn(
+            "mt-5 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[13.5px] font-semibold transition",
+            isFollowing
+              ? "text-app-text border border-white/[0.1] bg-white/[0.06] hover:bg-white/[0.1]"
+              : "bg-accent text-white shadow-[0_6px_14px_-11px_rgba(86,101,214,0.36),inset_0_1px_0_rgba(255,255,255,0.12)] hover:brightness-[1.06]",
+          )}
+        >
+          <AppIcon iconName="move" size={15} />
+          {isFollowing ? "따라가기 해제" : "따라가기"}
+        </button>
       </div>
     </Backdrop>
   );

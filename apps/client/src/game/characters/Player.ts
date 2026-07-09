@@ -48,7 +48,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setDepth(this.y);
     this.anims.play(`${texture}_idle_down`);
 
-    this.playerMarker = this.scene.add.circle(this.x, this.y, 25, 0x00ff00, 1).setDepth(999);
+    // 미니맵 전용 위치 마커 — 축소 배율에서도 식별되게 크게. 기본 흰색(타인), 로컬은 인디고로 덮어씀.
+    this.playerMarker = this.scene.add
+      .circle(this.x, this.y, 40, 0xffffff, 1)
+      .setStrokeStyle(8, 0x14161c, 0.9)
+      .setDepth(999);
     this.scene.cameras.main.ignore([this.playerMarker]);
     // 말풍선은 이름표 컨테이너의 자식이 아니라 별도 상위 레이어(depth 20000)에 둔다 —
     // 그래야 누구의 말풍선이든 항상 모든 이름표·뱃지 위에 그려진다. 위치는 preUpdate에서 동기화.

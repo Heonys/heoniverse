@@ -62,7 +62,10 @@ export const RoomSelectCard = ({
   }, [view]);
 
   return (
-    <Panel ref={panelRef} className="flex w-[400px] flex-col px-[26px] pb-[22px] pt-[26px]">
+    <Panel
+      ref={panelRef}
+      className="flex w-[400px] max-w-[calc(100vw-2rem)] flex-col px-[26px] pb-[22px] pt-[26px]"
+    >
       {/* key로 뷰 전환마다 vfade 재생 */}
       <div key={view} className="animate-vfade">
         {view === "select" && (

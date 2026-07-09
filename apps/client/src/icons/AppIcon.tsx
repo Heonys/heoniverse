@@ -12,7 +12,7 @@ import { LiaEditSolid } from "react-icons/lia";
 import { TfiInfoAlt, TfiLayoutLineSolid } from "react-icons/tfi";
 import { RiVoiceprintFill, RiCursorFill } from "react-icons/ri";
 import { LuEraser, LuUndo2, LuRedo2 } from "react-icons/lu";
-import { IoMdRefresh } from "react-icons/io";
+import { IoMdRefresh, IoMdFootball } from "react-icons/io";
 import { IoText } from "react-icons/io5";
 import {
   MdRoom,
@@ -164,6 +164,7 @@ const IconMap = {
   ["desktop"]: IoDesktopOutline,
   ["chair"]: LuArmchair,
   ["move"]: PiSneakerMoveFill,
+  ["ball"]: IoMdFootball,
 };
 
 type Props = { iconName: IconNames } & IconBaseProps;

@@ -4,7 +4,7 @@ import { ServerError } from "colyseus.js";
 import z from "zod";
 import { useAppDispatch, useAppSelector, useGame, useModal } from "@/hooks";
 import { grantAdmin } from "@/stores/userSlice";
-import { CreateFormSchema, FormSchema } from "@/utils";
+import { cn, CreateFormSchema, FormSchema } from "@/utils";
 import { createLoginMetrics } from "@/service/appwrite";
 import { IconNames } from "@/icons";
 import { MenuBackdrop } from "./MenuBackdrop";
@@ -193,7 +193,12 @@ export const EntryScreen = () => {
     <div className="text-app-text fixed inset-0 z-[1111] select-none">
       <MenuBackdrop />
 
-      <div className="relative z-10 flex h-full items-center justify-center overflow-y-auto p-9">
+      <div
+        className={cn(
+          "relative z-10 flex h-full items-center justify-center overflow-y-auto",
+          isBrowser ? "p-9" : "p-4",
+        )}
+      >
         {step === 1 ? (
           <RoomSelectCard
             view={view}

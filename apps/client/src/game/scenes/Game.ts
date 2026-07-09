@@ -1,3 +1,4 @@
+import { isBrowser } from "react-device-detect";
 import { Direction, ExtendedCursorKeys, WASD } from "@/constants/game";
 import { createCharacterAnims } from "@/game/anims/CharacterAnims";
 import {
@@ -224,19 +225,23 @@ export class Game extends Phaser.Scene {
   }
 
   setupCamera() {
-    this.cameras.main.setZoom(1.4);
+    // 모바일은 화면이 작아 1.4배면 시야가 너무 좁다 — 줌을 낮춰 주변을 더 보여준다
+    this.cameras.main.setZoom(isBrowser ? 1.4 : 1.1);
     this.cameras.main.startFollow(this.localPlayer);
   }
 
   setupMinimapCamera() {
-    this.minimap = this.cameras
-      .add(0, 0, 160, 160, false, "minimap")
-      .setZoom(0.15)
-      .setBackgroundColor("#000")
-      .startFollow(this.localPlayer);
-    this.minimap.postFX.addColorMatrix().grayscale(0.8);
+    // 데스크탑은 좌상단, 모바일은 상단 통합 바 아래 우상단
+    const x = isBrowser ? 0 : this.scale.width - 168;
+    const y = isBrowser ? 0 : 62;
 
-    const maskGraphic = this.add.graphics().fillCircle(80, 80, 70);
+    this.minimap = this.cameras
+      .add(x, y, 160, 160, false, "minimap")
+      .setZoom(0.12)
+      .setBackgroundColor("#0d0f16")
+      .startFollow(this.localPlayer);
+
+    const maskGraphic = this.add.graphics().fillCircle(x + 80, y + 80, 70);
     const mask = maskGraphic.createGeometryMask();
     this.minimap.setMask(mask);
 

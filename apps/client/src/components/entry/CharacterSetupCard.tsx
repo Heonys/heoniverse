@@ -1,6 +1,8 @@
+import { isBrowser } from "react-device-detect";
 import { AppIcon, IconNames } from "@/icons";
 import { spriteAvatars } from "@/constants/game";
 import { cn } from "@/utils";
+import { SpriteAnimation } from "@/common/SpriteAnimation";
 import { Panel } from "./primitives";
 import { MiniTilemap } from "./MiniTilemap";
 
@@ -33,7 +35,9 @@ export const CharacterSetupCard = ({
   onEnter,
 }: Props) => {
   return (
-    <Panel className="w-[560px] p-[26px] px-7">
+    <Panel
+      className={cn(isBrowser ? "w-[560px] p-[26px] px-7" : "w-full max-w-[400px] p-5 pt-[26px]")}
+    >
       <form
         noValidate
         onSubmit={(event) => {
@@ -58,36 +62,40 @@ export const CharacterSetupCard = ({
           <div className="text-text-dim text-[12.5px]">{roomDescription}</div>
         </div>
 
-        {/* 좌: 조작해보는 무대 / 우: 캐릭터 선택 — 고르면 바로 왼쪽 무대에 반영된다 */}
-        <div className="flex gap-3.5">
-          <MiniTilemap
-            avatar={avatar}
-            nickname={nickname}
-            className="h-[216px] w-[300px] flex-none"
-          />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <div className="text-text-dim mb-2 text-xs font-semibold">캐릭터 선택</div>
-            <div className="grid flex-1 grid-cols-3 content-start gap-1.5">
-              {spriteAvatars.map(({ name, sprite }) => (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => onAvatarChange(name)}
-                  className={cn(
-                    "bg-surface grid aspect-square cursor-pointer place-items-center overflow-hidden rounded-[9px] border border-white/[0.07] transition",
-                    "hover:-translate-y-0.5 hover:border-white/20",
-                    avatar === name && "border-accent shadow-[0_0_0_2px_rgba(86,101,214,0.36)]",
-                  )}
-                >
-                  <i
-                    className="block h-10 w-8 scale-[0.82] bg-no-repeat [background-position:-576px_-2px] [image-rendering:pixelated]"
-                    style={{ backgroundImage: `url(${sprite})` }}
-                  />
-                </button>
-              ))}
+        {/* 데스크탑: 좌 조작 무대 + 우 캐릭터 그리드 / 모바일: 원형 미리보기 + ‹ › 순환 (컴팩트) */}
+        {isBrowser ? (
+          <div className="flex gap-3.5">
+            <MiniTilemap
+              avatar={avatar}
+              nickname={nickname}
+              className="h-[216px] w-[300px] flex-none"
+            />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <div className="text-text-dim mb-2 text-xs font-semibold">캐릭터 선택</div>
+              <div className="grid flex-1 grid-cols-3 content-start gap-1.5">
+                {spriteAvatars.map(({ name, sprite }) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => onAvatarChange(name)}
+                    className={cn(
+                      "bg-surface grid aspect-square cursor-pointer place-items-center overflow-hidden rounded-[9px] border border-white/[0.07] transition",
+                      "hover:-translate-y-0.5 hover:border-white/20",
+                      avatar === name && "border-accent shadow-[0_0_0_2px_rgba(86,101,214,0.36)]",
+                    )}
+                  >
+                    <i
+                      className="block h-10 w-8 scale-[0.82] bg-no-repeat [background-position:-576px_-2px] [image-rendering:pixelated]"
+                      style={{ backgroundImage: `url(${sprite})` }}
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <MobileAvatarPicker avatar={avatar} onAvatarChange={onAvatarChange} />
+        )}
 
         <div className="mt-4">
           <label className="text-text-dim mb-2 block text-xs font-semibold" htmlFor="entry-nick">
@@ -132,5 +140,56 @@ export const CharacterSetupCard = ({
         </button>
       </form>
     </Panel>
+  );
+};
+
+// 모바일 컴팩트 캐릭터 선택 — 그리드 대신 큰 원형 미리보기를 ‹ ›로 순환 (한 화면에 딱 맞게)
+const MobileAvatarPicker = ({
+  avatar,
+  onAvatarChange,
+}: {
+  avatar: string;
+  onAvatarChange: (avatar: string) => void;
+}) => {
+  const index = Math.max(
+    spriteAvatars.findIndex(({ name }) => name === avatar),
+    0,
+  );
+  const sprite = spriteAvatars[index].sprite;
+
+  const cycle = (delta: number) => {
+    const next = (index + delta + spriteAvatars.length) % spriteAvatars.length;
+    onAvatarChange(spriteAvatars[next].name);
+  };
+
+  const cycleButtonClass =
+    "bg-surface-2 text-text-dim hover:text-app-text grid size-9 flex-none cursor-pointer place-items-center rounded-full border border-white/[0.07] text-base transition-colors hover:bg-[#24252b]";
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="flex items-center justify-center gap-5">
+        <button type="button" className={cycleButtonClass} onClick={() => cycle(-1)}>
+          <AppIcon iconName="chevron-left" size={16} />
+        </button>
+        <div className="grid size-28 place-items-center overflow-hidden rounded-full border-2 border-white/[0.14] bg-[#121319] shadow-[inset_0_0_26px_rgba(86,102,214,0.18)]">
+          {/* key로 캐릭터 변경 시 애니메이션 리셋 */}
+          <SpriteAnimation
+            key={avatar}
+            animKey="avatar-pick"
+            src={sprite}
+            startFrame={18}
+            endFrame={23}
+            frameWidth={32}
+            frameHeight={48}
+          />
+        </div>
+        <button type="button" className={cycleButtonClass} onClick={() => cycle(1)}>
+          <AppIcon iconName="chevron-left" size={16} className="rotate-180" />
+        </button>
+      </div>
+      <div className="text-text-faint font-retro mt-2.5 text-[11px]">
+        {index + 1} / {spriteAvatars.length}
+      </div>
+    </div>
   );
 };

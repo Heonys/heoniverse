@@ -60,6 +60,7 @@ export class LocalPlayer extends Player {
   joystickMovement?: JoystickMovement;
   joystickEPressed?: boolean;
   joystickRPressed?: boolean;
+  joystickSpacePressed?: boolean;
 
   // 따라가기 대상 sessionId. 이동은 아래 update의 velocity 블록에서 주입한다.
   followTargetId?: string;
@@ -75,6 +76,8 @@ export class LocalPlayer extends Player {
   ) {
     super(scene, id, x, y, texture);
     this.containerBody = this.playerContainer.body as Phaser.Physics.Arcade.Body;
+    // 미니맵에서 "나"를 구분 — 타인(흰색)과 달리 인디고
+    this.playerMarker.setFillStyle(0x5665d6);
     this.registerKeys();
   }
 
@@ -106,7 +109,7 @@ export class LocalPlayer extends Player {
     this.joystickMovement = movement;
   }
 
-  private startFollow(id: string, name: string) {
+  startFollow(id: string, name: string) {
     this.followTargetId = id;
     this.stallTime = 0;
     this.lastFollowPos = { x: this.x, y: this.y };
@@ -132,6 +135,7 @@ export class LocalPlayer extends Player {
     eventEmitter.on("JOYSTICK_KEY_PRESSED", (key) => {
       if (key === "keyE") this.joystickEPressed = true;
       if (key === "keyR") this.joystickRPressed = true;
+      if (key === "keySpace") this.joystickSpacePressed = true;
     });
   }
 
@@ -167,12 +171,14 @@ export class LocalPlayer extends Player {
     const isEJustDown = Phaser.Input.Keyboard.JustDown(this.keyE) || this.joystickEPressed;
     const isRJustDown = Phaser.Input.Keyboard.JustDown(this.keyR) || this.joystickRPressed;
     const isFJustDown = Phaser.Input.Keyboard.JustDown(this.keyF);
+    const joystickSpace = this.joystickSpacePressed;
     this.joystickEPressed = false;
     this.joystickRPressed = false;
+    this.joystickSpacePressed = false;
 
     switch (this.playerBehavior) {
       case PlayerBehavior.IDLE: {
-        const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(this.keySPACE);
+        const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(this.keySPACE) || joystickSpace;
 
         if (isEJustDown && selectedItem?.itemType === ItemType.CHAIR) {
           this.stopFollow();
@@ -370,8 +376,11 @@ export class LocalPlayer extends Player {
           }
         }
 
-        // Shift 또는 따라가기 추격 시 스프린트 (성분은 방향만, setLength가 실제 속도를 정함)
-        const moveSpeed = this.keyShift.isDown || followSprint ? SPRINT_SPEED : this.speed;
+        // Shift·조이스틱 끝까지 밀기·따라가기 추격 시 스프린트 (성분은 방향만, setLength가 실제 속도를 정함)
+        const moveSpeed =
+          this.keyShift.isDown || this.joystickMovement?.sprint || followSprint
+            ? SPRINT_SPEED
+            : this.speed;
 
         this.setDepth(this.y + this.height / 2);
         this.setVelocity(vx, vy);
