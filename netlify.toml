@@ -1,6 +1,10 @@
-[build]  
+[build]
   command = "pnpm install && pnpm build:client"
   publish = "apps/client/dist"
+
+# monaco-editor 도입 후 vite 변환 단계가 Node 기본 힙(~2GB)을 초과해 OOM — 상한 확장
+[build.environment]
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
 # Rule for router history mode
 [[redirects]]
