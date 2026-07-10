@@ -5,3 +5,6 @@ export * from "./ScreenSharing";
 export * from "./Photo";
 export * from "./Music";
 export * from "./ScreenSharingAlert";
+export * from "./Terminal";
+export * from "./Finder";
+export * from "./Assistant";

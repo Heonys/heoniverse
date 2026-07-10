@@ -1,4 +1,14 @@
-import { VSCode, Messages, ScreenSharing, Safari } from "@/components/computer/apps";
+import {
+  VSCode,
+  Messages,
+  ScreenSharing,
+  Safari,
+  Finder,
+  Music,
+  Photo,
+  Terminal,
+  Assistant,
+} from "@/components/computer/apps";
 
 type AppsData = {
   id: string;
@@ -17,6 +27,8 @@ export const appsData: AppsData[] = [
     id: "finder",
     title: "Finder",
     img: "/icons/finder.png",
+    component: <Finder />,
+    position: { width: 680, height: 460 },
   },
   {
     id: "screen-sharing",
@@ -38,14 +50,32 @@ export const appsData: AppsData[] = [
     component: <Safari />,
   },
   {
+    id: "assistant",
+    title: "AI 어시스턴트",
+    img: "/icons/assistant.svg",
+    component: <Assistant />,
+    position: { width: 560, height: 540 },
+  },
+  {
     id: "music",
     title: "Music",
     img: "/icons/music.png",
+    component: <Music />,
+    position: { width: 760, height: 500 },
   },
   {
     id: "photo",
     title: "Photo",
     img: "/icons/photos.png",
+    component: <Photo />,
+    position: { width: 720, height: 480 },
+  },
+  {
+    id: "terminal",
+    title: "Terminal",
+    img: "/icons/terminal.svg",
+    component: <Terminal />,
+    position: { width: 620, height: 420 },
   },
   {
     id: "vscode",
