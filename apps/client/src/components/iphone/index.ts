@@ -5,4 +5,6 @@ export * from "./Dialing";
 export * from "./Home";
 export * from "./IncomingCalls";
 export * from "./IphoneApp";
-export * from "./Dialing";
+export * from "./Photos";
+export * from "./MusicPlayer";
+export * from "./Camera";

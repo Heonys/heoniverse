@@ -4,17 +4,33 @@ import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { Condition, TooltipButton } from "@/common";
 import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AppIcon } from "@/icons";
-import { Pages, setShowIphone } from "@/stores/phoneSlice";
+import { Pages, setShowIphone, setCurrentPage } from "@/stores/phoneSlice";
 import { unreadMessageCount } from "@/stores/chatSlice";
-import { Home, Chat, IncomingCalls, Contacts, Dialing } from "@/components/iphone";
+// 배럴(@/components/iphone) 대신 파일 직접 import — 배럴 평가 순서 TDZ 오류 방지
+import { Home } from "./Home";
+import { Chat } from "./Chat";
+import { IncomingCalls } from "./IncomingCalls";
+import { Contacts } from "./Contacts";
+import { Dialing } from "./Dialing";
+import { Photos } from "./Photos";
+import { MusicPlayer } from "./MusicPlayer";
+import { Camera } from "./Camera";
 import { MobileChatSheet } from "@/components/MobileChatSheet";
 import { cn, helperButtonClass } from "@/utils";
+import { store } from "@/stores";
 
 const pagesMap: Record<Pages, React.ComponentType<any>> = {
   home: Home,
   messages: Chat,
   contacts: Contacts,
   dialing: Dialing,
+  photos: Photos,
+  music: () => (
+    <div className="rounded-4xl size-full overflow-hidden">
+      <MusicPlayer onHome={() => store.dispatch(setCurrentPage({ page: "home" }))} />
+    </div>
+  ),
+  camera: Camera,
 };
 
 const PRELOAD_IMAGES = [
@@ -22,10 +38,9 @@ const PRELOAD_IMAGES = [
   "/svg/iphone15.svg",
   "/icons/phone.png",
   "/icons/messages.png",
-  "/icons/note.png",
   "/icons/photos.png",
-  "/icons/maps.png",
   "/icons/music.png",
+  "/icons/camera.png",
 ];
 
 export const IphoneApp = () => {
@@ -59,7 +74,7 @@ export const IphoneApp = () => {
     }
   }, [isRinging, scope, animate]);
 
-  // 모바일에서 통화를 수락하면(시트 닫힘 상태여도) 통화 화면은 떠 있어야 한다
+  // 모바일: 통화 수락 화면은 시트가 닫혀 있어도 떠야 한다
   const sheetVisible =
     showIphone || (!isBrowser && currentPage.page === "dialing" && isConnected.state);
 

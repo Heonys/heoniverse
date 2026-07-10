@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { format } from "date-fns";
 import { AppIcon } from "@/icons";
 import { setCurrentPage } from "@/stores/phoneSlice";
-import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
+import { StatusBar, BackChevron } from "./StatusBar";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { AvatarIcon } from "@/components";
 import { Condition } from "@/common";
 import { cn } from "@/utils";
@@ -10,7 +10,6 @@ import { cn } from "@/utils";
 type Tabs = "contacts" | "recent";
 
 export const Contacts = () => {
-  const time = useCurrentTime();
   const [tab, setTab] = useState<Tabs>("contacts");
   const dispatch = useAppDispatch();
   const { getOtherPlayerById, network } = useGame();
@@ -21,26 +20,13 @@ export const Contacts = () => {
   return (
     <div className="rounded-4xl flex size-full flex-col bg-white">
       {/* header */}
-      <div className="rounded-t-4xl relative flex flex-col text-lg font-bold text-black">
-        <div className="absolute left-1/2 top-2 h-[22px] w-20 -translate-x-1/2 rounded-full bg-[#040404]" />
-        <div className="relative flex h-9 w-full items-center px-5 py-2 text-[13px]">
-          <div className="ml-2">{format(time, "h:mm")}</div>
-          <div className="flex flex-1 items-center justify-end gap-1.5">
-            <AppIcon iconName="signal" size={14} />
-            <AppIcon iconName="wifi" size={14} />
-            <AppIcon iconName="batterty-half" size={16} />
-          </div>
-        </div>
+      <div className="rounded-t-4xl relative flex flex-col font-bold text-black">
+        <StatusBar />
         <div className="h-13 relative flex flex-col items-center justify-center gap-1 text-black/70">
           <div className="text-sm font-medium text-black">
             {tab === "contacts" ? "연락처" : "최근 통화"}
           </div>
-          <button
-            className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer outline-none"
-            onClick={() => dispatch(setCurrentPage({ page: "home" }))}
-          >
-            <AppIcon iconName="chevron-left" color="#0579fb" size={23} />
-          </button>
+          <BackChevron onClick={() => dispatch(setCurrentPage({ page: "home" }))} />
         </div>
       </div>
       {/* center */}

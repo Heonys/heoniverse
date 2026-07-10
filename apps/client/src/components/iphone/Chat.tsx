@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
 import { Input } from "@headlessui/react";
 import { AppIcon } from "@/icons";
-import { useAppDispatch, useAppSelector, useCurrentTime, useGame } from "@/hooks";
+import { useAppDispatch, useAppSelector, useGame } from "@/hooks";
 import { markAsRead, setFocusChat } from "@/stores/chatSlice";
 import { ChatMessage } from "@/components/iphone";
+import { StatusBar, BackChevron } from "./StatusBar";
 import { setCurrentPage } from "@/stores/phoneSlice";
 import { Condition } from "@/common";
 
@@ -13,9 +13,8 @@ type FormType = { message: string };
 
 export const Chat = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const messageEndRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const { network, getLocalPlayer } = useGame();
-  const time = useCurrentTime();
   const dispatch = useAppDispatch();
   const { focused, chatMessages } = useAppSelector((state) => state.chat);
   const RoomName = useAppSelector((state) => state.room.name);
@@ -31,7 +30,8 @@ export const Chat = () => {
   };
 
   const scrollToBottom = () => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // scrollIntoView는 폰 목업(overflow-hidden) 등 조상까지 스크롤시킨다 — 목록만 스크롤
+    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -47,30 +47,18 @@ export const Chat = () => {
   return (
     <div className="rounded-4xl flex size-full flex-col bg-white">
       {/* header */}
-      <div className="rounded-t-4xl relative flex flex-col text-lg font-bold text-black">
-        <div className="absolute left-1/2 top-2 h-[22px] w-20 -translate-x-1/2 rounded-full bg-[#040404]" />
-        <div className="relative flex h-9 w-full items-center px-5 py-2 text-[13px]">
-          <div className="ml-2">{format(time, "h:mm")}</div>
-          <div className="flex flex-1 items-center justify-end gap-1.5">
-            <AppIcon iconName="signal" size={14} />
-            <AppIcon iconName="wifi" size={14} />
-            <AppIcon iconName="batterty-half" size={16} />
-          </div>
-        </div>
+      <div className="rounded-t-4xl relative flex flex-col font-bold text-black">
+        <StatusBar />
         <div className="relative flex h-full flex-col items-center justify-center gap-1 text-black/70">
           <AppIcon iconName="user-cirlce" size={32} />
           <div className="text-[10px] font-medium">{RoomName}</div>
-          <button
-            className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer outline-none"
-            onClick={() => dispatch(setCurrentPage({ page: "home" }))}
-          >
-            <AppIcon iconName="chevron-left" color="#0579fb" size={23} />
-          </button>
+          <BackChevron onClick={() => dispatch(setCurrentPage({ page: "home" }))} />
         </div>
       </div>
 
       {/* center */}
       <div
+        ref={listRef}
         className="flex h-full flex-1 flex-col gap-0.5 overflow-y-auto border-t border-black/15 bg-white p-2 outline-none"
         tabIndex={-1}
         onKeyDown={(e) => {
@@ -106,7 +94,6 @@ export const Chat = () => {
         {chatMessages.map(({ id, type, message }, index) => {
           return <ChatMessage key={id} chatId={index} messageType={type} chatMessage={message} />;
         })}
-        <div ref={messageEndRef} />
       </div>
 
       {/* bottom */}

@@ -7,17 +7,22 @@ import { markAsRead, setFocusChat, unreadMessageCount } from "@/stores/chatSlice
 import { setCurrentPage, setShowIphone } from "@/stores/phoneSlice";
 import { AppIcon } from "@/icons";
 import { AvatarIcon } from "./AvatarIcon";
+// 배럴(@/components/iphone) 대신 파일 직접 import — IphoneApp↔시트 순환 참조 방지
+import { MusicPlayer } from "./iphone/MusicPlayer";
 import { Condition } from "@/common";
+import { captureScreenshot } from "@/utils/captureScreenshot";
+import { getScreenshots, removeScreenshot, type Screenshot } from "@/utils/screenshotStore";
+import { eventEmitter } from "@/game/events";
 import { cn } from "@/utils";
 
 type FormType = { message: string };
-type SheetTab = "chat" | "contacts";
+type SheetTab = "chat" | "contacts" | "photos" | "music" | "camera";
 
 // 모바일 전용 '폰' 시트 — 아이폰 목업 대신 앱 톤의 다크 하단 시트.
 // 하단 독(dock)에 iOS풍 앱 아이콘(데스크탑 목업과 같은 에셋)을 두어 폰 메타포를 유지하고,
 // 앱이 늘어나면 독에 아이콘을 추가해 확장한다. 채팅/발신 로직은 iphone/Chat·Contacts와 동일.
 export const MobileChatSheet = () => {
-  const messageEndRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const { network, getLocalPlayer } = useGame();
   const dispatch = useAppDispatch();
   const { chatMessages } = useAppSelector((state) => state.chat);
@@ -37,10 +42,27 @@ export const MobileChatSheet = () => {
 
   useEffect(() => {
     if (tab !== "chat") return;
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // scrollIntoView는 시트(overflow-hidden) 등 조상까지 스크롤시킨다 — 목록만 스크롤
+    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
     dispatch(markAsRead());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatMessages, tab]);
+
+  // 카메라 모드 — 시트를 하단 바로 접어 게임 화면이 뷰파인더가 된다
+  if (tab === "camera") {
+    return (
+      <motion.div
+        className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-[22px] border-t border-white/10 bg-[#16171d] shadow-[0_-18px_50px_-20px_rgba(0,0,0,0.8)]"
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", stiffness: 200, damping: 26 }}
+      >
+        <div className="mx-auto mt-2 h-1 w-10 flex-none rounded-full bg-white/20" />
+        <CameraBar onExit={() => setTab("photos")} />
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -67,7 +89,7 @@ export const MobileChatSheet = () => {
       {tab === "chat" ? (
         <>
           {/* messages */}
-          <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-3.5 py-3">
+          <div ref={listRef} className="flex flex-1 flex-col gap-2 overflow-y-auto px-3.5 py-3">
             <SystemLine text={`${getLocalPlayer().playerName.text} 님이 입장하셨습니다`} />
             <Condition condition={single}>
               <SystemLine text="오프라인 모드에선 연결되지 않습니다" />
@@ -80,7 +102,6 @@ export const MobileChatSheet = () => {
                 isMe={message.clientId === localPlayerId}
               />
             ))}
-            <div ref={messageEndRef} />
           </div>
 
           {/* input */}
@@ -106,11 +127,17 @@ export const MobileChatSheet = () => {
             </button>
           </form>
         </>
-      ) : (
+      ) : tab === "contacts" ? (
         <ContactsTab />
+      ) : tab === "photos" ? (
+        <PhotosTab />
+      ) : (
+        <div className="min-h-0 flex-1">
+          <MusicPlayer />
+        </div>
       )}
 
-      <div className="flex flex-none items-center justify-around border-t border-white/[0.08] bg-[#14151c] px-5 pb-[max(10px,env(safe-area-inset-bottom))] pt-2.5">
+      <div className="flex flex-none items-center justify-around border-t border-white/[0.08] bg-[#14151c] px-3 pb-[max(10px,env(safe-area-inset-bottom))] pt-2.5">
         <DockItem
           img="/icons/messages.png"
           label="채팅"
@@ -124,11 +151,137 @@ export const MobileChatSheet = () => {
           active={tab === "contacts"}
           onClick={() => setTab("contacts")}
         />
-        <DockItem img="/icons/note.png" label="메모" disabled />
-        <DockItem img="/icons/photos.png" label="사진" disabled />
-        <DockItem img="/icons/music.png" label="음악" disabled />
+        <DockItem
+          img="/icons/photos.png"
+          label="사진"
+          active={tab === "photos"}
+          onClick={() => setTab("photos")}
+        />
+        <DockItem
+          img="/icons/music.png"
+          label="음악"
+          active={tab === "music"}
+          onClick={() => setTab("music")}
+        />
+        <DockItem img="/icons/camera.png" label="카메라" onClick={() => setTab("camera")} />
       </div>
     </motion.div>
+  );
+};
+
+// 카메라 모드 하단 바 — 게임이 뷰파인더, 셔터는 P키와 같은 파이프라인
+const CameraBar = ({ onExit }: { onExit: () => void }) => {
+  const [lastShot, setLastShot] = useState<string | null>(null);
+
+  const loadLast = () => {
+    getScreenshots()
+      .then((list) => {
+        const latest = list.sort((a, b) => b.createdAt - a.createdAt)[0];
+        setLastShot(latest?.dataUrl ?? null);
+      })
+      .catch(() => setLastShot(null));
+  };
+
+  useEffect(() => {
+    loadLast();
+    eventEmitter.on("SCREENSHOT_TAKEN", loadLast);
+    return () => eventEmitter.off("SCREENSHOT_TAKEN", loadLast);
+  }, []);
+
+  return (
+    <div className="flex items-center justify-between px-7 pb-[max(20px,env(safe-area-inset-bottom))] pt-3">
+      <button
+        className="relative size-11 cursor-pointer overflow-hidden rounded-[10px] border-[1.5px] border-white/25 bg-[#202126]"
+        onClick={onExit}
+        aria-label="사진 보기"
+      >
+        {lastShot && <img src={lastShot} alt="latest" className="size-full object-cover" />}
+      </button>
+      <button
+        className="size-[62px] cursor-pointer rounded-full border-4 border-white/35 bg-white bg-clip-content p-0.5 transition-transform active:scale-90"
+        onClick={captureScreenshot}
+        aria-label="촬영"
+      />
+      <button
+        className="grid size-11 cursor-pointer place-items-center rounded-full bg-white/[0.08] text-white"
+        onClick={onExit}
+        aria-label="카메라 종료"
+      >
+        <AppIcon iconName="x-mark" size={17} />
+      </button>
+    </div>
+  );
+};
+
+// 사진 — 인게임 스크린샷 갤러리 (데스크탑 P키·카메라 앱과 같은 IndexedDB)
+const PhotosTab = () => {
+  const [shots, setShots] = useState<Screenshot[]>([]);
+  const [selected, setSelected] = useState<Screenshot | null>(null);
+
+  useEffect(() => {
+    getScreenshots()
+      .then((list) => setShots(list.sort((a, b) => b.createdAt - a.createdAt)))
+      .catch((err) => console.error("스크린샷 로드 실패:", err));
+  }, []);
+
+  const download = (shot: Screenshot) => {
+    const a = document.createElement("a");
+    a.href = shot.dataUrl;
+    a.download = `heoniverse-${shot.createdAt}.png`;
+    a.click();
+  };
+
+  const remove = async (shot: Screenshot) => {
+    await removeScreenshot(shot.id);
+    setShots((prev) => prev.filter((s) => s.id !== shot.id));
+    setSelected(null);
+  };
+
+  if (shots.length === 0) {
+    return (
+      <div className="text-text-faint flex flex-1 flex-col items-center justify-center gap-1.5 text-center text-[12.5px]">
+        아직 사진이 없습니다
+        <span className="text-[11px] text-white/35">카메라 앱으로 이 순간을 남겨보세요</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex min-h-0 flex-1 flex-col">
+      <div className="grid flex-1 auto-rows-min grid-cols-3 gap-0.5 overflow-y-auto p-0.5">
+        {shots.map((shot) => (
+          <button
+            key={shot.id}
+            className="relative aspect-square cursor-pointer overflow-hidden rounded-sm"
+            onClick={() => setSelected(shot)}
+          >
+            <img src={shot.dataUrl} alt="screenshot" className="size-full object-cover" />
+          </button>
+        ))}
+      </div>
+      {selected && (
+        <div className="absolute inset-0 z-10 flex flex-col bg-black">
+          <div className="flex min-h-0 flex-1 items-center justify-center p-2">
+            <img
+              src={selected.dataUrl}
+              alt="screenshot"
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
+          </div>
+          <div className="flex flex-none justify-around py-2.5 text-[12px] text-[#0a84ff]">
+            <button className="cursor-pointer" onClick={() => download(selected)}>
+              다운로드
+            </button>
+            <button className="text-coral cursor-pointer" onClick={() => remove(selected)}>
+              삭제
+            </button>
+            <button className="cursor-pointer text-white/60" onClick={() => setSelected(null)}>
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

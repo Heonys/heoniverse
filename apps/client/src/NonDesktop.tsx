@@ -48,16 +48,13 @@ export const NonDesktop = ({ onClose, useComputer = false }: Props) => {
             >
               <AppIcon iconName="desktop" size={34} className="text-accent-hi mx-auto" />
               <h2 className="mt-3 text-[16px] font-semibold tracking-[-0.01em] text-white">
-                컴퓨터는 데스크탑 전용 기능입니다
+                데스크탑 전용 기능입니다
               </h2>
               <p className="text-text-dim mt-2 text-[12.5px] leading-relaxed">
-                화면 공유 기능이 모바일 브라우저에서는 지원되지 않습니다.
+                모바일 브라우저에서는 지원되지 않습니다.
                 <br />
-                데스크탑 브라우저에서 접속하면 사용할 수 있습니다.
+                데스크탑에서 접속하면 사용할 수 있습니다.
               </p>
-              <div className="text-text-dim mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/[0.07] bg-white/[0.04] px-3 py-1.5 text-[11.5px]">
-                화이트보드는 모바일에서도 사용할 수 있습니다
-              </div>
               <button
                 className="bg-accent mt-4 inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-xl text-[13.5px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:brightness-[1.06]"
                 onClick={handleClose}

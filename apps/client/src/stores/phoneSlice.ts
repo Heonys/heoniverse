@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type Pages = "home" | "messages" | "contacts" | "dialing";
+export type Pages = "home" | "messages" | "contacts" | "dialing" | "photos" | "music" | "camera";
 type CurrentPage = {
   page: Pages;
   props?: Record<string, any>;
@@ -42,4 +42,5 @@ const phoneSlice = createSlice({
 });
 
 export const { setShowIphone, setCurrentPage, setIsRinging, setIsConnected } = phoneSlice.actions;
+
 export default phoneSlice.reducer;
