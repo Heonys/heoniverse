@@ -8,3 +8,4 @@ export * from "./useModal";
 export * from "./useGame";
 export * from "./useCurrentTime";
 export * from "./useAppFetch";
+export * from "./useMusicPlayer";

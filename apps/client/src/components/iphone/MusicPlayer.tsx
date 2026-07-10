@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   IoPlay,
   IoPause,
@@ -12,6 +12,7 @@ import { BsChatQuote } from "react-icons/bs";
 import { MdAirplay } from "react-icons/md";
 import { HiMiniQueueList } from "react-icons/hi2";
 import { TRACKS, formatSec } from "@/constants/musicTracks";
+import { useMusicPlayer } from "@/hooks/useMusicPlayer";
 import { StatusBar, BackChevron } from "./StatusBar";
 import { cn } from "@/utils";
 
@@ -21,51 +22,33 @@ type Props = {
 };
 
 // 아이폰 목업(253px)과 모바일 시트 양쪽에서 재사용 — 컨테이너 크기에 의존하지 말 것.
-// 재생은 가짜 타이머 — 실제 오디오 연결 지점은 musicTracks.ts 참고.
 export const MusicPlayer = ({ onHome }: Props) => {
-  const [trackIndex, setTrackIndex] = useState(-1);
-  const [playing, setPlaying] = useState(false);
-  const [seconds, setSeconds] = useState(0);
+  const {
+    track,
+    trackIndex,
+    playing,
+    seconds,
+    volume,
+    pick: pickTrack,
+    toggle,
+    step,
+    seek,
+    setVolume,
+  } = useMusicPlayer();
   const [listOpen, setListOpen] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval>>(undefined);
-
-  const track = trackIndex >= 0 ? TRACKS[trackIndex] : null;
-
-  useEffect(() => {
-    clearInterval(timer.current);
-    if (playing) {
-      timer.current = setInterval(() => {
-        setSeconds((prev) => {
-          if (trackIndex >= 0 && prev + 1 >= TRACKS[trackIndex].duration) {
-            setTrackIndex((i) => (i + 1) % TRACKS.length);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(timer.current);
-  }, [playing, trackIndex]);
 
   const pick = (index: number) => {
-    setTrackIndex(index);
-    setSeconds(0);
-    setPlaying(true);
+    pickTrack(index);
     setListOpen(false);
   };
-  const toggle = () => {
-    if (trackIndex < 0) setTrackIndex(0);
-    setPlaying((prev) => !prev);
-  };
-  const step = (delta: number) => {
-    if (trackIndex < 0) return;
-    setTrackIndex((trackIndex + delta + TRACKS.length) % TRACKS.length);
-    setSeconds(0);
-  };
-  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+  const seekByClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!track) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    setSeconds(Math.floor(((e.clientX - rect.left) / rect.width) * track.duration));
+    seek(((e.clientX - rect.left) / rect.width) * track.duration);
+  };
+  const volumeByClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setVolume((e.clientX - rect.left) / rect.width);
   };
 
   return (
@@ -93,15 +76,15 @@ export const MusicPlayer = ({ onHome }: Props) => {
         {track ? (
           <>
             {/* 앨범 아트 */}
-            <div
+            <img
+              src={track.cover}
+              alt={track.title}
+              draggable={false}
               className={cn(
-                "grid aspect-square flex-none place-items-center rounded-xl text-[64px] shadow-[0_18px_44px_-12px_rgba(0,0,0,0.55)] transition-transform duration-300",
+                "aspect-square w-full flex-none rounded-xl object-cover shadow-[0_18px_44px_-12px_rgba(0,0,0,0.55)] transition-transform duration-300",
                 !playing && "scale-[0.82]",
               )}
-              style={{ background: track.gradient }}
-            >
-              {track.emoji}
-            </div>
+            />
 
             <div className="mt-4 flex flex-none items-center justify-between">
               <div className="min-w-0">
@@ -115,7 +98,7 @@ export const MusicPlayer = ({ onHome }: Props) => {
 
             {/* 진행바 */}
             <div className="mt-3 flex-none">
-              <div className="h-1 cursor-pointer rounded-full bg-white/25" onClick={seek}>
+              <div className="h-1 cursor-pointer rounded-full bg-white/25" onClick={seekByClick}>
                 <div
                   className="h-full rounded-full bg-white/85"
                   style={{ width: `${(seconds / track.duration) * 100}%` }}
@@ -140,11 +123,17 @@ export const MusicPlayer = ({ onHome }: Props) => {
               </button>
             </div>
 
-            {/* 볼륨 (장식) */}
+            {/* 볼륨 */}
             <div className="mt-4 flex flex-none items-center gap-2 text-white/60">
               <IoVolumeOff size={13} />
-              <div className="relative h-1 flex-1 rounded-full bg-white/25">
-                <div className="absolute inset-y-0 left-0 w-[62%] rounded-full bg-white/80 after:absolute after:-right-1.5 after:top-1/2 after:size-3 after:-translate-y-1/2 after:rounded-full after:bg-white after:content-['']" />
+              <div
+                className="relative h-1 flex-1 cursor-pointer rounded-full bg-white/25 py-0 before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-['']"
+                onClick={volumeByClick}
+              >
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full bg-white/80 after:absolute after:-right-1.5 after:top-1/2 after:size-3 after:-translate-y-1/2 after:rounded-full after:bg-white after:content-['']"
+                  style={{ width: `${volume * 100}%` }}
+                />
               </div>
               <IoVolumeHigh size={13} />
             </div>
@@ -201,12 +190,12 @@ export const MusicPlayer = ({ onHome }: Props) => {
                 className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 text-left active:bg-white/[0.07]"
                 onClick={() => pick(i)}
               >
-                <span
-                  className="grid size-9 flex-none place-items-center rounded-md text-[15px]"
-                  style={{ background: t.gradient }}
-                >
-                  {t.emoji}
-                </span>
+                <img
+                  src={t.cover}
+                  alt={t.title}
+                  draggable={false}
+                  className="size-9 flex-none rounded-md object-cover"
+                />
                 <span className="min-w-0 flex-1">
                   <span
                     className={cn(

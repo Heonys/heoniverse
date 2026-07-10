@@ -1,54 +1,23 @@
-import { useEffect, useRef, useState } from "react";
 import { TrafficLights } from "@/components/computer";
 import { TRACKS, ALBUMS, formatSec } from "@/constants/musicTracks";
+import { useMusicPlayer } from "@/hooks/useMusicPlayer";
 import { cn } from "@/utils";
 
 // 트랙 목록은 아이폰 목업·모바일 시트와 공유(musicTracks.ts)
 const RED = "#fa2d48";
 
 export const Music = () => {
-  const [trackIndex, setTrackIndex] = useState(-1); // -1 = 재생 이력 없음
-  const [playing, setPlaying] = useState(false);
-  const [seconds, setSeconds] = useState(0);
-  const timer = useRef<ReturnType<typeof setInterval>>(undefined);
+  const { track, trackIndex, playing, seconds, volume, pick, toggle, step, seek, setVolume } =
+    useMusicPlayer();
 
-  const track = trackIndex >= 0 ? TRACKS[trackIndex] : null;
-
-  // 가짜 재생 타이머 — 오디오 연결 시 <audio> timeupdate로 교체 지점
-  useEffect(() => {
-    clearInterval(timer.current);
-    if (playing) {
-      timer.current = setInterval(() => {
-        setSeconds((prev) => {
-          if (trackIndex >= 0 && prev + 1 >= TRACKS[trackIndex].duration) {
-            setTrackIndex((i) => (i + 1) % TRACKS.length);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(timer.current);
-  }, [playing, trackIndex]);
-
-  const pick = (index: number) => {
-    setTrackIndex(index);
-    setSeconds(0);
-    setPlaying(true);
-  };
-  const toggle = () => {
-    if (trackIndex < 0) setTrackIndex(0);
-    setPlaying((prev) => !prev);
-  };
-  const step = (delta: number) => {
-    if (trackIndex < 0) return;
-    setTrackIndex((trackIndex + delta + TRACKS.length) % TRACKS.length);
-    setSeconds(0);
-  };
-  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+  const seekByClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!track) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    setSeconds(Math.floor(((e.clientX - rect.left) / rect.width) * track.duration));
+    seek(((e.clientX - rect.left) / rect.width) * track.duration);
+  };
+  const volumeByClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setVolume((e.clientX - rect.left) / rect.width);
   };
 
   return (
@@ -75,12 +44,12 @@ export const Music = () => {
         <div className="relative mx-auto flex h-11 max-w-[380px] flex-1 items-center gap-2.5 overflow-hidden rounded-lg border border-white/[0.07] bg-[#1a1a1c] pl-1.5 pr-3">
           {track ? (
             <>
-              <div
-                className="grid size-8 flex-none place-items-center rounded-md text-[15px]"
-                style={{ background: track.gradient }}
-              >
-                {track.emoji}
-              </div>
+              <img
+                src={track.cover}
+                alt={track.title}
+                draggable={false}
+                className="size-8 flex-none rounded-md object-cover"
+              />
               <div className="min-w-0 flex-1 text-center">
                 <div className="truncate text-[11.5px] font-semibold text-[#eee]">
                   {track.title}
@@ -92,7 +61,7 @@ export const Music = () => {
               </div>
               <div
                 className="absolute inset-x-0 bottom-0 h-[3px] cursor-pointer bg-white/10"
-                onClick={seek}
+                onClick={seekByClick}
               >
                 <div
                   className="h-full"
@@ -104,11 +73,17 @@ export const Music = () => {
             <div className="w-full text-center text-[12px] text-[#7a7a80]"> 음악</div>
           )}
         </div>
-        {/* 볼륨 (장식) */}
+        {/* 볼륨 */}
         <div className="flex items-center gap-1.5 text-[12px] text-[#9a9aa0]">
           🔈
-          <div className="relative h-[3.5px] w-16 rounded-full bg-white/[0.14]">
-            <div className="absolute inset-y-0 left-0 w-[65%] rounded-full bg-[#c8c8cc]" />
+          <div
+            className="relative h-[3.5px] w-16 cursor-pointer rounded-full bg-white/[0.14] before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-['']"
+            onClick={volumeByClick}
+          >
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-[#c8c8cc]"
+              style={{ width: `${volume * 100}%` }}
+            />
           </div>
         </div>
       </div>
@@ -141,12 +116,12 @@ export const Music = () => {
                   className="group cursor-pointer text-left"
                   onClick={() => pick(TRACKS.indexOf(first))}
                 >
-                  <div
-                    className="grid aspect-square place-items-center rounded-lg text-[34px] shadow-[0_8px_18px_-8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-[1.03]"
-                    style={{ background: first.gradient }}
-                  >
-                    {first.emoji}
-                  </div>
+                  <img
+                    src={first.cover}
+                    alt={album}
+                    draggable={false}
+                    className="aspect-square w-full rounded-lg object-cover shadow-[0_8px_18px_-8px_rgba(0,0,0,0.5)] transition-transform group-hover:scale-[1.03]"
+                  />
                   <div className="mt-1.5 truncate text-[11.5px] font-semibold text-[#e8e8ec]">
                     {album}
                   </div>
@@ -185,12 +160,12 @@ export const Music = () => {
                   i + 1
                 )}
               </span>
-              <span
-                className="grid size-6 flex-none place-items-center rounded-[5px] text-[11px]"
-                style={{ background: t.gradient }}
-              >
-                {t.emoji}
-              </span>
+              <img
+                src={t.cover}
+                alt={t.title}
+                draggable={false}
+                className="size-6 flex-none rounded-[5px] object-cover"
+              />
               <span className="truncate">{t.title}</span>
               <span className="truncate text-[11px] text-[#7a7a80]">— {t.artist}</span>
               <span className="ml-auto flex-none text-[10.5px] text-[#7a7a80]">
