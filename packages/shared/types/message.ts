@@ -26,6 +26,11 @@ export enum Messages {
   UPDATED_ELEMENTS = "UPDATED_ELEMENTS",
   SEND_WHITEBOARD_POINTER = "SEND_WHITEBOARD_POINTER",
   UPDATED_WHITEBOARD_POINTER = "UPDATED_WHITEBOARD_POINTER",
+  UPDATE_CODE = "UPDATE_CODE",
+  UPDATED_CODE = "UPDATED_CODE",
+  UPDATE_CODE_AWARENESS = "UPDATE_CODE_AWARENESS",
+  UPDATED_CODE_AWARENESS = "UPDATED_CODE_AWARENESS",
+  REQUEST_CODE_SYNC = "REQUEST_CODE_SYNC",
   SEND_EMOTE = "SEND_EMOTE",
   UPDATED_EMOTE = "UPDATED_EMOTE",
   NPC_TALK_START = "NPC_TALK_START",
@@ -84,6 +89,13 @@ export type MessagePayloadMap = {
     y: number;
     tool: "pointer" | "laser";
   };
+  // 협업 코드 에디터: id는 computerId, update는 Yjs 바이너리(msgpack bin으로 그대로 전송됨).
+  // UPDATED_CODE는 실시간 릴레이와 REQUEST_CODE_SYNC 응답(전체 상태 = 유효한 update) 겸용
+  UPDATE_CODE: { id: string; update: Uint8Array };
+  UPDATED_CODE: { id: string; update: Uint8Array };
+  UPDATE_CODE_AWARENESS: { id: string; update: Uint8Array };
+  UPDATED_CODE_AWARENESS: { id: string; update: Uint8Array };
+  REQUEST_CODE_SYNC: string;
   SEND_EMOTE: string;
   UPDATED_EMOTE: { sessionId: string; emote: string };
   // AI NPC 대화: 시작/종료로 서버 잠금(한 명만), SAY는 점유자가 AI 답변을 보내면 서버가 모두에게 브로드캐스트

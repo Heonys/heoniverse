@@ -25,6 +25,7 @@
     "colyseus.js": "^0.16.19",
     "date-fns": "^4.1.0",
     "immer": "^10.1.1",
+    "monaco-editor": "^0.55.1",
     "motion": "^12.23.6",
     "peerjs": "^1.5.5",
     "perfect-freehand": "^1.2.2",
@@ -42,6 +43,9 @@
     "react-webcam": "^7.2.0",
     "roughjs": "^4.6.6",
     "tailwind-merge": "^3.0.2",
+    "y-monaco": "^0.1.6",
+    "y-protocols": "^1.0.7",
+    "yjs": "^13.6.31",
     "zod": "^4.0.5"
   },
   "devDependencies": {

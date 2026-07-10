@@ -1,5 +1,6 @@
 import { Room, Client, ServerError } from "colyseus";
 import bcrypt from "bcrypt";
+import * as Y from "yjs";
 import { Dispatcher } from "@colyseus/command";
 import { StudioState, Player, Computer, Whiteboard } from "./schema/StudioSchema";
 import {
@@ -12,6 +13,8 @@ import {
   ITEM_ID_PATTERN,
   ITEM_MAP_MAX,
   WHITEBOARD_ELEMENTS_MAX,
+  CODE_UPDATE_MAX_BYTES,
+  CODE_DOC_MAX_BYTES,
   WORLD_BOUNDS,
   EMOTES,
   NUDGE_COOLDOWN_MS,
@@ -25,6 +28,17 @@ import {
   WhiteboardUpdateCommand,
 } from "./commands";
 
+// 협업 에디터 첫 동기화 때 서버가 시드 — 클라 시드는 동시 접속 시 중복 삽입 레이스가 있음
+const CODE_SEED = `// Heoniverse 공유 에디터
+// 같은 컴퓨터에 연결된 사람들과 실시간으로 함께 편집됩니다.
+
+function greet(name: string) {
+  return \`Hello, \${name}!\`;
+}
+
+console.log(greet("Heoniverse"));
+`;
+
 export class Studio extends Room<StudioState> {
   state = new StudioState();
   dispatcher = new Dispatcher(this);
@@ -35,6 +49,8 @@ export class Studio extends Room<StudioState> {
   private lastNudgeAt = new Map<string, number>();
   // 화이트보드 최신 요소 스냅샷(보드 id별) — 늦게 접속한 유저에게 전송. 방과 수명이 같고 어디에도 저장 안 함
   private whiteboardSnapshots = new Map<string, readonly unknown[]>();
+  // 협업 에디터 Yjs 문서 상태(컴퓨터 id별, mergeUpdates로 병합 보관) — 위와 같은 룸 수명 인메모리
+  private codeDocs = new Map<string, Uint8Array>();
 
   async onCreate(options: IRoom) {
     this.name = options.name;
@@ -221,6 +237,47 @@ export class Studio extends Room<StudioState> {
         this.broadcast(Messages.UPDATED_ELEMENTS, payload, { except: client });
       },
     );
+
+    this.onMessage(
+      Messages.UPDATE_CODE,
+      (client, payload: { id: string; update: Uint8Array }) => {
+        if (!payload || !(payload.update instanceof Uint8Array)) return;
+        if (payload.update.byteLength > CODE_UPDATE_MAX_BYTES) return;
+        if (!this.state.computers.get(payload.id)?.connectedUser.has(client.sessionId)) return;
+
+        const prev = this.codeDocs.get(payload.id);
+        const merged = prev ? Y.mergeUpdates([prev, payload.update]) : payload.update;
+        if (merged.byteLength > CODE_DOC_MAX_BYTES) return;
+        this.codeDocs.set(payload.id, merged);
+        this.broadcast(Messages.UPDATED_CODE, payload, { except: client });
+      },
+    );
+
+    this.onMessage(
+      Messages.UPDATE_CODE_AWARENESS,
+      (client, payload: { id: string; update: Uint8Array }) => {
+        if (!payload || !(payload.update instanceof Uint8Array)) return;
+        if (payload.update.byteLength > CODE_UPDATE_MAX_BYTES) return;
+        if (!this.state.computers.get(payload.id)?.connectedUser.has(client.sessionId)) return;
+        this.broadcast(Messages.UPDATED_CODE_AWARENESS, payload, { except: client });
+      },
+    );
+
+    this.onMessage(Messages.REQUEST_CODE_SYNC, (client, computerId: string) => {
+      if (!this.state.computers.get(computerId)?.connectedUser.has(client.sessionId)) return;
+
+      let state = this.codeDocs.get(computerId);
+      if (!state) {
+        // 파일 맵 키 "files"와 시드 파일명은 클라 CodeEditor와의 계약
+        const doc = new Y.Doc();
+        const text = new Y.Text();
+        text.insert(0, CODE_SEED);
+        doc.getMap<Y.Text>("files").set("index.ts", text);
+        state = Y.encodeStateAsUpdate(doc);
+        this.codeDocs.set(computerId, state);
+      }
+      client.send(Messages.UPDATED_CODE, { id: computerId, update: state });
+    });
 
     this.onMessage(
       Messages.SEND_WHITEBOARD_POINTER,

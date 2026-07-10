@@ -63,6 +63,31 @@ export function pickColor(str: string) {
   return TAILWIND_COLORS[index];
 }
 
+// TAILWIND_COLORS(400 계열)의 hex 값 — 모나코 원격 커서처럼 실제 CSS 색이 필요한 곳용
+const HEX_COLORS = [
+  "#f87171",
+  "#fbbf24",
+  "#a3e635",
+  "#4ade80",
+  "#34d399",
+  "#2dd4bf",
+  "#22d3ee",
+  "#60a5fa",
+  "#818cf8",
+  "#a78bfa",
+  "#c084fc",
+  "#e879f9",
+  "#fb7185",
+];
+
+export function pickHexColor(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return HEX_COLORS[Math.abs(hash % HEX_COLORS.length)];
+}
+
 export function formatDate(timestamp: number): string {
   const date = new Date(timestamp);
   return isToday(date)

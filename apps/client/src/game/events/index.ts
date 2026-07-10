@@ -37,6 +37,8 @@ type EventsPayloadMap = {
     y: number;
     tool: "pointer" | "laser";
   };
+  CODE_UPDATED: { id: string; update: Uint8Array };
+  CODE_AWARENESS_UPDATED: { id: string; update: Uint8Array };
   JOYSTICK_KEY_PRESSED: "keyE" | "keyR" | "keySpace";
   TOGGLE_EMOTE_WHEEL: void;
   SCREENSHOT_TAKEN: void;

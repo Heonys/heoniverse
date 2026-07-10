@@ -6,6 +6,13 @@ export const ITEM_ID_PATTERN = /^\d{1,3}$/;
 export const ITEM_MAP_MAX = 64;
 export const WHITEBOARD_ELEMENTS_MAX = 5000;
 
+// 협업 코드 에디터(Yjs) — 업데이트 1건/병합 문서 크기 상한
+export const CODE_UPDATE_MAX_BYTES = 256 * 1024;
+export const CODE_DOC_MAX_BYTES = 2 * 1024 * 1024;
+// 파일 개수·이름 규칙 — Yjs 업데이트는 불투명 바이너리라 서버 검사 불가, 클라 측 강제 (2MB 상한이 서버 안전망)
+export const CODE_FILES_MAX = 10;
+export const CODE_FILE_NAME_PATTERN = /^[\w-]+\.(ts|tsx|js|jsx|json|css|html|md)$/;
+
 // tilemap 크기(2400x1600px) + 오브젝트 오프셋 여유분
 export const WORLD_BOUNDS = { minX: -100, maxX: 2500, minY: -100, maxY: 1700 };
 

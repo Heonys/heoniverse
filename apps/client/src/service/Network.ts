@@ -347,6 +347,18 @@ export class Network {
     this.sendMessage("SEND_WHITEBOARD_POINTER", { id, x, y, tool });
   }
 
+  updateCode(id: string, update: Uint8Array) {
+    this.sendMessage("UPDATE_CODE", { id, update });
+  }
+
+  updateCodeAwareness(id: string, update: Uint8Array) {
+    this.sendMessage("UPDATE_CODE_AWARENESS", { id, update });
+  }
+
+  requestCodeSync(id: string) {
+    this.sendMessage("REQUEST_CODE_SYNC", id);
+  }
+
   async joinSingleRoom() {
     // 오프라인 모드는 재접속 대상이 아니므로 저장된 세션이 있으면 지운다
     clearSession();
@@ -502,6 +514,14 @@ export class Network {
 
     this.onMessage(Messages.UPDATED_WHITEBOARD_POINTER, (payload) => {
       eventEmitter.emit("WHITEBOARD_POINTER_UPDATED", payload);
+    });
+
+    this.onMessage(Messages.UPDATED_CODE, (payload) => {
+      eventEmitter.emit("CODE_UPDATED", payload);
+    });
+
+    this.onMessage(Messages.UPDATED_CODE_AWARENESS, (payload) => {
+      eventEmitter.emit("CODE_AWARENESS_UPDATED", payload);
     });
   }
 }

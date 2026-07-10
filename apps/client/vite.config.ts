@@ -11,6 +11,10 @@ export default defineConfig({
     // 브라우저엔 process가 없어 ReferenceError로 앱 창이 크래시함 → 빈 객체로 치환
     "process.env": {},
   },
+  optimizeDeps: {
+    // lazy 청크(VSCode 앱)에서만 쓰여 dev가 런타임에 발견 → 사전번들 리로드로 페이지가 새로고침됨
+    include: ["monaco-editor", "yjs", "y-monaco", "y-protocols/awareness"],
+  },
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {

@@ -82,5 +82,6 @@ export const appsData: AppsData[] = [
     title: "VSCode",
     img: "/icons/vscode.png",
     component: <VSCode />,
+    position: { width: 900, height: 560 },
   },
 ];
