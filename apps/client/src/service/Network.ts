@@ -31,6 +31,8 @@ export class Network {
   lobby: Room | null = null;
   sessionId!: string;
   webRTC?: WebRTC;
+  // 보드별 마지막 수신 요소 — WhiteBoard가 lazy 청크 로딩 등으로 늦게 마운트해도 스냅샷을 놓치지 않게 보관
+  private whiteboardElements = new Map<string, readonly any[]>();
 
   constructor() {
     const endPoint = import.meta.env.PROD
@@ -332,8 +334,13 @@ export class Network {
     this.sendMessage("SCREEN_SHARING_REQUEST", { computerId, sharingId });
   }
 
-  updateWhiteboard(elements: readonly any[]) {
-    this.sendMessage("UPDATE_ELEMENTS", elements);
+  updateWhiteboard(id: string, elements: readonly any[]) {
+    this.whiteboardElements.set(id, elements);
+    this.sendMessage("UPDATE_ELEMENTS", { id, elements });
+  }
+
+  getWhiteboardElements(id: string) {
+    return this.whiteboardElements.get(id);
   }
 
   async joinSingleRoom() {
@@ -361,6 +368,7 @@ export class Network {
     store.dispatch(setLobbyJoined(false));
     this.webRTC?.dispose();
     this.webRTC = new WebRTC(this.room.sessionId, this);
+    this.whiteboardElements.clear();
 
     this.sessionId = this.room.sessionId;
     const $ = getStateCallbacks(this.room);
@@ -482,7 +490,8 @@ export class Network {
     });
 
     this.onMessage(Messages.UPDATED_ELEMENTS, (payload) => {
-      if (payload.length > 0) {
+      if (payload.elements.length > 0) {
+        this.whiteboardElements.set(payload.id, payload.elements);
         eventEmitter.emit("UPDATED_ELEMENTS", payload);
       }
     });

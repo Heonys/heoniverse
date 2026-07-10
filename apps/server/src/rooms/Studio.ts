@@ -33,6 +33,8 @@ export class Studio extends Room<StudioState> {
   password?: string;
   // 콕 찌르기 쿨다운: "보낸이>대상" 쌍별 마지막 전송 시각 (방과 수명이 같은 인메모리)
   private lastNudgeAt = new Map<string, number>();
+  // 화이트보드 최신 요소 스냅샷(보드 id별) — 늦게 접속한 유저에게 전송. 방과 수명이 같고 어디에도 저장 안 함
+  private whiteboardSnapshots = new Map<string, readonly unknown[]>();
 
   async onCreate(options: IRoom) {
     this.name = options.name;
@@ -130,6 +132,13 @@ export class Studio extends Room<StudioState> {
         whiteboardId: payload.id,
         connect: payload.connect,
       });
+
+      if (payload.connect) {
+        const snapshot = this.whiteboardSnapshots.get(payload.id);
+        if (snapshot?.length) {
+          client.send(Messages.UPDATED_ELEMENTS, { id: payload.id, elements: snapshot });
+        }
+      }
     });
 
     this.onMessage(Messages.UPDATED_CALLING, (client, payload) => {
@@ -202,10 +211,16 @@ export class Studio extends Room<StudioState> {
       }
     });
 
-    this.onMessage(Messages.UPDATE_ELEMENTS, (client, payload: any[]) => {
-      if (!Array.isArray(payload) || payload.length > WHITEBOARD_ELEMENTS_MAX) return;
-      this.broadcast(Messages.UPDATED_ELEMENTS, payload, { except: client });
-    });
+    this.onMessage(
+      Messages.UPDATE_ELEMENTS,
+      (client, payload: { id: string; elements: any[] }) => {
+        if (!payload || !Array.isArray(payload.elements)) return;
+        if (payload.elements.length > WHITEBOARD_ELEMENTS_MAX) return;
+        if (!this.state.whiteboards.has(payload.id)) return;
+        this.whiteboardSnapshots.set(payload.id, payload.elements);
+        this.broadcast(Messages.UPDATED_ELEMENTS, payload, { except: client });
+      },
+    );
 
     this.onMessage(Messages.SEND_EMOTE, (client, payload: string) => {
       // 허용된 이모지만 브로드캐스트 (상태 저장 없음 — 채팅에 안 남음)

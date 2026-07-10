@@ -69,8 +69,8 @@ export type MessagePayloadMap = {
   SCREEN_SHARING: { computerId: string; userId: string; shared: boolean };
   SCREEN_SHARING_REQUEST: { computerId: string; sharingId: string };
   SCREEN_SHARING_RESPONSE: string;
-  UPDATE_ELEMENTS: readonly any[];
-  UPDATED_ELEMENTS: readonly any[];
+  UPDATE_ELEMENTS: { id: string; elements: readonly any[] };
+  UPDATED_ELEMENTS: { id: string; elements: readonly any[] };
   SEND_EMOTE: string;
   UPDATED_EMOTE: { sessionId: string; emote: string };
   // AI NPC 대화: 시작/종료로 서버 잠금(한 명만), SAY는 점유자가 AI 답변을 보내면 서버가 모두에게 브로드캐스트
