@@ -7,7 +7,7 @@ import { RoomType } from "@heoniverse/shared";
 
 import { Studio } from "./rooms/Studio";
 import { CustomLobbyRoom } from "./rooms/Lobby";
-import { generateNpcReply } from "./services/npcAgent";
+import { generateNpcReply, generateAssistantReply } from "./services/npcAgent";
 import cors from "cors";
 
 // 모니터 대시보드 보호: MONITOR_PASSWORD가 있으면 basic-auth,
@@ -66,6 +66,16 @@ export default config({
         return;
       }
       const reply = await generateNpcReply(messages);
+      res.json({ reply });
+    });
+    // 가상 컴퓨터의 AI 어시스턴트 앱 — NPC와 같은 Gemini 프록시, 프롬프트/답변 길이만 다름
+    app.post("/api/assistant-chat", async (req, res) => {
+      const messages = req.body?.messages;
+      if (!Array.isArray(messages)) {
+        res.status(400).json({ error: "messages must be an array" });
+        return;
+      }
+      const reply = await generateAssistantReply(messages);
       res.json({ reply });
     });
     app.use("/colyseus", monitorAuth, monitor());
