@@ -45,9 +45,8 @@ export const EntryButton = ({
         "flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-transparent text-[14.5px] font-medium text-white transition",
         "active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60",
         variant === "primary" &&
-          "bg-accent shadow-[0_6px_14px_-11px_rgba(86,101,214,0.36),inset_0_1px_0_rgba(255,255,255,0.1)] hover:brightness-[1.06]",
-        variant === "secondary" &&
-          "bg-surface-2 text-app-text border-white/[0.07] hover:border-white/[0.14] hover:bg-[#24252b]",
+          "bg-accent shadow-[0_6px_14px_-11px_rgba(86,101,214,0.36),inset_0_1px_0_rgba(255,255,255,0.1)]",
+        variant === "secondary" && "text-app-text border-white/[0.09] bg-black/25",
         className,
       )}
     >
