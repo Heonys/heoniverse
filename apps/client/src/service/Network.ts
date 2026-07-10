@@ -343,6 +343,10 @@ export class Network {
     return this.whiteboardElements.get(id);
   }
 
+  sendWhiteboardPointer(id: string, x: number, y: number, tool: "pointer" | "laser") {
+    this.sendMessage("SEND_WHITEBOARD_POINTER", { id, x, y, tool });
+  }
+
   async joinSingleRoom() {
     // 오프라인 모드는 재접속 대상이 아니므로 저장된 세션이 있으면 지운다
     clearSession();
@@ -494,6 +498,10 @@ export class Network {
         this.whiteboardElements.set(payload.id, payload.elements);
         eventEmitter.emit("UPDATED_ELEMENTS", payload);
       }
+    });
+
+    this.onMessage(Messages.UPDATED_WHITEBOARD_POINTER, (payload) => {
+      eventEmitter.emit("WHITEBOARD_POINTER_UPDATED", payload);
     });
   }
 }

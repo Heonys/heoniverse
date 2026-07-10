@@ -29,6 +29,14 @@ type EventsPayloadMap = {
   WHITEBOARD_USER_ADDED: { userId: string; whiteboardId: string };
   WHITEBOARD_USER_REMOVED: { userId: string; whiteboardId: string };
   UPDATED_ELEMENTS: { id: string; elements: readonly any[] };
+  WHITEBOARD_POINTER_UPDATED: {
+    id: string;
+    sessionId: string;
+    name: string;
+    x: number;
+    y: number;
+    tool: "pointer" | "laser";
+  };
   JOYSTICK_KEY_PRESSED: "keyE" | "keyR" | "keySpace";
   TOGGLE_EMOTE_WHEEL: void;
   SCREENSHOT_TAKEN: void;

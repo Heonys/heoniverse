@@ -222,6 +222,30 @@ export class Studio extends Room<StudioState> {
       },
     );
 
+    this.onMessage(
+      Messages.SEND_WHITEBOARD_POINTER,
+      (client, payload: { id: string; x: number; y: number; tool: string }) => {
+        if (!payload || !Number.isFinite(payload.x) || !Number.isFinite(payload.y)) return;
+        if (payload.tool !== "pointer" && payload.tool !== "laser") return;
+        const whiteboard = this.state.whiteboards.get(payload.id);
+        if (!whiteboard?.connectedUser.has(client.sessionId)) return;
+
+        const sender = this.state.players.get(client.sessionId);
+        this.broadcast(
+          Messages.UPDATED_WHITEBOARD_POINTER,
+          {
+            id: payload.id,
+            sessionId: client.sessionId,
+            name: sender?.name ?? "",
+            x: payload.x,
+            y: payload.y,
+            tool: payload.tool,
+          },
+          { except: client },
+        );
+      },
+    );
+
     this.onMessage(Messages.SEND_EMOTE, (client, payload: string) => {
       // 허용된 이모지만 브로드캐스트 (상태 저장 없음 — 채팅에 안 남음)
       if (!(EMOTES as readonly string[]).includes(payload)) return;

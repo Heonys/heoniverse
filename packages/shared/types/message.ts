@@ -24,6 +24,8 @@ export enum Messages {
   SCREEN_SHARING_RESPONSE = "SCREEN_SHARING_RESPONSE",
   UPDATE_ELEMENTS = "UPDATE_ELEMENTS",
   UPDATED_ELEMENTS = "UPDATED_ELEMENTS",
+  SEND_WHITEBOARD_POINTER = "SEND_WHITEBOARD_POINTER",
+  UPDATED_WHITEBOARD_POINTER = "UPDATED_WHITEBOARD_POINTER",
   SEND_EMOTE = "SEND_EMOTE",
   UPDATED_EMOTE = "UPDATED_EMOTE",
   NPC_TALK_START = "NPC_TALK_START",
@@ -71,6 +73,17 @@ export type MessagePayloadMap = {
   SCREEN_SHARING_RESPONSE: string;
   UPDATE_ELEMENTS: { id: string; elements: readonly any[] };
   UPDATED_ELEMENTS: { id: string; elements: readonly any[] };
+  // 화이트보드 라이브 커서: x/y는 Excalidraw scene 좌표(수신측이 자기 뷰포트로 변환).
+  // UPDATED의 name은 서버가 state에서 채운다(스푸핑 방지). 저장 없는 휘발 채널
+  SEND_WHITEBOARD_POINTER: { id: string; x: number; y: number; tool: "pointer" | "laser" };
+  UPDATED_WHITEBOARD_POINTER: {
+    id: string;
+    sessionId: string;
+    name: string;
+    x: number;
+    y: number;
+    tool: "pointer" | "laser";
+  };
   SEND_EMOTE: string;
   UPDATED_EMOTE: { sessionId: string; emote: string };
   // AI NPC 대화: 시작/종료로 서버 잠금(한 명만), SAY는 점유자가 AI 답변을 보내면 서버가 모두에게 브로드캐스트
