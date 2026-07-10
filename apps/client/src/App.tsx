@@ -9,6 +9,7 @@ import {
   NpcChatBar,
   NudgeToast,
   FollowIndicator,
+  ScreenshotFlash,
 } from "@/components";
 import { EntryScreen } from "@/components/entry";
 import { ComputerDialog } from "@/components/computer";
@@ -56,6 +57,7 @@ function App() {
             <MinimapFrame />
             <NudgeToast />
             <FollowIndicator />
+            <ScreenshotFlash />
             <Condition condition={npcTalking}>
               <NpcChatBar />
             </Condition>

@@ -21,13 +21,13 @@ export function playNudgeSound() {
   }
 }
 
-// 탭이 안 보일 때 데스크탑 알림. 권한이 없으면 false — 호출측이 인앱 토스트로 폴백한다
-export function showDesktopNudge(name: string) {
+// 탭이 안 보일 때 데스크탑 알림(범용). 권한이 없으면 false — 호출측이 인앱 표시로 폴백한다
+export function showDesktopNotification(title: string) {
   if (!("Notification" in window) || Notification.permission !== "granted") return false;
   try {
     // tag를 쓰면 같은 tag 알림이 남아 있을 때 배너 없이 "조용히 교체"돼 안 뜬 것처럼 보인다.
-    // 연타는 서버 쿨다운이 막으니 tag 없이 매번 새 알림으로 띄운다.
-    const noti = new Notification(`${name}님이 콕 찔렀어요`, {
+    // 연타는 호출측(서버 쿨다운 등)이 막으니 tag 없이 매번 새 알림으로 띄운다.
+    const noti = new Notification(title, {
       icon: "/favicon.ico",
     });
     noti.onclick = () => {
@@ -38,4 +38,8 @@ export function showDesktopNudge(name: string) {
   } catch {
     return false;
   }
+}
+
+export function showDesktopNudge(name: string) {
+  return showDesktopNotification(`${name}님이 콕 찔렀어요`);
 }

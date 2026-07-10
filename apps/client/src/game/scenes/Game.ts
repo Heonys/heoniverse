@@ -12,6 +12,7 @@ import { Item, Chair, Computer, Whiteboard, Ball, BALL_RADIUS } from "@/game/obj
 import { Network } from "@/service";
 import type { RestoreData } from "@/service";
 import { getAIResponse } from "@/service/ai";
+import { captureScreenshot } from "@/utils/captureScreenshot";
 import { IPlayer, IChatMessage, BALL_SPAWN } from "@heoniverse/shared";
 import { eventEmitter } from "@/game/events";
 import { store } from "@/stores";
@@ -442,6 +443,11 @@ export class Game extends Phaser.Scene {
       // 채팅 입력 중이면 그냥 'g' 타이핑 (휠 열지 않음)
       if (store.getState().chat.focused) return;
       eventEmitter.emit("TOGGLE_EMOTE_WHEEL");
+    });
+
+    this.input.keyboard?.on("keydown-P", () => {
+      if (store.getState().chat.focused) return;
+      captureScreenshot();
     });
   }
 

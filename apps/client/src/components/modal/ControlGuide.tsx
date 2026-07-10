@@ -20,6 +20,7 @@ export const ControlGuide = () => {
             <GuideRow keys={["Space"]}>공 차기</GuideRow>
             <GuideRow keys={["Enter"]}>채팅</GuideRow>
             <GuideRow keys={["G"]}>감정 표현</GuideRow>
+            <GuideRow keys={["P"]}>스크린샷 — 컴퓨터의 사진 앱에 저장</GuideRow>
             <GuideRow keys={["Esc"]}>창 닫기</GuideRow>
           </div>
         ) : (
