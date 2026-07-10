@@ -6,6 +6,11 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
+  define: {
+    // react-rnd의 의존성 react-draggable이 process.env.DRAGGABLE_DEBUG를 참조하는데,
+    // 브라우저엔 process가 없어 ReferenceError로 앱 창이 크래시함 → 빈 객체로 치환
+    "process.env": {},
+  },
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {

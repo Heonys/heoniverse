@@ -11,7 +11,7 @@ export const TrafficLights = ({ id, onClose }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="group absolute left-0 ml-3 mt-2 flex items-center gap-2">
+    <div className="group absolute left-0 top-1/2 ml-3 flex -translate-y-1/2 items-center gap-2">
       <button
         className="flex size-[13px] cursor-pointer items-center justify-center rounded-full border-[#e0443e] bg-[#ff5f56] shadow-2xl group-hover:scale-110"
         onClick={() => {

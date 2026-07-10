@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Rnd } from "react-rnd";
-import { openApp } from "@/stores/desktopSlice";
+import { openApp, closeApp } from "@/stores/desktopSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks";
+import { ErrorBoundary } from "@/ErrorBoundary";
+import { AppIcon } from "@/icons";
 
 type Props = {
   id: string;
@@ -11,7 +13,7 @@ type Props = {
 };
 
 export const AppWindow = ({ id, title, component, initPosition }: Props) => {
-  const parent = document.getElementById("desktop-inner");
+  const parent = document.getElementById("desktop-windows");
   const parentWidth = parent?.clientWidth ?? window.innerWidth;
   const parentHeight = parent?.clientHeight ?? window.innerHeight;
 
@@ -57,7 +59,26 @@ export const AppWindow = ({ id, title, component, initPosition }: Props) => {
         });
       }}
     >
-      {component}
+      {/* 앱 하나의 크래시가 데스크탑·게임 전체를 죽이지 않게 창 단위로 격리 */}
+      <ErrorBoundary
+        fallback={
+          <div className="flex size-full select-none flex-col items-center justify-center gap-2 bg-[#16171d] text-center">
+            <AppIcon iconName="warning-tri" size={28} className="text-[#ffb056]" />
+            <div className="text-[14px] font-semibold text-white">
+              {title} 앱에 문제가 발생했습니다
+            </div>
+            <div className="text-text-dim text-[12px]">창을 닫고 다시 열어보세요</div>
+            <button
+              className="bg-accent mt-2 cursor-pointer rounded-lg px-4 py-1.5 text-[12.5px] font-semibold text-white transition hover:brightness-[1.06]"
+              onClick={() => dispatch(closeApp(id))}
+            >
+              창 닫기
+            </button>
+          </div>
+        }
+      >
+        {component}
+      </ErrorBoundary>
     </Rnd>
   );
 };

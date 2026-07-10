@@ -8,7 +8,8 @@ export function Dock() {
   const dockMag = 2;
 
   return (
-    <div className="absolute inset-x-0 bottom-2 flex select-none justify-center">
+    // z-[5000] — 실제 macOS처럼 독은 항상 창 위에 뜬다 (창 z는 11부터 증가)
+    <div className="absolute inset-x-0 bottom-2 z-[5000] flex select-none justify-center">
       <ul
         className="flex h-16 space-x-2 rounded-xl border border-neutral-400/40 bg-white/20 px-2 shadow-2xl backdrop-blur-2xl"
         onMouseMove={(e) => mouseX.set(e.clientX)}

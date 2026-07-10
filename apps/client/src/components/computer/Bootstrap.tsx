@@ -12,7 +12,7 @@ export function Bootstrap() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black text-white"
+          className="absolute inset-0 z-[9000] flex flex-col items-center justify-center bg-black text-white"
         >
           <AppIcon iconName="apple-logo" size={100} />
           <div className="mt-4 h-1 w-56 overflow-hidden rounded bg-neutral-700" role="progressbar">
